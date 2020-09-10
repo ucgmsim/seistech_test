@@ -1,0 +1,608 @@
+{
+  "id": "e178328e-df39-479e-a0a4-2da769ccec11",
+  "version": "2.0",
+  "name": "Psha_Seistech",
+  "url": "https://development.seistech.nz",
+  "tests": [{
+    "id": "ccf36611-cb2c-4cf7-8dde-f1e251a6da10",
+    "name": "Compute Hazard Curve",
+    "commands": [{
+      "id": "11cf5875-c654-455e-8fa9-90feba6fa599",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "e06a9c77-50e4-402e-b078-c984e138642f",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1680x1027",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "a3cb2d6f-c30f-439a-b422-42e9f85aa867",
+      "comment": "",
+      "command": "click",
+      "target": "id=qs-login-btn",
+      "targets": [
+        ["id=qs-login-btn", "id"],
+        ["css=#qs-login-btn", "css:finder"],
+        ["xpath=//button[@id='qs-login-btn']", "xpath:attributes"],
+        ["xpath=//div[@id='app']/nav/div/ul[2]/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Log in')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "539f8999-e000-48e5-b4c5-a43a143a96dc",
+      "comment": "",
+      "command": "click",
+      "target": "id=username",
+      "targets": [
+        ["id=username", "id"],
+        ["name=username", "name"],
+        ["css=#username", "css:finder"],
+        ["xpath=//input[@id='username']", "xpath:attributes"],
+        ["xpath=//div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "34a2d0bd-fa96-4f9c-b381-e734cf98da33",
+      "comment": "",
+      "command": "type",
+      "target": "id=username",
+      "targets": [
+        ["id=username", "id"],
+        ["name=username", "name"],
+        ["css=#username", "css:finder"],
+        ["xpath=//input[@id='username']", "xpath:attributes"],
+        ["xpath=//div/input", "xpath:position"]
+      ],
+      "value": "sungeunbae@live.com"
+    }, {
+      "id": "e1a6e10f-2980-43ca-bc38-751ad80d7235",
+      "comment": "",
+      "command": "type",
+      "target": "id=password",
+      "targets": [
+        ["id=password", "id"],
+        ["name=password", "name"],
+        ["css=#password", "css:finder"],
+        ["xpath=//input[@id='password']", "xpath:attributes"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": "Yonsei96!"
+    }, {
+      "id": "cad2d36e-e5e4-4898-b1d1-a9f074ff2eda",
+      "comment": "",
+      "command": "click",
+      "target": "name=action",
+      "targets": [
+        ["name=action", "name"],
+        ["css=.cebb329f6", "css:finder"],
+        ["xpath=//button[@name='action']", "xpath:attributes"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Continue')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "d11bedb6-3349-4f3b-9b0c-d8cc4955fdf4",
+      "comment": "",
+      "command": "waitForElementPresent",
+      "target": "xpath=//a[contains(text(),'Hazard Analysis')]",
+      "targets": [
+        ["linkText=Hazard Analysis", "linkText"],
+        ["css=.router-link-exact-active", "css:finder"],
+        ["xpath=//a[contains(text(),'Hazard Analysis')]", "xpath:link"],
+        ["xpath=//div[@id='app']/nav/div/ul/a[2]", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/hazard')]", "xpath:href"],
+        ["xpath=//a[2]", "xpath:position"],
+        ["xpath=//a[contains(.,'Hazard Analysis')]", "xpath:innerText"]
+      ],
+      "value": "30000"
+    }, {
+      "id": "a01e9f97-776a-43ef-85f9-703434dbec0b",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Hazard Analysis",
+      "targets": [
+        ["linkText=Hazard Analysis", "linkText"],
+        ["css=.nav-link:nth-child(2)", "css:finder"],
+        ["xpath=//a[contains(text(),'Hazard Analysis')]", "xpath:link"],
+        ["xpath=//div[@id='app']/nav/div/ul/a[2]", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/hazard')]", "xpath:href"],
+        ["xpath=//a[2]", "xpath:position"],
+        ["xpath=//a[contains(.,'Hazard Analysis')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "e09a9cfe-2e58-41b3-b1fd-c84f2dba6f29",
+      "comment": "",
+      "command": "mouseOver",
+      "target": "linkText=Hazard Analysis",
+      "targets": [
+        ["linkText=Hazard Analysis", "linkText"],
+        ["css=.nav-link:nth-child(2)", "css:finder"],
+        ["xpath=//a[contains(text(),'Hazard Analysis')]", "xpath:link"],
+        ["xpath=//div[@id='app']/nav/div/ul/a[2]", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/hazard')]", "xpath:href"],
+        ["xpath=//a[2]", "xpath:position"],
+        ["xpath=//a[contains(.,'Hazard Analysis')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "975a3d88-8f49-4cab-98a8-1e2077df8824",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,0)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "63f9e259-42fb-4d0b-ab7f-903d876fbcfa",
+      "comment": "",
+      "command": "mouseOut",
+      "target": "linkText=Hazard Analysis",
+      "targets": [
+        ["linkText=Hazard Analysis", "linkText"],
+        ["css=.router-link-exact-active", "css:finder"],
+        ["xpath=//a[contains(text(),'Hazard Analysis')]", "xpath:link"],
+        ["xpath=//div[@id='app']/nav/div/ul/a[2]", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/hazard')]", "xpath:href"],
+        ["xpath=//a[2]", "xpath:position"],
+        ["xpath=//a[contains(.,'Hazard Analysis')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "9e5fea30-8106-45e2-84a6-dd462fbf7fa7",
+      "comment": "",
+      "command": "click",
+      "target": "id=site-selection",
+      "targets": [
+        ["id=site-selection", "id"],
+        ["css=#site-selection", "css:finder"],
+        ["xpath=//button[@id='site-selection']", "xpath:attributes"],
+        ["xpath=//div[@id='uncontrolled-tab-example-tabpane-siteselection']/div/div/div/div/form/div[2]/button", "xpath:idRelative"],
+        ["xpath=//div[2]/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Set')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "30ce0be8-7642-43c8-a135-f9e446b1198c",
+      "comment": "If the tab has been already clickable, it takes a few milliseconds until the tab becomes inactive when set button is clicked",
+      "command": "pause",
+      "target": "3",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "0d921495-3c35-4852-ab85-082ce27e8dc1",
+      "comment": "",
+      "command": "waitForElementNotPresent",
+      "target": "css=#uncontrolled-tab-example-tab-hazard[aria-disabled]",
+      "targets": [
+        ["id=uncontrolled-tab-example-tab-hazard", "id"],
+        ["linkText=Seismic Hazard", "linkText"],
+        ["css=#uncontrolled-tab-example-tab-hazard", "css:finder"],
+        ["xpath=//a[contains(text(),'Seismic Hazard')]", "xpath:link"],
+        ["xpath=//a[@id='uncontrolled-tab-example-tab-hazard']", "xpath:attributes"],
+        ["xpath=//div[@id='app']/div/div/nav/a[2]", "xpath:idRelative"],
+        ["xpath=(//a[contains(@href, '#')])[3]", "xpath:href"],
+        ["xpath=//nav/a[2]", "xpath:position"],
+        ["xpath=//a[contains(.,'Seismic Hazard')]", "xpath:innerText"]
+      ],
+      "value": "10000"
+    }, {
+      "id": "fcc5b3c6-01ee-4ca6-b020-86dc7c5f03f1",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//a[contains(.,'Seismic Hazard')]",
+      "targets": [
+        ["id=uncontrolled-tab-example-tab-hazard", "id"],
+        ["linkText=Seismic Hazard", "linkText"],
+        ["css=#uncontrolled-tab-example-tab-hazard", "css:finder"],
+        ["xpath=//a[contains(text(),'Seismic Hazard')]", "xpath:link"],
+        ["xpath=//a[@id='uncontrolled-tab-example-tab-hazard']", "xpath:attributes"],
+        ["xpath=//div[@id='app']/div/div/nav/a[2]", "xpath:idRelative"],
+        ["xpath=(//a[contains(@href, '#')])[3]", "xpath:href"],
+        ["xpath=//nav/a[2]", "xpath:position"],
+        ["xpath=//a[contains(.,'Seismic Hazard')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "8c7d4568-dbd4-4967-8e31-afdb477e6b3f",
+      "comment": "",
+      "command": "click",
+      "target": "id=IMs",
+      "targets": [
+        ["id=IMs", "id"],
+        ["css=#IMs", "css:finder"],
+        ["xpath=//select[@id='IMs']", "xpath:attributes"],
+        ["xpath=//div[@id='uncontrolled-tab-example-tabpane-hazard']/div/div/div/div/div/div[2]/select", "xpath:idRelative"],
+        ["xpath=//div[2]/select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "a3e3f29a-e011-40d0-b49e-5fab941f2024",
+      "comment": "",
+      "command": "select",
+      "target": "id=IMs",
+      "targets": [],
+      "value": "label=PGA"
+    }, {
+      "id": "5213f584-4e9c-469d-8ec3-7a5bc57d317a",
+      "comment": "",
+      "command": "click",
+      "target": "id=IMs",
+      "targets": [
+        ["id=IMs", "id"],
+        ["css=#IMs", "css:finder"],
+        ["xpath=//select[@id='IMs']", "xpath:attributes"],
+        ["xpath=//div[@id='uncontrolled-tab-example-tabpane-hazard']/div/div/div/div/div/div[2]/select", "xpath:idRelative"],
+        ["xpath=//div[2]/select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "3a51256b-243f-4cd8-9ef8-a4f6892cb2a4",
+      "comment": "",
+      "command": "click",
+      "target": "id=im-select",
+      "targets": [
+        ["id=im-select", "id"],
+        ["css=#im-select", "css:finder"],
+        ["xpath=//button[@id='im-select']", "xpath:attributes"],
+        ["xpath=//div[@id='uncontrolled-tab-example-tabpane-hazard']/div/div/div/div/div/div[3]/button", "xpath:idRelative"],
+        ["xpath=//div[3]/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Compute')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "ec48f4d2-4ef3-45ea-99d1-9869d7e9edd8",
+      "comment": "",
+      "command": "waitForElementNotPresent",
+      "target": "css=.hazard-curve-viewer > .download-button[disabled]",
+      "targets": [
+        ["css=.hazard-curve-viewer > .download-button", "css:finder"],
+        ["xpath=//div[@id='uncontrolled-tab-example-tabpane-hazardCurve']/div/button", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div/div/div/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Download Data')]", "xpath:innerText"]
+      ],
+      "value": "30000"
+    }, {
+      "id": "15042f4d-c5b1-4cb2-8b7f-cf54da4c2edb",
+      "comment": "",
+      "command": "click",
+      "target": "css=.hazard-curve-viewer > .download-button",
+      "targets": [
+        ["css=.hazard-curve-viewer > .download-button", "css:finder"],
+        ["xpath=//div[@id='uncontrolled-tab-example-tabpane-hazardCurve']/div/button", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div/div/div/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Download Data')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "966a41ed-4796-47cb-92b8-3b35c675ff5c",
+    "name": "Compute Disagg",
+    "commands": [{
+      "id": "7a0db33c-ed87-43cf-8c0a-391e619b62bf",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "829d126b-5828-4f07-80cb-a799044c34c4",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1680x1027",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "2c86150b-0397-4ebd-b336-eb9c6b6df4fd",
+      "comment": "",
+      "command": "click",
+      "target": "id=qs-login-btn",
+      "targets": [
+        ["id=qs-login-btn", "id"],
+        ["css=#qs-login-btn", "css:finder"],
+        ["xpath=//button[@id='qs-login-btn']", "xpath:attributes"],
+        ["xpath=//div[@id='app']/nav/div/ul[2]/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Log in')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "c0eeddf6-55a6-4818-ba1b-c479e7578f76",
+      "comment": "",
+      "command": "click",
+      "target": "id=username",
+      "targets": [
+        ["id=username", "id"],
+        ["name=username", "name"],
+        ["css=#username", "css:finder"],
+        ["xpath=//input[@id='username']", "xpath:attributes"],
+        ["xpath=//div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "75d0e510-e349-4be9-b630-39f01bca4b23",
+      "comment": "",
+      "command": "type",
+      "target": "id=username",
+      "targets": [
+        ["id=username", "id"],
+        ["name=username", "name"],
+        ["css=#username", "css:finder"],
+        ["xpath=//input[@id='username']", "xpath:attributes"],
+        ["xpath=//div/input", "xpath:position"]
+      ],
+      "value": "sungeunbae@live.com"
+    }, {
+      "id": "d3c240ec-29c1-4b7f-84b2-1042af12165c",
+      "comment": "",
+      "command": "type",
+      "target": "id=password",
+      "targets": [
+        ["id=password", "id"],
+        ["name=password", "name"],
+        ["css=#password", "css:finder"],
+        ["xpath=//input[@id='password']", "xpath:attributes"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": "Yonsei96!"
+    }, {
+      "id": "3adfbfcc-c4bb-4b29-ba83-a72a63c36e17",
+      "comment": "",
+      "command": "click",
+      "target": "name=action",
+      "targets": [
+        ["name=action", "name"],
+        ["css=.cebb329f6", "css:finder"],
+        ["xpath=//button[@name='action']", "xpath:attributes"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Continue')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "86ca9027-8cc4-40b6-8975-8b9a49558db1",
+      "comment": "",
+      "command": "waitForElementPresent",
+      "target": "xpath=//a[contains(text(),'Hazard Analysis')]",
+      "targets": [
+        ["linkText=Hazard Analysis", "linkText"],
+        ["css=.router-link-exact-active", "css:finder"],
+        ["xpath=//a[contains(text(),'Hazard Analysis')]", "xpath:link"],
+        ["xpath=//div[@id='app']/nav/div/ul/a[2]", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/hazard')]", "xpath:href"],
+        ["xpath=//a[2]", "xpath:position"],
+        ["xpath=//a[contains(.,'Hazard Analysis')]", "xpath:innerText"]
+      ],
+      "value": "30000"
+    }, {
+      "id": "5b3ad1a3-bc0c-46f6-b354-784d99bb57b3",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Hazard Analysis",
+      "targets": [
+        ["linkText=Hazard Analysis", "linkText"],
+        ["css=.nav-link:nth-child(2)", "css:finder"],
+        ["xpath=//a[contains(text(),'Hazard Analysis')]", "xpath:link"],
+        ["xpath=//div[@id='app']/nav/div/ul/a[2]", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/hazard')]", "xpath:href"],
+        ["xpath=//a[2]", "xpath:position"],
+        ["xpath=//a[contains(.,'Hazard Analysis')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "b02d24ca-bdfb-4947-bbf4-308954cf77dc",
+      "comment": "",
+      "command": "mouseOver",
+      "target": "linkText=Hazard Analysis",
+      "targets": [
+        ["linkText=Hazard Analysis", "linkText"],
+        ["css=.nav-link:nth-child(2)", "css:finder"],
+        ["xpath=//a[contains(text(),'Hazard Analysis')]", "xpath:link"],
+        ["xpath=//div[@id='app']/nav/div/ul/a[2]", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/hazard')]", "xpath:href"],
+        ["xpath=//a[2]", "xpath:position"],
+        ["xpath=//a[contains(.,'Hazard Analysis')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "11cf644d-c391-4679-9439-983f10a0df0b",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,0)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "f6a222de-b649-44d8-ae05-bc321766c1a0",
+      "comment": "",
+      "command": "mouseOut",
+      "target": "linkText=Hazard Analysis",
+      "targets": [
+        ["linkText=Hazard Analysis", "linkText"],
+        ["css=.router-link-exact-active", "css:finder"],
+        ["xpath=//a[contains(text(),'Hazard Analysis')]", "xpath:link"],
+        ["xpath=//div[@id='app']/nav/div/ul/a[2]", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/hazard')]", "xpath:href"],
+        ["xpath=//a[2]", "xpath:position"],
+        ["xpath=//a[contains(.,'Hazard Analysis')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "96de12ff-f70e-4e0f-920e-c0ba6cb5ba94",
+      "comment": "",
+      "command": "click",
+      "target": "id=site-selection",
+      "targets": [
+        ["id=site-selection", "id"],
+        ["css=#site-selection", "css:finder"],
+        ["xpath=//button[@id='site-selection']", "xpath:attributes"],
+        ["xpath=//div[@id='uncontrolled-tab-example-tabpane-siteselection']/div/div/div/div/form/div[2]/button", "xpath:idRelative"],
+        ["xpath=//div[2]/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Set')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "a8039b2f-e69d-4c4b-ac72-da623118f38d",
+      "comment": "If the tab has been already clickable, it takes a few milliseconds until the tab becomes inactive when set button is clicked",
+      "command": "pause",
+      "target": "3",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "90063e85-acc1-4e77-ac81-fda93a756429",
+      "comment": "",
+      "command": "waitForElementNotPresent",
+      "target": "css=#uncontrolled-tab-example-tab-hazard[aria-disabled]",
+      "targets": [
+        ["id=uncontrolled-tab-example-tab-hazard", "id"],
+        ["linkText=Seismic Hazard", "linkText"],
+        ["css=#uncontrolled-tab-example-tab-hazard", "css:finder"],
+        ["xpath=//a[contains(text(),'Seismic Hazard')]", "xpath:link"],
+        ["xpath=//a[@id='uncontrolled-tab-example-tab-hazard']", "xpath:attributes"],
+        ["xpath=//div[@id='app']/div/div/nav/a[2]", "xpath:idRelative"],
+        ["xpath=(//a[contains(@href, '#')])[3]", "xpath:href"],
+        ["xpath=//nav/a[2]", "xpath:position"],
+        ["xpath=//a[contains(.,'Seismic Hazard')]", "xpath:innerText"]
+      ],
+      "value": "10000"
+    }, {
+      "id": "38d61fe6-ff58-41c9-afe6-c7975f8e2fce",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//a[contains(.,'Seismic Hazard')]",
+      "targets": [
+        ["id=uncontrolled-tab-example-tab-hazard", "id"],
+        ["linkText=Seismic Hazard", "linkText"],
+        ["css=#uncontrolled-tab-example-tab-hazard", "css:finder"],
+        ["xpath=//a[contains(text(),'Seismic Hazard')]", "xpath:link"],
+        ["xpath=//a[@id='uncontrolled-tab-example-tab-hazard']", "xpath:attributes"],
+        ["xpath=//div[@id='app']/div/div/nav/a[2]", "xpath:idRelative"],
+        ["xpath=(//a[contains(@href, '#')])[3]", "xpath:href"],
+        ["xpath=//nav/a[2]", "xpath:position"],
+        ["xpath=//a[contains(.,'Seismic Hazard')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "9ab17113-e678-4715-ae2d-5202d8902c0d",
+      "comment": "",
+      "command": "click",
+      "target": "id=IMs",
+      "targets": [
+        ["id=IMs", "id"],
+        ["css=#IMs", "css:finder"],
+        ["xpath=//select[@id='IMs']", "xpath:attributes"],
+        ["xpath=//div[@id='uncontrolled-tab-example-tabpane-hazard']/div/div/div/div/div/div[2]/select", "xpath:idRelative"],
+        ["xpath=//div[2]/select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "f0c21e98-c955-44d8-81e7-e1d94baa15ce",
+      "comment": "",
+      "command": "select",
+      "target": "id=IMs",
+      "targets": [],
+      "value": "label=PGA"
+    }, {
+      "id": "09355aee-3433-4b11-ba80-edf6220232f2",
+      "comment": "",
+      "command": "click",
+      "target": "id=IMs",
+      "targets": [
+        ["id=IMs", "id"],
+        ["css=#IMs", "css:finder"],
+        ["xpath=//select[@id='IMs']", "xpath:attributes"],
+        ["xpath=//div[@id='uncontrolled-tab-example-tabpane-hazard']/div/div/div/div/div/div[2]/select", "xpath:idRelative"],
+        ["xpath=//div[2]/select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "9986f312-7501-4837-bd2c-939987a2a478",
+      "comment": "",
+      "command": "click",
+      "target": "id=im-select",
+      "targets": [
+        ["id=im-select", "id"],
+        ["css=#im-select", "css:finder"],
+        ["xpath=//button[@id='im-select']", "xpath:attributes"],
+        ["xpath=//div[@id='uncontrolled-tab-example-tabpane-hazard']/div/div/div/div/div/div[3]/button", "xpath:idRelative"],
+        ["xpath=//div[3]/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Compute')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "98b54644-653e-48bf-9b2e-b82cd5afff07",
+      "comment": "",
+      "command": "click",
+      "target": "id=annual-rate",
+      "targets": [
+        ["id=annual-rate", "id"],
+        ["css=div:nth-child(3) #annual-rate", "css:finder"],
+        ["xpath=//input[@id='annual-rate']", "xpath:attributes"],
+        ["xpath=//div[@id='uncontrolled-tab-example-tabpane-hazard']/div/div/div/div/div[3]/div[2]/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "fc059396-f4e6-402a-a79f-cfe32746c48b",
+      "comment": "",
+      "command": "type",
+      "target": "id=annual-rate",
+      "targets": [
+        ["id=annual-rate", "id"],
+        ["css=div:nth-child(3) #annual-rate", "css:finder"],
+        ["xpath=//input[@id='annual-rate']", "xpath:attributes"],
+        ["xpath=//div[@id='uncontrolled-tab-example-tabpane-hazard']/div/div/div/div/div[3]/div[2]/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/input", "xpath:position"]
+      ],
+      "value": "0.2"
+    }, {
+      "id": "9b310209-175f-44d3-9fb2-c05ff8245d71",
+      "comment": "",
+      "command": "click",
+      "target": "id=prob-update",
+      "targets": [
+        ["id=prob-update", "id"],
+        ["css=div:nth-child(3) > .form-group > #prob-update", "css:finder"],
+        ["xpath=//button[@id='prob-update']", "xpath:attributes"],
+        ["xpath=//div[@id='uncontrolled-tab-example-tabpane-hazard']/div/div/div/div/div[3]/div[3]/button", "xpath:idRelative"],
+        ["xpath=//div[3]/div[3]/button", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "dbf054be-21c5-4821-a84a-552e2aace118",
+      "comment": "",
+      "command": "waitForElementNotPresent",
+      "target": "css=#uncontrolled-tab-example-tabpane-disagg > .download-button[disabled]",
+      "targets": [
+        ["css=#uncontrolled-tab-example-tabpane-disagg > .download-button", "css:finder"],
+        ["xpath=//div[@id='uncontrolled-tab-example-tabpane-disagg']/button", "xpath:idRelative"],
+        ["xpath=//div/div[2]/button", "xpath:position"]
+      ],
+      "value": "60000"
+    }, {
+      "id": "7111637e-bb23-40b8-9bcd-05ba837eb36c",
+      "comment": "",
+      "command": "click",
+      "target": "css=#uncontrolled-tab-example-tabpane-disagg > .download-button",
+      "targets": [
+        ["css=#uncontrolled-tab-example-tabpane-disagg > .download-button", "css:finder"],
+        ["xpath=//div[@id='uncontrolled-tab-example-tabpane-disagg']/button", "xpath:idRelative"],
+        ["xpath=//div/div[2]/button", "xpath:position"]
+      ],
+      "value": ""
+    }]
+  }],
+  "suites": [{
+    "id": "726c02c4-c0f2-44f1-92f5-8e3448489020",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": []
+  }],
+  "urls": ["https://development.seistech.nz/"],
+  "plugins": []
+}
