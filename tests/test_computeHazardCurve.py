@@ -9,10 +9,14 @@ from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.webdriver.chrome.options import Options
+
+chrome_options = Options()
+chrome_options.add_argument("--headless")
 
 class TestComputeHazardCurve():
   def setup_method(self, method):
-    self.driver = webdriver.Chrome()
+    self.driver = webdriver.Chrome(options=chrome_options)
     self.vars = {}
   
   def teardown_method(self, method):
