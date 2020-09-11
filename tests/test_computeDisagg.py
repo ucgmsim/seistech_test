@@ -9,10 +9,14 @@ from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.webdriver.chrome.options import Options
+
+chrome_options = Options()
+chrome_options.add_argument("--headless")
 
 class TestComputeDisagg():
   def setup_method(self, method):
-    self.driver = webdriver.Chrome()
+    self.driver = webdriver.Chrome(options=chrome_options)
     self.vars = {}
   
   def teardown_method(self, method):
@@ -34,7 +38,6 @@ class TestComputeDisagg():
     self.driver.execute_script("window.scrollTo(0,0)")
     element = self.driver.find_element(By.CSS_SELECTOR, "body")
     actions = ActionChains(self.driver)
-    actions.move_to_element(element, 0, 0).perform()
     self.driver.find_element(By.ID, "site-selection").click()
     time.sleep(3)
     WebDriverWait(self.driver, 10000).until(expected_conditions.invisibility_of_element_located((By.CSS_SELECTOR, "#uncontrolled-tab-example-tab-hazard[aria-disabled]")))
