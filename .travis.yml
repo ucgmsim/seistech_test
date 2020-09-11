@@ -18,4 +18,6 @@ script:
   - whereis google-chrome-stable
   - whereis chromedriver
   - pytest -s  
-
+after_script:
+  - ls *.zip
+  - rm *.zip
