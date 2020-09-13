@@ -6,7 +6,6 @@ addons:
   chrome: stable
   
 before_install:
- - pwd
  - cd /home/travis/build/ucgmsim/
  - git clone https://github.com/ucgmsim/qcore.git
 
@@ -17,7 +16,6 @@ install:
   - sudo mv -f ~/chromedriver /usr/local/share/
   - sudo chmod +x /usr/local/share/chromedriver
   - sudo ln -s /usr/local/share/chromedriver /usr/local/bin/chromedriver⋮
-  - pwd
   - pip install -r /home/travis/build/ucgmsim/seistech_psha_frontend/requirements.txt
   - pip install --no-deps ./qcore
 

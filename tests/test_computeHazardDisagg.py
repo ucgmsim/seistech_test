@@ -10,6 +10,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.chrome.options import Options
+import glob
 
 chrome_options = Options()
 chrome_options.add_argument("--headless")
@@ -62,4 +63,7 @@ class TestComputeHazardDisagg():
     WebDriverWait(self.driver, 60000).until(expected_conditions.invisibility_of_element_located((By.CSS_SELECTOR, "#uncontrolled-tab-example-tabpane-disagg > .download-button[disabled]")))
     self.driver.find_element(By.CSS_SELECTOR, "#uncontrolled-tab-example-tabpane-disagg > .download-button").click()
     time.sleep(10)
+    zip_files= glob.glob("*.zip")
+    assert len(zip_files)==2
+
   
