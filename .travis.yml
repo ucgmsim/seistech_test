@@ -5,6 +5,10 @@ dist: xenial
 addons:
   chrome: stable
   
+before_install:
+ - cd /home/travis/build/ucgsim/
+ - git clone https://github.ciom/ucgsim/qcore.git
+
 install:
   - wget -N http://chromedriver.storage.googleapis.com/85.0.4183.87/chromedriver_linux64.zip -P ~/
   - unzip ~/chromedriver_linux64.zip -d ~/
@@ -13,10 +17,12 @@ install:
   - sudo chmod +x /usr/local/share/chromedriver
   - sudo ln -s /usr/local/share/chromedriver /usr/local/bin/chromedriver⋮
   - pip install -r requirements.txt
+  - pip install --no-deps ./qcore
 
 script:
   - whereis google-chrome-stable
   - whereis chromedriver
+  - cd /home/travis/build/ucgsim/seistech_psha_frontend
   - pytest -s  
 after_script:
   - ls *.zip
