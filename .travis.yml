@@ -7,7 +7,7 @@ addons:
   
 before_install:
  - cd /home/travis/build/ucgmsim/
- - git clone https://github.ciom/ucgmsim/qcore.git
+ - git clone https://github.com/ucgmsim/qcore.git
 
 install:
   - wget -N http://chromedriver.storage.googleapis.com/85.0.4183.87/chromedriver_linux64.zip -P ~/
