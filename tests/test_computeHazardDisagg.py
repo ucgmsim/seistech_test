@@ -13,7 +13,7 @@ from selenium.webdriver.chrome.options import Options
 import glob
 
 chrome_options = Options()
-chrome_options.add_argument("--headless")
+#chrome_options.add_argument("--headless")
 
 class TestComputeHazardDisagg():
   def setup_method(self, method):
@@ -24,7 +24,7 @@ class TestComputeHazardDisagg():
     self.driver.quit()
   
   def test_computeHazardDisagg(self):
-    self.driver.get("https://development.seistech.nz/")
+    self.driver.get("https://ea.seistech.nz/")
     self.driver.set_window_size(1680, 1027)
     self.driver.find_element(By.ID, "qs-login-btn").click()
     self.driver.find_element(By.ID, "username").click()
