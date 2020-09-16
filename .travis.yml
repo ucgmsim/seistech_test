@@ -6,8 +6,13 @@ addons:
   chrome: stable
   
 before_install:
- - cd /home/travis/build/ucgmsim/
- - git clone https://github.com/ucgmsim/qcore.git
+  - export HOST_NAME=`hostname`
+  - echo `pwd`
+  - export DEPLOY_NAME=`git rev-parse --abbrev-ref HEAD |awk -F'_' '{print $2}'`
+  - echo $DEPLOY_NAME
+
+  - cd /home/travis/build/ucgmsim/
+  - git clone https://github.com/ucgmsim/qcore.git
 
 install:
   - wget -N http://chromedriver.storage.googleapis.com/85.0.4183.87/chromedriver_linux64.zip -P ~/
@@ -18,9 +23,6 @@ install:
   - sudo ln -s /usr/local/share/chromedriver /usr/local/bin/chromedriver⋮
   - pip install -r /home/travis/build/ucgmsim/seistech_psha_frontend/requirements.txt
   - pip install --no-deps ./qcore
-  - export DEPLOY_NAME=`git rev-parse --abbrev-ref HEAD |awk -F'_' '{print $2}'`
-  - echo $DEPLOY_NAME
-  - export HOST_NAME=`hostname`
 
 script:
   - whereis google-chrome-stable
