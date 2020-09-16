@@ -8,8 +8,10 @@ addons:
 before_install:
   - export HOST_NAME=`hostname`
   - echo `pwd`
-  - export BRANCH_NAME=`git branch |grep \* |cut -d ' ' -f2`
-  - echo $BRANCH_NAME
+    #- export BRANCH_NAME=`git branch |grep \* |cut -d ' ' -f2`
+    #- echo $BRANCH_NAME
+  - export BRANCH_NAME=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
+  - echo "TRAVIS_BRANCH=$TRAVIS_BRANCH, PR=$PR, BRANCH=$BRANCH_NAME"
   - cd /home/travis/build/ucgmsim/
   - git clone https://github.com/ucgmsim/qcore.git
 
