@@ -6,6 +6,7 @@ addons:
   chrome: stable
   
 before_install:
+  - echo `hostname`
   - export HOST_NAME=`hostname`
   - echo `pwd`
     #- export BRANCH_NAME=`git branch |grep \* |cut -d ' ' -f2`
