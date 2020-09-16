@@ -14,8 +14,8 @@ import glob
 import os
 
 chrome_options = Options()
-#if os.environ['HOST_NAME'] and os.environ['HOST_NAME'].startswith("travis"):
-chrome_options.add_argument("--headless")
+if os.environ.get('HOST_NAME') and os.environ['HOST_NAME'].startswith("travis"):
+    chrome_options.add_argument("--headless")
 
 class TestComputeHazardDisagg():
   def setup_method(self, method):
