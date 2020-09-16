@@ -14,7 +14,7 @@ import glob
 import os
 
 chrome_options = Options()
-if os.environ['HOST_NAME'].startswith("travis"):
+if os.environ['HOST_NAME'] and os.environ['HOST_NAME'].startswith("travis"):
     chrome_options.add_argument("--headless")
 
 class TestComputeHazardDisagg():
@@ -32,7 +32,7 @@ class TestComputeHazardDisagg():
     self.driver.quit()
   
   def test_computeHazardDisagg(self):
-    self.driver.get("https://{}seistech.nz/".format(self.deployname))
+    self.driver.get("https://{}seistech.nz/".format(self.deploy_name))
     self.driver.set_window_size(1680, 1027)
     self.driver.find_element(By.ID, "qs-login-btn").click()
     self.driver.find_element(By.ID, "username").click()
