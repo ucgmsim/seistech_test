@@ -11,6 +11,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.chrome.options import Options
 import glob
+import os
 
 chrome_options = Options()
 chrome_options.add_argument("--headless")
@@ -19,12 +20,18 @@ class TestComputeHazardDisagg():
   def setup_method(self, method):
     self.driver = webdriver.Chrome(options=chrome_options)
     self.vars = {}
+    try:
+        self.deploy_name=os.environ['DEPLOY_NAME']+"."
+    except:
+        pass
+    if len(self.deploy_name)==1:
+        self.deploy_name=''
   
   def teardown_method(self, method):
     self.driver.quit()
   
   def test_computeHazardDisagg(self):
-    self.driver.get("https://development.seistech.nz/")
+    self.driver.get("https://{}seistech.nz/".format(self.deployname))
     self.driver.set_window_size(1680, 1027)
     self.driver.find_element(By.ID, "qs-login-btn").click()
     self.driver.find_element(By.ID, "username").click()
