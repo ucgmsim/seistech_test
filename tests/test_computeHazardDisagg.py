@@ -21,13 +21,19 @@ class TestComputeHazardDisagg():
   def setup_method(self, method):
     self.driver = webdriver.Chrome(options=chrome_options)
     self.vars = {}
+    self.deploy_name="devel"
     try:
-        self.deploy_name=os.environ['DEPLOY_NAME']+"."
-    except:
-        pass
-    if len(self.deploy_name)==1:
-        self.deploy_name=''
-  
+        branch=os.environ['BRANCH_NAME']
+    except KeyError:
+        branch='master_devel'
+    try:
+        self.deploy_name=branch.split("master_")[1]
+    except IndexError: #not in master_* format
+        if branch=='master':
+            self.deploy_name=''
+    else:
+        self.deploy_name+='.'
+
   def teardown_method(self, method):
     self.driver.quit()
   
