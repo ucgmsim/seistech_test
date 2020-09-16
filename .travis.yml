@@ -8,9 +8,8 @@ addons:
 before_install:
   - export HOST_NAME=`hostname`
   - echo `pwd`
-  - export BRANCH_NAME=`git rev-parse --abbrev-ref HEAD`
+  - export BRANCH_NAME=`git branch |grep \* |cut -d ' ' -f2`
   - echo $BRANCH_NAME
-
   - cd /home/travis/build/ucgmsim/
   - git clone https://github.com/ucgmsim/qcore.git
 

@@ -21,24 +21,25 @@ class TestComputeHazardDisagg():
   def setup_method(self, method):
     self.driver = webdriver.Chrome(options=chrome_options)
     self.vars = {}
-    self.deploy_name="devel"
+    self.deploy_name="psha-"
+
     try:
         branch=os.environ['BRANCH_NAME']
     except KeyError:
-        branch='master_devel'
+        branch='master_devel' #assumed to be the default
     try:
-        self.deploy_name=branch.split("master_")[1]
+        self.deploy_name+=branch.split("master_")[1] #psha-ea, psha-devel ...
     except IndexError: #not in master_* format
         if branch=='master':
-            self.deploy_name=''
-    else:
-        self.deploy_name+='.'
+            self.deploy_name='psha'
+
+    print("branch name: {} deployment name: {}".format(branch, self.deploy_name))
 
   def teardown_method(self, method):
     self.driver.quit()
   
   def test_computeHazardDisagg(self):
-    self.driver.get("https://{}seistech.nz/".format(self.deploy_name))
+    self.driver.get("https://{}.seistech.nz/".format(self.deploy_name))
     self.driver.set_window_size(1680, 1027)
     self.driver.find_element(By.ID, "qs-login-btn").click()
     self.driver.find_element(By.ID, "username").click()
