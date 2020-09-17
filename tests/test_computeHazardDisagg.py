@@ -21,19 +21,10 @@ class TestComputeHazardDisagg():
   def setup_method(self, method):
     self.driver = webdriver.Chrome(options=chrome_options)
     self.vars = {}
-    self.deploy_name="psha-"
-
     try:
-        branch=os.environ['BRANCH_NAME']
-    except KeyError:
-        branch='master_devel' #assumed to be the default
-    try:
-        self.deploy_name+=branch.split("master_")[1] #psha-ea, psha-devel ...
-    except IndexError: #not in master_* format
-        if branch=='master':
-            self.deploy_name='psha'
-
-    print("branch name: {} deployment name: {}".format(branch, self.deploy_name))
+        self.deploy_name=os.environ['DEPLOY_NAME']
+    except:
+        self.deploy_name="psha-devel"
 
   def teardown_method(self, method):
     self.driver.quit()
