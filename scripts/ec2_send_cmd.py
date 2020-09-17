@@ -5,10 +5,14 @@ if len(sys.argv)< 4:
     sys.exit()
 USERNAME,PASSWORD = sys.argv[1:3]
 CMD = " ".join(sys.argv[3:])
-print("user:{}".format(USERNAME))
-print("passwd:{}".format(PASSWORD))
 print(CMD)
 child = pexpect.spawn("ssh {}@seistech.nz {}".format(USERNAME,CMD))
+try:
+    child.expect("yes/no")
+except:
+    pass
+else:
+    child.sendline("yes")
 try:
     child.expect("password: ")
 except:
