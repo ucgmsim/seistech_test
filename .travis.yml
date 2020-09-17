@@ -14,7 +14,7 @@ before_install:
   - export DEPLOY_NAME=`python scripts/get_deploy_name.py $BRANCH_NAME`
   - echo $DEPLOY_NAME
   - pip install pexpect
-  - python scripts/ec2_send_cmd.py "$EC2USER" "$EC2PASSWD" /home/ec2-user/test.sh
+  - python scripts/ec2_send_cmd.py "$EC2USER" "$EC2PASSWD" "cd /home/ec2-user/seistech/dockerv;./Dockerise.sh $BRANCH_NAME"
   - cd /home/travis/build/ucgmsim/
   - git clone https://github.com/ucgmsim/qcore.git
 

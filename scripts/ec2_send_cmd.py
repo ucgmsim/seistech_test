@@ -13,17 +13,24 @@ except:
     pass
 else:
     child.sendline("yes")
+    print(child.before.decode("utf-8"))
 try:
     child.expect("password: ")
 except:
     pass
 else:
     child.sendline(PASSWORD)
+    print(child.before.decode("utf-8"))
+
 #child.expect('.+')
-i=child.expect(['Permission denied', pexpect.EOF])
-if i==0:
+try:
+    child.expect('Permission denied', timeout=2)
+except:
+    pass
+else:
     print("Permission denied. Can't login")
     child.kill(0)
-elif i==1:
-    print("Executed")
-    print(child.before.decode("utf-8"))
+print("Executed")
+child.expect(pexpect.EOF, timeout=600)
+print(child.before.decode("utf-8"))
+
