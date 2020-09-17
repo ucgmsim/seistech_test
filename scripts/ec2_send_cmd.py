@@ -8,7 +8,7 @@ CMD = " ".join(sys.argv[3:])
 print(CMD)
 child = pexpect.spawn("ssh {}@seistech.nz {}".format(USERNAME,CMD))
 try:
-    child.expect("yes/no")
+    child.expect("yes/no", timeout=2) #first time ssh. if not first time, proceed after 2 secs  
 except:
     pass
 else:
