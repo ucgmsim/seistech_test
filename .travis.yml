@@ -11,10 +11,11 @@ before_install:
   - echo `pwd`
   - export BRANCH_NAME=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
   - echo "TRAVIS_BRANCH=$TRAVIS_BRANCH, PR=$PR, BRANCH=$BRANCH_NAME"
-  - export DEPLOY_NAME=`python scripts/get_deploy_name.py $BRANCH_NAME`
+    #  - export DEPLOY_NAME=`python scripts/get_deploy_name.py $BRANCH_NAME`
+  - export DEPLOY_NAME=psha-test
   - echo $DEPLOY_NAME
   - pip install pexpect
-  - python scripts/ec2_send_cmd.py "$EC2USER" "$EC2PASSWD" "cd /home/ec2-user/seistech/docker/$BRANCH_NAME;../Dockerise.sh $BRANCH_NAME"
+  - python scripts/ec2_send_cmd.py "$EC2USER" "$EC2PASSWD" "cd /home/ec2-user/seistech/docker/$BRANCH_NAME;../Dockerise.sh $BRANCH_NAME 5102 5002"
   - cd /home/travis/build/ucgmsim/
   - git clone https://github.com/ucgmsim/qcore.git
 

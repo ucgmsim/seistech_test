@@ -24,7 +24,7 @@ class TestComputeHazardDisagg():
     try:
         self.deploy_name=os.environ['DEPLOY_NAME']
     except:
-        self.deploy_name="psha-devel"
+        self.deploy_name="psha-test"
 
   def teardown_method(self, method):
     self.driver.quit()
