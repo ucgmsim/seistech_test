@@ -53,10 +53,8 @@ class TestComputeHazardDisagg():
     time.sleep(3)
     WebDriverWait(self.driver, 20000).until(expected_conditions.invisibility_of_element_located((By.CSS_SELECTOR, "#uncontrolled-tab-example-tab-hazard[aria-disabled]")))
     self.driver.find_element(By.XPATH, "//a[contains(.,\'Seismic Hazard\')]").click()
-    self.driver.find_element(By.ID, "IMs").click()
-    dropdown = self.driver.find_element(By.ID, "IMs")
-    dropdown.find_element(By.XPATH, "//option[. = 'PGA']").click()
-    self.driver.find_element(By.ID, "IMs").click()
+    self.driver.find_element(By.XPATH, "//div[@id=\'IMs\']/div/div").click()
+    self.driver.find_element(By.ID, "react-select-3-option-0").click() #PGA
     self.driver.find_element(By.ID, "im-select").click()
     WebDriverWait(self.driver, 30000).until(expected_conditions.invisibility_of_element_located((By.CSS_SELECTOR, ".hazard-curve-viewer > .download-button[disabled]")))
     self.driver.find_element(By.CSS_SELECTOR, ".hazard-curve-viewer > .download-button").click()
