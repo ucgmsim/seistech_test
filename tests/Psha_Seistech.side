@@ -2,7 +2,7 @@
   "id": "e178328e-df39-479e-a0a4-2da769ccec11",
   "version": "2.0",
   "name": "Psha_Seistech",
-  "url": "https://development.seistech.nz",
+  "url": "https://psha-test.seistech.nz",
   "tests": [{
     "id": "ccf36611-cb2c-4cf7-8dde-f1e251a6da10",
     "name": "Compute Hazard Curve",
@@ -209,30 +209,17 @@
       ],
       "value": ""
     }, {
+      "id": "a3e3f29a-e011-40d0-b49e-5fab941f2024",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//div[@id='IMs']/div/div",
+      "targets": [],
+      "value": "PGA"
+    }, {
       "id": "8c7d4568-dbd4-4967-8e31-afdb477e6b3f",
       "comment": "",
       "command": "click",
-      "target": "id=IMs",
-      "targets": [
-        ["id=IMs", "id"],
-        ["css=#IMs", "css:finder"],
-        ["xpath=//select[@id='IMs']", "xpath:attributes"],
-        ["xpath=//div[@id='uncontrolled-tab-example-tabpane-hazard']/div/div/div/div/div/div[2]/select", "xpath:idRelative"],
-        ["xpath=//div[2]/select", "xpath:position"]
-      ],
-      "value": ""
-    }, {
-      "id": "a3e3f29a-e011-40d0-b49e-5fab941f2024",
-      "comment": "",
-      "command": "select",
-      "target": "id=IMs",
-      "targets": [],
-      "value": "label=PGA"
-    }, {
-      "id": "5213f584-4e9c-469d-8ec3-7a5bc57d317a",
-      "comment": "",
-      "command": "click",
-      "target": "id=IMs",
+      "target": "id=react-select-3-option-1",
       "targets": [
         ["id=IMs", "id"],
         ["css=#IMs", "css:finder"],
@@ -455,7 +442,7 @@
       "id": "90063e85-acc1-4e77-ac81-fda93a756429",
       "comment": "",
       "command": "waitForElementNotPresent",
-      "target": "css=#uncontrolled-tab-example-tab-hazard[aria-disabled]",
+      "target": "id=uncontrolled-tab-example-tab-hazard[aria-disabled]",
       "targets": [
         ["id=uncontrolled-tab-example-tab-hazard", "id"],
         ["linkText=Seismic Hazard", "linkText"],
@@ -486,36 +473,27 @@
       ],
       "value": ""
     }, {
-      "id": "9ab17113-e678-4715-ae2d-5202d8902c0d",
+      "id": "9851f4d4-6887-485e-bd74-5ecc5a8a74f5",
       "comment": "",
       "command": "click",
-      "target": "id=IMs",
+      "target": "xpath=//div[@id='IMs']/div/div",
       "targets": [
-        ["id=IMs", "id"],
-        ["css=#IMs", "css:finder"],
-        ["xpath=//select[@id='IMs']", "xpath:attributes"],
-        ["xpath=//div[@id='uncontrolled-tab-example-tabpane-hazard']/div/div/div/div/div/div[2]/select", "xpath:idRelative"],
-        ["xpath=//div[2]/select", "xpath:position"]
+        ["css=.css-1pahdxg-control > .css-g1d714-ValueContainer", "css:finder"],
+        ["xpath=//div[@id='IMs']/div/div", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div/div/div/div/div[2]/div/div/div", "xpath:position"]
       ],
       "value": ""
     }, {
-      "id": "f0c21e98-c955-44d8-81e7-e1d94baa15ce",
-      "comment": "",
-      "command": "select",
-      "target": "id=IMs",
-      "targets": [],
-      "value": "label=PGA"
-    }, {
-      "id": "09355aee-3433-4b11-ba80-edf6220232f2",
+      "id": "af5cecc9-461d-49a2-ae94-3df66bfa91f0",
       "comment": "",
       "command": "click",
-      "target": "id=IMs",
+      "target": "id=react-select-3-option-1",
       "targets": [
-        ["id=IMs", "id"],
-        ["css=#IMs", "css:finder"],
-        ["xpath=//select[@id='IMs']", "xpath:attributes"],
-        ["xpath=//div[@id='uncontrolled-tab-example-tabpane-hazard']/div/div/div/div/div/div[2]/select", "xpath:idRelative"],
-        ["xpath=//div[2]/select", "xpath:position"]
+        ["id=react-select-3-option-0", "id"],
+        ["css=#react-select-3-option-0", "css:finder"],
+        ["xpath=//div[@id='react-select-3-option-0']", "xpath:attributes"],
+        ["xpath=//div[@id='IMs']/div[2]/div/div", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div[2]/div/div", "xpath:position"]
       ],
       "value": ""
     }, {
@@ -536,26 +514,26 @@
       "id": "98b54644-653e-48bf-9b2e-b82cd5afff07",
       "comment": "",
       "command": "click",
-      "target": "id=annual-rate",
+      "target": "id=disagg-annual-rate",
       "targets": [
-        ["id=annual-rate", "id"],
-        ["css=div:nth-child(3) #annual-rate", "css:finder"],
-        ["xpath=//input[@id='annual-rate']", "xpath:attributes"],
-        ["xpath=//div[@id='uncontrolled-tab-example-tabpane-hazard']/div/div/div/div/div[3]/div[2]/div/input", "xpath:idRelative"],
-        ["xpath=//div[2]/div/input", "xpath:position"]
+        ["id=disagg-annual-rate", "id"],
+        ["css=#disagg-annual-rate", "css:finder"],
+        ["xpath=//input[@id='disagg-annual-rate']", "xpath:attributes"],
+        ["xpath=//div[@id='uncontrolled-tab-example-tabpane-hazard']/div/div/div/div/div[3]/form/div[2]/div/input", "xpath:idRelative"],
+        ["xpath=//form/div[2]/div/input", "xpath:position"]
       ],
       "value": ""
     }, {
       "id": "fc059396-f4e6-402a-a79f-cfe32746c48b",
       "comment": "",
       "command": "type",
-      "target": "id=annual-rate",
+      "target": "id=disagg-annual-rate",
       "targets": [
-        ["id=annual-rate", "id"],
-        ["css=div:nth-child(3) #annual-rate", "css:finder"],
-        ["xpath=//input[@id='annual-rate']", "xpath:attributes"],
-        ["xpath=//div[@id='uncontrolled-tab-example-tabpane-hazard']/div/div/div/div/div[3]/div[2]/div/input", "xpath:idRelative"],
-        ["xpath=//div[2]/div/input", "xpath:position"]
+        ["id=disagg-annual-rate", "id"],
+        ["css=#disagg-annual-rate", "css:finder"],
+        ["xpath=//input[@id='disagg-annual-rate']", "xpath:attributes"],
+        ["xpath=//div[@id='uncontrolled-tab-example-tabpane-hazard']/div/div/div/div/div[3]/form/div[2]/div/input", "xpath:idRelative"],
+        ["xpath=//form/div[2]/div/input", "xpath:position"]
       ],
       "value": "0.2"
     }, {
@@ -565,10 +543,10 @@
       "target": "id=prob-update",
       "targets": [
         ["id=prob-update", "id"],
-        ["css=div:nth-child(3) > .form-group > #prob-update", "css:finder"],
+        ["css=form #prob-update", "css:finder"],
         ["xpath=//button[@id='prob-update']", "xpath:attributes"],
-        ["xpath=//div[@id='uncontrolled-tab-example-tabpane-hazard']/div/div/div/div/div[3]/div[3]/button", "xpath:idRelative"],
-        ["xpath=//div[3]/div[3]/button", "xpath:position"]
+        ["xpath=//div[@id='uncontrolled-tab-example-tabpane-hazard']/div/div/div/div/div[3]/form/div[3]/button", "xpath:idRelative"],
+        ["xpath=//form/div[3]/button", "xpath:position"]
       ],
       "value": ""
     }, {
@@ -603,6 +581,6 @@
     "timeout": 300,
     "tests": []
   }],
-  "urls": ["https://development.seistech.nz/"],
+  "urls": ["https://development.seistech.nz/", "https://psha-dev.seistech.nz/", "https://psha-test.seistech.nz/"],
   "plugins": []
 }

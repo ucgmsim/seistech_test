@@ -33,6 +33,8 @@ script:
   - whereis google-chrome-stable
   - whereis chromedriver
   - cd /home/travis/build/ucgmsim/seistech_psha_frontend
+  - sleep 5
+  - echo "Testing $DEPLOY_NAME"
   - pytest -s  
 after_script:
   - ls *.zip
