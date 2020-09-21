@@ -51,12 +51,12 @@ class TestComputeHazardDisagg():
     self.driver.find_element(By.ID, "haz-lng").clear()
     self.driver.find_element(By.ID, "haz-lng").send_keys("172.72")
     self.driver.find_element(By.ID, "site-selection").click()
-    time.sleep(3)
+#    time.sleep(3)
     WebDriverWait(self.driver, 20000).until(expected_conditions.invisibility_of_element_located((By.CSS_SELECTOR, "#uncontrolled-tab-example-tab-hazard[aria-disabled]")))
     self.driver.find_element(By.XPATH, "//a[contains(.,\'Seismic Hazard\')]").click()
-    WebDriverWait(self.driver, 2000).until(expected_conditions.presence_of_element_located((By.XPATH,"//div[@id='IMs']/div/div")))
+#    WebDriverWait(self.driver, 2000).until(expected_conditions.presence_of_element_located((By.XPATH,"//div[@id='IMs']/div/div")))
+    time.sleep(5) #wait until the dropdown list gets ready to click. ideally a condition should be used but... 5 secs should be adequate.
     self.driver.find_element(By.XPATH, "//div[@id='IMs']/div/div").click()
-    time.sleep(5)
     self.driver.find_element(By.ID, "react-select-3-option-2").click() #PGA
     self.driver.find_element(By.ID, "im-select").click()
     WebDriverWait(self.driver, 30000).until(expected_conditions.invisibility_of_element_located((By.CSS_SELECTOR, ".hazard-curve-viewer > .download-button[disabled]")))
@@ -69,7 +69,7 @@ class TestComputeHazardDisagg():
     self.driver.find_element(By.XPATH, "//a[contains(text(),\'Disaggregation\')]").click()
     WebDriverWait(self.driver, 60000).until(expected_conditions.invisibility_of_element_located((By.CSS_SELECTOR, "#uncontrolled-tab-example-tabpane-disagg > .download-button[disabled]")))
     self.driver.find_element(By.CSS_SELECTOR, "#uncontrolled-tab-example-tabpane-disagg > .download-button").click()
-    time.sleep(10)
+    time.sleep(10) #wait for the download to complete.
     zip_files= glob.glob("*.zip")
     assert len(zip_files)==2
 
