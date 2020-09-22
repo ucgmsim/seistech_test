@@ -51,11 +51,10 @@ class TestComputeHazardDisagg():
     self.driver.find_element(By.ID, "haz-lng").clear()
     self.driver.find_element(By.ID, "haz-lng").send_keys("172.72")
     self.driver.find_element(By.ID, "site-selection").click()
-#    time.sleep(3)
     WebDriverWait(self.driver, 20000).until(expected_conditions.invisibility_of_element_located((By.CSS_SELECTOR, "#uncontrolled-tab-example-tab-hazard[aria-disabled]")))
     self.driver.find_element(By.XPATH, "//a[contains(.,\'Seismic Hazard\')]").click()
-#    WebDriverWait(self.driver, 2000).until(expected_conditions.presence_of_element_located((By.XPATH,"//div[@id='IMs']/div/div")))
-    time.sleep(5) #wait until the dropdown list gets ready to click. ideally a condition should be used but... 5 secs should be adequate.
+#    time.sleep(5) #wait until the dropdown list gets ready to click. replaced by the line below.
+    WebDriverWait(self.driver, 5000).until(expected_conditions.element_to_be_clickable((By.XPATH,"//div[@id='IMs']/div/div")))
     self.driver.find_element(By.XPATH, "//div[@id='IMs']/div/div").click()
     self.driver.find_element(By.ID, "react-select-3-option-2").click() #PGA
     self.driver.find_element(By.ID, "im-select").click()
