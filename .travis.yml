@@ -36,7 +36,9 @@ script:
   - echo "Wait for the deployment to be ready"
   - sleep 30
   - echo "Testing $DEPLOY_NAME"
-  - pytest -s  
+  - pytest -s 
+after_success:
+  - python scripts/ec2_send_cmd.py "$EC2USER" "$EC2PASSWD" "cd /home/ec2-user/seistech/docker/$BRANCH_NAME;docker-compose down"
 after_script:
   - ls *.zip
   - rm *.zip
