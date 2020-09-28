@@ -31,7 +31,7 @@ class TestComputeHazardDisagg():
   
   def test_computeHazardDisagg(self):
     self.driver.get("https://{}.seistech.nz/".format(self.deploy_name))
-    assert self.deploy_name == 'psha-test'
+#    assert self.deploy_name == 'psha-test'
     self.driver.set_window_size(1680, 1027)
     self.driver.find_element(By.ID, "qs-login-btn").click()
     self.driver.find_element(By.ID, "username").click()
@@ -60,7 +60,8 @@ class TestComputeHazardDisagg():
     self.driver.find_element(By.ID, "im-select").click()
     WebDriverWait(self.driver, 30000).until(expected_conditions.invisibility_of_element_located((By.CSS_SELECTOR, ".hazard-curve-viewer > .download-button[disabled]")))
     self.driver.find_element(By.CSS_SELECTOR, ".hazard-curve-viewer > .download-button").click()
-    self.driver.find_element(By.ID, "im-select").click()
+
+    time.sleep(10)
     self.driver.find_element(By.ID, "disagg-annual-rate").click()
     self.driver.find_element(By.ID, "disagg-annual-rate").clear()
     self.driver.find_element(By.ID, "disagg-annual-rate").send_keys("0.2")
@@ -68,8 +69,27 @@ class TestComputeHazardDisagg():
     self.driver.find_element(By.XPATH, "//a[contains(text(),\'Disaggregation\')]").click()
     WebDriverWait(self.driver, 60000).until(expected_conditions.invisibility_of_element_located((By.CSS_SELECTOR, "#uncontrolled-tab-example-tabpane-disagg > .download-button[disabled]")))
     self.driver.find_element(By.CSS_SELECTOR, "#uncontrolled-tab-example-tabpane-disagg > .download-button").click()
-    time.sleep(10) #wait for the download to complete.
+
+    time.sleep(10)
+    self.driver.find_element(By.ID, "uhs-annual-rate").click()
+    self.driver.find_element(By.ID, "uhs-annual-rate").clear()
+    self.driver.find_element(By.ID, "uhs-annual-rate").send_keys("0.01")
+    self.driver.find_element(By.XPATH, "//button[contains(.,\'Add\')]").click()
+    self.driver.find_element(By.ID, "uhs-annual-rate").click()
+    self.driver.find_element(By.ID, "uhs-annual-rate").clear()
+    self.driver.find_element(By.ID, "uhs-annual-rate").send_keys("0.012")
+    self.driver.find_element(By.XPATH, "//button[contains(.,\'Add\')]").click()
+    self.driver.find_element(By.ID, "uhs-annual-rate").click()
+    self.driver.find_element(By.ID, "uhs-annual-rate").clear()
+    self.driver.find_element(By.ID, "uhs-annual-rate").send_keys("0.013")
+    self.driver.find_element(By.XPATH, "//button[contains(.,\'Add\')]").click()
+    self.driver.find_element(By.ID, "uhs-update-plot").click()
+    time.sleep(10)
+    WebDriverWait(self.driver, 180000).until(expected_conditions.invisibility_of_element_located((By.CSS_SELECTOR, "#uncontrolled-tab-example-tabpane-uhs > .download-button[disabled]")))
+    self.driver.find_element(By.CSS_SELECTOR, "#uncontrolled-tab-example-tabpane-uhs > .download-button").click()
+
+    time.sleep(10) #wait for the download to complete
     zip_files= glob.glob("*.zip")
-    assert len(zip_files)==2
+    assert len(zip_files)==3
 
   
