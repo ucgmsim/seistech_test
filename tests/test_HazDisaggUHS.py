@@ -32,6 +32,7 @@ class TestComputeHazardDisagg():
   def test_computeHazardDisagg(self):
     self.driver.get("https://{}.seistech.nz/".format(self.deploy_name))
 #    assert self.deploy_name == 'psha-test'
+
     self.driver.set_window_size(1680, 1027)
     self.driver.find_element(By.ID, "qs-login-btn").click()
     self.driver.find_element(By.ID, "username").click()
