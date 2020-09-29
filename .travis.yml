@@ -6,8 +6,18 @@ addons:
   chrome: stable
   
 before_install:
- - cd /home/travis/build/ucgmsim/
- - git clone https://github.com/ucgmsim/qcore.git
+  - echo `hostname`
+  - export HOST_NAME=`hostname`
+  - echo `pwd`
+  - export BRANCH_NAME=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
+  - echo "TRAVIS_BRANCH=$TRAVIS_BRANCH, PR=$PR, BRANCH=$BRANCH_NAME"
+    #  - export DEPLOY_NAME=`python scripts/get_deploy_name.py $BRANCH_NAME`
+  - export DEPLOY_NAME=psha-test
+  - echo $DEPLOY_NAME
+  - pip install pexpect
+  - python scripts/ec2_send_cmd.py "$EC2USER" "$EC2PASSWD" "cd /home/ec2-user/seistech/docker/$BRANCH_NAME;../Dockerise.sh $BRANCH_NAME 5102 5002"
+  - cd /home/travis/build/ucgmsim/
+  - git clone https://github.com/ucgmsim/qcore.git
 
 install:
   - wget -N http://chromedriver.storage.googleapis.com/85.0.4183.87/chromedriver_linux64.zip -P ~/
@@ -23,7 +33,12 @@ script:
   - whereis google-chrome-stable
   - whereis chromedriver
   - cd /home/travis/build/ucgmsim/seistech_psha_frontend
-  - pytest -s  
+  - echo "Wait for the deployment to be ready"
+  - sleep 30
+  - echo "Testing $DEPLOY_NAME"
+  - pytest -s 
+after_success:
+  - python scripts/ec2_send_cmd.py "$EC2USER" "$EC2PASSWD" "cd /home/ec2-user/seistech/docker/$BRANCH_NAME;docker-compose down"
 after_script:
   - ls *.zip
   - rm *.zip
