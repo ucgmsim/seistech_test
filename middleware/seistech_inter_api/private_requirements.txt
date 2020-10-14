@@ -1,0 +1,4 @@
+git+ssh://git@github.com/ucgmsim/seistech.git#egg=seistech_api&subdirectory=seistech_api
+git+ssh://git@github.com/ucgmsim/seistech.git#egg=seistech_internal&subdirectory=seistech_internal
+git+ssh://git@github.com/ucgmsim/seistech.git#egg=seistech_scripts&subdirectory=seistech_scripts
+git+ssh://git@github.com/ucgmsim/seistech.git#egg=SHA_calc&subdirectory=SHA_calc

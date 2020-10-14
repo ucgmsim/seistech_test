@@ -1,0 +1,238 @@
+/* 
+  TODO
+  Split into different CSS for each section 
+*/
+.controlGroup {
+  border: 1px solid silver;
+  border-radius: 2px;
+  /* width: 800px; */
+  padding: 10px;
+  margin-top: 10px;
+  overflow: hidden;
+}
+
+button.download-button {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+}
+
+button.hazard-disagg-contrib-button {
+  position: absolute;
+  top: 0px;
+  right: 180px;
+}
+
+div.two-column-row {
+  min-height: 42vw;
+}
+
+div.form-row,
+div.form-group-inline {
+  margin-top: 20px;
+  margin-left: 0px;
+  margin-bottom: 20px;
+}
+
+div.form-section-title {
+  font-size: calc(12px + 0.4vw);
+  margin-top: 10px;
+  font-weight: 700;
+  margin-top: 10px;
+}
+
+div.tab-content {
+  padding-top: 10px;
+}
+
+button.btn {
+  min-width: 100px;
+}
+
+nav.pivot-tabs,
+nav.pivot-tabs > a.active {
+  /* TODO - Need to investgate on this as seems doing nothing. */
+  /* border: none; */
+}
+
+nav.pivot-tabs > a.nav-item {
+  font-size: 1em;
+  display: inline-block;
+}
+
+nav.pivot-tabs > a.active {
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+nav.pivot-tabs {
+  margin-top: 10px;
+  width: 70%;
+}
+
+nav.pivot-tabs > a.disabled {
+  font-size: 0.8em;
+  margin-top: 0.3em;
+}
+
+nav.hazard-viewer-tabs > a {
+  font-weight: 600;
+}
+
+div.two-column-view-right-pane {
+  padding: 5px;
+}
+
+/* BEGIN */
+/* https://www.w3schools.com/howto/howto_css_hide_arrow_number.asp */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+/* END */
+
+label#label-haz-lat,
+label#label-haz-lng {
+  width: 7em;
+  font-size: calc(12px + 0.27vw);
+  margin-bottom: 1rem;
+}
+
+label#label-vs30 {
+  width: 7em;
+  font-size: calc(12px + 0.27vw);
+  margin-bottom: 0;
+}
+
+label.control-label {
+  font-size: calc(12px + 0.27vw);
+}
+
+button#editVS30,
+button#vs30useDefault {
+  width: 7em;
+}
+
+table#uhs-added {
+  border: 1px solid silver !important;
+  width: 100%;
+}
+
+table#uhs-added td {
+  font-size: small;
+  padding: 2px;
+}
+table#uhs-added tr {
+  background-color: white;
+  border: 1px solid silver;
+}
+
+table#uhs-added tbody tr:hover {
+  border: 2px solid black !important;
+  cursor: pointer;
+}
+table#uhs-added thead tr:hover {
+  border: none;
+  cursor: auto;
+}
+table#uhs-added th {
+  font-size: small;
+}
+table#uhs-added th,
+table#uhs-added td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+input.uhs {
+  width: 6em;
+  margin-right: 5px;
+  display: inline-block;
+}
+
+button#uhs_add {
+  display: block;
+  margin-top: 10px;
+  float: right;
+  min-width: 3.5em;
+  width: 3.5em;
+  margin-top: 0px;
+}
+
+#uhs-added tr:hover div.uhs-delete-row {
+  font-weight: bold;
+}
+
+div.table {
+  display: table;
+  border-spacing: 0px 8px;
+}
+div.t-row {
+  display: table-row;
+  margin-top: 10px;
+}
+div.t-cell {
+  display: table-cell;
+}
+
+div.hr {
+  border-top: 1px solid silver;
+  margin-top: 20px;
+  margin-bottom: 25px;
+}
+
+nav.hazard-tabs {
+  width: 77%;
+}
+
+div.hazard-inner {
+  margin: auto;
+  width: 90vw;
+  margin-bottom: 2%;
+}
+
+div.uhs-params span,
+div.uhs-params select {
+  display: inline-block;
+}
+
+div.uhs-params select {
+  width: 40%;
+}
+
+span.show-nzs {
+  font-size: small;
+}
+
+tr.contrib-row-hidden {
+  display: none;
+}
+
+tr.contrib-ellipsis {
+  background-color: white !important;
+}
+
+tr.contrib-ellipsis td.hidden {
+  display: none;
+}
+
+button.default-button {
+  margin-left: 1.2em;
+}
+
+div.hazard-curve-viewer,
+div.disaggregation-viewer,
+div.uhs-viewer {
+  position: relative;
+}
+
+div.uhs-viewer {
+  margin-top: 10px;
+}
