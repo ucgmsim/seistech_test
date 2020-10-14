@@ -1,0 +1,54 @@
+# docker-compose.yml
+
+version: "3.8"
+
+networks:
+  seistech-ea:
+    driver: bridge
+
+services:
+  middleware:
+    image: middleware:ea
+    build:
+      context: ../../seistech_inter_api/seistech_inter_api
+      args:
+        - SSH_PRIVATE_KEY
+    environment:
+      - ENV=EA
+      - AUTH0_DOMAIN=${AUTH0_DOMAIN_EA}
+      - API_AUDIENCE=${API_AUDIENCE_EA}
+      - ALGORITHMS=${ALGORITHMS_EA}
+      - CORE_API_SECRET=${CORE_API_SECRET_EA}
+      - CORE_API_BASE=${CORE_API_BASE_EA}
+      - INTER_PORT=${INTER_API_PORT_EA}
+      - N_PROCS=${N_PROCS_EA}
+    networks:
+      - seistech-ea
+    expose:
+      - ${INTER_API_PORT_EA}
+    ports:
+      - ${INTER_API_PORT_EA}:${INTER_API_PORT_EA}
+  frontend:
+    image: frontend:ea
+    build: ../../seistech_web
+    environment:
+      - REACT_APP_ENV=EA
+      - REACT_APP_CONSTANT_CORE_API_BASE_URL=${BASE_URL_EA}
+      - PORT=${FRONT_END_PORT_EA}
+      - REACT_APP_BUILD_DATE=${BUILD_DATE_EA}
+      - REACT_APP_GIT_SHA=${GIT_SHA_EA}
+      - REACT_APP_AUTH0_DOMAIN=${REACT_APP_AUTH0_DOMAIN_EA}
+      - REACT_APP_AUTH0_CLIENTID=${REACT_APP_AUTH0_CLIENTID_EA}
+      - REACT_APP_AUTH0_AUDIENCE=${REACT_APP_AUTH0_AUDIENCE_EA}
+      - REACT_APP_MAP_BOX_TOKEN=${REACT_APP_MAP_BOX_TOKEN_EA}
+    volumes:
+      - ../../seistech_web/src:/app/src
+      - ../../seistech_web/public:/app/public
+    stdin_open: true
+    tty: true
+    networks:
+      - seistech-ea
+    expose:
+      - ${FRONT_END_PORT_EA}
+    ports:
+      - ${FRONT_END_PORT_EA}:${FRONT_END_PORT_EA}

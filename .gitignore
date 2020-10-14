@@ -1,0 +1,17 @@
+frontend/web/static/disagg/
+*.h5
+*.pyc
+*.swp
+.cache/
+.idea/
+/frontend/debug.log
+/frontend/.vscode
+
+middleware/seistech_inter_api.egg-info/
+
+.env
+.env.dev
+.env.test
+
+# Pthon virtual environment
+/env
