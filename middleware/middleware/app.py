@@ -1,6 +1,6 @@
 import os
 
-from seistech_inter_api import app
+from middleware import app
 
 if __name__ == "__main__":
     app.run(

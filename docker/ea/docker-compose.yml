@@ -10,7 +10,7 @@ services:
   middleware:
     image: middleware:ea
     build:
-      context: ../../seistech_inter_api/seistech_inter_api
+      context: ../../middleware/middleware
       args:
         - SSH_PRIVATE_KEY
     environment:
@@ -30,7 +30,7 @@ services:
       - ${INTER_API_PORT_EA}:${INTER_API_PORT_EA}
   frontend:
     image: frontend:ea
-    build: ../../seistech_web
+    build: ../../frontend
     environment:
       - REACT_APP_ENV=EA
       - REACT_APP_CONSTANT_CORE_API_BASE_URL=${BASE_URL_EA}
@@ -42,8 +42,8 @@ services:
       - REACT_APP_AUTH0_AUDIENCE=${REACT_APP_AUTH0_AUDIENCE_EA}
       - REACT_APP_MAP_BOX_TOKEN=${REACT_APP_MAP_BOX_TOKEN_EA}
     volumes:
-      - ../../seistech_web/src:/app/src
-      - ../../seistech_web/public:/app/public
+      - ../../frontend/src:/app/src
+      - ../../frontend/public:/app/public
     stdin_open: true
     tty: true
     networks:
