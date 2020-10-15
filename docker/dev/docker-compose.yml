@@ -28,30 +28,30 @@ services:
       - ${INTER_API_PORT_DEV}
     ports:
       - ${INTER_API_PORT_DEV}:${INTER_API_PORT_DEV}
-  # frontend:
-  #   image: frontend:dev
-  #   build: ../../frontend
-  #   environment:
-  #     - REACT_APP_DEFAULT_ANNUAL_EXCEEDANCE_RATE=${DEFAULT_ANNUAL_EXCEEDANCE_RATE}
-  #     - REACT_APP_DEFAULT_LAT=${DEFAULT_LAT}
-  #     - REACT_APP_DEFAULT_LNG=${DEFAULT_LNG}
-  #     - REACT_APP_ENV=DEV
-  #     - REACT_APP_CONSTANT_CORE_API_BASE_URL=${BASE_URL_DEV}
-  #     - PORT=${FRONT_END_PORT_DEV}
-  #     - REACT_APP_BUILD_DATE=${BUILD_DATE_DEV}
-  #     - REACT_APP_GIT_SHA=${GIT_SHA_DEV}
-  #     - REACT_APP_AUTH0_DOMAIN=${REACT_APP_AUTH0_DOMAIN_DEV}
-  #     - REACT_APP_AUTH0_CLIENTID=${REACT_APP_AUTH0_CLIENTID_DEV}
-  #     - REACT_APP_AUTH0_AUDIENCE=${REACT_APP_AUTH0_AUDIENCE_DEV}
-  #     - REACT_APP_MAP_BOX_TOKEN=${REACT_APP_MAP_BOX_TOKEN_DEV}
-  #   volumes:
-  #     - ../../frontend/src:/app/src
-  #     - ../../frontend/public:/app/public
-  #   stdin_open: true
-  #   tty: true
-  #   networks:
-  #     - seistech-dev
-  #   expose:
-  #     - ${FRONT_END_PORT_DEV}
-  #   ports:
-  #     - ${FRONT_END_PORT_DEV}:${FRONT_END_PORT_DEV}
+  frontend:
+    image: frontend:dev
+    build: ../../frontend
+    environment:
+      - REACT_APP_DEFAULT_ANNUAL_EXCEEDANCE_RATE=${DEFAULT_ANNUAL_EXCEEDANCE_RATE}
+      - REACT_APP_DEFAULT_LAT=${DEFAULT_LAT}
+      - REACT_APP_DEFAULT_LNG=${DEFAULT_LNG}
+      - REACT_APP_ENV=DEV
+      - REACT_APP_CONSTANT_CORE_API_BASE_URL=${BASE_URL_DEV}
+      - PORT=${FRONT_END_PORT_DEV}
+      - REACT_APP_BUILD_DATE=${BUILD_DATE_DEV}
+      - REACT_APP_GIT_SHA=${GIT_SHA_DEV}
+      - REACT_APP_AUTH0_DOMAIN=${REACT_APP_AUTH0_DOMAIN_DEV}
+      - REACT_APP_AUTH0_CLIENTID=${REACT_APP_AUTH0_CLIENTID_DEV}
+      - REACT_APP_AUTH0_AUDIENCE=${REACT_APP_AUTH0_AUDIENCE_DEV}
+      - REACT_APP_MAP_BOX_TOKEN=${REACT_APP_MAP_BOX_TOKEN_DEV}
+    volumes:
+      - ../../frontend/src:/app/src
+      - ../../frontend/public:/app/public
+    stdin_open: true
+    tty: true
+    networks:
+      - seistech-dev
+    expose:
+      - ${FRONT_END_PORT_DEV}
+    ports:
+      - ${FRONT_END_PORT_DEV}:${FRONT_END_PORT_DEV}

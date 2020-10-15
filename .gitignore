@@ -14,4 +14,4 @@ middleware/middleware.egg-info/
 .env.test
 
 # Pthon virtual environment
-/env
+/venv
