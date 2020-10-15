@@ -11,11 +11,11 @@ docker rmi frontend:dev middleware:dev
 # Switch to Master branch in case we're not in the right branch
 # TODO UPDATE THIS TO master-dev branch when it goes to public repo
 echo "Changing to Master branch"
-# git checkout master
+git checkout master_dev
 
 # To pull latest version
 echo "Pulling latest info from Master branch"
-# git pull
+git pull
 
 # Set the Time
 export TZ=NZ
