@@ -8,7 +8,7 @@ networks:
 
 services:
   middleware:
-    image: middleware:dev
+    image: middleware:${BRANCH_NAME}
     build:
       context: ../../middleware/middleware
       args:
@@ -29,7 +29,7 @@ services:
     ports:
       - ${INTER_API_PORT_DEV}:${INTER_API_PORT_DEV}
   frontend:
-    image: frontend:dev
+    image: frontend:${BRANCH_NAME}
     build: ../../frontend
     environment:
       - REACT_APP_DEFAULT_ANNUAL_EXCEEDANCE_RATE=${DEFAULT_ANNUAL_EXCEEDANCE_RATE}
@@ -44,9 +44,6 @@ services:
       - REACT_APP_AUTH0_CLIENTID=${REACT_APP_AUTH0_CLIENTID_DEV}
       - REACT_APP_AUTH0_AUDIENCE=${REACT_APP_AUTH0_AUDIENCE_DEV}
       - REACT_APP_MAP_BOX_TOKEN=${REACT_APP_MAP_BOX_TOKEN_DEV}
-    volumes:
-      - ../../frontend/src:/app/src
-      - ../../frontend/public:/app/public
     stdin_open: true
     tty: true
     networks:
