@@ -22,10 +22,10 @@ echo "Pulling latest info from Master branch"
 
 # Set the Time
 export TZ=NZ
-export BUILD_DATE_DEV=$(date +%Y-%m-%d)-$(date +%T)
+export BUILD_DATE=$(date +%Y-%m-%d)-$(date +%T)
 
 # Get the latest git commit's hash
-export GIT_SHA_DEV=`git rev-parse --short HEAD`
+export GIT_SHA=`git rev-parse --short HEAD`
 
 # Then create one
 echo "Dockerizing"
