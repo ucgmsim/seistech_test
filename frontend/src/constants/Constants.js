@@ -135,11 +135,28 @@ export const UNIFORM_HAZARD_SPECTRUM_INSTRUCTION = [
 ];
 
 /*
-  Error Message
+  Error Messages
 */
-export const ERROR_MSG_HEADER = "Error";
-export const ERROR_MSG_TITLE = "Something went wrong";
-export const ERROR_MSG_BODY = "Please try again or contact us.";
+
+export const ERROR_SET_DIFF_CODE = {
+  DEFAULT: {
+    ERROR_MSG_HEADER: "Error",
+    ERROR_MSG_TITLE: "Something went wrong.",
+    ERROR_MSG_BODY: "Please try again or contact us.",
+  },
+
+  400: {
+    ERROR_MSG_HEADER: "400 Error",
+    ERROR_MSG_TITLE: "One of the request inputs is not valid.",
+    ERROR_MSG_BODY: "Please check inputs and try again.",
+  },
+  500: {
+    ERROR_MSG_HEADER: "500 Error",
+    ERROR_MSG_TITLE: "Our server is currently having issues.",
+    ERROR_MSG_BODY: "Please try again later.",
+  },
+};
+
 /*
   Hazard Curve Plots
 */

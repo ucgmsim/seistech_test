@@ -71,7 +71,9 @@ const HazardBranchPlot = ({ hazardData, im }) => {
           margin: PLOT_MARGIN,
         }}
         useResizeHandler={true}
-        config={{ displayModeBar: true }}
+        config={{
+          displayModeBar: true,
+        }}
       />
     );
   }

@@ -5,7 +5,7 @@ import { getPlotData } from "utils/Utils";
 import { PLOT_MARGIN } from "constants/Constants";
 import ErrorMessage from "components/common/ErrorMessage";
 
-function HazardEnsemblePlot({ hazardData, im }) {
+const HazardEnsemblePlot = ({ hazardData, im }) => {
   if (hazardData !== null && !hazardData.hasOwnProperty("error")) {
     const ensHazard = hazardData["ensemble_hazard"];
 
@@ -75,11 +75,13 @@ function HazardEnsemblePlot({ hazardData, im }) {
           margin: PLOT_MARGIN,
         }}
         useResizeHandler={true}
-        config={{ displayModeBar: true }}
+        config={{
+          displayModeBar: true,
+        }}
       />
     );
   }
   return <ErrorMessage />;
-}
+};
 
 export default HazardEnsemblePlot;

@@ -18,7 +18,10 @@ const HazardViewerUhs = () => {
 
   const [showSpinnerUHS, setShowSpinnerUHS] = useState(false);
   const [showPlotUHS, setShowPlotUHS] = useState(false);
-  const [showErrorMessage, setShowErrorMessage] = useState(false);
+  const [showErrorMessage, setShowErrorMessage] = useState({
+    isError: false,
+    errorCode: null,
+  });
 
   const [downloadToken, setDownloadToken] = useState("");
 
@@ -49,7 +52,7 @@ const HazardViewerUhs = () => {
         try {
           setShowPlotUHS(false);
           setShowSpinnerUHS(true);
-          setShowErrorMessage(false);
+          setShowErrorMessage({ isError: false, errorCode: null });
           const token = await getTokenSilently();
 
           const exceedences = uhsRateTable.map((entry, idx) => {
@@ -78,22 +81,23 @@ const HazardViewerUhs = () => {
             }
           )
             .then(handleErrors)
-            .then(async function (response) {
+            .then(async (response) => {
               const responseData = await response.json();
               setUHSData(responseData);
               setDownloadToken(responseData["download_token"]);
               setShowSpinnerUHS(false);
               setShowPlotUHS(true);
             })
-            .catch(function (error) {
-              setShowSpinnerUHS(false);
-              setShowErrorMessage(true);
+            .catch((error) => {
+              if (error.name !== "AbortError") {
+                setShowSpinnerUHS(false);
+                setShowErrorMessage({ isError: true, errorCode: error });
+              }
               console.log(error);
             });
         } catch (error) {
           setShowSpinnerUHS(false);
-          setShowErrorMessage(true);
-          console.log(error);
+          setShowErrorMessage({ isError: false, errorCode: error });
         }
       }
     };
@@ -116,19 +120,23 @@ const HazardViewerUhs = () => {
           />
         )}
 
-        {showSpinnerUHS === true && uhsComputeClick !== null && (
-          <LoadingSpinner />
-        )}
+        {showSpinnerUHS === true &&
+          uhsComputeClick !== null &&
+          showErrorMessage.isError === false && <LoadingSpinner />}
 
         {uhsComputeClick !== null &&
           showSpinnerUHS === false &&
-          showErrorMessage === true && <ErrorMessage />}
+          showErrorMessage.isError === true && (
+            <ErrorMessage errorCode={showErrorMessage.errorCode} />
+          )}
 
-        {showSpinnerUHS === false && showPlotUHS === true && (
-          <Fragment>
-            <UHSPlot uhsData={uhsData} />
-          </Fragment>
-        )}
+        {showSpinnerUHS === false &&
+          showPlotUHS === true &&
+          showErrorMessage.isError === false && (
+            <Fragment>
+              <UHSPlot uhsData={uhsData} />
+            </Fragment>
+          )}
       </div>
 
       <DownloadButton

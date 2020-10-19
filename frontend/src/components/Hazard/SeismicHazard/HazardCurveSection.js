@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, Fragment } from "react";
 import IMSelect from "components/common/IMSelect";
 import { v4 as uuidv4 } from "uuid";
 import { GlobalContext } from "context";
@@ -18,7 +18,7 @@ const HazardCurveSection = () => {
   }, [selectedIM]);
 
   return (
-    <div>
+    <Fragment>
       <div className="form-group form-section-title">
         <span>Hazard Curve</span>
       </div>
@@ -39,7 +39,7 @@ const HazardCurveSection = () => {
           Compute
         </button>
       </div>
-    </div>
+    </Fragment>
   );
 };
 

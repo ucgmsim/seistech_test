@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, Fragment } from "react";
 import * as CONSTANTS from "constants/Constants";
 import { v4 as uuidv4 } from "uuid";
 import { GlobalContext } from "context";
@@ -68,15 +68,15 @@ const UHSSection = () => {
     );
   });
 
-  function onClickDeleteRow(id) {
+  const onClickDeleteRow = (id) => {
     if (id === 0 && uhsRateTable[0] === CONSTANTS.UHS_TABLE_MESSAGE) {
       return;
     }
     uhsTableDeleteRow(id);
-  }
+  };
 
   return (
-    <div>
+    <Fragment>
       <form autoComplete="off" onSubmit={(e) => e.preventDefault()}>
         <div className="form-group form-section-title">
           <span>Uniform Hazard Spectrum</span>
@@ -151,7 +151,7 @@ const UHSSection = () => {
           Compute
         </button>
       </div>
-    </div>
+    </Fragment>
   );
 };
 

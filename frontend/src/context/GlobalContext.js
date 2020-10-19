@@ -114,7 +114,7 @@ export const Provider = (props) => {
   useEffect(() => {
     // To get user data, we need to check that it is authenticated first
     if (isAuthenticated) {
-      async function callGetUserData() {
+      const callGetUserData = async () => {
         const token = await getTokenSilently();
 
         await fetch(
@@ -126,14 +126,14 @@ export const Provider = (props) => {
           }
         )
           .then(handleErrors)
-          .then(async function (response) {
+          .then(async (response) => {
             const ud = await response.json();
 
             let userPermissions = ud.permissions;
 
             setEnabledTabs(userPermissions);
           });
-      }
+      };
       callGetUserData();
     }
   }, []);

@@ -23,7 +23,10 @@ const HazadViewerDisaggregation = () => {
   );
   const [showSpinnerContribTable, setShowSpinnerContribTable] = useState(false);
 
-  const [showErrorMessage, setShowErrorMessage] = useState(false);
+  const [showErrorMessage, setShowErrorMessage] = useState({
+    isError: false,
+    errorCode: null,
+  });
 
   const [showPlotDisaggEpsilon, setShowPlotDisaggEpsilon] = useState(false);
   const [showPlotDisaggFault, setShowPlotDisaggFault] = useState(false);
@@ -93,7 +96,7 @@ const HazadViewerDisaggregation = () => {
       if (disaggComputeClick !== null) {
         try {
           const token = await getTokenSilently();
-          setShowErrorMessage(false);
+          setShowErrorMessage({ isError: false, errorCode: null });
 
           setShowSpinnerDisaggEpsilon(true);
 
@@ -123,7 +126,7 @@ const HazadViewerDisaggregation = () => {
             }
           )
             .then(handleErrors)
-            .then(async function (response) {
+            .then(async (response) => {
               const responseData = await response.json();
 
               setDownloadToken(responseData["download_token"]);
@@ -178,12 +181,15 @@ const HazadViewerDisaggregation = () => {
 
               setDisaggTotalContr(data);
             })
-            .catch(function (error) {
-              setShowSpinnerContribTable(false);
-              setShowSpinnerDisaggEpsilon(false);
-              setShowSpinnerDisaggFault(false);
+            .catch((error) => {
+              if (error.name !== "AbortError") {
+                setShowSpinnerContribTable(false);
+                setShowSpinnerDisaggEpsilon(false);
+                setShowSpinnerDisaggFault(false);
 
-              setShowErrorMessage(true);
+                setShowErrorMessage({ isError: true, errorCode: error });
+              }
+
               console.log(error);
             });
         } catch (error) {
@@ -191,7 +197,7 @@ const HazadViewerDisaggregation = () => {
           setShowSpinnerDisaggEpsilon(false);
           setShowSpinnerDisaggFault(false);
 
-          setShowErrorMessage(true);
+          setShowErrorMessage({ isError: true, errorCode: error });
           console.log(error);
         }
       }
@@ -215,16 +221,19 @@ const HazadViewerDisaggregation = () => {
             />
           )}
 
-          {showSpinnerDisaggEpsilon === true && disaggComputeClick !== null && (
-            <LoadingSpinner />
-          )}
+          {showSpinnerDisaggEpsilon === true &&
+            disaggComputeClick !== null &&
+            showErrorMessage.isError === false && <LoadingSpinner />}
 
           {disaggComputeClick !== null &&
             showSpinnerDisaggEpsilon === false &&
-            showErrorMessage === true && <ErrorMessage />}
+            showErrorMessage.isError === true && (
+              <ErrorMessage errorCode={showErrorMessage.errorCode} />
+            )}
 
           {showSpinnerDisaggEpsilon === false &&
-            showPlotDisaggEpsilon === true && (
+            showPlotDisaggEpsilon === true &&
+            showErrorMessage.isError === false && (
               <Fragment>
                 <img
                   className="img-fluid rounded mx-auto d-block"
@@ -244,23 +253,27 @@ const HazadViewerDisaggregation = () => {
             />
           )}
 
-          {showSpinnerDisaggFault === true && disaggComputeClick !== null && (
-            <LoadingSpinner />
-          )}
+          {showSpinnerDisaggFault === true &&
+            disaggComputeClick !== null &&
+            showErrorMessage.isError === false && <LoadingSpinner />}
 
           {disaggComputeClick !== null &&
             showSpinnerDisaggFault === false &&
-            showErrorMessage === true && <ErrorMessage />}
+            showErrorMessage.isError === true && (
+              <ErrorMessage errorCode={showErrorMessage.errorCode} />
+            )}
 
-          {showSpinnerDisaggFault === false && showPlotDisaggFault === true && (
-            <Fragment>
-              <img
-                className="img-fluid rounded mx-auto d-block"
-                src={`data:image/png;base64,${disaggPlotData.src}`}
-                alt="Source disagg plot"
-              />
-            </Fragment>
-          )}
+          {showSpinnerDisaggFault === false &&
+            showPlotDisaggFault === true &&
+            showErrorMessage.isError === false && (
+              <Fragment>
+                <img
+                  className="img-fluid rounded mx-auto d-block"
+                  src={`data:image/png;base64,${disaggPlotData.src}`}
+                  alt="Source disagg plot"
+                />
+              </Fragment>
+            )}
         </Tab>
 
         <Tab eventKey="contributions" title="Source contributions">
@@ -272,25 +285,29 @@ const HazadViewerDisaggregation = () => {
             />
           )}
 
-          {showSpinnerContribTable === true && disaggComputeClick !== null && (
-            <LoadingSpinner />
-          )}
+          {showSpinnerContribTable === true &&
+            disaggComputeClick !== null &&
+            showErrorMessage.isError === false && <LoadingSpinner />}
 
           {disaggComputeClick !== null &&
             showSpinnerContribTable === false &&
-            showErrorMessage === true && <ErrorMessage />}
+            showErrorMessage.isError === true && (
+              <ErrorMessage errorCode={showErrorMessage.errorCode} />
+            )}
 
-          {showSpinnerContribTable === false && showContribTable === true && (
-            <Fragment>
-              <ContributionTable disaggData={disaggTotalContr} />
-              <button
-                className="btn btn-info hazard-disagg-contrib-button"
-                onClick={rowToggle}
-              >
-                {toggleText}
-              </button>
-            </Fragment>
-          )}
+          {showSpinnerContribTable === false &&
+            showContribTable === true &&
+            showErrorMessage.isError === false && (
+              <Fragment>
+                <ContributionTable disaggData={disaggTotalContr} />
+                <button
+                  className="btn btn-info hazard-disagg-contrib-button"
+                  onClick={rowToggle}
+                >
+                  {toggleText}
+                </button>
+              </Fragment>
+            )}
         </Tab>
       </Tabs>
       <DownloadButton
