@@ -8,7 +8,7 @@ networks:
 
 services:
   middleware:
-    image: middleware:${BRANCH_NAME}
+    image: middleware:master_dev
     build:
       context: ../../middleware/middleware
       args:
@@ -29,7 +29,7 @@ services:
     ports:
       - ${INTER_API_PORT_DEV}:${INTER_API_PORT_DEV}
   frontend:
-    image: frontend:${BRANCH_NAME}
+    image: frontend:master_dev
     build: ../../frontend
     environment:
       - REACT_APP_DEFAULT_ANNUAL_EXCEEDANCE_RATE=${DEFAULT_ANNUAL_EXCEEDANCE_RATE}

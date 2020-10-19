@@ -8,7 +8,7 @@ networks:
 
 services:
   middleware:
-    image: middleware:test
+    image: middleware:master_test
     build:
       context: ../../middleware/middleware
       args:
@@ -29,7 +29,7 @@ services:
     ports:
       - ${INTER_API_PORT_TEST}:${INTER_API_PORT_TEST}
   frontend:
-    image: frontend:test
+    image: frontend:master_test
     build: ../../frontend
     environment:
       - REACT_APP_DEFAULT_ANNUAL_EXCEEDANCE_RATE=${DEFAULT_ANNUAL_EXCEEDANCE_RATE}
