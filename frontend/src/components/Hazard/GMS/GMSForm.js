@@ -12,7 +12,7 @@ import $ from "jquery";
 import { renderSigfigs, handleErrors } from "utils/Utils";
 import "assets/style/GMSForm.css";
 
-const GmsForm = () => {
+const GMSForm = () => {
   const { getTokenSilently } = useAuth0();
 
   const {
@@ -21,6 +21,8 @@ const GmsForm = () => {
     vs30,
     IMVectors,
     setComputedGMS,
+    setIsLoading,
+    setSelectedIMVectors,
   } = useContext(GlobalContext);
   const [localComputeButton, setLocalComputeButton] = useState("Compute");
   const [localComputeClick, setLocalComputeClick] = useState(null);
@@ -44,7 +46,7 @@ const GmsForm = () => {
   const [localNumGMS, setLocalNumGMS] = useState("");
   const [localWeights, setLocalWeights] = useState("");
   const [localDatabase, setLocalDatabase] = useState(null);
-  const [localReplicates, setLocalReplicates] = useState("");
+  const [localReplicates, setLocalReplicates] = useState(1);
 
   // IM Level / Exceedance Rate
   const [localIMExdRateRadio, setLocalImExdRateRadio] = useState("im-level");
@@ -261,6 +263,7 @@ const GmsForm = () => {
         try {
           const token = await getTokenSilently();
           setLocalComputeButton(<FontAwesomeIcon icon="spinner" spin />);
+          setIsLoading(true);
           const newIMVector = debouncedLocalIMVector.map((vector) => {
             return vector.value;
           });
@@ -311,11 +314,13 @@ const GmsForm = () => {
             .then(async function (response) {
               const responseData = await response.json();
               setComputedGMS(responseData);
-              setDownloadToken(responseData["download_token"]);
               setLocalComputeButton("Compute");
+              setSelectedIMVectors(newIMVector)
+              setIsLoading(false);
             })
             .catch(function (error) {
               setLocalComputeButton("Compute");
+              setIsLoading(false);
               console.log(error);
             });
         } catch (error) {
@@ -612,4 +617,4 @@ const GmsForm = () => {
   );
 };
 
-export default GmsForm;
+export default GMSForm;

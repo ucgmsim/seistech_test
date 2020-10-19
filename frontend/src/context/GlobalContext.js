@@ -70,6 +70,8 @@ export const Provider = (props) => {
     GMS
   */
   const [computedGMS, setComputedGMS] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedIMVectors, setSelectedIMVectors] = useState(null);
 
   /* 
     User Permissions
@@ -241,6 +243,10 @@ export const Provider = (props) => {
     */
     computedGMS,
     setComputedGMS,
+    isLoading,
+    setIsLoading,
+    selectedIMVectors,
+    setSelectedIMVectors,
   };
 
   // pass the value in provider and return
