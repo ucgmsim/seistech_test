@@ -17,27 +17,24 @@ const FirstPlot = ({ gmsData, IM }) => {
     const realisations = gmsData["realisations"][IM];
     const selectedGMs = gmsData["selected_GMs"][IM];
 
-    // Create an array from N to 1.
-    const realisationsRangeY = Array.from(
-      { length: realisations.length },
-      (_, index) => index + 1
-    );
-    // Range from 1/N to 1
-    realisationsRangeY.forEach(
-      (y, index, realisationsRangeY) =>
-        (realisationsRangeY[index] = y / realisations.length)
-    );
+    // Create range for Realisations, 0 ~ 1
+    let realisationsRangeY = [];
+    for (let i = 1; i < realisations.length; i++) {
+      realisationsRangeY.push(i / (realisations.length - 1));
+    }
+    // Add 0 in index 0;
+    realisationsRangeY.splice(0, 0, 0);
 
-    // Create an array from N to 1.
-    const selectedGMsRangeY = Array.from(
-      { length: selectedGMs.length },
-      (_, index) => index + 1
-    );
-    // Range from 1/N to 1
-    selectedGMsRangeY.forEach(
-      (y, index, selectedGMsRangeY) =>
-        (selectedGMsRangeY[index] = y / selectedGMs.length)
-    );
+    // Create range for Realisations, 0 ~ 1
+    let selectedGMsRangeY = [];
+    for (let i = 1; i < selectedGMs.length; i++) {
+      selectedGMsRangeY.push(i / (selectedGMs.length - 1));
+    }
+    // Add 0 in index 0;
+    selectedGMsRangeY.splice(0, 0, 0);
+
+    console.log("NEW RANGE: ", realisationsRangeY);
+    console.log("NEW RANGE: ", selectedGMsRangeY);
 
     return (
       <Plot
