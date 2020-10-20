@@ -5,6 +5,7 @@ import Select from "react-select";
 import { GlobalContext } from "context";
 
 import FirstPlot from "./FirstPlot";
+import SecondPlot from "./SecondPlot";
 import LoadingSpinner from "components/common/LoadingSpinner";
 
 import "assets/style/GMSViewer.css"
@@ -16,13 +17,22 @@ const GMSViewer = () => {
 
   const [specifiedIM, setSpecifiedIM] = useState([]);
   const [localIMVectors, setLocalIMVectors] = useState([]);
+  const [periods, setPeriods] = useState([]);
 
   useEffect(() => {
+    // Create proper IM array for Select package
     let localIMs = selectedIMVectors.map((IM) => ({
       value: IM,
       label: IM,
     }));
     setLocalIMVectors(localIMs);
+
+    // Get only period from IM
+    let localPeriods = selectedIMVectors.map((IM) => {
+      return IM.split("_")[1]
+    });
+    setPeriods(localPeriods);
+
   }, [selectedIMVectors]);
 
   return (
@@ -43,7 +53,12 @@ const GMSViewer = () => {
           )}
         </Tab>
         <Tab eventKey="secondPlot" title="Second Plot">
-          <div>HELLO</div>
+        {isLoading === true && <LoadingSpinner />}
+          {isLoading === false && computedGMS !== null && (
+            <Fragment>
+              <SecondPlot gmsData={computedGMS} periods={periods}/>
+            </Fragment>
+          )}
         </Tab>
         <Tab eventKey="thirdPlot" title="Third Plot">
           <div>HELLO</div>

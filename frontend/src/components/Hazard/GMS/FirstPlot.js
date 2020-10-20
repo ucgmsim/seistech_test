@@ -7,6 +7,11 @@ import ErrorMessage from "components/common/ErrorMessage";
 import "assets/style/GMSPlot.css";
 
 const FirstPlot = ({ gmsData, IM }) => {
+  const range = (start, stop, step = 1) =>
+    Array(Math.ceil((stop - start) / step) + 1)
+      .fill(start)
+      .map((x, y) => x + y * step);
+
   if (
     gmsData !== null &&
     !gmsData.hasOwnProperty("error") &&
@@ -17,24 +22,25 @@ const FirstPlot = ({ gmsData, IM }) => {
     const realisations = gmsData["realisations"][IM];
     const selectedGMs = gmsData["selected_GMs"][IM];
 
-    // Create range for Realisations, 0 ~ 1
-    let realisationsRangeY = [];
-    for (let i = 1; i < realisations.length; i++) {
-      realisationsRangeY.push(i / (realisations.length - 1));
-    }
-    // Add 0 in index 0;
-    realisationsRangeY.splice(0, 0, 0);
+    // double the elements
+    const newRealisations = realisations.flatMap((x) => Array(2).fill(x));
 
-    // Create range for Realisations, 0 ~ 1
-    let selectedGMsRangeY = [];
-    for (let i = 1; i < selectedGMs.length; i++) {
-      selectedGMsRangeY.push(i / (selectedGMs.length - 1));
-    }
-    // Add 0 in index 0;
-    selectedGMsRangeY.splice(0, 0, 0);
+    const realisationsRangeY = range(0, 1, 1 / realisations.length);
 
-    console.log("NEW RANGE: ", realisationsRangeY);
-    console.log("NEW RANGE: ", selectedGMsRangeY);
+    const newRealisationsRangeY = realisationsRangeY.flatMap((x, i) =>
+      Array(i === 0 || i === (realisationsRangeY.length - 1) ? 1 : 2).fill(x)
+    );
+
+
+    // double the elements
+    const newSelectedGMs = selectedGMs.flatMap((x) => Array(2).fill(x));
+
+    const selectedGMsRangeY = range(0, 1, 1 / selectedGMs.length);
+
+    const newSelectedGMsRangeY = selectedGMsRangeY.flatMap((x, i) =>
+      Array(i === 0 || i === (selectedGMsRangeY.length - 1) ? 1 : 2).fill(x)
+    );
+
 
     return (
       <Plot
@@ -49,16 +55,16 @@ const FirstPlot = ({ gmsData, IM }) => {
             type: "scatter",
           },
           {
-            x: realisations.sort(),
-            y: realisationsRangeY,
+            x: newRealisations.sort(),
+            y: newRealisationsRangeY,
             mode: "lines+markers",
             name: "Realisations",
             line: { shape: "hv", color: "red" },
             type: "scatter",
           },
           {
-            x: selectedGMs.sort(),
-            y: selectedGMsRangeY,
+            x: newSelectedGMs.sort(),
+            y: newSelectedGMsRangeY,
             mode: "lines+markers",
             name: "GMs",
             line: { shape: "hv", color: "blue" },
