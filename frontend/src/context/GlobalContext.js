@@ -71,7 +71,7 @@ export const Provider = (props) => {
   */
   const [computedGMS, setComputedGMS] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedIMVectors, setSelectedIMVectors] = useState(null);
+  const [selectedIMVectors, setSelectedIMVectors] = useState([]);
 
   /* 
     User Permissions
