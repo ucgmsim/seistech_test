@@ -15,7 +15,7 @@ before_install:
   - export DEPLOY_NAME=psha-test
   - echo $DEPLOY_NAME
   - pip install pexpect
-  - python scripts/ec2_send_cmd.py "$EC2USER" "$EC2PASSWD" "cd /home/ec2-user/seistech/docker/$BRANCH_NAME;../Dockerise.sh $BRANCH_NAME 5102 5002"
+  - python scripts/ec2_send_cmd.py "$EC2USER" "$EC2PASSWD" "cd /home/ec2-user/seistech/docker/master_test;../Dockerise.sh master_test"
   - cd /home/travis/build/ucgmsim/
   - git clone https://github.com/ucgmsim/qcore.git
 
@@ -38,7 +38,7 @@ script:
   - echo "Testing $DEPLOY_NAME"
   - pytest -s 
 after_success:
-  - python scripts/ec2_send_cmd.py "$EC2USER" "$EC2PASSWD" "cd /home/ec2-user/seistech/docker/$BRANCH_NAME;docker-compose down"
+  - python scripts/ec2_send_cmd.py "$EC2USER" "$EC2PASSWD" "cd /home/ec2-user/seistech/docker/master_test;docker-compose down"
 after_script:
   - ls *.zip
   - rm *.zip

@@ -1,0 +1,54 @@
+# docker-compose.yml
+
+version: "3.8"
+
+networks:
+  seistech-test:
+    driver: bridge
+
+services:
+  middleware:
+    image: middleware:master_test
+    build:
+      context: ../../middleware/middleware
+      args:
+        - SSH_PRIVATE_KEY
+    environment:
+      - ENV=TEST
+      - AUTH0_DOMAIN=${AUTH0_DOMAIN_TEST}
+      - API_AUDIENCE=${API_AUDIENCE_TEST}
+      - ALGORITHMS=${ALGORITHMS_TEST}
+      - CORE_API_SECRET=${CORE_API_SECRET_TEST}
+      - CORE_API_BASE=${CORE_API_BASE_TEST}
+      - INTER_PORT=${INTER_API_PORT_TEST}
+      - N_PROCS=${N_PROCS_TEST}
+    networks:
+      - seistech-test
+    expose:
+      - ${INTER_API_PORT_TEST}
+    ports:
+      - ${INTER_API_PORT_TEST}:${INTER_API_PORT_TEST}
+  frontend:
+    image: frontend:master_test
+    build: ../../frontend
+    environment:
+      - REACT_APP_DEFAULT_ANNUAL_EXCEEDANCE_RATE=${DEFAULT_ANNUAL_EXCEEDANCE_RATE}
+      - REACT_APP_DEFAULT_LAT=${DEFAULT_LAT}
+      - REACT_APP_DEFAULT_LNG=${DEFAULT_LNG}
+      - REACT_APP_ENV=TEST
+      - REACT_APP_CONSTANT_CORE_API_BASE_URL=${BASE_URL_TEST}
+      - PORT=${FRONT_END_PORT_TEST}
+      - REACT_APP_BUILD_DATE=${BUILD_DATE}
+      - REACT_APP_GIT_SHA=${GIT_SHA}
+      - REACT_APP_AUTH0_DOMAIN=${REACT_APP_AUTH0_DOMAIN_TEST}
+      - REACT_APP_AUTH0_CLIENTID=${REACT_APP_AUTH0_CLIENTID_TEST}
+      - REACT_APP_AUTH0_AUDIENCE=${REACT_APP_AUTH0_AUDIENCE_TEST}
+      - REACT_APP_MAP_BOX_TOKEN=${REACT_APP_MAP_BOX_TOKEN_TEST}
+    stdin_open: true
+    tty: true
+    networks:
+      - seistech-test
+    expose:
+      - ${FRONT_END_PORT_TEST}
+    ports:
+      - ${FRONT_END_PORT_TEST}:${FRONT_END_PORT_TEST}
