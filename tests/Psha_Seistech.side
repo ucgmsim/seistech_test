@@ -834,7 +834,7 @@
       "command": "click",
       "target": "xpath=//button[contains(.,'Add')]",
       "targets": [
-        ["css=.form-group > .disagg-calc", "css:finder"],
+        ["css=.form-group > .uhs-add-btn", "css:finder"],
         ["xpath=(//button[@type='button'])[11]", "xpath:attributes"],
         ["xpath=//div[@id='uncontrolled-tab-example-tabpane-hazard']/div/div/div/div/div[5]/form/div[3]/button", "xpath:idRelative"],
         ["xpath=//div[5]/form/div[3]/button", "xpath:position"],
@@ -873,7 +873,7 @@
       "command": "click",
       "target": "xpath=//button[contains(.,'Add')]",
       "targets": [
-        ["css=.form-group > .disagg-calc", "css:finder"],
+        ["css=.form-group > .uhs-add-btn", "css:finder"],
         ["xpath=(//button[@type='button'])[11]", "xpath:attributes"],
         ["xpath=//div[@id='uncontrolled-tab-example-tabpane-hazard']/div/div/div/div/div[5]/form/div[3]/button", "xpath:idRelative"],
         ["xpath=//div[5]/form/div[3]/button", "xpath:position"],
@@ -912,7 +912,7 @@
       "command": "click",
       "target": "xpath=//button[contains(.,'Add')]",
       "targets": [
-        ["css=.form-group > .disagg-calc", "css:finder"],
+        ["css=.form-group > .uhs-add-btn", "css:finder"],
         ["xpath=(//button[@type='button'])[11]", "xpath:attributes"],
         ["xpath=//div[@id='uncontrolled-tab-example-tabpane-hazard']/div/div/div/div/div[5]/form/div[3]/button", "xpath:idRelative"],
         ["xpath=//div[5]/form/div[3]/button", "xpath:position"],

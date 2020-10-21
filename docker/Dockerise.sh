@@ -1,4 +1,7 @@
 #! /bin/bash
+branch_name=$1
+
+echo "Branch $branch_name"
 
 # Down the docker-compose first
 echo "docker-compose down"
@@ -6,23 +9,23 @@ docker-compose down
 
 # Remove existing images
 echo "Removing docker images first"
-docker rmi frontend:dev middleware:dev
+docker rmi frontend:${branch_name} middleware:${branch_name}
 
 # Switch to Master branch in case we're not in the right branch
 # TODO UPDATE THIS TO master-dev branch when it goes to public repo
 echo "Changing to Master branch"
-git checkout master
+# git checkout master_dev
 
 # To pull latest version
 echo "Pulling latest info from Master branch"
-git pull
+# git pull
 
 # Set the Time
 export TZ=NZ
-export BUILD_DATE_DEV=$(date +%Y-%m-%d)-$(date +%T)
+export BUILD_DATE=$(date +%Y-%m-%d)-$(date +%T)
 
 # Get the latest git commit's hash
-export GIT_SHA_DEV=`git rev-parse --short HEAD`
+export GIT_SHA=`git rev-parse --short HEAD`
 
 # Then create one
 echo "Dockerizing"
