@@ -22,9 +22,9 @@ API_AUDIENCE = os.environ["API_AUDIENCE"]
 ALGORITHMS = os.environ["ALGORITHMS"]
 
 # For DEV/EA/PROD with ENV
-# coreApiBase = os.environ["CORE_API_BASE"]
+coreApiBase = os.environ["CORE_API_BASE"]
 # In case I need to make a change locally
-coreApiBase = "http://localhost:10022/"
+# coreApiBase = "http://localhost:10022/"
 
 # Generate the coreAPI token
 coreApiToken = "Bearer {}".format(
