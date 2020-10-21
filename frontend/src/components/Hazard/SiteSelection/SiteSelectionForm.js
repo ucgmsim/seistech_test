@@ -283,9 +283,7 @@ const SiteSelectionForm = () => {
             type="button"
             className="btn btn-primary"
             onClick={onClickLocationSet}
-            disabled={
-              !validEnsembleLatLng() || locationSetButton.isFetching === true
-            }
+            disabled={!validEnsembleLatLng()}
           >
             {locationSetButton.text}
           </button>
