@@ -6,6 +6,7 @@ import { GlobalContext } from "context";
 
 import FirstPlot from "./FirstPlot";
 import SecondPlot from "./SecondPlot";
+import ThirdPlot from "./ThirdPlot"
 import LoadingSpinner from "components/common/LoadingSpinner";
 
 import "assets/style/GMSViewer.css";
@@ -60,7 +61,12 @@ const GMSViewer = () => {
           )}
         </Tab>
         <Tab eventKey="thirdPlot" title="Third Plot">
-          <div>HELLO</div>
+        {isLoading === true && <LoadingSpinner />}
+          {isLoading === false && computedGMS !== null && (
+            <Fragment>
+              <ThirdPlot gmsData={computedGMS} />
+            </Fragment>
+          )}
         </Tab>
         <Tab eventKey="fourthPlot" title="Fourth Plot">
           <div>HELLO</div>
