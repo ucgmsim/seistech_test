@@ -21,7 +21,7 @@ const Home = () => {
   return (
     <Fragment>
       <Tabs defaultActiveKey="siteselection" className="hazard-tabs">
-        <Tab eventKey="siteselection" title="Site Selection">
+        <Tab eventKey="siteselection" title="Site Selection" tabClassName="site-selection-tab">
           <TwoColumnView
             cpanel={SiteSelectionForm}
             viewer={SiteSelectionViewer}
@@ -32,6 +32,7 @@ const Home = () => {
           eventKey="hazard"
           title="Seismic Hazard"
           disabled={locationSetClick === null || vs30 === ""}
+          tabClassName="seismic-hazard-tab"
         >
           <TwoColumnView cpanel={HazardForm} viewer={HazardViewer} />
         </Tab>
@@ -40,6 +41,7 @@ const Home = () => {
           eventKey="gms"
           title="GMS"
           disabled={ENV !== "DEV" || locationSetClick === null || vs30 === ""}
+          tabClassName="gms-tab"
         >
           <TwoColumnView cpanel={GmsForm} viewer={GmsViewer} />
         </Tab>
