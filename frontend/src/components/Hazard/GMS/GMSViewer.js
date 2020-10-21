@@ -8,7 +8,7 @@ import FirstPlot from "./FirstPlot";
 import SecondPlot from "./SecondPlot";
 import LoadingSpinner from "components/common/LoadingSpinner";
 
-import "assets/style/GMSViewer.css"
+import "assets/style/GMSViewer.css";
 
 const GMSViewer = () => {
   const { isLoading, computedGMS, selectedIMVectors } = useContext(
@@ -27,12 +27,11 @@ const GMSViewer = () => {
     }));
     setLocalIMVectors(localIMs);
 
-    // Get only period from IM
-    let localPeriods = selectedIMVectors.map((IM) => {
-      return IM.split("_")[1]
-    });
+    let localPeriods = {}
+    selectedIMVectors.forEach((IM) => {
+      localPeriods[IM] = IM.split("_")[1];
+    })
     setPeriods(localPeriods);
-
   }, [selectedIMVectors]);
 
   return (
@@ -53,10 +52,10 @@ const GMSViewer = () => {
           )}
         </Tab>
         <Tab eventKey="secondPlot" title="Second Plot">
-        {isLoading === true && <LoadingSpinner />}
+          {isLoading === true && <LoadingSpinner />}
           {isLoading === false && computedGMS !== null && (
             <Fragment>
-              <SecondPlot gmsData={computedGMS} periods={periods}/>
+              <SecondPlot gmsData={computedGMS} periods={periods} />
             </Fragment>
           )}
         </Tab>

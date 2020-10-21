@@ -7,79 +7,132 @@ import ErrorMessage from "components/common/ErrorMessage";
 import "assets/style/GMSPlot.css";
 
 const SecondPlot = ({ gmsData, periods }) => {
-  if (
-    gmsData !== null &&
-    !gmsData.hasOwnProperty("error") &&
-    periods !== []
-  ) {
+  if (gmsData !== null && !gmsData.hasOwnProperty("error") && periods !== []) {
     const cdfX = gmsData["gcim_cdf_x"];
     const cdfY = gmsData["gcim_cdf_y"];
     const realisations = gmsData["realisations"];
     const selectedGMs = gmsData["selected_GMs"];
 
-    // console.log(gmsData)
-    // console.log(periods)
+    const scatterArr = [];
 
-    const scatterObjs = [];
+    /*
+      GCIM calculations
+    */
+    const medianIndexObj = {};
+    const lowerPercenIndexObj = {};
+    const higherPercenIndexObj = {};
 
+    // We are going to compare Y value to 0.5 (Median), 0.16 (16th percentile) and 0.84 (84th percentile)
+    for (const [IM, values] of Object.entries(cdfY)) {
+      // Median
+      const medianFound = values.find((element) => element >= 0.5);
+      medianIndexObj[IM] = values.indexOf(medianFound);
 
-    // // Create range for Realisations, 0 ~ 1
-    // let realisationsRangeY = [];
-    // for (let i = 1; i < realisations.length; i++) {
-    //   realisationsRangeY.push(i / (realisations.length - 1));
-    // }
-    // // Add 0 in index 0;
-    // realisationsRangeY.splice(0, 0, 0);
+      // 0.16 (16th percentile)
+      const lowerPercentileFound = values.find((element) => element >= 0.16);
+      lowerPercenIndexObj[IM] = values.indexOf(lowerPercentileFound);
 
-    // // Create range for Realisations, 0 ~ 1
-    // let selectedGMsRangeY = [];
-    // for (let i = 1; i < selectedGMs.length; i++) {
-    //   selectedGMsRangeY.push(i / (selectedGMs.length - 1));
-    // }
-    // // Add 0 in index 0;
-    // selectedGMsRangeY.splice(0, 0, 0);
+      // 0.84 (84th percentile)
+      const higherPercentileFound = values.find((element) => element >= 0.84);
+      higherPercenIndexObj[IM] = values.indexOf(higherPercentileFound);
+    }
 
-    // console.log("NEW RANGE: ", realisationsRangeY);
-    // console.log("NEW RANGE: ", selectedGMsRangeY);
+    const upperPercenValues = [];
+    const medianValues = [];
+    const lowerPercenValues = [];
 
-    // return (
-    //   <Plot
-    //     className={"specific-im-plot"}
-    //     data={[
-    //       {
-    //         x: cdfX,
-    //         y: cdfY,
-    //         mode: "lines+markers",
-    //         name: "GCIM",
-    //         line: { shape: "hv", color: "black" },
-    //         type: "scatter",
-    //       },
-    //       {
-    //         x: realisations.sort(),
-    //         y: realisationsRangeY,
-    //         mode: "lines+markers",
-    //         name: "Realisations",
-    //         line: { shape: "hv", color: "red" },
-    //         type: "scatter",
-    //       },
-    //       {
-    //         x: selectedGMs.sort(),
-    //         y: selectedGMsRangeY,
-    //         mode: "lines+markers",
-    //         name: "GMs",
-    //         line: { shape: "hv", color: "blue" },
-    //         type: "scatter",
-    //       },
-    //     ]}
-    //     layout={{
-    //       autosize: true,
-    //       margin: PLOT_MARGIN,
-    //     }}
-    //     useResizeHandler={true}
-    //     config={{ displayModeBar: true }}
-    //   />
-      
-    // );
+    for (const [IM, values] of Object.entries(cdfX)) {
+      upperPercenValues.push(values[higherPercenIndexObj[IM]]);
+      medianValues.push(values[medianIndexObj[IM]]);
+      lowerPercenValues.push(values[lowerPercenIndexObj[IM]]);
+    }
+
+    scatterArr.push(
+      {
+        x: Object.values(periods),
+        y: upperPercenValues,
+        mode: "lines+markers",
+        name: "GCIM - 84th Percentile",
+        line: { dash: "dashdot", color: "red" },
+        type: "scatter",
+      },
+      {
+        x: Object.values(periods),
+        y: medianValues,
+        mode: "lines+markers",
+        name: "GCIM - Median",
+        line: { color: "red" },
+        type: "scatter",
+      },
+      {
+        x: Object.values(periods),
+        y: lowerPercenValues,
+        mode: "lines+markers",
+        name: "GCIM - 16th percentile",
+        line: { dash: "dashdot", color: "red" },
+        type: "scatter",
+      }
+    );
+
+    /*
+      Realisations calculation
+    */
+    for (let i = 0; i < Object.values(realisations)[0].length; i++) {
+      let yCoords = [];
+      for (const [IM, period] of Object.entries(realisations)) {
+        yCoords.push(realisations[IM][i]);
+      }
+      scatterArr.push({
+        x: Object.values(periods),
+        y: yCoords,
+        mode: "lines+markers",
+        name: "Realisations",
+        line: { color: "blue" },
+        type: "scatter",
+      });
+    }
+    /*
+      Selected GMs calculation
+    */
+    for (let i = 0; i < Object.values(selectedGMs)[0].length; i++) {
+      let yCoords = [];
+      for (const [IM, period] of Object.entries(selectedGMs)) {
+        yCoords.push(selectedGMs[IM][i]);
+      }
+      scatterArr.push({
+        x: Object.values(periods),
+        y: yCoords,
+        mode: "lines+markers",
+        name: "Selected GMs",
+        line: { color: "green" },
+        type: "scatter",
+      });
+    }
+
+    return (
+      <Plot
+        className={"specific-im-plot"}
+        data={scatterArr}
+        layout={{
+          xaxis: {
+            type: "log",
+            title: { text: "Period, T (s)" },
+            showexponent: "first",
+            exponentformat: "power",
+          },
+          yaxis: {
+            type: "log",
+            title: { text: "Spectral acceleration, SA (g)" },
+            showexponent: "first",
+            exponentformat: "power",
+          },
+          autosize: true,
+          margin: PLOT_MARGIN,
+        }}
+        useResizeHandler={true}
+        config={{ displayModeBar: true }}
+      />
+    );
   }
   return <ErrorMessage />;
 };
