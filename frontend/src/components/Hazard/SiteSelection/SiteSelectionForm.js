@@ -8,15 +8,19 @@ import { disableScrollOnNumInput, handleErrors } from "utils/Utils";
 import TextField from "@material-ui/core/TextField";
 
 import "assets/style/HazardForms.css";
-import EnsembleSelect from "./EnsembleSelect";
 
+import EnsembleSelect from "./EnsembleSelect";
 import SiteConditions from "./SiteSelectionVS30SiteConditions";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const SiteSelectionForm = () => {
   const { getTokenSilently } = useAuth0();
 
-  const [locationSetButton, setLocationSetButton] = useState("Set");
+  const [locationSetButton, setLocationSetButton] = useState({
+    text: "Set",
+    isFetching: false,
+  });
   const [localLat, setLocalLat] = useState(CONSTANTS.DEFAULT_LAT);
   const [localLng, setLocalLng] = useState(CONSTANTS.DEFAULT_LNG);
   const [localSetClick, setLocalSetClick] = useState(null);
@@ -91,7 +95,10 @@ const SiteSelectionForm = () => {
     // Table rows in UHS section
     setUHSRateTable([]);
     // For location button
-    setLocationSetButton("Set");
+    setLocationSetButton({
+      text: "Set",
+      isFetching: false,
+    });
   }, []);
 
   useEffect(() => {
@@ -104,7 +111,10 @@ const SiteSelectionForm = () => {
           const token = await getTokenSilently();
           setVS30("");
           setDefaultVS30("");
-          setLocationSetButton(<FontAwesomeIcon icon="spinner" spin />);
+          setLocationSetButton({
+            text: <FontAwesomeIcon icon="spinner" spin />,
+            isFetching: true,
+          });
           await fetch(
             CONSTANTS.CORE_API_BASE_URL +
               CONSTANTS.CORE_API_ROUTE_STATION +
@@ -117,15 +127,23 @@ const SiteSelectionForm = () => {
             }
           )
             .then(handleErrors)
-            .then(async function (response) {
+            .then(async (response) => {
               const responseData = await response.json();
               setStation(responseData.station);
               setVS30(responseData.vs30);
               setDefaultVS30(responseData.vs30);
-              setLocationSetButton("Set");
+              setLocationSetButton({
+                text: "Set",
+                isFetching: false,
+              });
             })
-            .catch(function (error) {
-              setLocationSetButton("Set");
+            .catch((error) => {
+              if (error.name !== "AbortError") {
+                setLocationSetButton({
+                  text: "Set",
+                  isFetching: false,
+                });
+              }
               console.log(error);
             });
         } catch (error) {
@@ -165,11 +183,11 @@ const SiteSelectionForm = () => {
           }
         )
           .then(handleErrors)
-          .then(async function (response) {
+          .then(async (response) => {
             const responseData = await response.json();
             setIMs(responseData["ims"]);
           })
-          .catch(function (error) {
+          .catch((error) => {
             console.log(error);
           });
       } catch (error) {
@@ -269,7 +287,7 @@ const SiteSelectionForm = () => {
             onClick={onClickLocationSet}
             disabled={!validEnsembleLatLng()}
           >
-            {locationSetButton}
+            {locationSetButton.text}
           </button>
         </div>
       </form>

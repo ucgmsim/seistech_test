@@ -50,7 +50,9 @@ const UHSPlot = ({ uhsData }) => {
           margin: PLOT_MARGIN,
         }}
         useResizeHandler={true}
-        config={{ displayModeBar: true }}
+        config={{
+          displayModeBar: true,
+        }}
       />
     );
   }

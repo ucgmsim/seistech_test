@@ -30,7 +30,10 @@ const HazardViewerHazardCurve = () => {
 
   const [showSpinnerHazard, setShowSpinnerHazard] = useState(false);
   const [showPlotHazard, setShowPlotHazard] = useState(false);
-  const [showErrorMessage, setShowErrorMessage] = useState(false);
+  const [showErrorMessage, setShowErrorMessage] = useState({
+    isError: false,
+    errorCode: null,
+  });
 
   const [hazardData, setHazardData] = useState(null);
 
@@ -54,7 +57,7 @@ const HazardViewerHazardCurve = () => {
         try {
           setShowPlotHazard(false);
           setShowSpinnerHazard(true);
-          setShowErrorMessage(false);
+          setShowErrorMessage({ isError: false, errorCode: null });
 
           const token = await getTokenSilently();
 
@@ -75,21 +78,24 @@ const HazardViewerHazardCurve = () => {
             }
           )
             .then(handleErrors)
-            .then(async function (response) {
+            .then(async (response) => {
               const responseData = await response.json();
               setHazardData(responseData);
               setDownloadToken(responseData["download_token"]);
               setShowSpinnerHazard(false);
               setShowPlotHazard(true);
             })
-            .catch(function (error) {
-              setShowSpinnerHazard(false);
-              setShowErrorMessage(true);
+            .catch((error) => {
+              if (error.name !== "AbortError") {
+                setShowSpinnerHazard(false);
+                setShowErrorMessage({ isError: true, errorCode: error });
+              }
+
               console.log(error);
             });
         } catch (error) {
           setShowSpinnerHazard(false);
-          setShowErrorMessage(true);
+          setShowErrorMessage({ isError: true, errorCode: error });
           console.log(error);
         }
       }
@@ -113,17 +119,20 @@ const HazardViewerHazardCurve = () => {
             />
           )}
 
-          {showSpinnerHazard === true && hazardCurveComputeClick !== null && (
-            <LoadingSpinner />
-          )}
+          {showSpinnerHazard === true &&
+            hazardCurveComputeClick !== null &&
+            showErrorMessage.isError === false && <LoadingSpinner />}
 
           {hazardCurveComputeClick !== null &&
             showSpinnerHazard === false &&
-            showErrorMessage === true && <ErrorMessage />}
+            showErrorMessage.isError === true && (
+              <ErrorMessage errorCode={showErrorMessage.errorCode} />
+            )}
 
           {showSpinnerHazard === false &&
             showPlotHazard === true &&
-            hazardData !== null && (
+            hazardData !== null &&
+            showErrorMessage.isError === false && (
               <Fragment>
                 <HazardBranchPlot hazardData={hazardData} im={selectedIM} />
                 <HazardCurveMetadata
@@ -145,17 +154,20 @@ const HazardViewerHazardCurve = () => {
             />
           )}
 
-          {showSpinnerHazard === true && hazardCurveComputeClick !== null && (
-            <LoadingSpinner />
-          )}
+          {showSpinnerHazard === true &&
+            hazardCurveComputeClick !== null &&
+            showErrorMessage.isError === false && <LoadingSpinner />}
 
           {hazardCurveComputeClick !== null &&
             showSpinnerHazard === false &&
-            showErrorMessage === true && <ErrorMessage />}
+            showErrorMessage.isError === true && (
+              <ErrorMessage errorCode={showErrorMessage.errorCode} />
+            )}
 
           {showSpinnerHazard === false &&
             showPlotHazard === true &&
-            hazardData !== null && (
+            hazardData !== null &&
+            showErrorMessage.isError === false && (
               <Fragment>
                 <HazardEnsemblePlot hazardData={hazardData} im={selectedIM} />
                 <HazardCurveMetadata

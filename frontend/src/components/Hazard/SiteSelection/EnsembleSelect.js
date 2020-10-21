@@ -42,11 +42,11 @@ const EnsembleSelect = () => {
           }
         )
           .then(handleErrors)
-          .then(async function (response) {
+          .then(async (response) => {
             const responseData = await response.json();
             setEnsembleIds(responseData["ensemble_ids"]);
           })
-          .catch(function (error) {
+          .catch((error) => {
             console.log(error);
           });
       } catch (error) {

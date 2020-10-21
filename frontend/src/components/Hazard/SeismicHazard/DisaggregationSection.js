@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, Fragment } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { GlobalContext } from "context";
 import * as CONSTANTS from "constants/Constants";
@@ -27,7 +27,7 @@ const HazardCurveSection = () => {
   }, [selectedIM]);
 
   return (
-    <div>
+    <Fragment>
       <form autoComplete="off" onSubmit={(e) => e.preventDefault()}>
         <div className="form-group form-section-title">
           <span>Disaggregation</span>
@@ -81,7 +81,7 @@ const HazardCurveSection = () => {
           </button>
         </div>
       </form>
-    </div>
+    </Fragment>
   );
 };
 

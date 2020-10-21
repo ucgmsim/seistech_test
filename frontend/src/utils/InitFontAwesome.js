@@ -10,7 +10,7 @@ import {
   faCaretUp,
 } from "@fortawesome/free-solid-svg-icons";
 
-function InitFontAwesome() {
+const InitFontAwesome = () => {
   library.add(faLink);
   library.add(faUser);
   library.add(faPowerOff);
@@ -19,6 +19,6 @@ function InitFontAwesome() {
   library.add(faTrash);
   library.add(faCaretDown);
   library.add(faCaretUp);
-}
+};
 
 export default InitFontAwesome;

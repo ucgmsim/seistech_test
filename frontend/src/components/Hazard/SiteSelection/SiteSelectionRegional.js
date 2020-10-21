@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, Fragment } from "react";
 import { useAuth0 } from "components/common/ReactAuth0SPA";
 import * as CONSTANTS from "constants/Constants";
 
@@ -22,7 +22,10 @@ const SiteSelectionRegional = () => {
 
   const [contextPlot, setContextPlot] = useState(null);
   const [showSpinner, setShowSpinner] = useState(false);
-  const [showErrorMessage, setShowErrorMessage] = useState(false);
+  const [showErrorMessage, setShowErrorMessage] = useState({
+    isError: false,
+    errorCode: null,
+  });
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -33,7 +36,7 @@ const SiteSelectionRegional = () => {
         try {
           const token = await getTokenSilently();
           setShowSpinner(true);
-          setShowErrorMessage(false);
+          setShowErrorMessage({ isError: false, errorCode: null });
 
           await fetch(
             CONSTANTS.CORE_API_BASE_URL +
@@ -47,19 +50,21 @@ const SiteSelectionRegional = () => {
             }
           )
             .then(handleErrors)
-            .then(async function (response) {
+            .then(async (response) => {
               const responseData = await response.json();
               setShowSpinner(false);
               setContextPlot(responseData["context_plot"]);
             })
-            .catch(function (error) {
-              setShowSpinner(false);
-              setShowErrorMessage(true);
+            .catch((error) => {
+              if (error.name !== "AbortError") {
+                setShowSpinner(false);
+                setShowErrorMessage({ isError: true, errorCode: error });
+              }
               console.log(error);
             });
         } catch (error) {
           setShowSpinner(false);
-          setShowErrorMessage(true);
+          setShowErrorMessage({ isError: true, errorCode: error });
           console.log(error);
         }
       }
@@ -72,7 +77,7 @@ const SiteSelectionRegional = () => {
   }, [locationSetClick]);
 
   return (
-    <div>
+    <Fragment>
       {locationSetClick === null && (
         <GuideMessage
           header={CONSTANTS.SITE_SELECTION_REGIONAL_TITLE}
@@ -85,16 +90,20 @@ const SiteSelectionRegional = () => {
 
       {locationSetClick !== null &&
         showSpinner === false &&
-        showErrorMessage === true && <ErrorMessage />}
+        showErrorMessage.isError === true && (
+          <ErrorMessage errorCode={showErrorMessage.errorCode} />
+        )}
 
-      {contextPlot !== null && showSpinner === false && (
-        <img
-          className="rounded mx-auto d-block img-fluid"
-          src={`data:image/png;base64,${contextPlot}`}
-          alt="Context plot"
-        />
-      )}
-    </div>
+      {contextPlot !== null &&
+        showSpinner === false &&
+        showErrorMessage.isError === false && (
+          <img
+            className="rounded mx-auto d-block img-fluid"
+            src={`data:image/png;base64,${contextPlot}`}
+            alt="Regional Map"
+          />
+        )}
+    </Fragment>
   );
 };
 
