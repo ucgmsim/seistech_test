@@ -138,10 +138,12 @@ const SiteSelectionForm = () => {
               });
             })
             .catch((error) => {
-              setLocationSetButton({
-                text: "Set",
-                isFetching: false,
-              });
+              if (error.name !== "AbortError") {
+                setLocationSetButton({
+                  text: "Set",
+                  isFetching: false,
+                });
+              }
               console.log(error);
             });
         } catch (error) {
