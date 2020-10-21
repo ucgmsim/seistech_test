@@ -99,7 +99,7 @@ const SiteSelectionVs30 = () => {
           <img
             className="rounded mx-auto d-block img-fluid"
             src={`data:image/png;base64,${vs30Map}`}
-            alt="Context plot"
+            alt="VS30 Map"
           />
         )}
     </Fragment>

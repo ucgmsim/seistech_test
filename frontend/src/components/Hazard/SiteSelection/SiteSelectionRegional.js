@@ -100,7 +100,7 @@ const SiteSelectionRegional = () => {
           <img
             className="rounded mx-auto d-block img-fluid"
             src={`data:image/png;base64,${contextPlot}`}
-            alt="Context plot"
+            alt="Regional Map"
           />
         )}
     </Fragment>
