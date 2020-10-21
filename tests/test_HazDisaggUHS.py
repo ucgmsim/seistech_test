@@ -8,6 +8,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.keys import Keys
+from selenium.common import exceptions
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.chrome.options import Options
 import glob
@@ -16,6 +17,37 @@ import os
 chrome_options = Options()
 if os.environ.get('HOST_NAME') and os.environ['HOST_NAME'].startswith("travis"):
     chrome_options.add_argument("--headless")
+
+def wait_and_click_button(driver,target_by,target_keyword):
+    #works with a button usually searched by CSS_SELECTOR
+    def this_button():
+        return driver.find_element(target_by,target_keyword)
+
+    while this_button().get_attribute('disabled') != None:
+        print("Wait: "+target_keyword+" not ready")
+        time.sleep(5)
+
+    this_button().click()
+
+def wait_and_click(driver, target_by, target_keyword):
+    #works with ordinary links or standard HTML elements searched by ID, XPATH or LINK_TEXT
+    while True:
+        try:
+            driver.find_element(target_by, target_keyword).click()
+        except exceptions.ElementClickInterceptedException:
+            print("Wait: "+target_keyword+" not ready")
+            time.sleep(5)
+        else:
+            break
+
+
+def clear_input_field(driver,target_by,target_keyword):
+    def this_field() :
+        return driver.find_element(target_by, target_keyword)
+ 
+    while this_field().get_attribute('value')!='':
+        this_field().send_keys(Keys.BACKSPACE)
+
 
 class TestComputeHazardDisagg():
   def setup_method(self, method):
@@ -39,56 +71,51 @@ class TestComputeHazardDisagg():
     self.driver.find_element(By.ID, "username").send_keys("sungeunbae@live.com")
     self.driver.find_element(By.ID, "password").send_keys("Yonsei96!")
     self.driver.find_element(By.NAME, "action").click()
-    WebDriverWait(self.driver, 30000).until(expected_conditions.presence_of_element_located((By.XPATH, "//a[contains(text(),\'Hazard Analysis\')]")))
-    self.driver.find_element(By.LINK_TEXT, "Hazard Analysis").click()
-    element = self.driver.find_element(By.LINK_TEXT, "Hazard Analysis")
-    actions = ActionChains(self.driver)
-    actions.move_to_element(element).perform()
-    self.driver.execute_script("window.scrollTo(0,0)")
-    self.driver.find_element(By.ID, "haz-lat").click()
-    self.driver.find_element(By.ID, "haz-lat").clear()
+
+    #Wait until the page is loaded
+    WebDriverWait(self.driver, 30000).until(expected_conditions.presence_of_element_located((By.LINK_TEXT, "Hazard Analysis")))
+    wait_and_click(self.driver,By.LINK_TEXT, "Hazard Analysis")
+
+    clear_input_field(self.driver,By.ID,"haz-lat")   
     self.driver.find_element(By.ID, "haz-lat").send_keys("-43.60")
-    self.driver.find_element(By.ID, "haz-lng").click()
-    self.driver.find_element(By.ID, "haz-lng").clear()
+
+    clear_input_field(self.driver,By.ID,"haz-lng")   
     self.driver.find_element(By.ID, "haz-lng").send_keys("172.72")
     self.driver.find_element(By.ID, "site-selection").click()
-    WebDriverWait(self.driver, 20000).until(expected_conditions.invisibility_of_element_located((By.CSS_SELECTOR, "#uncontrolled-tab-example-tab-hazard[aria-disabled]")))
-    self.driver.find_element(By.XPATH, "//a[contains(.,\'Seismic Hazard\')]").click()
-#    time.sleep(5) #wait until the dropdown list gets ready to click. replaced by the line below.
-    WebDriverWait(self.driver, 5000).until(expected_conditions.element_to_be_clickable((By.XPATH,"//div[@id='IMs']/div/div")))
-    self.driver.find_element(By.XPATH, "//div[@id='IMs']/div/div").click()
-    self.driver.find_element(By.ID, "react-select-3-option-2").click() #PGA
-    self.driver.find_element(By.ID, "im-select").click()
-    WebDriverWait(self.driver, 30000).until(expected_conditions.invisibility_of_element_located((By.CSS_SELECTOR, ".hazard-curve-viewer > .download-button[disabled]")))
-    self.driver.find_element(By.CSS_SELECTOR, ".hazard-curve-viewer > .download-button").click()
 
+    wait_and_click(self.driver, By.LINK_TEXT, "Seismic Hazard")
+
+    wait_and_click(self.driver, By.XPATH,"//div[@id='IMs']/div/div")
+    self.driver.find_element(By.ID, "react-select-2-option-0").click() #PGA
+    self.driver.find_element(By.ID, "im-select").click()
+
+    wait_and_click_button(self.driver, By.CSS_SELECTOR, ".hazard-curve-viewer > .download-button")
     time.sleep(10)
-    self.driver.find_element(By.ID, "disagg-annual-rate").click()
+
     self.driver.find_element(By.ID, "disagg-annual-rate").clear()
     self.driver.find_element(By.ID, "disagg-annual-rate").send_keys("0.2")
     self.driver.find_element(By.ID, "prob-update").click()
-    self.driver.find_element(By.XPATH, "//a[contains(text(),\'Disaggregation\')]").click()
-    WebDriverWait(self.driver, 60000).until(expected_conditions.invisibility_of_element_located((By.CSS_SELECTOR, "#uncontrolled-tab-example-tabpane-disagg > .download-button[disabled]")))
-    self.driver.find_element(By.CSS_SELECTOR, "#uncontrolled-tab-example-tabpane-disagg > .download-button").click()
-
+ 
+    wait_and_click_button(self.driver, By.CSS_SELECTOR, ".disaggregation-viewer > .download-button")
     time.sleep(10)
-    self.driver.find_element(By.ID, "uhs-annual-rate").click()
-    self.driver.find_element(By.ID, "uhs-annual-rate").clear()
+   
+    clear_input_field(self.driver,By.ID,"uhs-annual-rate")
     self.driver.find_element(By.ID, "uhs-annual-rate").send_keys("0.01")
-    self.driver.find_element(By.XPATH, "//button[contains(.,\'Add\')]").click()
-    self.driver.find_element(By.ID, "uhs-annual-rate").click()
-    self.driver.find_element(By.ID, "uhs-annual-rate").clear()
+    self.driver.find_element(By.CSS_SELECTOR, ".uhs-add-btn").click()
+
+    clear_input_field(self.driver,By.ID,"uhs-annual-rate")
     self.driver.find_element(By.ID, "uhs-annual-rate").send_keys("0.012")
-    self.driver.find_element(By.XPATH, "//button[contains(.,\'Add\')]").click()
-    self.driver.find_element(By.ID, "uhs-annual-rate").click()
-    self.driver.find_element(By.ID, "uhs-annual-rate").clear()
+    self.driver.find_element(By.CSS_SELECTOR, ".uhs-add-btn").click()
+
+    clear_input_field(self.driver,By.ID,"uhs-annual-rate")
     self.driver.find_element(By.ID, "uhs-annual-rate").send_keys("0.013")
-    self.driver.find_element(By.XPATH, "//button[contains(.,\'Add\')]").click()
+    self.driver.find_element(By.CSS_SELECTOR, ".uhs-add-btn").click()
+ 
     self.driver.find_element(By.ID, "uhs-update-plot").click()
     time.sleep(10)
-    WebDriverWait(self.driver, 180000).until(expected_conditions.invisibility_of_element_located((By.CSS_SELECTOR, "#uncontrolled-tab-example-tabpane-uhs > .download-button[disabled]")))
-    self.driver.find_element(By.CSS_SELECTOR, "#uncontrolled-tab-example-tabpane-uhs > .download-button").click()
 
+    wait_and_click_button(self.driver, By.CSS_SELECTOR, ".uhs-viewer > .download-button")
+ 
     time.sleep(10) #wait for the download to complete
     zip_files= glob.glob("*.zip")
     assert len(zip_files)==3
