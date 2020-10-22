@@ -14,42 +14,12 @@ from selenium.webdriver.chrome.options import Options
 import glob
 import os
 
-chrome_options = Options()
-if os.environ.get('HOST_NAME') and os.environ['HOST_NAME'].startswith("travis"):
-    chrome_options.add_argument("--headless")
-
-def wait_and_click_button(driver,target_by,target_keyword):
-    #works with a button usually searched by CSS_SELECTOR
-    def this_button():
-        return driver.find_element(target_by,target_keyword)
-
-    while this_button().get_attribute('disabled') != None:
-        print("Wait: "+target_keyword+" not ready")
-        time.sleep(5)
-
-    this_button().click()
-
-def wait_and_click(driver, target_by, target_keyword):
-    #works with ordinary links or standard HTML elements searched by ID, XPATH or LINK_TEXT
-    while True:
-        try:
-            driver.find_element(target_by, target_keyword).click()
-        except exceptions.ElementClickInterceptedException:
-            print("Wait: "+target_keyword+" not ready")
-            time.sleep(5)
-        else:
-            break
+from qctools import set_chrome_options, wait_and_click_button, wait_and_click, clear_input_field
 
 
-def clear_input_field(driver,target_by,target_keyword):
-    def this_field() :
-        return driver.find_element(target_by, target_keyword)
- 
-    while this_field().get_attribute('value')!='':
-        this_field().send_keys(Keys.BACKSPACE)
+chrome_options = set_chrome_options()
 
-
-class TestComputeHazardDisagg():
+class TestComputeSeisTech_Psha_Frontend():
   def setup_method(self, method):
     self.driver = webdriver.Chrome(options=chrome_options)
     self.vars = {}
@@ -61,7 +31,7 @@ class TestComputeHazardDisagg():
   def teardown_method(self, method):
     self.driver.quit()
   
-  def test_computeHazardDisagg(self):
+  def test_computeSeisTech_Psha_Frontend(self):
     self.driver.get("https://{}.seistech.nz/".format(self.deploy_name))
 #    assert self.deploy_name == 'psha-test'
 
@@ -82,6 +52,13 @@ class TestComputeHazardDisagg():
     clear_input_field(self.driver,By.ID,"haz-lng")   
     self.driver.find_element(By.ID, "haz-lng").send_keys("172.72")
     self.driver.find_element(By.ID, "site-selection").click()
+    self.driver.find_element(By.ID, "vs30").click()
+    self.driver.find_element(By.LINK_TEXT, "Regional").click()
+    WebDriverWait(self.driver, 30000).until(expected_conditions.presence_of_element_located((By.XPATH, "//img[@alt=\'Context plot\']")))
+    self.driver.find_element(By.LINK_TEXT, "VS30").click()
+    WebDriverWait(self.driver, 30000).until(expected_conditions.presence_of_element_located((By.XPATH, "(//img[@alt=\'Context plot\'])")))
+    value = self.driver.find_element(By.ID, "vs30").get_attribute("value")
+    assert value == "465.7"
 
     wait_and_click(self.driver, By.LINK_TEXT, "Seismic Hazard")
 
@@ -89,32 +66,43 @@ class TestComputeHazardDisagg():
     self.driver.find_element(By.ID, "react-select-2-option-0").click() #PGA
     self.driver.find_element(By.ID, "im-select").click()
 
-    wait_and_click_button(self.driver, By.CSS_SELECTOR, ".hazard-curve-viewer > .download-button")
-    time.sleep(10)
+    self.driver.find_element(By.LINK_TEXT, "Hazard Curve").click()
+    self.driver.find_element(By.LINK_TEXT, "Ensemble branches").click()
+    WebDriverWait(self.driver, 30000).until(expected_conditions.presence_of_element_located((By.CSS_SELECTOR, ".active > .hazard-plot .user-select-none")))
+    self.driver.find_element(By.LINK_TEXT, "Fault/distributed seismicity contribution").click()
+    WebDriverWait(self.driver, 30000).until(expected_conditions.presence_of_element_located((By.CSS_SELECTOR, ".active > .hazard-plot .user-select-none")))
+    self.driver.find_element(By.CSS_SELECTOR, ".hazard-curve-viewer > .download-button").click()
 
-    self.driver.find_element(By.ID, "disagg-annual-rate").clear()
+#    wait_and_click_button(self.driver, By.CSS_SELECTOR, ".hazard-curve-viewer > .download-button")
+#    time.sleep(10)
+#
+
+    clear_input_field(self.driver,By.ID,"disagg-annual-rate")    
     self.driver.find_element(By.ID, "disagg-annual-rate").send_keys("0.2")
     self.driver.find_element(By.ID, "prob-update").click()
- 
-    wait_and_click_button(self.driver, By.CSS_SELECTOR, ".disaggregation-viewer > .download-button")
-    time.sleep(10)
+
+    self.driver.find_element(By.LINK_TEXT, "Disaggregation").click()
+    self.driver.find_element(By.LINK_TEXT, "Epsilon").click()
+    WebDriverWait(self.driver, 60000).until(expected_conditions.presence_of_element_located((By.CSS_SELECTOR, ".active > .img-fluid")))
+    self.driver.find_element(By.LINK_TEXT, "Fault/distributed seismicity").click()
+    WebDriverWait(self.driver, 30000).until(expected_conditions.presence_of_element_located((By.CSS_SELECTOR, ".active > .img-fluid")))
+    self.driver.find_element(By.LINK_TEXT, "Source contributions").click()
+    WebDriverWait(self.driver, 30000).until(expected_conditions.presence_of_element_located((By.CSS_SELECTOR, ".thead-dark")))
+    self.driver.find_element(By.CSS_SELECTOR, ".disaggregation-viewer > .download-button").click()
    
     clear_input_field(self.driver,By.ID,"uhs-annual-rate")
     self.driver.find_element(By.ID, "uhs-annual-rate").send_keys("0.01")
     self.driver.find_element(By.CSS_SELECTOR, ".uhs-add-btn").click()
-
+    clear_input_field(self.driver,By.ID,"uhs-annual-rate")
+    self.driver.find_element(By.ID, "uhs-annual-rate").send_keys("0.011")
+    self.driver.find_element(By.CSS_SELECTOR, ".uhs-add-btn").click()
     clear_input_field(self.driver,By.ID,"uhs-annual-rate")
     self.driver.find_element(By.ID, "uhs-annual-rate").send_keys("0.012")
     self.driver.find_element(By.CSS_SELECTOR, ".uhs-add-btn").click()
-
-    clear_input_field(self.driver,By.ID,"uhs-annual-rate")
-    self.driver.find_element(By.ID, "uhs-annual-rate").send_keys("0.013")
-    self.driver.find_element(By.CSS_SELECTOR, ".uhs-add-btn").click()
- 
     self.driver.find_element(By.ID, "uhs-update-plot").click()
-    time.sleep(10)
-
-    wait_and_click_button(self.driver, By.CSS_SELECTOR, ".uhs-viewer > .download-button")
+    self.driver.find_element(By.LINK_TEXT, "Uniform Hazard Spectrum").click()
+    WebDriverWait(self.driver, 150000).until(expected_conditions.presence_of_element_located((By.CSS_SELECTOR, ".uhs-plot .user-select-none")))
+    self.driver.find_element(By.CSS_SELECTOR, ".uhs-viewer > .download-button").click()
  
     time.sleep(10) #wait for the download to complete
     zip_files= glob.glob("*.zip")
