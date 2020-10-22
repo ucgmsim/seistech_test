@@ -1,44 +1,53 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { CORE_API_BASE_URL } from "constants/Constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { handleErrors } from "utils/Utils";
 
 const DownloadButton = ({ downloadURL, downloadToken, fileName, disabled }) => {
-  const [downloadButtonLabel, setDownloadButtonLabel] = useState(
-    <FontAwesomeIcon icon="download" className="mr-3" />
-  );
+  const [downloadButtonLabel, setDownloadButtonLabel] = useState({
+    icon: <FontAwesomeIcon icon="download" className="mr-3" />,
+    isFetching: false,
+  });
 
   const downloadData = () => {
-    setDownloadButtonLabel(
-      <FontAwesomeIcon icon="spinner" className="mr-3" spin />
-    );
-
-    axios({
-      url: CORE_API_BASE_URL + downloadURL + downloadToken,
-      method: "GET",
-      responseType: "blob",
-    }).then((response) => {
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", fileName);
-      document.body.appendChild(link);
-      link.click();
-      setDownloadButtonLabel(
-        <FontAwesomeIcon icon="download" className="mr-3" />
-      );
+    setDownloadButtonLabel({
+      icon: <FontAwesomeIcon icon="spinner" className="mr-3" spin />,
+      isFetching: true,
     });
+
+    fetch(CORE_API_BASE_URL + downloadURL + downloadToken)
+      .then(handleErrors)
+      .then((response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", fileName);
+        document.body.appendChild(link);
+        link.click();
+        setDownloadButtonLabel({
+          icon: <FontAwesomeIcon icon="download" className="mr-3" />,
+          isFetching: false,
+        });
+      })
+      .catch((error) => {
+        // Later on, maybe can add Modal to tell users an error msg.
+        setDownloadButtonLabel({
+          icon: <FontAwesomeIcon icon="download" className="mr-3" />,
+          isFetching: false,
+        });
+        console.log(error);
+      });
   };
 
   return (
     <button
       className="download-button btn btn-primary"
-      disabled={disabled}
+      disabled={disabled || downloadButtonLabel.isFetching === true}
       onClick={() => {
         downloadData();
       }}
     >
-      {downloadButtonLabel}
+      {downloadButtonLabel.icon}
       Download Data
     </button>
   );
