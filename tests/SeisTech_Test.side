@@ -540,6 +540,17 @@
         ["xpath=//div[3]/div/button", "xpath:position"]
       ],
       "value": ""
+    }, {
+      "id": "95d2d76a-0be2-4d34-afa1-a32e16a32c4a",
+      "comment": "",
+      "command": "verifyElementNotPresent",
+      "target": "css=.text-white > .card-header",
+      "targets": [
+        ["css=.text-white > .card-header", "css:finder"],
+        ["xpath=//div[@id='app']/div/div/div/div[2]/div/div/div[2]/div/div/div[3]/div/div/div/div", "xpath:idRelative"],
+        ["xpath=//div[3]/div/div/div/div", "xpath:position"]
+      ],
+      "value": ""
     }]
   }, {
     "id": "b5ea81f5-2986-4033-b17c-9bc72ab9f2e4",
