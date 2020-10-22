@@ -7,11 +7,11 @@ frontend/web/static/disagg/
 /frontend/debug.log
 /frontend/.vscode
 
-middleware/seistech_inter_api.egg-info/
+middleware/middleware.egg-info/
 
 .env
 .env.dev
 .env.test
 
 # Pthon virtual environment
-/env
+/venv
