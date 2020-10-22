@@ -8,6 +8,7 @@ import * as CONSTANTS from "constants/Constants";
 import FirstPlot from "./FirstPlot";
 import SecondPlot from "./SecondPlot";
 import ThirdPlot from "./ThirdPlot";
+import FourthPlot from "./FourthPlot";
 import LoadingSpinner from "components/common/LoadingSpinner";
 import GuideMessage from "components/common/GuideMessage";
 import ErrorMessage from "components/common/ErrorMessage";
@@ -46,6 +47,7 @@ const GMSViewer = () => {
     let isValidResponse = true;
 
     Object.values(computedGMS).forEach((x) => {
+      
       if (Object.keys(x).length === 0) {
         isValidResponse = false;
       }
@@ -68,9 +70,9 @@ const GMSViewer = () => {
           {isLoading === true && <LoadingSpinner />}
           {isLoading === false && computedGMS !== null && (
             <Fragment>
-              {validateComputedGMS() === false ? (
+              {/* {validateComputedGMS() === false ? (
                 <ErrorMessage />
-              ) : (
+              ) : ( */}
                 <Fragment>
                   <Select
                     id="im-vectors"
@@ -80,7 +82,7 @@ const GMSViewer = () => {
                   />
                   <FirstPlot gmsData={computedGMS} IM={specifiedIM.value} />
                 </Fragment>
-              )}
+              {/* )} */}
             </Fragment>
           )}
         </Tab>
@@ -95,11 +97,11 @@ const GMSViewer = () => {
           {isLoading === true && <LoadingSpinner />}
           {isLoading === false && computedGMS !== null && (
             <Fragment>
-              {validateComputedGMS() === false ? (
+              {/* {validateComputedGMS() === false ? (
                 <ErrorMessage />
-              ) : (
+              ) : ( */}
                 <SecondPlot gmsData={computedGMS} periods={periods} />
-              )}
+              {/* )} */}
             </Fragment>
           )}
         </Tab>
@@ -114,11 +116,11 @@ const GMSViewer = () => {
           {isLoading === true && <LoadingSpinner />}
           {isLoading === false && computedGMS !== null && (
             <Fragment>
-              {validateComputedGMS() === false ? (
+              {/* {validateComputedGMS() === false ? (
                 <ErrorMessage />
-              ) : (
+              ) : ( */}
                 <ThirdPlot gmsData={computedGMS} />
-              )}
+              {/* )} */}
             </Fragment>
           )}
         </Tab>
@@ -131,6 +133,15 @@ const GMSViewer = () => {
             />
           )}
           {isLoading === true && <LoadingSpinner />}
+          {isLoading === false && computedGMS !== null && (
+            <Fragment>
+              {/* {validateComputedGMS() === false ? (
+                <ErrorMessage />
+              ) : ( */}
+                <FourthPlot gmsData={computedGMS} />
+              {/* )} */}
+            </Fragment>
+          )}
         </Tab>
       </Tabs>
     </div>

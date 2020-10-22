@@ -12,7 +12,7 @@ const ThirdPlot = ({ gmsData }) => {
 
     return (
       <Plot
-        className={"specific-im-plot"}
+        className={"third-plot"}
         data={[
           {
             x: metadata["rrup"],

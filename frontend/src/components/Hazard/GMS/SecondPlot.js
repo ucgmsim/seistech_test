@@ -111,7 +111,7 @@ const SecondPlot = ({ gmsData, periods }) => {
 
     return (
       <Plot
-        className={"specific-im-plot"}
+        className={"second-plot"}
         data={scatterArr}
         layout={{
           xaxis: {
