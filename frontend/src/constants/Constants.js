@@ -63,6 +63,7 @@ export const SITE_SELECTION_VS30_TITLE = "VS30";
 
 /* 
   Guide Messages
+  Site Selection - Regional & VS30
 */
 export const SITE_SELECTION_VS30_MSG =
   "Please do the following steps to see an image.";
@@ -102,18 +103,18 @@ export const DEFAULT_ANNUAL_PROB =
   process.env.REACT_APP_DEFAULT_ANNUAL_EXCEEDANCE_RATE || "";
 
 /* 
-  Hazard Viewer
   Guide messages
+  Seismic Hazard - Hazard Viewer
 */
-export const HAZARD_CURVE_WARNING_MSG =
+export const HAZARD_CURVE_GUIDE_MSG =
   "Please do the following steps to see plots.";
 export const HAZARD_CURVE_INSTRUCTION = [
   "Choose the Intensity Measure first.",
   "Click the compute button in the 'Hazard Curve' section to see plots.",
 ];
-export const DISAGGREGATION_WARNING_MSG_PLOT =
+export const DISAGGREGATION_GUIDE_MSG_PLOT =
   "Please do the following steps to see plots.";
-export const DISAGGREGATION_WARNING_MSG_TABLE =
+export const DISAGGREGATION_GUIDE_MSG_TABLE =
   "Please do the following steps to see the contribution table.";
 export const DISAGGREGATION_INSTRUCTION_PLOT = [
   "Choose the Intensity Measure first.",
@@ -132,6 +133,20 @@ export const UNIFORM_HAZARD_SPECTRUM_INSTRUCTION = [
   "Using input fields to find the RP you want to use",
   "Click Add button to add for calculation",
   "Click Compute button to see plots.",
+];
+
+/* 
+  Guide messages
+  - GMS
+*/
+export const GMS_VIEWER_GUIDE_MSG =
+  "Please do the following steps to see plots.";
+export const GMS_VIEWER_GUIDE_INSTRUCTION = [
+  "Select IM from IM Type.",
+  "Choose IM Level or Exceedance Rate then put a value.",
+  "Select IM Vector(s).",
+  "Put Number of Ground Motions.",
+  "Click the Compute button.",
 ];
 
 /*
