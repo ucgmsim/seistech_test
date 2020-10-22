@@ -1,7 +1,6 @@
 #! /bin/bash
-branch_name=$1
-
-echo "Branch $branch_name"
+deployment_name=$1
+target_branch=$2
 
 # Down the docker-compose first
 echo "docker-compose down"
@@ -9,16 +8,15 @@ docker-compose down
 
 # Remove existing images
 echo "Removing docker images first"
-docker rmi frontend:${branch_name} middleware:${branch_name}
+docker rmi frontend:${deployment_name} middleware:${deployment_name}
 
-# Switch to Master branch in case we're not in the right branch
-# TODO UPDATE THIS TO master-dev branch when it goes to public repo
-echo "Changing to Master branch"
-# git checkout master_dev
+# Switch to target branch in case we're not in the right branch
+echo `Changing to ${target_branch} branch`
+git checkout ${target_branch}
 
 # To pull latest version
-echo "Pulling latest info from Master branch"
-# git pull
+echo `Pulling latest info from ${target_branch} branch`
+git pull
 
 # Set the Time
 export TZ=NZ
