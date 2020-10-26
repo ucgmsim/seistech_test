@@ -44,7 +44,7 @@ const FourthPlot = ({ gmsData, metadata }) => {
         ]}
         layout={{
           xaxis: {
-            title: { text: "Metadata" },
+            title: { text: `Metadata: ${metadata}` },
           },
           yaxis: {
             title: { text: "0 to 1" },
