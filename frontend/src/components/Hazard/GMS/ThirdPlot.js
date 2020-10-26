@@ -21,7 +21,6 @@ const ThirdPlot = ({ gmsData }) => {
             name: "GCIM",
             line: { color: "black" },
             type: "scatter",
-            marker: { symbol: "x-open-dot", size: 20 },
           },
         ]}
         layout={{
