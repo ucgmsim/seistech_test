@@ -15,7 +15,7 @@ before_install:
   - export DEPLOY_NAME=psha-test
   - echo $DEPLOY_NAME
   - pip install pexpect
-  - python scripts/ec2_send_cmd.py "$EC2USER" "$EC2PASSWD" "cd /home/ec2-user/seistech/docker/master_test;../Dockerise.sh master_test"
+  - python scripts/ec2_send_cmd.py "$EC2USER" "$EC2PASSWD" "cd /home/ec2-user/seistech_psha_frontend/docker/master_test;../Dockerise.sh master_test $BRANCH_NAME"
   - cd /home/travis/build/ucgmsim/
   - git clone https://github.com/ucgmsim/qcore.git
 
