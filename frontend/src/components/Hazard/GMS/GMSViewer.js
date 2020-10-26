@@ -24,6 +24,9 @@ const GMSViewer = () => {
   const [localIMVectors, setLocalIMVectors] = useState([]);
   const [periods, setPeriods] = useState([]);
 
+  const [specifiedMetadata, setSpecifiedMetadata] = useState([]);
+  const [localMetadatas, setLocalMetadatas] = useState([]);
+
   useEffect(() => {
     // Create proper IM array for Select package
     let localIMs = selectedIMVectors.map((IM) => ({
@@ -31,6 +34,7 @@ const GMSViewer = () => {
       label: IM,
     }));
     setLocalIMVectors(localIMs);
+    console.log(selectedIMVectors);
 
     // Set the first IM as a default IM for plot
     setSpecifiedIM(localIMs[0]);
@@ -43,11 +47,28 @@ const GMSViewer = () => {
     setPeriods(localPeriods);
   }, [selectedIMVectors]);
 
+  useEffect(() => {
+    if (computedGMS !== null) {
+      const metadatas = computedGMS["metadata"];
+      console.log(metadatas);
+      let localMetadatas = Object.getOwnPropertyNames(metadatas).map(
+        (metadata) => ({
+          value: metadata,
+          label: metadata,
+        })
+      );
+
+      // Set the first Metadata as a default metadata for plot
+      setSpecifiedMetadata(localMetadatas[0]);
+
+      setLocalMetadatas(localMetadatas);
+    }
+  }, [computedGMS]);
+
   const validateComputedGMS = () => {
     let isValidResponse = true;
 
     Object.values(computedGMS).forEach((x) => {
-      
       if (Object.keys(x).length === 0) {
         isValidResponse = false;
       }
@@ -73,15 +94,15 @@ const GMSViewer = () => {
               {/* {validateComputedGMS() === false ? (
                 <ErrorMessage />
               ) : ( */}
-                <Fragment>
-                  <Select
-                    id="im-vectors"
-                    onChange={(value) => setSpecifiedIM(value || [])}
-                    defaultValue={specifiedIM}
-                    options={localIMVectors}
-                  />
-                  <FirstPlot gmsData={computedGMS} IM={specifiedIM.value} />
-                </Fragment>
+              <Fragment>
+                <Select
+                  id="im-vectors"
+                  onChange={(value) => setSpecifiedIM(value || [])}
+                  defaultValue={specifiedIM}
+                  options={localIMVectors}
+                />
+                <FirstPlot gmsData={computedGMS} IM={specifiedIM.value} />
+              </Fragment>
               {/* )} */}
             </Fragment>
           )}
@@ -100,7 +121,7 @@ const GMSViewer = () => {
               {/* {validateComputedGMS() === false ? (
                 <ErrorMessage />
               ) : ( */}
-                <SecondPlot gmsData={computedGMS} periods={periods} />
+              <SecondPlot gmsData={computedGMS} periods={periods} />
               {/* )} */}
             </Fragment>
           )}
@@ -119,7 +140,9 @@ const GMSViewer = () => {
               {/* {validateComputedGMS() === false ? (
                 <ErrorMessage />
               ) : ( */}
+              <Fragment>
                 <ThirdPlot gmsData={computedGMS} />
+              </Fragment>
               {/* )} */}
             </Fragment>
           )}
@@ -138,7 +161,19 @@ const GMSViewer = () => {
               {/* {validateComputedGMS() === false ? (
                 <ErrorMessage />
               ) : ( */}
-                <FourthPlot gmsData={computedGMS} />
+              <Fragment>
+                <Select
+                  id="metadata"
+                  onChange={(value) => setSpecifiedMetadata(value || [])}
+                  defaultValue={specifiedMetadata}
+                  options={localMetadatas}
+                />
+
+                <FourthPlot
+                  gmsData={computedGMS}
+                  metadata={specifiedMetadata.value}
+                />
+              </Fragment>
               {/* )} */}
             </Fragment>
           )}
