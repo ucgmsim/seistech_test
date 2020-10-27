@@ -51,8 +51,6 @@ const GMSForm = () => {
   // IM Level / Exceedance Rate
   const [localIMExdRateRadio, setLocalImExdRateRadio] = useState("im-level");
 
-  const [downloadToken, setDownloadToken] = useState("");
-
   /*
     Pre-GM Filtering Parameters Table
   */
@@ -69,45 +67,29 @@ const GMSForm = () => {
     IM Level/Exceedance Rate Section
   */
   const [localIMLevel, setLocalIMLevel] = useState("");
-  const [debouncedLocalIMLevel, setDebouncedLocalIMLevel] = useState(
-    localIMLevel
-  );
+  const [isLocalIMLevelChosen, setIsLocalIMLevelChosen] = useState(false);
 
-  useEffect(() => {
-    const timerId = setTimeout(() => {
-      setDebouncedLocalIMLevel(localIMLevel);
-    }, 2000);
-    return () => {
-      clearTimeout(timerId);
-    };
-  }, [localIMLevel]);
-
-  const [localExceedanceRate, setlocalExceedanceRate] = useState("");
-  const [
-    debouncedLocalExceedanceRate,
-    setDebouncedLocalExceedanceRate,
-  ] = useState(localExceedanceRate);
-
-  useEffect(() => {
-    const timerId = setTimeout(() => {
-      setDebouncedLocalExceedanceRate(localExceedanceRate);
-    }, 2000);
-    return () => {
-      clearTimeout(timerId);
-    };
-  }, [localExceedanceRate]);
+  const [localExcdRate, setLocalExcdRate] = useState("");
+  const [isLocalExcdRateChosen, setIsLocalExcdRateChosen] = useState(false);
 
   useEffect(() => {
     const abortController = new AbortController();
     const signal = abortController.signal;
 
     const defaultCausalParams = async () => {
-      if (debouncedLocalIMLevel !== "" || debouncedLocalExceedanceRate !== "") {
+      if (
+        (selectedIMType !== null &&
+          isLocalIMLevelChosen === true &&
+          localIMLevel !== "") ||
+        (selectedIMType !== null &&
+          isLocalExcdRateChosen === true &&
+          localExcdRate !== "")
+      ) {
         let queryString = `?ensemble_id=${selectedEnsemble}&station=${station}&IM_j=${selectedIMType}&user_vs30=${vs30}`;
         if (localIMExdRateRadio === "im-level") {
           queryString += `&im_level=${localIMLevel}`;
         } else if (localIMExdRateRadio === "exceedance-rate") {
-          queryString += `&exceedance=${localExceedanceRate}`;
+          queryString += `&exceedance=${localExcdRate}`;
         }
         try {
           const token = await getTokenSilently();
@@ -138,6 +120,9 @@ const GMSForm = () => {
               setLocalVS30Max(
                 renderSigfigs(responseData.vs30_high, CONSTANTS.APP_UI_SIGFIGS)
               );
+
+              setIsLocalIMLevelChosen(false);
+              setIsLocalExcdRateChosen(false);
             })
             .catch(function (error) {
               console.log(error);
@@ -153,14 +138,13 @@ const GMSForm = () => {
     return () => {
       abortController.abort();
     };
-  }, [debouncedLocalIMLevel, debouncedLocalExceedanceRate]);
+  }, [selectedIMType, isLocalIMLevelChosen, isLocalExcdRateChosen]);
 
   /*
     IM Vector Section
   */
   const [localIMVector, setLocalIMVector] = useState([]);
   const [isIMVectorChosen, setIsIMVectorChosen] = useState(false);
-  const [isIMVectorSelecting, setIsIMVectorSelecting] = useState(false);
 
   /*
     IM Vector -> Create Weights Table inside Advanced tab
@@ -169,7 +153,7 @@ const GMSForm = () => {
 
   useEffect(() => {
     // To check whether we have any default weights from Core API or NOT
-    if (Object.keys(localWeights).length !== 0 && isIMVectorSelecting === false) {
+    if (Object.keys(localWeights).length !== 0) {
       setLocalWeightsTable(
         localIMVector.map((imVector) => {
           return (
@@ -190,7 +174,7 @@ const GMSForm = () => {
     if (localIMVector.length === 0) {
       setLocalWeightsTable([]);
     }
-  }, [localIMVector, localWeights, isIMVectorSelecting]);
+  }, [localIMVector, localWeights]);
 
   /*
     Fetch data from Core API -> To get a default weight for each IM Vector.
@@ -241,11 +225,6 @@ const GMSForm = () => {
     };
   }, [isIMVectorChosen]);
 
-  const getDefaultWeights = () => {
-    setIsIMVectorSelecting(false);
-    setIsIMVectorChosen(true);
-  }
-
   /*
     Fetch data from Core API -> compute_ensemble_GMS
   */
@@ -256,7 +235,7 @@ const GMSForm = () => {
     const computeEnsembleGMS = async () => {
       if (
         localComputeClick !== null &&
-        (debouncedLocalIMLevel !== "" || debouncedLocalExceedanceRate !== "")
+        (localIMLevel !== "" || localExcdRate !== "")
       ) {
         try {
           const token = await getTokenSilently();
@@ -279,7 +258,7 @@ const GMSForm = () => {
                 IMs: newIMVector,
                 n_gms: Number(localNumGMS),
                 gm_source_ids: ["nga_west_2"],
-                im_level: Number(debouncedLocalIMLevel),
+                im_level: Number(localIMLevel),
                 n_replica: Number(localReplicates),
                 IM_weights: localWeights,
               }),
@@ -296,7 +275,7 @@ const GMSForm = () => {
                 IMs: newIMVector,
                 n_gms: Number(localNumGMS),
                 gm_source_ids: ["nga_west_2"],
-                exceedance: Number(debouncedLocalExceedanceRate),
+                exceedance: Number(localExcdRate),
                 n_replica: Number(localReplicates),
                 IM_weights: localWeights,
               }),
@@ -313,8 +292,10 @@ const GMSForm = () => {
               const responseData = await response.json();
               setComputedGMS(responseData);
               setLocalComputeButton("Compute");
-              setSelectedIMVectors(newIMVector)
+              setSelectedIMVectors(newIMVector);
               setIsLoading(false);
+              setIsLocalIMLevelChosen(false);
+              setIsLocalExcdRateChosen(false);
             })
             .catch(function (error) {
               setLocalComputeButton("Compute");
@@ -338,13 +319,13 @@ const GMSForm = () => {
   useEffect(() => {
     if (
       selectedIMType !== null &&
-      (localIMLevel !== "" || localExceedanceRate !== "")
+      (localIMLevel !== "" || localExcdRate !== "")
     ) {
       $("table input").prop("disabled", false);
     } else {
       $("table input").prop("disabled", true);
     }
-  }, [selectedIMType, localIMLevel, localExceedanceRate]);
+  }, [selectedIMType, localIMLevel, localExcdRate]);
 
   const validInputs = () => {
     return (
@@ -356,9 +337,8 @@ const GMSForm = () => {
       localReplicates !== ("" && null) &&
       localWeights !== ("" && null) &&
       ((localIMExdRateRadio === "exceedance-rate" &&
-        debouncedLocalExceedanceRate !== ("" && null)) ||
-        (localIMExdRateRadio === "im-level" &&
-          debouncedLocalIMLevel !== ("" && null)))
+        localExcdRate !== ("" && null)) ||
+        (localIMExdRateRadio === "im-level" && localIMLevel !== ("" && null)))
     );
   };
 
@@ -415,6 +395,8 @@ const GMSForm = () => {
             <input
               id="im-level"
               type="number"
+              onFocus={() => setIsLocalIMLevelChosen(false)}
+              onBlur={() => setIsLocalIMLevelChosen(true)}
               onChange={(e) => setLocalIMLevel(e.target.value)}
               className="form-control"
               value={localIMLevel}
@@ -423,9 +405,11 @@ const GMSForm = () => {
             <input
               id="exceedance-rate"
               type="number"
-              onChange={(e) => setlocalExceedanceRate(e.target.value)}
+              onFocus={() => setIsLocalExcdRateChosen(false)}
+              onBlur={() => setIsLocalExcdRateChosen(true)}
+              onChange={(e) => setLocalExcdRate(e.target.value)}
               className="form-control"
-              value={localExceedanceRate}
+              value={localExcdRate}
             />
           )}
         </div>
@@ -435,12 +419,11 @@ const GMSForm = () => {
           <Select
             id="im-vector"
             closeMenuOnSelect={false}
-            onMenuOpen={() => setIsIMVectorSelecting(true)}
-            onMenuClose={() => getDefaultWeights()}
+            onMenuOpen={() => setIsIMVectorChosen(false)}
+            onMenuClose={() => setIsIMVectorChosen(true)}
             components={animatedComponents}
             isMulti
             onChange={(value) => setLocalIMVector(value || [])}
-            defaultValue={localIMVector}
             options={IMVectors.filter((e) => {
               return e.value !== selectedIMType;
             })}
