@@ -27,7 +27,7 @@ const GMSForm = () => {
     setGMSRadio,
     setGMSIMType,
     setGMSNum,
-    setGMSReplicats,
+    setGMSReplicates,
     setGMSWeights,
   } = useContext(GlobalContext);
 
@@ -263,7 +263,7 @@ const GMSForm = () => {
     setGMSRadio(localIMExdRateRadio);
     setGMSIMType(selectedIMType);
     setGMSNum(localNumGMS);
-    setGMSReplicats(localReplicates);
+    setGMSReplicates(localReplicates);
     setGMSWeights(localWeights);
     setGMSComputeClick(uuidv4());
   };

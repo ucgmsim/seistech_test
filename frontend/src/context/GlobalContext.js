@@ -79,7 +79,7 @@ export const Provider = (props) => {
   const [GMSRadio, setGMSRadio] = useState("im-level")
   const [GMSIMType, setGMSIMType ] = useState(null)
   const [GMSNum, setGMSNum] = useState("")
-  const [GMSReplicats, setGMSReplicats] = useState(1)
+  const [GMSReplicates, setGMSReplicates] = useState(1)
   const [GMSWeights, setGMSWeights] = useState("")
 
 
@@ -267,8 +267,8 @@ export const Provider = (props) => {
     setGMSIMType,
     GMSNum,
     setGMSNum,
-    GMSReplicats,
-    setGMSReplicats,
+    GMSReplicates,
+    setGMSReplicates,
     GMSWeights,
     setGMSWeights
   };
