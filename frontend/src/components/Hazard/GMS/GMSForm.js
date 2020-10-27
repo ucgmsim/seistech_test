@@ -159,16 +159,8 @@ const GMSForm = () => {
     IM Vector Section
   */
   const [localIMVector, setLocalIMVector] = useState([]);
-  const [debouncedLocalIMVector, setDebouncedLocalIMVector] = useState([]);
-
-  useEffect(() => {
-    const timerId = setTimeout(() => {
-      setDebouncedLocalIMVector(localIMVector);
-    }, 2000);
-    return () => {
-      clearTimeout(timerId);
-    };
-  }, [localIMVector]);
+  const [isIMVectorChosen, setIsIMVectorChosen] = useState(false);
+  const [isIMVectorSelecting, setIsIMVectorSelecting] = useState(false);
 
   /*
     IM Vector -> Create Weights Table inside Advanced tab
@@ -177,7 +169,7 @@ const GMSForm = () => {
 
   useEffect(() => {
     // To check whether we have any default weights from Core API or NOT
-    if (Object.keys(localWeights).length !== 0) {
+    if (Object.keys(localWeights).length !== 0 && isIMVectorSelecting === false) {
       setLocalWeightsTable(
         localIMVector.map((imVector) => {
           return (
@@ -195,10 +187,10 @@ const GMSForm = () => {
       );
     }
     // If users remove all IM Vectors, then we reset weights table inside Advanced tab
-    if (debouncedLocalIMVector.length === 0) {
+    if (localIMVector.length === 0) {
       setLocalWeightsTable([]);
     }
-  }, [debouncedLocalIMVector, localWeights]);
+  }, [localIMVector, localWeights, isIMVectorSelecting]);
 
   /*
     Fetch data from Core API -> To get a default weight for each IM Vector.
@@ -208,10 +200,10 @@ const GMSForm = () => {
     const signal = abortController.signal;
 
     const defaultIMWeights = async () => {
-      if (debouncedLocalIMVector.length !== 0) {
+      if (localIMVector.length !== 0 && isIMVectorChosen === true) {
         let queryString = `?IM_j=${selectedIMType}&IMs=`;
         // To make a string from an array of objects and separate with comma
-        debouncedLocalIMVector.forEach((IM) => (queryString += IM.value + ","));
+        localIMVector.forEach((IM) => (queryString += IM.value + ","));
         // Remove the last comma
         queryString = queryString.slice(0, -1);
 
@@ -231,6 +223,7 @@ const GMSForm = () => {
             .then(async function (response) {
               const responseData = await response.json();
               setLocalWeights(responseData);
+              setIsIMVectorChosen(false);
             })
             .catch(function (error) {
               console.log(error);
@@ -246,7 +239,12 @@ const GMSForm = () => {
     return () => {
       abortController.abort();
     };
-  }, [debouncedLocalIMVector]);
+  }, [isIMVectorChosen]);
+
+  const getDefaultWeights = () => {
+    setIsIMVectorSelecting(false);
+    setIsIMVectorChosen(true);
+  }
 
   /*
     Fetch data from Core API -> compute_ensemble_GMS
@@ -353,7 +351,7 @@ const GMSForm = () => {
       selectedEnsemble !== ("" && null) &&
       station !== ("" && null) &&
       selectedIMType !== ("" && null) &&
-      debouncedLocalIMVector !== ("" && null) &&
+      localIMVector !== [] &&
       localNumGMS !== ("" && null) &&
       localReplicates !== ("" && null) &&
       localWeights !== ("" && null) &&
@@ -437,6 +435,8 @@ const GMSForm = () => {
           <Select
             id="im-vector"
             closeMenuOnSelect={false}
+            onMenuOpen={() => setIsIMVectorSelecting(true)}
+            onMenuClose={() => getDefaultWeights()}
             components={animatedComponents}
             isMulti
             onChange={(value) => setLocalIMVector(value || [])}
