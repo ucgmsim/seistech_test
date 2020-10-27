@@ -3,25 +3,21 @@ import React from "react";
 import Plot from "react-plotly.js";
 import { PLOT_MARGIN } from "constants/Constants";
 import ErrorMessage from "components/common/ErrorMessage";
+import { range } from "utils/Utils";
 
 import "assets/style/GMSPlot.css";
 
 const FourthPlot = ({ gmsData, metadata }) => {
-  const range = (start, stop, step = 1) =>
-    Array(Math.ceil((stop - start) / step) + 1)
-      .fill(start)
-      .map((x, y) => x + y * step);
-
   if (
     gmsData !== null &&
     !gmsData.hasOwnProperty("error") &&
     metadata !== undefined
   ) {
     const xRange = gmsData["metadata"][metadata]
-      .flatMap((x) => Array(2).fill(x))
       .sort((a, b) => {
         return a - b;
-      });
+      })
+      .flatMap((x) => Array(2).fill(x));
 
     const rangeY = range(0, 1, 1 / xRange.length);
 

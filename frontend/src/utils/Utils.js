@@ -26,10 +26,10 @@ export const handleErrors = (response) => {
   return response;
 };
 
-/**
- * Converts the Series json (which is a dict with each index value as a key),
- * to two arrays ready for plotting.
- */
+/*
+  Converts the Series json (which is a dict with each index value as a key),
+  to two arrays ready for plotting.
+*/
 export const getPlotData = (data) => {
   const index = [];
   const values = [];
@@ -41,9 +41,18 @@ export const getPlotData = (data) => {
   return { index: index, values: values };
 };
 
-/**
- * Implement x sig figs for numeric float values
- */
+/*
+  Implement x sig figs for numeric float values
+*/
 export const renderSigfigs = (fullprecision, sigfigs) => {
   return Number.parseFloat(fullprecision).toPrecision(sigfigs);
 };
+
+/*
+  Create an Array from start to stop by step
+*/
+
+export const range = (start, stop, step = 1) =>
+  Array(Math.ceil((stop - start) / step) + 1)
+    .fill(start)
+    .map((x, y) => x + y * step);

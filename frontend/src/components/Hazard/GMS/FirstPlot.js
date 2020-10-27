@@ -3,15 +3,11 @@ import React from "react";
 import Plot from "react-plotly.js";
 import { PLOT_MARGIN } from "constants/Constants";
 import ErrorMessage from "components/common/ErrorMessage";
+import { range } from "utils/Utils";
 
 import "assets/style/GMSPlot.css";
 
 const FirstPlot = ({ gmsData, IM }) => {
-  const range = (start, stop, step = 1) =>
-    Array(Math.ceil((stop - start) / step) + 1)
-      .fill(start)
-      .map((x, y) => x + y * step);
-
   if (
     gmsData !== null &&
     !gmsData.hasOwnProperty("error") &&
@@ -23,24 +19,30 @@ const FirstPlot = ({ gmsData, IM }) => {
     const selectedGMs = gmsData["selected_GMs"][IM];
 
     // double the elements
-    const newRealisations = realisations.flatMap((x) => Array(2).fill(x));
+    const newRealisations = realisations
+      .sort((a, b) => {
+        return a - b;
+      })
+      .flatMap((x) => Array(2).fill(x));
 
     const realisationsRangeY = range(0, 1, 1 / realisations.length);
 
     const newRealisationsRangeY = realisationsRangeY.flatMap((x, i) =>
-      Array(i === 0 || i === (realisationsRangeY.length - 1) ? 1 : 2).fill(x)
+      Array(i === 0 || i === realisationsRangeY.length - 1 ? 1 : 2).fill(x)
     );
 
-
     // double the elements
-    const newSelectedGMs = selectedGMs.flatMap((x) => Array(2).fill(x));
+    const newSelectedGMs = selectedGMs
+      .sort((a, b) => {
+        return a - b;
+      })
+      .flatMap((x) => Array(2).fill(x));
 
     const selectedGMsRangeY = range(0, 1, 1 / selectedGMs.length);
 
     const newSelectedGMsRangeY = selectedGMsRangeY.flatMap((x, i) =>
-      Array(i === 0 || i === (selectedGMsRangeY.length - 1) ? 1 : 2).fill(x)
+      Array(i === 0 || i === selectedGMsRangeY.length - 1 ? 1 : 2).fill(x)
     );
-
 
     return (
       <Plot
@@ -55,7 +57,7 @@ const FirstPlot = ({ gmsData, IM }) => {
             type: "scatter",
           },
           {
-            x: newRealisations.sort(),
+            x: newRealisations,
             y: newRealisationsRangeY,
             mode: "lines+markers",
             name: "Realisations",
@@ -63,7 +65,7 @@ const FirstPlot = ({ gmsData, IM }) => {
             type: "scatter",
           },
           {
-            x: newSelectedGMs.sort(),
+            x: newSelectedGMs,
             y: newSelectedGMsRangeY,
             mode: "lines+markers",
             name: "GMs",
