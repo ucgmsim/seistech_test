@@ -264,7 +264,7 @@ const GMSForm = () => {
           const token = await getTokenSilently();
           setLocalComputeButton(<FontAwesomeIcon icon="spinner" spin />);
           setIsLoading(true);
-          const newIMVector = debouncedLocalIMVector.map((vector) => {
+          const newIMVector = localIMVector.map((vector) => {
             return vector.value;
           });
 
