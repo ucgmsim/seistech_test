@@ -37,7 +37,7 @@ const GMSViewer = () => {
     GMSRadio,
     GMSIMType,
     GMSNum,
-    GMSReplicats,
+    GMSReplicates,
     GMSWeights,
   } = useContext(GlobalContext);
 
@@ -47,6 +47,11 @@ const GMSViewer = () => {
 
   const [specifiedMetadata, setSpecifiedMetadata] = useState([]);
   const [localMetadatas, setLocalMetadatas] = useState([]);
+
+  const [showErrorMessage, setShowErrorMessage] = useState({
+    isError: false,
+    errorCode: null,
+  });
 
   /*
     Fetch data from Core API -> compute_ensemble_GMS
@@ -62,7 +67,10 @@ const GMSViewer = () => {
       ) {
         try {
           const token = await getTokenSilently();
+
           setIsLoading(true);
+          setShowErrorMessage({ isError: false, errorCode: null });
+
           const newIMVector = GMSIMVector.map((vector) => {
             return vector.value;
           });
@@ -81,7 +89,7 @@ const GMSViewer = () => {
                 n_gms: Number(GMSNum),
                 gm_source_ids: ["nga_west_2"],
                 im_level: Number(GMSIMLevel),
-                n_replica: Number(GMSReplicats),
+                n_replica: Number(GMSReplicates),
                 IM_weights: GMSWeights,
               }),
               signal: signal,
@@ -98,7 +106,7 @@ const GMSViewer = () => {
                 n_gms: Number(GMSNum),
                 gm_source_ids: ["nga_west_2"],
                 exceedance: Number(GMSExcdRate),
-                n_replica: Number(GMSReplicats),
+                n_replica: Number(GMSReplicates),
                 IM_weights: GMSWeights,
               }),
               signal: signal,
@@ -110,14 +118,18 @@ const GMSViewer = () => {
             requestOptions
           )
             .then(handleErrors)
-            .then(async function (response) {
+            .then(async (response) => {
               const responseData = await response.json();
               setComputedGMS(responseData);
               setSelectedIMVectors(newIMVector);
               setIsLoading(false);
             })
-            .catch(function (error) {
-              setIsLoading(false);
+            .catch((error) => {
+              if (error.name !== "AbortError") {
+                setIsLoading(false);
+                setShowErrorMessage({ isError: true, errorCode: error });
+              }
+
               console.log(error);
             });
         } catch (error) {
@@ -140,7 +152,6 @@ const GMSViewer = () => {
       label: IM,
     }));
     setLocalIMVectors(localIMs);
-    console.log(selectedIMVectors);
 
     // Set the first IM as a default IM for plot
     setSpecifiedIM(localIMs[0]);
@@ -188,102 +199,130 @@ const GMSViewer = () => {
     <div className="gms-viewer">
       <Tabs defaultActiveKey="firstPlot">
         <Tab eventKey="firstPlot" title="Specific IM">
-          {isLoading === false && computedGMS === null && (
+          {GMSComputeClick === null && (
             <GuideMessage
               header={CONSTANTS.GMS}
               body={CONSTANTS.GMS_VIEWER_GUIDE_MSG}
               instruction={CONSTANTS.GMS_VIEWER_GUIDE_INSTRUCTION}
             />
           )}
-          {isLoading === true && <LoadingSpinner />}
-          {isLoading === false && computedGMS !== null && (
-            <Fragment>
-              {validateComputedGMS() === false ? (
-                <ErrorMessage />
-              ) : (
-                <Fragment>
-                  <Select
-                    id="im-vectors"
-                    onChange={(value) => setSpecifiedIM(value || [])}
-                    defaultValue={specifiedIM}
-                    options={localIMVectors}
-                  />
-                  <FirstPlot gmsData={computedGMS} IM={specifiedIM.value} />
-                </Fragment>
-              )}
-            </Fragment>
+          {isLoading === true && showErrorMessage.isError === false && (
+            <LoadingSpinner />
           )}
+          {isLoading === false && showErrorMessage.isError === true && (
+            <ErrorMessage errorCode={showErrorMessage.errorCode} />
+          )}
+          {isLoading === false &&
+            computedGMS !== null &&
+            showErrorMessage.isError === false && (
+              <Fragment>
+                {validateComputedGMS() === false ? (
+                  <ErrorMessage />
+                ) : (
+                  <Fragment>
+                    <Select
+                      id="im-vectors"
+                      onChange={(value) => setSpecifiedIM(value || [])}
+                      defaultValue={specifiedIM}
+                      options={localIMVectors}
+                    />
+                    <FirstPlot gmsData={computedGMS} IM={specifiedIM.value} />
+                  </Fragment>
+                )}
+              </Fragment>
+            )}
         </Tab>
         <Tab eventKey="secondPlot" title="Second Plot">
-          {isLoading === false && computedGMS === null && (
+          {GMSComputeClick === null && (
             <GuideMessage
               header={CONSTANTS.GMS}
               body={CONSTANTS.GMS_VIEWER_GUIDE_MSG}
               instruction={CONSTANTS.GMS_VIEWER_GUIDE_INSTRUCTION}
             />
           )}
-          {isLoading === true && <LoadingSpinner />}
-          {isLoading === false && computedGMS !== null && (
-            <Fragment>
-              {/* {validateComputedGMS() === false ? (
+          {isLoading === true && showErrorMessage.isError === false && (
+            <LoadingSpinner />
+          )}
+          {isLoading === false && showErrorMessage.isError === true && (
+            <ErrorMessage errorCode={showErrorMessage.errorCode} />
+          )}
+          {isLoading === false &&
+            computedGMS !== null &&
+            showErrorMessage.isError === false && (
+              <Fragment>
+                {/* {validateComputedGMS() === false ? (
                 <ErrorMessage />
               ) : ( */}
-              <SecondPlot gmsData={computedGMS} periods={periods} />
-              {/* )} */}
-            </Fragment>
-          )}
+                <SecondPlot gmsData={computedGMS} periods={periods} />
+                {/* )} */}
+              </Fragment>
+            )}
         </Tab>
         <Tab eventKey="thirdPlot" title="Third Plot">
-          {isLoading === false && computedGMS === null && (
+          {GMSComputeClick === null && (
             <GuideMessage
               header={CONSTANTS.GMS}
               body={CONSTANTS.GMS_VIEWER_GUIDE_MSG}
               instruction={CONSTANTS.GMS_VIEWER_GUIDE_INSTRUCTION}
             />
           )}
-          {isLoading === true && <LoadingSpinner />}
-          {isLoading === false && computedGMS !== null && (
-            <Fragment>
-              {/* {validateComputedGMS() === false ? (
+          {isLoading === true && showErrorMessage.isError === false && (
+            <LoadingSpinner />
+          )}
+          {isLoading === false && showErrorMessage.isError === true && (
+            <ErrorMessage errorCode={showErrorMessage.errorCode} />
+          )}
+          {isLoading === false &&
+            computedGMS !== null &&
+            showErrorMessage.isError === false && (
+              <Fragment>
+                {/* {validateComputedGMS() === false ? (
                 <ErrorMessage />
               ) : ( */}
-              <Fragment>
-                <ThirdPlot gmsData={computedGMS} />
+                <Fragment>
+                  <ThirdPlot gmsData={computedGMS} />
+                </Fragment>
+                {/* )} */}
               </Fragment>
-              {/* )} */}
-            </Fragment>
-          )}
+            )}
         </Tab>
         <Tab eventKey="fourthPlot" title="Fourth Plot">
-          {isLoading === false && computedGMS === null && (
+          {GMSComputeClick === null && (
             <GuideMessage
               header={CONSTANTS.GMS}
               body={CONSTANTS.GMS_VIEWER_GUIDE_MSG}
               instruction={CONSTANTS.GMS_VIEWER_GUIDE_INSTRUCTION}
             />
           )}
-          {isLoading === true && <LoadingSpinner />}
-          {isLoading === false && computedGMS !== null && (
-            <Fragment>
-              {/* {validateComputedGMS() === false ? (
+          {isLoading === true && showErrorMessage.isError === false && (
+            <LoadingSpinner />
+          )}
+          {isLoading === false && showErrorMessage.isError === true && (
+            <ErrorMessage errorCode={showErrorMessage.errorCode} />
+          )}
+          {isLoading === false &&
+            computedGMS !== null &&
+            showErrorMessage.isError === false && (
+              <Fragment>
+                {/* {validateComputedGMS() === false ? (
                 <ErrorMessage />
               ) : ( */}
-              <Fragment>
-                <Select
-                  id="metadata"
-                  onChange={(value) => setSpecifiedMetadata(value || [])}
-                  defaultValue={specifiedMetadata}
-                  options={localMetadatas}
-                />
+                <Fragment>
+                  <Select
+                    id="metadata"
+                    onChange={(value) => setSpecifiedMetadata(value || [])}
+                    defaultValue={specifiedMetadata}
+                    options={localMetadatas}
+                  />
 
-                <FourthPlot
-                  gmsData={computedGMS}
-                  metadata={specifiedMetadata.value}
-                />
+                  <FourthPlot
+                    gmsData={computedGMS}
+                    metadata={specifiedMetadata.value}
+                  />
+                </Fragment>
+                {/* )} */}
               </Fragment>
-              {/* )} */}
-            </Fragment>
-          )}
+            )}
         </Tab>
       </Tabs>
     </div>
