@@ -4,6 +4,7 @@ import { Tab } from "react-bootstrap";
 import Select from "react-select";
 import { GlobalContext } from "context";
 import * as CONSTANTS from "constants/Constants";
+import { useAuth0 } from "components/common/ReactAuth0SPA";
 
 import FirstPlot from "./FirstPlot";
 import SecondPlot from "./SecondPlot";
@@ -13,12 +14,32 @@ import LoadingSpinner from "components/common/LoadingSpinner";
 import GuideMessage from "components/common/GuideMessage";
 import ErrorMessage from "components/common/ErrorMessage";
 
+import { handleErrors } from "utils/Utils";
+
 import "assets/style/GMSViewer.css";
 
 const GMSViewer = () => {
-  const { isLoading, computedGMS, selectedIMVectors } = useContext(
-    GlobalContext
-  );
+  const { getTokenSilently } = useAuth0();
+
+  const {
+    selectedEnsemble,
+    station,
+    isLoading,
+    setIsLoading,
+    computedGMS,
+    setComputedGMS,
+    selectedIMVectors,
+    setSelectedIMVectors,
+    GMSComputeClick,
+    GMSIMLevel,
+    GMSExcdRate,
+    GMSIMVector,
+    GMSRadio,
+    GMSIMType,
+    GMSNum,
+    GMSReplicats,
+    GMSWeights,
+  } = useContext(GlobalContext);
 
   const [specifiedIM, setSpecifiedIM] = useState([]);
   const [localIMVectors, setLocalIMVectors] = useState([]);
@@ -26,6 +47,91 @@ const GMSViewer = () => {
 
   const [specifiedMetadata, setSpecifiedMetadata] = useState([]);
   const [localMetadatas, setLocalMetadatas] = useState([]);
+
+  /*
+    Fetch data from Core API -> compute_ensemble_GMS
+  */
+  useEffect(() => {
+    const abortController = new AbortController();
+    const signal = abortController.signal;
+
+    const computeEnsembleGMS = async () => {
+      if (
+        GMSComputeClick !== null &&
+        (GMSIMLevel !== "" || GMSExcdRate !== "")
+      ) {
+        try {
+          const token = await getTokenSilently();
+          setIsLoading(true);
+          const newIMVector = GMSIMVector.map((vector) => {
+            return vector.value;
+          });
+
+          let requestOptions = {};
+
+          if (GMSRadio === "im-level") {
+            requestOptions = {
+              method: "POST",
+              headers: { Authorization: `Bearer ${token}` },
+              body: JSON.stringify({
+                ensemble_id: selectedEnsemble,
+                station: station,
+                IM_j: GMSIMType,
+                IMs: newIMVector,
+                n_gms: Number(GMSNum),
+                gm_source_ids: ["nga_west_2"],
+                im_level: Number(GMSIMLevel),
+                n_replica: Number(GMSReplicats),
+                IM_weights: GMSWeights,
+              }),
+              signal: signal,
+            };
+          } else if (GMSRadio === "exceedance-rate") {
+            requestOptions = {
+              method: "POST",
+              headers: { Authorization: `Bearer ${token}` },
+              body: JSON.stringify({
+                ensemble_id: selectedEnsemble,
+                station: station,
+                IM_j: GMSIMType,
+                IMs: newIMVector,
+                n_gms: Number(GMSNum),
+                gm_source_ids: ["nga_west_2"],
+                exceedance: Number(GMSExcdRate),
+                n_replica: Number(GMSReplicats),
+                IM_weights: GMSWeights,
+              }),
+              signal: signal,
+            };
+          }
+
+          await fetch(
+            CONSTANTS.CORE_API_BASE_URL + CONSTANTS.CORE_API_ROUTE_GMS_COMPUTE,
+            requestOptions
+          )
+            .then(handleErrors)
+            .then(async function (response) {
+              const responseData = await response.json();
+              setComputedGMS(responseData);
+              setSelectedIMVectors(newIMVector);
+              setIsLoading(false);
+            })
+            .catch(function (error) {
+              setIsLoading(false);
+              console.log(error);
+            });
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    };
+
+    computeEnsembleGMS();
+
+    return () => {
+      abortController.abort();
+    };
+  }, [GMSComputeClick]);
 
   useEffect(() => {
     // Create proper IM array for Select package
@@ -50,7 +156,6 @@ const GMSViewer = () => {
   useEffect(() => {
     if (computedGMS !== null) {
       const metadatas = computedGMS["metadata"];
-      console.log(metadatas);
       let localMetadatas = Object.getOwnPropertyNames(metadatas).map(
         (metadata) => ({
           value: metadata,
@@ -67,8 +172,10 @@ const GMSViewer = () => {
 
   const validateComputedGMS = () => {
     let isValidResponse = true;
-
     Object.values(computedGMS).forEach((x) => {
+      if (!isNaN(x)) {
+        return;
+      }
       if (Object.keys(x).length === 0) {
         isValidResponse = false;
       }
@@ -91,19 +198,19 @@ const GMSViewer = () => {
           {isLoading === true && <LoadingSpinner />}
           {isLoading === false && computedGMS !== null && (
             <Fragment>
-              {/* {validateComputedGMS() === false ? (
+              {validateComputedGMS() === false ? (
                 <ErrorMessage />
-              ) : ( */}
-              <Fragment>
-                <Select
-                  id="im-vectors"
-                  onChange={(value) => setSpecifiedIM(value || [])}
-                  defaultValue={specifiedIM}
-                  options={localIMVectors}
-                />
-                <FirstPlot gmsData={computedGMS} IM={specifiedIM.value} />
-              </Fragment>
-              {/* )} */}
+              ) : (
+                <Fragment>
+                  <Select
+                    id="im-vectors"
+                    onChange={(value) => setSpecifiedIM(value || [])}
+                    defaultValue={specifiedIM}
+                    options={localIMVectors}
+                  />
+                  <FirstPlot gmsData={computedGMS} IM={specifiedIM.value} />
+                </Fragment>
+              )}
             </Fragment>
           )}
         </Tab>

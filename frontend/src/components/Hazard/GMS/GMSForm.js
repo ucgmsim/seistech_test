@@ -9,7 +9,7 @@ import makeAnimated from "react-select/animated";
 import IMSelect from "components/common/IMSelect";
 import * as CONSTANTS from "constants/Constants";
 import $ from "jquery";
-import { renderSigfigs, handleErrors } from "utils/Utils";
+import { renderSigfigs } from "utils/Utils";
 import "assets/style/GMSForm.css";
 
 const GMSForm = () => {
@@ -20,12 +20,16 @@ const GMSForm = () => {
     station,
     vs30,
     IMVectors,
-    setComputedGMS,
-    setIsLoading,
-    setSelectedIMVectors,
+    setGMSComputeClick,
+    setGMSIMLevel,
+    setGMSExcdRate,
+    setGMSIMVector,
+    setGMSRadio,
+    setGMSIMType,
+    setGMSNum,
+    setGMSReplicats,
+    setGMSWeights,
   } = useContext(GlobalContext);
-  const [localComputeButton, setLocalComputeButton] = useState("Compute");
-  const [localComputeClick, setLocalComputeClick] = useState(null);
 
   const animatedComponents = makeAnimated();
 
@@ -225,96 +229,6 @@ const GMSForm = () => {
     };
   }, [isIMVectorChosen]);
 
-  /*
-    Fetch data from Core API -> compute_ensemble_GMS
-  */
-  useEffect(() => {
-    const abortController = new AbortController();
-    const signal = abortController.signal;
-
-    const computeEnsembleGMS = async () => {
-      if (
-        localComputeClick !== null &&
-        (localIMLevel !== "" || localExcdRate !== "")
-      ) {
-        try {
-          const token = await getTokenSilently();
-          setLocalComputeButton(<FontAwesomeIcon icon="spinner" spin />);
-          setIsLoading(true);
-          const newIMVector = localIMVector.map((vector) => {
-            return vector.value;
-          });
-
-          let requestOptions = {};
-
-          if (localIMExdRateRadio === "im-level") {
-            requestOptions = {
-              method: "POST",
-              headers: { Authorization: `Bearer ${token}` },
-              body: JSON.stringify({
-                ensemble_id: selectedEnsemble,
-                station: station,
-                IM_j: selectedIMType,
-                IMs: newIMVector,
-                n_gms: Number(localNumGMS),
-                gm_source_ids: ["nga_west_2"],
-                im_level: Number(localIMLevel),
-                n_replica: Number(localReplicates),
-                IM_weights: localWeights,
-              }),
-              signal: signal,
-            };
-          } else if (localIMExdRateRadio === "exceedance-rate") {
-            requestOptions = {
-              method: "POST",
-              headers: { Authorization: `Bearer ${token}` },
-              body: JSON.stringify({
-                ensemble_id: selectedEnsemble,
-                station: station,
-                IM_j: selectedIMType,
-                IMs: newIMVector,
-                n_gms: Number(localNumGMS),
-                gm_source_ids: ["nga_west_2"],
-                exceedance: Number(localExcdRate),
-                n_replica: Number(localReplicates),
-                IM_weights: localWeights,
-              }),
-              signal: signal,
-            };
-          }
-
-          await fetch(
-            CONSTANTS.CORE_API_BASE_URL + CONSTANTS.CORE_API_ROUTE_GMS_COMPUTE,
-            requestOptions
-          )
-            .then(handleErrors)
-            .then(async function (response) {
-              const responseData = await response.json();
-              setComputedGMS(responseData);
-              setLocalComputeButton("Compute");
-              setSelectedIMVectors(newIMVector);
-              setIsLoading(false);
-              setIsLocalIMLevelChosen(false);
-              setIsLocalExcdRateChosen(false);
-            })
-            .catch(function (error) {
-              setLocalComputeButton("Compute");
-              setIsLoading(false);
-              console.log(error);
-            });
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    };
-
-    computeEnsembleGMS();
-
-    return () => {
-      abortController.abort();
-    };
-  }, [localComputeClick]);
-
   // Disable table's input
   useEffect(() => {
     if (
@@ -339,6 +253,19 @@ const GMSForm = () => {
       ((localIMExdRateRadio === "exceedance-rate" && localExcdRate !== "") ||
         (localIMExdRateRadio === "im-level" && localIMLevel !== ""))
     );
+  };
+
+  const computeGMS = () => {
+    localIMExdRateRadio === "im-level"
+      ? setGMSIMLevel(localIMLevel)
+      : setGMSExcdRate(localExcdRate);
+    setGMSIMVector(localIMVector);
+    setGMSRadio(localIMExdRateRadio);
+    setGMSIMType(selectedIMType);
+    setGMSNum(localNumGMS);
+    setGMSReplicats(localReplicates);
+    setGMSWeights(localWeights);
+    setGMSComputeClick(uuidv4());
   };
 
   return (
@@ -444,12 +371,8 @@ const GMSForm = () => {
         </div>
 
         <div className="form-group">
-          <button
-            className="btn btn-primary"
-            onClick={() => setLocalComputeClick(uuidv4())}
-            disabled={!validInputs()}
-          >
-            {localComputeButton}
+          <button className="btn btn-primary" onClick={() => computeGMS()}>
+            Compute
           </button>
         </div>
 

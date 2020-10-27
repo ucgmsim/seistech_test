@@ -72,6 +72,16 @@ export const Provider = (props) => {
   const [computedGMS, setComputedGMS] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedIMVectors, setSelectedIMVectors] = useState([]);
+  const [GMSComputeClick, setGMSComputeClick] = useState(null);
+  const [GMSIMLevel, setGMSIMLevel] = useState("");
+  const [GMSExcdRate, setGMSExcdRate] = useState("")
+  const [GMSIMVector, setGMSIMVector] = useState([])
+  const [GMSRadio, setGMSRadio] = useState("im-level")
+  const [GMSIMType, setGMSIMType ] = useState(null)
+  const [GMSNum, setGMSNum] = useState("")
+  const [GMSReplicats, setGMSReplicats] = useState(1)
+  const [GMSWeights, setGMSWeights] = useState("")
+
 
   /* 
     User Permissions
@@ -198,12 +208,6 @@ export const Provider = (props) => {
     IMs,
     setIMs,
 
-    /*
-      GMS - IM Vector
-    */
-    IMVectors,
-    setIMVectors,
-
     // MapBox
     mapBoxCoordinate,
     setMapBoxCoordinate,
@@ -241,12 +245,32 @@ export const Provider = (props) => {
     /*
       GMS
     */
+    IMVectors,
+    setIMVectors,
     computedGMS,
     setComputedGMS,
     isLoading,
     setIsLoading,
     selectedIMVectors,
     setSelectedIMVectors,
+    GMSComputeClick,
+    setGMSComputeClick,
+    GMSIMLevel,
+    setGMSIMLevel,
+    GMSExcdRate,
+    setGMSExcdRate,
+    GMSIMVector,
+    setGMSIMVector,
+    GMSRadio,
+    setGMSRadio,
+    GMSIMType,
+    setGMSIMType,
+    GMSNum,
+    setGMSNum,
+    GMSReplicats,
+    setGMSReplicats,
+    GMSWeights,
+    setGMSWeights
   };
 
   // pass the value in provider and return
