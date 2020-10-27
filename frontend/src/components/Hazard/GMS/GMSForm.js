@@ -332,13 +332,12 @@ const GMSForm = () => {
       selectedEnsemble !== ("" && null) &&
       station !== ("" && null) &&
       selectedIMType !== ("" && null) &&
-      localIMVector !== [] &&
+      localIMVector.length !== 0 &&
       localNumGMS !== ("" && null) &&
       localReplicates !== ("" && null) &&
       localWeights !== ("" && null) &&
-      ((localIMExdRateRadio === "exceedance-rate" &&
-        localExcdRate !== ("" && null)) ||
-        (localIMExdRateRadio === "im-level" && localIMLevel !== ("" && null)))
+      ((localIMExdRateRadio === "exceedance-rate" && localExcdRate !== "") ||
+        (localIMExdRateRadio === "im-level" && localIMLevel !== ""))
     );
   };
 
