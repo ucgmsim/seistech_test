@@ -202,7 +202,7 @@ const GMSViewer = () => {
   return (
     <div className="gms-viewer">
       <Tabs defaultActiveKey="firstPlot">
-        <Tab eventKey="firstPlot" title="Specific IM">
+        <Tab eventKey="firstPlot" title="Peak ground velocity">
           {GMSComputeClick === null && (
             <GuideMessage
               header={CONSTANTS.GMS}
@@ -236,7 +236,7 @@ const GMSViewer = () => {
               </Fragment>
             )}
         </Tab>
-        <Tab eventKey="secondPlot" title="Second Plot">
+        <Tab eventKey="secondPlot" title="Pseudo acceleration response spectra">
           {GMSComputeClick === null && (
             <GuideMessage
               header={CONSTANTS.GMS}
