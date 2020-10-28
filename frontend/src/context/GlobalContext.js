@@ -69,18 +69,16 @@ export const Provider = (props) => {
   /*
     GMS
   */
-  const [computedGMS, setComputedGMS] = useState(null);
   const [selectedIMVectors, setSelectedIMVectors] = useState([]);
   const [GMSComputeClick, setGMSComputeClick] = useState(null);
   const [GMSIMLevel, setGMSIMLevel] = useState("");
-  const [GMSExcdRate, setGMSExcdRate] = useState("")
-  const [GMSIMVector, setGMSIMVector] = useState([])
-  const [GMSRadio, setGMSRadio] = useState("im-level")
-  const [GMSIMType, setGMSIMType ] = useState(null)
-  const [GMSNum, setGMSNum] = useState("")
-  const [GMSReplicates, setGMSReplicates] = useState(1)
-  const [GMSWeights, setGMSWeights] = useState("")
-
+  const [GMSExcdRate, setGMSExcdRate] = useState("");
+  const [GMSIMVector, setGMSIMVector] = useState([]);
+  const [GMSRadio, setGMSRadio] = useState("im-level");
+  const [GMSIMType, setGMSIMType] = useState(null);
+  const [GMSNum, setGMSNum] = useState("");
+  const [GMSReplicates, setGMSReplicates] = useState(1);
+  const [GMSWeights, setGMSWeights] = useState("");
 
   /* 
     User Permissions
@@ -246,8 +244,6 @@ export const Provider = (props) => {
     */
     IMVectors,
     setIMVectors,
-    computedGMS,
-    setComputedGMS,
     selectedIMVectors,
     setSelectedIMVectors,
     GMSComputeClick,
@@ -267,7 +263,7 @@ export const Provider = (props) => {
     GMSReplicates,
     setGMSReplicates,
     GMSWeights,
-    setGMSWeights
+    setGMSWeights,
   };
 
   // pass the value in provider and return

@@ -24,8 +24,6 @@ const GMSViewer = () => {
   const {
     selectedEnsemble,
     station,
-    computedGMS,
-    setComputedGMS,
     selectedIMVectors,
     setSelectedIMVectors,
     GMSComputeClick,
@@ -38,6 +36,8 @@ const GMSViewer = () => {
     GMSReplicates,
     GMSWeights,
   } = useContext(GlobalContext);
+
+  const [computedGMS, setComputedGMS] = useState(null);
 
   const [specifiedIM, setSpecifiedIM] = useState([]);
   const [localIMVectors, setLocalIMVectors] = useState([]);
@@ -185,9 +185,13 @@ const GMSViewer = () => {
     let isValidResponse = true;
     Object.values(computedGMS).forEach((x) => {
       if (!isNaN(x)) {
+        console.log("Its me!");
+        console.log(x);
         return;
       }
       if (Object.keys(x).length === 0) {
+        console.log("SOMETHING IS AN EMPTY OBJECT");
+        console.log(x);
         isValidResponse = false;
       }
     });
@@ -250,11 +254,11 @@ const GMSViewer = () => {
             computedGMS !== null &&
             showErrorMessage.isError === false && (
               <Fragment>
-                {/* {validateComputedGMS() === false ? (
-                <ErrorMessage />
-              ) : ( */}
-                <SecondPlot gmsData={computedGMS} periods={periods} />
-                {/* )} */}
+                {validateComputedGMS() === false ? (
+                  <ErrorMessage />
+                ) : (
+                  <SecondPlot gmsData={computedGMS} periods={periods} />
+                )}
               </Fragment>
             )}
         </Tab>
@@ -276,13 +280,13 @@ const GMSViewer = () => {
             computedGMS !== null &&
             showErrorMessage.isError === false && (
               <Fragment>
-                {/* {validateComputedGMS() === false ? (
-                <ErrorMessage />
-              ) : ( */}
-                <Fragment>
-                  <ThirdPlot gmsData={computedGMS} />
-                </Fragment>
-                {/* )} */}
+                {validateComputedGMS() === false ? (
+                  <ErrorMessage />
+                ) : (
+                  <Fragment>
+                    <ThirdPlot gmsData={computedGMS} />
+                  </Fragment>
+                )}
               </Fragment>
             )}
         </Tab>
@@ -304,23 +308,23 @@ const GMSViewer = () => {
             computedGMS !== null &&
             showErrorMessage.isError === false && (
               <Fragment>
-                {/* {validateComputedGMS() === false ? (
-                <ErrorMessage />
-              ) : ( */}
-                <Fragment>
-                  <Select
-                    id="metadata"
-                    onChange={(value) => setSpecifiedMetadata(value || [])}
-                    defaultValue={specifiedMetadata}
-                    options={localMetadatas}
-                  />
+                {validateComputedGMS() === false ? (
+                  <ErrorMessage />
+                ) : (
+                  <Fragment>
+                    <Select
+                      id="metadata"
+                      onChange={(value) => setSpecifiedMetadata(value || [])}
+                      defaultValue={specifiedMetadata}
+                      options={localMetadatas}
+                    />
 
-                  <FourthPlot
-                    gmsData={computedGMS}
-                    metadata={specifiedMetadata.value}
-                  />
-                </Fragment>
-                {/* )} */}
+                    <FourthPlot
+                      gmsData={computedGMS}
+                      metadata={specifiedMetadata.value}
+                    />
+                  </Fragment>
+                )}
               </Fragment>
             )}
         </Tab>
