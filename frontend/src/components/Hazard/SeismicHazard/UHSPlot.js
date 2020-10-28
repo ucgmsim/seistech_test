@@ -1,7 +1,7 @@
 import React from "react";
 import Plot from "react-plotly.js";
 import { getPlotData } from "utils/Utils.js";
-import { PLOT_MARGIN } from "constants/Constants";
+import { PLOT_MARGIN, PLOT_CONFIG } from "constants/Constants";
 import ErrorMessage from "components/common/ErrorMessage";
 
 import "assets/style/UHSPlot.css";
@@ -50,9 +50,7 @@ const UHSPlot = ({ uhsData }) => {
           margin: PLOT_MARGIN,
         }}
         useResizeHandler={true}
-        config={{
-          displayModeBar: true,
-        }}
+        config={PLOT_CONFIG}
       />
     );
   }

@@ -1,7 +1,7 @@
 import React from "react";
 
 import Plot from "react-plotly.js";
-import { PLOT_MARGIN } from "constants/Constants";
+import { PLOT_MARGIN, PLOT_CONFIG } from "constants/Constants";
 import ErrorMessage from "components/common/ErrorMessage";
 
 import "assets/style/GMSPlot.css";
@@ -25,16 +25,16 @@ const ThirdPlot = ({ gmsData }) => {
         ]}
         layout={{
           xaxis: {
-            title: { text: "rrup" },
+            title: { text: `Distance, R${"rup".sub()} (km)` },
           },
           yaxis: {
-            title: { text: "Magnitude" },
+            title: { text: `Magnitude, M${"W".sub()}` },
           },
           autosize: true,
           margin: PLOT_MARGIN,
         }}
         useResizeHandler={true}
-        config={{ displayModeBar: true }}
+        config={PLOT_CONFIG}
       />
     );
   }

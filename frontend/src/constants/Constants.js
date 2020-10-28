@@ -173,7 +173,7 @@ export const ERROR_SET_DIFF_CODE = {
 };
 
 /*
-  Hazard Curve Plots
+  react-plotly.js configuration
 */
 export const PLOT_MARGIN = {
   l: 60,
@@ -181,4 +181,18 @@ export const PLOT_MARGIN = {
   b: 50,
   t: 30,
   pad: 4,
+};
+
+export const PLOT_CONFIG = {
+  displayModeBar: true,
+  modeBarButtonsToRemove: [
+    "select2d",
+    "lasso2d",
+    "zoomIn2d",
+    "zoomOut2d",
+    "toggleSpikelines",
+    "hoverCompareCartesian",
+    "hoverClosestCartesian",
+    "autoScale2d",
+  ],
 };

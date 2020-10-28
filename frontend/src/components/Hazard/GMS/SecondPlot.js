@@ -1,7 +1,7 @@
 import React from "react";
 
 import Plot from "react-plotly.js";
-import { PLOT_MARGIN } from "constants/Constants";
+import { PLOT_MARGIN, PLOT_CONFIG } from "constants/Constants";
 import ErrorMessage from "components/common/ErrorMessage";
 
 import "assets/style/GMSPlot.css";
@@ -85,10 +85,12 @@ const SecondPlot = ({ gmsData, periods }) => {
       scatterArr.push({
         x: Object.values(periods),
         y: yCoords,
+        legendgroup: "Realisations",
         mode: "lines+markers",
         name: "Realisations",
         line: { color: "blue" },
         type: "scatter",
+        showlegend: i === 0 ? true : false,
       });
     }
     /*
@@ -102,10 +104,12 @@ const SecondPlot = ({ gmsData, periods }) => {
       scatterArr.push({
         x: Object.values(periods),
         y: yCoords,
+        legendgroup: "Selected GMs",
         mode: "lines+markers",
         name: "Selected GMs",
         line: { color: "green" },
         type: "scatter",
+        showlegend: i === 0 ? true : false,
       });
     }
 
@@ -130,7 +134,7 @@ const SecondPlot = ({ gmsData, periods }) => {
           margin: PLOT_MARGIN,
         }}
         useResizeHandler={true}
-        config={{ displayModeBar: true }}
+        config={PLOT_CONFIG}
       />
     );
   }
