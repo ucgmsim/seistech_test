@@ -24,8 +24,6 @@ const GMSViewer = () => {
   const {
     selectedEnsemble,
     station,
-    isLoading,
-    setIsLoading,
     computedGMS,
     setComputedGMS,
     selectedIMVectors,
@@ -44,6 +42,8 @@ const GMSViewer = () => {
   const [specifiedIM, setSpecifiedIM] = useState([]);
   const [localIMVectors, setLocalIMVectors] = useState([]);
   const [periods, setPeriods] = useState([]);
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const [specifiedMetadata, setSpecifiedMetadata] = useState([]);
   const [localMetadatas, setLocalMetadatas] = useState([]);
