@@ -371,7 +371,11 @@ const GMSForm = () => {
         </div>
 
         <div className="form-group">
-          <button className="btn btn-primary" onClick={() => computeGMS()}>
+          <button
+            className="btn btn-primary"
+            onClick={() => computeGMS()}
+            disabled={!validInputs()}
+          >
             Compute
           </button>
         </div>
