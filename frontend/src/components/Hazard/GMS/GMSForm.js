@@ -211,7 +211,7 @@ const GMSForm = () => {
           return (
             <tr id={"weight-row-" + imVector.value} key={imVector.value}>
               <td>{imVector.value}</td>
-              <td>
+              <td className="text-center">
                 {renderSigfigs(
                   localWeights[imVector.value],
                   CONSTANTS.APP_UI_SIGFIGS
@@ -316,6 +316,10 @@ const GMSForm = () => {
     setGMSComputeClick(uuidv4());
   };
 
+  const preventEnterKey = (e) => {
+    e.key === "Enter" && e.preventDefault();
+  };
+
   return (
     <Fragment>
       <form autoComplete="off" onSubmit={(e) => e.preventDefault()}>
@@ -374,6 +378,7 @@ const GMSForm = () => {
               onChange={(e) => setLocalIMLevel(e.target.value)}
               className="form-control"
               value={localIMLevel}
+              onKeyPress={(e) => preventEnterKey(e)}
             />
           ) : (
             <input
@@ -384,6 +389,7 @@ const GMSForm = () => {
               onChange={(e) => setLocalExcdRate(e.target.value)}
               className="form-control"
               value={localExcdRate}
+              onKeyPress={(e) => preventEnterKey(e)}
             />
           )}
         </div>
@@ -415,6 +421,7 @@ const GMSForm = () => {
             onChange={(e) => setLocalNumGMS(e.target.value)}
             className="form-control"
             value={localNumGMS}
+            onKeyPress={(e) => preventEnterKey(e)}
           />
         </div>
 
@@ -472,6 +479,7 @@ const GMSForm = () => {
                             onFocus={() => setIsLocalMwMinChosen(false)}
                             onBlur={() => setIsLocalMwMinChosen(true)}
                             onChange={(e) => setLocalMwMin(e.target.value)}
+                            onKeyPress={(e) => preventEnterKey(e)}
                           />
                         </td>
                         <td>
@@ -481,6 +489,7 @@ const GMSForm = () => {
                             onFocus={() => setIsLocalMwMaxChosen(false)}
                             onBlur={() => setIsLocalMwMaxChosen(true)}
                             onChange={(e) => setLocalMwMax(e.target.value)}
+                            onKeyPress={(e) => preventEnterKey(e)}
                           />
                         </td>
                       </tr>
@@ -493,6 +502,7 @@ const GMSForm = () => {
                             onFocus={() => setIsLocalRrupMinChosen(false)}
                             onBlur={() => setIsLocalRrupMinChosen(true)}
                             onChange={(e) => setLocalRrupMin(e.target.value)}
+                            onKeyPress={(e) => preventEnterKey(e)}
                           />
                         </td>
                         <td>
@@ -502,6 +512,7 @@ const GMSForm = () => {
                             onFocus={() => setIsLocalRrupMaxChosen(false)}
                             onBlur={() => setIsLocalRrupMaxChosen(true)}
                             onChange={(e) => setLocalRrupMax(e.target.value)}
+                            onKeyPress={(e) => preventEnterKey(e)}
                           />
                         </td>
                       </tr>
@@ -512,6 +523,7 @@ const GMSForm = () => {
                             type="text"
                             value={localVS30Min}
                             onChange={(e) => setLocalVS30Min(e.target.value)}
+                            onKeyPress={(e) => preventEnterKey(e)}
                           />
                         </td>
                         <td>
@@ -519,6 +531,7 @@ const GMSForm = () => {
                             type="text"
                             value={localVS30Max}
                             onChange={(e) => setLocalVS30Max(e.target.value)}
+                            onKeyPress={(e) => preventEnterKey(e)}
                           />
                         </td>
                       </tr>
@@ -571,6 +584,7 @@ const GMSForm = () => {
                     onChange={(e) => setLocalReplicates(e.target.value)}
                     className="form-control"
                     value={localReplicates}
+                    onKeyPress={(e) => preventEnterKey(e)}
                   />
                 </div>
               </Card.Body>
