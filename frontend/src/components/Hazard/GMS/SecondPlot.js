@@ -51,7 +51,7 @@ const SecondPlot = ({ gmsData, periods }) => {
       {
         x: Object.values(periods),
         y: upperPercenValues,
-        mode: "lines+markers",
+        mode: "lines",
         name: "GCIM - 84th Percentile",
         line: { dash: "dashdot", color: "red" },
         type: "scatter",
@@ -59,7 +59,7 @@ const SecondPlot = ({ gmsData, periods }) => {
       {
         x: Object.values(periods),
         y: medianValues,
-        mode: "lines+markers",
+        mode: "lines",
         name: "GCIM - Median",
         line: { color: "red" },
         type: "scatter",
@@ -67,7 +67,7 @@ const SecondPlot = ({ gmsData, periods }) => {
       {
         x: Object.values(periods),
         y: lowerPercenValues,
-        mode: "lines+markers",
+        mode: "lines",
         name: "GCIM - 16th percentile",
         line: { dash: "dashdot", color: "red" },
         type: "scatter",
@@ -86,9 +86,9 @@ const SecondPlot = ({ gmsData, periods }) => {
         x: Object.values(periods),
         y: yCoords,
         legendgroup: "Realisations",
-        mode: "lines+markers",
+        mode: "lines",
         name: "Realisations",
-        line: { color: "blue" },
+        line: { color: "black" },
         type: "scatter",
         showlegend: i === 0 ? true : false,
       });
@@ -105,9 +105,9 @@ const SecondPlot = ({ gmsData, periods }) => {
         x: Object.values(periods),
         y: yCoords,
         legendgroup: "Selected GMs",
-        mode: "lines+markers",
+        mode: "lines",
         name: "Selected GMs",
-        line: { color: "green" },
+        line: { color: "blue" },
         type: "scatter",
         showlegend: i === 0 ? true : false,
       });
@@ -123,12 +123,14 @@ const SecondPlot = ({ gmsData, periods }) => {
             title: { text: "Period, T (s)" },
             showexponent: "first",
             exponentformat: "power",
+            autorange: true
           },
           yaxis: {
             type: "log",
             title: { text: "Spectral acceleration, SA (g)" },
             showexponent: "first",
             exponentformat: "power",
+            autorange: true
           },
           autosize: true,
           margin: PLOT_MARGIN,

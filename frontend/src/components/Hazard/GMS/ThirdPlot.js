@@ -21,14 +21,20 @@ const ThirdPlot = ({ gmsData }) => {
             name: "GCIM",
             line: { color: "black" },
             type: "scatter",
+            autorange: true
           },
         ]}
         layout={{
           xaxis: {
+            type: "log",
             title: { text: `Distance, R${"rup".sub()} (km)` },
+            showexponent: "first",
+            exponentformat: "power",
+            autorange: true
           },
           yaxis: {
             title: { text: `Magnitude, M${"W".sub()}` },
+            autorange: true
           },
           autosize: true,
           margin: PLOT_MARGIN,

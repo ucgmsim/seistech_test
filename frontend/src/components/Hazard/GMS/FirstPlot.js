@@ -51,23 +51,23 @@ const FirstPlot = ({ gmsData, IM }) => {
           {
             x: cdfX,
             y: cdfY,
-            mode: "lines+markers",
+            mode: "lines",
             name: "GCIM",
-            line: { shape: "hv", color: "black" },
+            line: { shape: "hv", color: "red" },
             type: "scatter",
           },
           {
             x: newRealisations,
             y: newRealisationsRangeY,
-            mode: "lines+markers",
+            mode: "lines",
             name: "Realisations",
-            line: { shape: "hv", color: "red" },
+            line: { shape: "hv", color: "black" },
             type: "scatter",
           },
           {
             x: newSelectedGMs,
             y: newSelectedGMsRangeY,
-            mode: "lines+markers",
+            mode: "lines",
             name: "GMs",
             line: { shape: "hv", color: "blue" },
             type: "scatter",
@@ -76,9 +76,11 @@ const FirstPlot = ({ gmsData, IM }) => {
         layout={{
           xaxis: {
             title: { text: "Peak ground velocity, PGV (cm/s)" },
+            range: [0, Math.max(...cdfX, ...newRealisations, ...newSelectedGMs)]
           },
           yaxis: {
             title: { text: "Cumulative probability, CDF" },
+            autorange: true
           },
           autosize: true,
           margin: PLOT_MARGIN,
