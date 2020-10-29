@@ -13,22 +13,17 @@ const FourthPlot = ({ gmsData, metadata }) => {
     !gmsData.hasOwnProperty("error") &&
     metadata !== undefined
   ) {
-    console.log("X RANGE: ", gmsData["metadata"][metadata])
     const xRange = gmsData["metadata"][metadata]
       .sort((a, b) => {
         return a - b;
       })
       .flatMap((x) => Array(2).fill(x));
-      console.log("NEW X RANGE: ", xRange)
 
     const rangeY = range(0, 1, 1 / gmsData["metadata"][metadata].length);
-    console.log("WHAT ARE YOU: ", rangeY)
 
     const newRangeY = rangeY.flatMap((x, i) =>
       Array(i === 0 || i === rangeY.length - 1 ? 1 : 2).fill(x)
     );
-
-    console.log("WHAT ARE YOU: ", newRangeY)
 
     return (
       <Plot
