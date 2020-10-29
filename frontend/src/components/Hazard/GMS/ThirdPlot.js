@@ -7,15 +7,11 @@ import ErrorMessage from "components/common/ErrorMessage";
 import "assets/style/GMSPlot.css";
 
 const ThirdPlot = ({ gmsData, causalParamBounds }) => {
-  console.log("IM HERE BUT WHATS HAPPENING")
   const validateBounds = () => {
     let isValidated = false;
-    console.log("LETS VALIDATE THE INPUT!")
-    console.log(causalParamBounds)
     Object.values(causalParamBounds).forEach(
       (x) => (isValidated = x === "" ? false : true)
     );
-    console.log("AM I DOOMED?: ", isValidated)
     return isValidated;
   };
   if (gmsData !== null && validateBounds()) {
@@ -53,7 +49,7 @@ const ThirdPlot = ({ gmsData, causalParamBounds }) => {
             name: "GCIM",
             line: { color: "black" },
             type: "scatter",
-            autorange: true,
+            showlegend: false,
           },
           {
             x: topBoundX,
