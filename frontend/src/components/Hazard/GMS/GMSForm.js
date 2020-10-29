@@ -29,6 +29,10 @@ const GMSForm = () => {
     setGMSNum,
     setGMSReplicates,
     setGMSWeights,
+    setGMSMwMin,
+    setGMSMwMax,
+    setGMSRrupMin,
+    setGMSRrupMax,
   } = useContext(GlobalContext);
 
   const animatedComponents = makeAnimated();
@@ -64,6 +68,39 @@ const GMSForm = () => {
   const [localRrupMax, setLocalRrupMax] = useState("");
   const [localVS30Min, setLocalVS30Min] = useState("");
   const [localVS30Max, setLocalVS30Max] = useState("");
+
+  const [isLocalMwMinChosen, setIsLocalMwMinChosen] = useState(false);
+  const [isLocalMwMaxChosen, setIsLocalMwMaxChosen] = useState(false);
+  const [isLocalRrupMinChosen, setIsLocalRrupMinChosen] = useState(false);
+  const [isLocalRrupMaxChosen, setIsLocalRrupMaxChosen] = useState(false);
+
+  /*
+    Setting those as global variable to be used in GMS Viewer to draw a box
+  */
+  useEffect(() => {
+    if (isLocalMwMinChosen === true) {
+      console.log("AM I DOING SOMETHING");
+      setGMSMwMin(localMwMin);
+    }
+  }, [localMwMin, isLocalMwMinChosen]);
+
+  useEffect(() => {
+    if (isLocalMwMaxChosen === true) {
+      setGMSMwMax(localMwMax);
+    }
+  }, [localMwMax, isLocalMwMaxChosen]);
+
+  useEffect(() => {
+    if (isLocalRrupMinChosen === true) {
+      setGMSRrupMin(localRrupMin);
+    }
+  }, [localRrupMin, isLocalRrupMinChosen]);
+
+  useEffect(() => {
+    if (isLocalRrupMaxChosen === true) {
+      setGMSRrupMax(localRrupMax);
+    }
+  }, [localRrupMax, isLocalRrupMaxChosen]);
 
   const [arrow, setArrow] = useState(true);
 
@@ -110,6 +147,7 @@ const GMSForm = () => {
           )
             .then(async function (response) {
               const responseData = await response.json();
+              // For Local table
               setLocalMwMin(responseData.mw_low);
               setLocalMwMax(responseData.mw_high);
               setLocalRrupMin(
@@ -127,6 +165,16 @@ const GMSForm = () => {
 
               setIsLocalIMLevelChosen(false);
               setIsLocalExcdRateChosen(false);
+
+              // For GMS Viewer, Third Plot
+              setGMSMwMin(responseData.mw_low);
+              setGMSMwMax(responseData.mw_high);
+              setGMSRrupMin(
+                renderSigfigs(responseData.rrup_low, CONSTANTS.APP_UI_SIGFIGS)
+              );
+              setGMSRrupMax(
+                renderSigfigs(responseData.rrup_high, CONSTANTS.APP_UI_SIGFIGS)
+              );
             })
             .catch(function (error) {
               console.log(error);
@@ -421,6 +469,8 @@ const GMSForm = () => {
                           <input
                             type="text"
                             value={localMwMin}
+                            onFocus={() => setIsLocalMwMinChosen(false)}
+                            onBlur={() => setIsLocalMwMinChosen(true)}
                             onChange={(e) => setLocalMwMin(e.target.value)}
                           />
                         </td>
@@ -428,6 +478,8 @@ const GMSForm = () => {
                           <input
                             type="text"
                             value={localMwMax}
+                            onFocus={() => setIsLocalMwMaxChosen(false)}
+                            onBlur={() => setIsLocalMwMaxChosen(true)}
                             onChange={(e) => setLocalMwMax(e.target.value)}
                           />
                         </td>
@@ -438,6 +490,8 @@ const GMSForm = () => {
                           <input
                             type="text"
                             value={localRrupMin}
+                            onFocus={() => setIsLocalRrupMinChosen(false)}
+                            onBlur={() => setIsLocalRrupMinChosen(true)}
                             onChange={(e) => setLocalRrupMin(e.target.value)}
                           />
                         </td>
@@ -445,6 +499,8 @@ const GMSForm = () => {
                           <input
                             type="text"
                             value={localRrupMax}
+                            onFocus={() => setIsLocalRrupMaxChosen(false)}
+                            onBlur={() => setIsLocalRrupMaxChosen(true)}
                             onChange={(e) => setLocalRrupMax(e.target.value)}
                           />
                         </td>

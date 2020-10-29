@@ -79,6 +79,10 @@ export const Provider = (props) => {
   const [GMSNum, setGMSNum] = useState("");
   const [GMSReplicates, setGMSReplicates] = useState(1);
   const [GMSWeights, setGMSWeights] = useState("");
+  const [GMSMwMin, setGMSMwMin] = useState("");
+  const [GMSMwMax, setGMSMwMax] = useState("");
+  const [GMSRrupMin, setGMSRrupMin] = useState("");
+  const [GMSRrupMax, setGMSRrupMax] = useState("");
 
   /* 
     User Permissions
@@ -264,6 +268,14 @@ export const Provider = (props) => {
     setGMSReplicates,
     GMSWeights,
     setGMSWeights,
+    GMSMwMin,
+    setGMSMwMin,
+    GMSMwMax,
+    setGMSMwMax,
+    GMSRrupMin,
+    setGMSRrupMin,
+    GMSRrupMax,
+    setGMSRrupMax,
   };
 
   // pass the value in provider and return

@@ -35,6 +35,10 @@ const GMSViewer = () => {
     GMSNum,
     GMSReplicates,
     GMSWeights,
+    GMSMwMin,
+    GMSMwMax,
+    GMSRrupMin,
+    GMSRrupMax,
   } = useContext(GlobalContext);
 
   const [computedGMS, setComputedGMS] = useState(null);
@@ -52,6 +56,15 @@ const GMSViewer = () => {
     isError: false,
     errorCode: null,
   });
+
+  let causalParamBounds = {
+    Mwmin: GMSMwMin,
+    Mwmax: GMSMwMax,
+    Rrupmin: GMSRrupMin,
+    Rrupmax: GMSRrupMax,
+  };
+
+  console.log(causalParamBounds);
 
   /*
     Fetch data from Core API -> compute_ensemble_GMS
@@ -284,7 +297,10 @@ const GMSViewer = () => {
                   <ErrorMessage />
                 ) : (
                   <Fragment>
-                    <ThirdPlot gmsData={computedGMS} />
+                    <ThirdPlot
+                      gmsData={computedGMS}
+                      causalParamBounds={causalParamBounds}
+                    />
                   </Fragment>
                 )}
               </Fragment>

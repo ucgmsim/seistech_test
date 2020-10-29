@@ -6,9 +6,41 @@ import ErrorMessage from "components/common/ErrorMessage";
 
 import "assets/style/GMSPlot.css";
 
-const ThirdPlot = ({ gmsData }) => {
-  if (gmsData !== null) {
+const ThirdPlot = ({ gmsData, causalParamBounds }) => {
+  console.log("IM HERE BUT WHATS HAPPENING")
+  const validateBounds = () => {
+    let isValidated = false;
+    console.log("LETS VALIDATE THE INPUT!")
+    console.log(causalParamBounds)
+    Object.values(causalParamBounds).forEach(
+      (x) => (isValidated = x === "" ? false : true)
+    );
+    console.log("AM I DOOMED?: ", isValidated)
+    return isValidated;
+  };
+  if (gmsData !== null && validateBounds()) {
     const metadata = gmsData["metadata"];
+
+    /* 
+      Plotting a Box with Causal Parameter Bounds 
+      Mw Max
+      Mw Min
+      Rrup Max
+      Rrup Min
+    */
+    const xMin = causalParamBounds["Rrupmin"];
+    const xMax = causalParamBounds["Rrupmax"];
+    const yMin = causalParamBounds["Mwmin"];
+    const yMax = causalParamBounds["Mwmax"];
+
+    const topBoundX = [xMin, xMax];
+    const topBoundY = [yMax, yMax];
+    const rightBoundX = [xMax, xMax];
+    const rightBoundY = [yMin, yMax];
+    const bottomBoundX = [xMin, xMax];
+    const bottomBoundY = [yMin, yMin];
+    const leftBoundX = [xMin, xMin];
+    const leftBoundY = [yMin, yMax];
 
     return (
       <Plot
@@ -21,7 +53,47 @@ const ThirdPlot = ({ gmsData }) => {
             name: "GCIM",
             line: { color: "black" },
             type: "scatter",
-            autorange: true
+            autorange: true,
+          },
+          {
+            x: topBoundX,
+            y: topBoundY,
+            legendgroup: "Bounds",
+            mode: "lines",
+            name: "Bounds",
+            line: { color: "red" },
+            type: "scatter",
+            showlegend: false,
+          },
+          {
+            x: rightBoundX,
+            y: rightBoundY,
+            legendgroup: "Bounds",
+            mode: "lines",
+            name: "Bounds",
+            line: { color: "red" },
+            type: "scatter",
+            showlegend: false,
+          },
+          {
+            x: bottomBoundX,
+            y: bottomBoundY,
+            legendgroup: "Bounds",
+            mode: "lines",
+            name: "Bounds",
+            line: { color: "red" },
+            type: "scatter",
+            showlegend: false,
+          },
+          {
+            x: leftBoundX,
+            y: leftBoundY,
+            legendgroup: "Bounds",
+            mode: "lines",
+            name: "Bounds",
+            line: { color: "red" },
+            type: "scatter",
+            showlegend: false,
           },
         ]}
         layout={{
@@ -30,11 +102,11 @@ const ThirdPlot = ({ gmsData }) => {
             title: { text: `Distance, R${"rup".sub()} (km)` },
             showexponent: "first",
             exponentformat: "power",
-            autorange: true
+            autorange: true,
           },
           yaxis: {
             title: { text: `Magnitude, M${"W".sub()}` },
-            autorange: true
+            autorange: true,
           },
           autosize: true,
           margin: PLOT_MARGIN,
