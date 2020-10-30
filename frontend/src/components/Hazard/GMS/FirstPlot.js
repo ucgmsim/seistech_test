@@ -17,6 +17,10 @@ const FirstPlot = ({ gmsData, IM }) => {
     const cdfY = gmsData["gcim_cdf_y"][IM];
     const realisations = gmsData["realisations"][IM];
     const selectedGMs = gmsData["selected_GMs"][IM];
+    const ksBounds = gmsData["ks_bounds"];
+
+    const upperBounds = Array.from(cdfY, (x) => x + ksBounds);
+    const lowerBounds = Array.from(cdfY, (x) => x - ksBounds);
 
     // double the elements
     const newRealisations = realisations
@@ -57,6 +61,25 @@ const FirstPlot = ({ gmsData, IM }) => {
             type: "scatter",
           },
           {
+            x: cdfX,
+            y: upperBounds,
+            mode: "lines",
+            name: "KS bounds",
+            legendgroup: "KS bounds",
+            line: { dash: "dashdot", shape: "hv", color: "red" },
+            type: "scatter",
+          },
+          {
+            x: cdfX,
+            y: lowerBounds,
+            mode: "lines",
+            name: "KS bounds",
+            legendgroup: "KS bounds",
+            line: { dash: "dashdot", shape: "hv", color: "red" },
+            type: "scatter",
+            showlegend: false,
+          },
+          {
             x: newRealisations,
             y: newRealisationsRangeY,
             mode: "lines",
@@ -76,11 +99,12 @@ const FirstPlot = ({ gmsData, IM }) => {
         layout={{
           xaxis: {
             title: { text: "Peak ground velocity, PGV (cm/s)" },
-            range: [0, Math.max(...cdfX, ...newRealisations, ...newSelectedGMs)]
+            rangemode: "tozero",
+            autorange: true,
           },
           yaxis: {
             title: { text: "Cumulative probability, CDF" },
-            autorange: true
+            range: [0, 1],
           },
           autosize: true,
           margin: PLOT_MARGIN,
