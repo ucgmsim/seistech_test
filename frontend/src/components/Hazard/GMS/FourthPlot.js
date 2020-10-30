@@ -41,9 +41,13 @@ const FourthPlot = ({ gmsData, metadata }) => {
         layout={{
           xaxis: {
             title: { text: `Metadata: ${metadata}` },
+            rangemode: "nonnegative",
+            autorange: true,
           },
           yaxis: {
             title: { text: "0 to 1" },
+            rangemode: "nonnegative",
+            autorange: true,
           },
           autosize: true,
           margin: PLOT_MARGIN,
