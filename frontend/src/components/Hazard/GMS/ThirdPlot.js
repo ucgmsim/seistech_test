@@ -14,7 +14,11 @@ const ThirdPlot = ({ gmsData, causalParamBounds }) => {
     );
     return isValidated;
   };
-  if (gmsData !== null && validateBounds()) {
+  if (
+    gmsData !== null &&
+    !gmsData.hasOwnProperty("error") &&
+    validateBounds()
+  ) {
     const metadata = gmsData["metadata"];
 
     /* 
