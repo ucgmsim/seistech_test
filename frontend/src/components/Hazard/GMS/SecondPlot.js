@@ -123,14 +123,14 @@ const SecondPlot = ({ gmsData, periods }) => {
             title: { text: "Period, T (s)" },
             showexponent: "first",
             exponentformat: "power",
-            autorange: true
+            autorange: true,
           },
           yaxis: {
             type: "log",
             title: { text: "Spectral acceleration, SA (g)" },
             showexponent: "first",
             exponentformat: "power",
-            autorange: true
+            autorange: true,
           },
           autosize: true,
           margin: PLOT_MARGIN,

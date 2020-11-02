@@ -14,7 +14,7 @@ import LoadingSpinner from "components/common/LoadingSpinner";
 import GuideMessage from "components/common/GuideMessage";
 import ErrorMessage from "components/common/ErrorMessage";
 
-import { handleErrors } from "utils/Utils";
+import { handleErrors, orderIMs } from "utils/Utils";
 
 import "assets/style/GMSViewer.css";
 
@@ -64,8 +64,6 @@ const GMSViewer = () => {
     Rrupmax: GMSRrupMax,
   };
 
-  console.log(causalParamBounds);
-
   /*
     Fetch data from Core API -> compute_ensemble_GMS
   */
@@ -98,7 +96,7 @@ const GMSViewer = () => {
                 ensemble_id: selectedEnsemble,
                 station: station,
                 IM_j: GMSIMType,
-                IMs: newIMVector,
+                IMs: orderIMs(newIMVector),
                 n_gms: Number(GMSNum),
                 gm_source_ids: ["nga_west_2"],
                 im_level: Number(GMSIMLevel),
@@ -115,7 +113,7 @@ const GMSViewer = () => {
                 ensemble_id: selectedEnsemble,
                 station: station,
                 IM_j: GMSIMType,
-                IMs: newIMVector,
+                IMs: orderIMs(newIMVector),
                 n_gms: Number(GMSNum),
                 gm_source_ids: ["nga_west_2"],
                 exceedance: Number(GMSExcdRate),
@@ -171,7 +169,7 @@ const GMSViewer = () => {
 
     // Create an object key = IM, value = Period
     let localPeriods = {};
-    selectedIMVectors.forEach((IM) => {
+    orderIMs(selectedIMVectors).forEach((IM) => {
       localPeriods[IM] = IM.split("_")[1];
     });
     setPeriods(localPeriods);
@@ -197,14 +195,12 @@ const GMSViewer = () => {
   const validateComputedGMS = () => {
     let isValidResponse = true;
     Object.values(computedGMS).forEach((x) => {
+      // Like ks_bound value is Number and is not working with Object.keys(x).length
       if (!isNaN(x)) {
-        console.log("Its me!");
-        console.log(x);
         return;
       }
+      // When an object doesn't have and values
       if (Object.keys(x).length === 0) {
-        console.log("SOMETHING IS AN EMPTY OBJECT");
-        console.log(x);
         isValidResponse = false;
       }
     });
