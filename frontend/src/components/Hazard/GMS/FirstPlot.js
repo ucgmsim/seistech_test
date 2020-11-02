@@ -29,12 +29,6 @@ const FirstPlot = ({ gmsData, IM }) => {
       })
       .flatMap((x) => Array(2).fill(x));
 
-    const realisationsRangeY = range(0, 1, 1 / realisations.length);
-
-    const newRealisationsRangeY = realisationsRangeY.flatMap((x, i) =>
-      Array(i === 0 || i === realisationsRangeY.length - 1 ? 1 : 2).fill(x)
-    );
-
     // double the elements
     const newSelectedGMs = selectedGMs
       .sort((a, b) => {
@@ -42,10 +36,11 @@ const FirstPlot = ({ gmsData, IM }) => {
       })
       .flatMap((x) => Array(2).fill(x));
 
-    const selectedGMsRangeY = range(0, 1, 1 / selectedGMs.length);
+    // Create an array for Y axis
+    const rangeY = range(0, 1, 1 / realisations.length);
 
-    const newSelectedGMsRangeY = selectedGMsRangeY.flatMap((x, i) =>
-      Array(i === 0 || i === selectedGMsRangeY.length - 1 ? 1 : 2).fill(x)
+    const newRangeY = rangeY.flatMap((x, i) =>
+      Array(i === 0 || i === rangeY.length - 1 ? 1 : 2).fill(x)
     );
 
     return (
@@ -81,7 +76,7 @@ const FirstPlot = ({ gmsData, IM }) => {
           },
           {
             x: newRealisations,
-            y: newRealisationsRangeY,
+            y: newRangeY,
             mode: "lines",
             name: "Realisations",
             line: { shape: "hv", color: "black" },
@@ -89,7 +84,7 @@ const FirstPlot = ({ gmsData, IM }) => {
           },
           {
             x: newSelectedGMs,
-            y: newSelectedGMsRangeY,
+            y: newRangeY,
             mode: "lines",
             name: "GMs",
             line: { shape: "hv", color: "blue" },
