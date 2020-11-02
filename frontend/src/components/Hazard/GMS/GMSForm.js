@@ -9,7 +9,7 @@ import makeAnimated from "react-select/animated";
 import IMSelect from "components/common/IMSelect";
 import * as CONSTANTS from "constants/Constants";
 import $ from "jquery";
-import { renderSigfigs } from "utils/Utils";
+import { renderSigfigs, orderIMs } from "utils/Utils";
 import "assets/style/GMSForm.css";
 
 const GMSForm = () => {
@@ -79,7 +79,6 @@ const GMSForm = () => {
   */
   useEffect(() => {
     if (isLocalMwMinChosen === true) {
-      console.log("AM I DOING SOMETHING");
       setGMSMwMin(localMwMin);
     }
   }, [localMwMin, isLocalMwMinChosen]);
@@ -238,8 +237,13 @@ const GMSForm = () => {
     const defaultIMWeights = async () => {
       if (localIMVector.length !== 0 && isIMVectorChosen === true) {
         let queryString = `?IM_j=${selectedIMType}&IMs=`;
-        // To make a string from an array of objects and separate with comma
-        localIMVector.forEach((IM) => (queryString += IM.value + ","));
+
+        // Create a new array from an object.
+        // As localIMVector is an object with properties of label and value
+        const newIMVector = Array.from(localIMVector, (x) => x.value);
+
+        // To make a string from a sorted array and separate with comma
+        orderIMs(newIMVector).forEach((IM) => (queryString += IM + ","));
         // Remove the last comma
         queryString = queryString.slice(0, -1);
 
