@@ -45,7 +45,7 @@ const FourthPlot = ({ gmsData, metadata }) => {
             autorange: true,
           },
           yaxis: {
-            title: { text: "0 to 1" },
+            title: { text: "Cumulative probability, CDF" },
             rangemode: "nonnegative",
             autorange: true,
           },
