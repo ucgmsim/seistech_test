@@ -19,8 +19,18 @@ const FirstPlot = ({ gmsData, IM }) => {
     const selectedGMs = gmsData["selected_GMs"][IM];
     const ksBounds = gmsData["ks_bounds"];
 
+    // GCIM + KS Bounds
     const upperBounds = Array.from(cdfY, (x) => x + ksBounds);
+    // Find the the y value that is bigger than 1.
+    const yLimitAtOne = upperBounds.find((element) => element > 1);
+    // This is the upper limit and slice does not include it, so no need to subtract 1 index
+    const yLimitAtOneIndex = upperBounds.indexOf(yLimitAtOne);
+
+    // GCIM - KS Bounds
     const lowerBounds = Array.from(cdfY, (x) => x - ksBounds);
+    // Find the the y value that is bigger than or equal to 0
+    const yLimitAtZero = lowerBounds.find((element) => element >= 0);
+    const yLimitAtZeroIndex = lowerBounds.indexOf(yLimitAtZero);
 
     // double the elements
     const newRealisations = realisations
@@ -56,8 +66,8 @@ const FirstPlot = ({ gmsData, IM }) => {
             type: "scatter",
           },
           {
-            x: cdfX,
-            y: upperBounds,
+            x: cdfX.slice(0, yLimitAtOneIndex),
+            y: upperBounds.slice(0, yLimitAtOneIndex),
             mode: "lines",
             name: "KS bounds",
             legendgroup: "KS bounds",
@@ -65,8 +75,8 @@ const FirstPlot = ({ gmsData, IM }) => {
             type: "scatter",
           },
           {
-            x: cdfX,
-            y: lowerBounds,
+            x: cdfX.slice(yLimitAtZeroIndex),
+            y: lowerBounds.slice(yLimitAtZeroIndex),
             mode: "lines",
             name: "KS bounds",
             legendgroup: "KS bounds",
