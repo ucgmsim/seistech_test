@@ -42,6 +42,10 @@ const ThirdPlot = ({ gmsData, causalParamBounds }) => {
     const leftBoundX = [xMin, xMin];
     const leftBoundY = [yMin, yMax];
 
+    // To set a range for X-axis to get a gap
+    const rangeXMin = Math.min(...metadata["rrup"], xMin) * 0.9;
+    const rangeXMax = Math.max(...metadata["rrup"], xMax) * 1.1;
+
     return (
       <Plot
         className={"third-plot"}
@@ -102,7 +106,7 @@ const ThirdPlot = ({ gmsData, causalParamBounds }) => {
             title: { text: `Distance, R${"rup".sub()} (km)` },
             showexponent: "first",
             exponentformat: "power",
-            autorange: true,
+            range: [Math.log10(rangeXMin), Math.log10(rangeXMax)],
           },
           yaxis: {
             title: { text: `Magnitude, M${"W".sub()}` },
