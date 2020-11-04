@@ -9,7 +9,7 @@ import makeAnimated from "react-select/animated";
 import IMSelect from "components/common/IMSelect";
 import * as CONSTANTS from "constants/Constants";
 import $ from "jquery";
-import { renderSigfigs, orderIMs } from "utils/Utils";
+import { renderSigfigs, orderIMs, handleErrors } from "utils/Utils";
 import "assets/style/GMSForm.css";
 
 const GMSForm = () => {
@@ -19,7 +19,6 @@ const GMSForm = () => {
     selectedEnsemble,
     station,
     vs30,
-    IMVectors,
     setGMSComputeClick,
     setGMSIMLevel,
     setGMSExcdRate,
@@ -36,6 +35,77 @@ const GMSForm = () => {
   } = useContext(GlobalContext);
 
   const animatedComponents = makeAnimated();
+
+  const [availableIMs, setAvailableIMs] = useState([]);
+  const [localIMs, setLocalIMs] = useState([]);
+
+  useEffect(() => {
+    const abortController = new AbortController();
+    const signal = abortController.signal;
+
+    const getGMSIMs = async () => {
+      try {
+        const token = await getTokenSilently();
+
+        await fetch(
+          CONSTANTS.CORE_API_BASE_URL +
+            CONSTANTS.CORE_API_ROUTE_GMS_GET_GM_DATASETS,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            signal: signal,
+          }
+        )
+          .then(handleErrors)
+          .then(async (response) => {
+            const responseData = await response.json();
+            const gmDatasetIDs = responseData["gm_dataset_ids"];
+            return await fetch(
+              CONSTANTS.CORE_API_BASE_URL +
+                CONSTANTS.CORE_API_ROUTE_GMS_GET_AVAILABLE_GMS +
+                `?ensemble_id=${selectedEnsemble}&gm_dataset_ids=${gmDatasetIDs.join(
+                  ","
+                )}`,
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+                signal: signal,
+              }
+            )
+              .then(handleErrors)
+              .then(async (response) => {
+                const responseData = await response.json();
+                setAvailableIMs(orderIMs(responseData["ims"]));
+              })
+              // Catch error for the second fetch, IMs
+              .catch((error) => {
+                console.log(error);
+              });
+          })
+          // Catch error for the first fetch, GM Dataset
+          .catch((error) => {
+            console.log(error);
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getGMSIMs();
+
+    return () => {
+      abortController.abort();
+    };
+  }, []);
+
+  useEffect(() => {
+    let localIMs = availableIMs.map((IM) => ({
+      value: IM,
+      label: IM,
+    }));
+    setLocalIMs(localIMs);
+  }, [availableIMs]);
 
   const availableDatabases = [
     { value: "A", label: "A" },
@@ -332,7 +402,11 @@ const GMSForm = () => {
         </div>
 
         <div className="custom-form-group">
-          <IMSelect title="IM Type" setIM={setSelectedIMType} />
+          <IMSelect
+            title="IM Type"
+            setIM={setSelectedIMType}
+            options={availableIMs}
+          />
         </div>
 
         <div className="form-group">
@@ -408,10 +482,10 @@ const GMSForm = () => {
             components={animatedComponents}
             isMulti
             onChange={(value) => setLocalIMVector(value || [])}
-            options={IMVectors.filter((e) => {
+            options={localIMs.filter((e) => {
               return e.value !== selectedIMType;
             })}
-            isDisabled={IMVectors.length === 0}
+            isDisabled={localIMs.length === 0}
           />
         </div>
 
