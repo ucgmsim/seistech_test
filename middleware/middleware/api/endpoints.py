@@ -163,6 +163,16 @@ def get_default_causal_params():
     )
 
 
+@app.route("/gms/ensemble_gms/datasets", methods=["GET"])
+def get_gm_datasets():
+    return proxy_to_core_api(flask.request, "api/gms/ensemble_gms/datasets", "GET")
+
+
+@app.route("/gms/ensemble_gms/ims", methods=["GET"])
+def get_GMS_available_IMs():
+    return proxy_to_core_api(flask.request, "api/gms/ensemble_gms/ims", "GET")
+
+
 @app.route("/user", methods=["GET"])
 def user_get():
     token = get_token_auth_header()
