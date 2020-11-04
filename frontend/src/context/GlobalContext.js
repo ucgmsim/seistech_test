@@ -30,15 +30,10 @@ export const Provider = (props) => {
   });
 
   /* 
-    For IMs
+    For IMs - Seismic Hazard
     The only exception regards naming conventions as 'ims' seems very odd
   */
   const [IMs, setIMs] = useState([]);
-
-  /*
-    Seismic Hazard & GMS
-  */
-  const [IMVectors, setIMVectors] = useState([]);
 
   /*
     Seismic Hazard
@@ -246,8 +241,6 @@ export const Provider = (props) => {
     /*
       GMS
     */
-    IMVectors,
-    setIMVectors,
     selectedIMVectors,
     setSelectedIMVectors,
     GMSComputeClick,
