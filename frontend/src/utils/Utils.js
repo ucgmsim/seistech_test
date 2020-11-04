@@ -88,16 +88,17 @@ export const orderIMs = (unsortedIMs) => {
         }
       });
 
-      if (curIMs.length === 0) {
+      const filteredCurIMs = curIMs.filter((element) => {
+        return element !== undefined;
+      });
+
+      if (filteredCurIMs.length === 0) {
         continue;
-      } else if (curIMs.length === 1) {
-        adjIMs.push(curIMs[0]);
+      } else if (filteredCurIMs.length === 1) {
+        adjIMs.push(filteredCurIMs[0]);
       } else {
-        const tempSortedIMs = curIMs.sort((a, b) => {
-          return a.localeCompare(b, undefined, {
-            numeric: true,
-            sensitivity: "base",
-          });
+        const tempSortedIMs = filteredCurIMs.sort((a, b) => {
+          return a.split("_")[1] - b.split("_")[1];
         });
         tempSortedIMs.forEach((x) => {
           adjIMs.push(x);
@@ -106,9 +107,5 @@ export const orderIMs = (unsortedIMs) => {
     }
   }
 
-  const filteredAdjIms = adjIMs.filter((element) => {
-    return element !== undefined;
-  });
-
-  return filteredAdjIms;
+  return adjIMs;
 };
