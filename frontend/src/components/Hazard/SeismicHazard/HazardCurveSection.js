@@ -4,9 +4,12 @@ import { v4 as uuidv4 } from "uuid";
 import { GlobalContext } from "context";
 
 const HazardCurveSection = () => {
-  const { selectedIM, setSelectedIM, setHazardCurveComputeClick } = useContext(
-    GlobalContext
-  );
+  const {
+    selectedIM,
+    setSelectedIM,
+    setHazardCurveComputeClick,
+    IMs,
+  } = useContext(GlobalContext);
 
   const [
     disabledButtonHazardCurveCompute,
@@ -23,7 +26,11 @@ const HazardCurveSection = () => {
         <span>Hazard Curve</span>
       </div>
       <div className="custom-form-group">
-        <IMSelect title="Intensity Measure" setIM={setSelectedIM} />
+        <IMSelect
+          title="Intensity Measure"
+          setIM={setSelectedIM}
+          options={IMs}
+        />
       </div>
 
       <div className="form-group">
