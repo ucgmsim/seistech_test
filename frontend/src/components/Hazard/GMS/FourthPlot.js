@@ -39,6 +39,7 @@ const FourthPlot = ({ gmsData, metadata, causalParamBounds }) => {
         name: metadata,
         line: { shape: "hv", color: "black" },
         type: "scatter",
+        showlegend: true,
       },
     ];
 
