@@ -7,7 +7,7 @@ import { range } from "utils/Utils";
 
 import "assets/style/GMSPlot.css";
 
-const FourthPlot = ({ gmsData, metadata }) => {
+const FourthPlot = ({ gmsData, metadata, causalParamBounds }) => {
   if (
     gmsData !== null &&
     !gmsData.hasOwnProperty("error") &&
@@ -25,28 +25,84 @@ const FourthPlot = ({ gmsData, metadata }) => {
       Array(i === 0 || i === rangeY.length - 1 ? 1 : 2).fill(x)
     );
 
+    // Y coordiates for bounds
+    const boundsRangeY = [0, 1];
+
+    // X-axis range - Default
+    let xAxisRange = [Math.min(...xRange) * 0.9, Math.max(...xRange) * 1.1];
+
+    const scattersArray = [
+      {
+        x: xRange,
+        y: newRangeY,
+        mode: "lines+markers",
+        name: "Magnitude",
+        line: { shape: "hv", color: "black" },
+        type: "scatter",
+      },
+    ];
+
+    if (metadata !== "sf") {
+      scattersArray.push(
+        {
+          x: [
+            causalParamBounds[metadata]["min"],
+            causalParamBounds[metadata]["min"],
+          ],
+          y: boundsRangeY,
+          legendgroup: metadata,
+          name: "Bounds",
+          mode: "lines",
+          line: { color: "red", dash: "dot" },
+          type: "scatter",
+        },
+        {
+          x: [
+            causalParamBounds[metadata]["max"],
+            causalParamBounds[metadata]["max"],
+          ],
+          y: boundsRangeY,
+          legendgroup: metadata,
+          name: "Bounds",
+          mode: "lines",
+          line: { color: "red", dash: "dot" },
+          type: "scatter",
+          showlegend: false,
+        }
+      );
+
+      if (metadata === "vs30") {
+        scattersArray.push({
+          x: [
+            causalParamBounds[metadata]["vs30"],
+            causalParamBounds[metadata]["vs30"],
+          ],
+          y: boundsRangeY,
+          legendgroup: metadata,
+          name: "VS30",
+          mode: "lines",
+          line: { color: "red" },
+          type: "scatter",
+        });
+      }
+
+      xAxisRange = [
+        Math.min(...xRange, causalParamBounds[metadata]["min"]) * 0.9,
+        Math.max(...xRange, causalParamBounds[metadata]["max"]) * 1.1,
+      ];
+    }
+
     return (
       <Plot
         className={"fourth-plot"}
-        data={[
-          {
-            x: xRange,
-            y: newRangeY,
-            mode: "lines+markers",
-            name: "Magnitude",
-            line: { shape: "hv", color: "black" },
-            type: "scatter",
-          },
-        ]}
+        data={scattersArray}
         layout={{
           xaxis: {
             title: { text: `Metadata: ${metadata}` },
-            rangemode: "nonnegative",
-            autorange: true,
+            range: xAxisRange,
           },
           yaxis: {
             title: { text: "Cumulative probability, CDF" },
-            rangemode: "nonnegative",
             autorange: true,
           },
           autosize: true,

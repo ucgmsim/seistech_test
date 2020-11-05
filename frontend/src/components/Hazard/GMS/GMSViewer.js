@@ -24,6 +24,7 @@ const GMSViewer = () => {
   const {
     selectedEnsemble,
     station,
+    vs30,
     selectedIMVectors,
     setSelectedIMVectors,
     GMSComputeClick,
@@ -39,6 +40,8 @@ const GMSViewer = () => {
     GMSMwMax,
     GMSRrupMin,
     GMSRrupMax,
+    GMSVS30Min,
+    GMSVS30Max,
   } = useContext(GlobalContext);
 
   const [computedGMS, setComputedGMS] = useState(null);
@@ -58,10 +61,19 @@ const GMSViewer = () => {
   });
 
   let causalParamBounds = {
-    Mwmin: GMSMwMin,
-    Mwmax: GMSMwMax,
-    Rrupmin: GMSRrupMin,
-    Rrupmax: GMSRrupMax,
+    mag: {
+      min: GMSMwMin,
+      max: GMSMwMax,
+    },
+    rrup: {
+      min: GMSRrupMin,
+      max: GMSRrupMax,
+    },
+    vs30: {
+      min: GMSVS30Min,
+      max: GMSVS30Max,
+      vs30: vs30,
+    },
   };
 
   /*
@@ -238,6 +250,7 @@ const GMSViewer = () => {
                       onChange={(value) => setSpecifiedIM(value || [])}
                       defaultValue={specifiedIM}
                       options={localIMVectors}
+                      isSearchable={false}
                     />
                     <FirstPlot gmsData={computedGMS} IM={specifiedIM.value} />
                   </Fragment>
@@ -329,11 +342,13 @@ const GMSViewer = () => {
                       onChange={(value) => setSpecifiedMetadata(value || [])}
                       defaultValue={specifiedMetadata}
                       options={localMetadatas}
+                      isSearchable={false}
                     />
 
                     <FourthPlot
                       gmsData={computedGMS}
                       metadata={specifiedMetadata.value}
+                      causalParamBounds={causalParamBounds}
                     />
                   </Fragment>
                 )}

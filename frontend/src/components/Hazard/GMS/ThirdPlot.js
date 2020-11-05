@@ -23,15 +23,16 @@ const ThirdPlot = ({ gmsData, causalParamBounds }) => {
 
     /* 
       Plotting a Box with Causal Parameter Bounds 
-      Mw Max
-      Mw Min
-      Rrup Max
-      Rrup Min
+      Mw Max - yMin
+      Mw Min - yMax
+      Rrup Max - xMin
+      Rrup Min - xMax
     */
-    const xMin = causalParamBounds["Rrupmin"];
-    const xMax = causalParamBounds["Rrupmax"];
-    const yMin = causalParamBounds["Mwmin"];
-    const yMax = causalParamBounds["Mwmax"];
+
+    const xMin = causalParamBounds["rrup"]["min"];
+    const xMax = causalParamBounds["rrup"]["max"];
+    const yMin = causalParamBounds["mag"]["min"];
+    const yMax = causalParamBounds["mag"]["max"];
 
     const topBoundX = [xMin, xMax];
     const topBoundY = [yMax, yMax];
