@@ -78,6 +78,8 @@ export const Provider = (props) => {
   const [GMSMwMax, setGMSMwMax] = useState("");
   const [GMSRrupMin, setGMSRrupMin] = useState("");
   const [GMSRrupMax, setGMSRrupMax] = useState("");
+  const [GMSVS30Min, setGMSVS30Min] = useState("");
+  const [GMSVS30Max, setGMSVS30Max] = useState("");
 
   /* 
     User Permissions
@@ -269,6 +271,10 @@ export const Provider = (props) => {
     setGMSRrupMin,
     GMSRrupMax,
     setGMSRrupMax,
+    GMSVS30Min,
+    setGMSVS30Min,
+    GMSVS30Max,
+    setGMSVS30Max,
   };
 
   // pass the value in provider and return
