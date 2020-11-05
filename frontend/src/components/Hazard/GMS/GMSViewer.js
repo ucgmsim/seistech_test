@@ -11,6 +11,7 @@ import SecondPlot from "./SecondPlot";
 import ThirdPlot from "./ThirdPlot";
 import FourthPlot from "./FourthPlot";
 import LoadingSpinner from "components/common/LoadingSpinner";
+import DownloadButton from "components/common/DownloadButton";
 import GuideMessage from "components/common/GuideMessage";
 import ErrorMessage from "components/common/ErrorMessage";
 
@@ -54,6 +55,8 @@ const GMSViewer = () => {
 
   const [specifiedMetadata, setSpecifiedMetadata] = useState([]);
   const [localMetadatas, setLocalMetadatas] = useState([]);
+
+  const [downloadToken, setDownloadToken] = useState("");
 
   const [showErrorMessage, setShowErrorMessage] = useState({
     isError: false,
@@ -145,6 +148,7 @@ const GMSViewer = () => {
               const responseData = await response.json();
               setComputedGMS(responseData);
               setSelectedIMVectors(newIMVector);
+              setDownloadToken(responseData["download_token"]);
               setIsLoading(false);
             })
             .catch((error) => {
@@ -356,6 +360,12 @@ const GMSViewer = () => {
             )}
         </Tab>
       </Tabs>
+      <DownloadButton
+        disabled={computedGMS === null}
+        downloadURL={CONSTANTS.INTE_API_DOWNLOAD_GMS}
+        downloadToken={downloadToken}
+        fileName="gms.zip"
+      />
     </div>
   );
 };
