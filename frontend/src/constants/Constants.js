@@ -197,4 +197,5 @@ export const PLOT_CONFIG = {
     "hoverClosestCartesian",
     "autoScale2d",
   ],
+  doubleClick: "autosize",
 };
