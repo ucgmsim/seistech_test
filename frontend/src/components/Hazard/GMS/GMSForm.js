@@ -395,6 +395,12 @@ const GMSForm = () => {
       localNumGMS !== ("" && null) &&
       localReplicates !== ("" && null) &&
       localWeights !== ("" && null) &&
+      localMwMin !== "" &&
+      localMwMax !== "" &&
+      localRrupMin !== "" &&
+      localRrupMax !== "" &&
+      localVS30Min !== "" &&
+      localVS30Max !== "" &&
       ((localIMExdRateRadio === "exceedance-rate" && localExcdRate !== "") ||
         (localIMExdRateRadio === "im-level" && localIMLevel !== ""))
     );
@@ -410,6 +416,12 @@ const GMSForm = () => {
     setGMSNum(localNumGMS);
     setGMSReplicates(localReplicates);
     setGMSWeights(localWeights);
+    setGMSMwMin(localMwMin);
+    setGMSMwMax(localMwMax);
+    setGMSRrupMin(localRrupMin);
+    setGMSRrupMax(localRrupMax);
+    setGMSVS30Min(localVS30Min);
+    setGMSVS30Max(localVS30Max);
     setGMSComputeClick(uuidv4());
   };
 

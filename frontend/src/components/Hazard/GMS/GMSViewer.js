@@ -79,6 +79,15 @@ const GMSViewer = () => {
     },
   };
 
+  let filterParamsObj = {
+    mag_low: Number(GMSMwMin),
+    mag_high: Number(GMSMwMax),
+    rrup_low: Number(GMSRrupMin),
+    rrup_high: Number(GMSRrupMax),
+    vs30_low: Number(GMSVS30Min),
+    vs30_high: Number(GMSVS30Max),
+  };
+
   /*
     Fetch data from Core API -> compute_ensemble_GMS
   */
@@ -117,6 +126,7 @@ const GMSViewer = () => {
                 im_level: Number(GMSIMLevel),
                 n_replica: Number(GMSReplicates),
                 IM_weights: GMSWeights,
+                filter_params: filterParamsObj,
               }),
               signal: signal,
             };
@@ -134,6 +144,7 @@ const GMSViewer = () => {
                 exceedance: Number(GMSExcdRate),
                 n_replica: Number(GMSReplicates),
                 IM_weights: GMSWeights,
+                filter_params: filterParamsObj,
               }),
               signal: signal,
             };
@@ -227,7 +238,7 @@ const GMSViewer = () => {
   return (
     <div className="gms-viewer">
       <Tabs defaultActiveKey="GMSViewerIMDistributions">
-        <Tab eventKey="GMSViewerIMDistributions" title="Peak ground velocity">
+        <Tab eventKey="GMSViewerIMDistributions" title="IM Distributions">
           {GMSComputeClick === null && (
             <GuideMessage
               header={CONSTANTS.GMS}
@@ -256,7 +267,10 @@ const GMSViewer = () => {
                       options={localIMVectors}
                       isSearchable={false}
                     />
-                    <GMSViewerIMDistributions gmsData={computedGMS} IM={specifiedIM.value} />
+                    <GMSViewerIMDistributions
+                      gmsData={computedGMS}
+                      IM={specifiedIM.value}
+                    />
                   </Fragment>
                 )}
               </Fragment>
@@ -319,7 +333,7 @@ const GMSViewer = () => {
               </Fragment>
             )}
         </Tab>
-        <Tab eventKey="GMSViewerCausalParameters" title="Fourth Plot">
+        <Tab eventKey="GMSViewerCausalParameters" title="Causal Parameters">
           {GMSComputeClick === null && (
             <GuideMessage
               header={CONSTANTS.GMS}
