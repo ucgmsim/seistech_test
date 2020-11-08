@@ -7,7 +7,7 @@ import { range } from "utils/Utils";
 
 import "assets/style/GMSPlot.css";
 
-const FirstPlot = ({ gmsData, IM }) => {
+const GMSViewerIMDistributions = ({ gmsData, IM }) => {
   if (
     gmsData !== null &&
     !gmsData.hasOwnProperty("error") &&
@@ -122,4 +122,4 @@ const FirstPlot = ({ gmsData, IM }) => {
   return <ErrorMessage />;
 };
 
-export default FirstPlot;
+export default GMSViewerIMDistributions;

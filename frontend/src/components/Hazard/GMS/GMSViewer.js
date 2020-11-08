@@ -6,10 +6,10 @@ import { GlobalContext } from "context";
 import * as CONSTANTS from "constants/Constants";
 import { useAuth0 } from "components/common/ReactAuth0SPA";
 
-import FirstPlot from "./FirstPlot";
+import GMSViewerIMDistributions from "./GMSViewerIMDistributions";
 import SecondPlot from "./SecondPlot";
 import ThirdPlot from "./ThirdPlot";
-import FourthPlot from "./FourthPlot";
+import GMSViewerCausalParameters from "./GMSViewerCausalParameters";
 import LoadingSpinner from "components/common/LoadingSpinner";
 import DownloadButton from "components/common/DownloadButton";
 import GuideMessage from "components/common/GuideMessage";
@@ -226,8 +226,8 @@ const GMSViewer = () => {
 
   return (
     <div className="gms-viewer">
-      <Tabs defaultActiveKey="firstPlot">
-        <Tab eventKey="firstPlot" title="Peak ground velocity">
+      <Tabs defaultActiveKey="GMSViewerIMDistributions">
+        <Tab eventKey="GMSViewerIMDistributions" title="Peak ground velocity">
           {GMSComputeClick === null && (
             <GuideMessage
               header={CONSTANTS.GMS}
@@ -256,7 +256,7 @@ const GMSViewer = () => {
                       options={localIMVectors}
                       isSearchable={false}
                     />
-                    <FirstPlot gmsData={computedGMS} IM={specifiedIM.value} />
+                    <GMSViewerIMDistributions gmsData={computedGMS} IM={specifiedIM.value} />
                   </Fragment>
                 )}
               </Fragment>
@@ -319,7 +319,7 @@ const GMSViewer = () => {
               </Fragment>
             )}
         </Tab>
-        <Tab eventKey="fourthPlot" title="Fourth Plot">
+        <Tab eventKey="GMSViewerCausalParameters" title="Fourth Plot">
           {GMSComputeClick === null && (
             <GuideMessage
               header={CONSTANTS.GMS}
@@ -349,7 +349,7 @@ const GMSViewer = () => {
                       isSearchable={false}
                     />
 
-                    <FourthPlot
+                    <GMSViewerCausalParameters
                       gmsData={computedGMS}
                       metadata={specifiedMetadata.value}
                       causalParamBounds={causalParamBounds}

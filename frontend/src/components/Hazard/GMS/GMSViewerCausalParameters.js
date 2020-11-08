@@ -7,7 +7,7 @@ import { range } from "utils/Utils";
 
 import "assets/style/GMSPlot.css";
 
-const FourthPlot = ({ gmsData, metadata, causalParamBounds }) => {
+const GMSViewerCausalParameters = ({ gmsData, metadata, causalParamBounds }) => {
   if (
     gmsData !== null &&
     !gmsData.hasOwnProperty("error") &&
@@ -117,4 +117,4 @@ const FourthPlot = ({ gmsData, metadata, causalParamBounds }) => {
   return <ErrorMessage />;
 };
 
-export default FourthPlot;
+export default GMSViewerCausalParameters;
