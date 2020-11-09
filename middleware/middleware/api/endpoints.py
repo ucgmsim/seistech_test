@@ -60,6 +60,36 @@ def get_hazard():
     )
 
 
+@app.route("/hazard/nz11750", methods=["GET"])
+@requires_auth
+def get_nzcode():
+    if requires_permission("hazard:hazard"):
+        return proxy_to_core_api(flask.request, "api/hazard/nz11750/get", "GET")
+    raise AuthError(
+        {
+            "code": "Unauthorized",
+            "description": "You don't have access to this resource",
+        },
+        403,
+    )
+
+
+@app.route("/hazard/nz11750/default", methods=["GET"])
+@requires_auth
+def get_nzcode_default_params():
+    if requires_permission("hazard:hazard"):
+        return proxy_to_core_api(
+            flask.request, "api/hazard/nz11750/default_params", "GET"
+        )
+    raise AuthError(
+        {
+            "code": "Unauthorized",
+            "description": "You don't have access to this resource",
+        },
+        403,
+    )
+
+
 @app.route("/disagg", methods=["GET"])
 @requires_auth
 def get_disagg():
