@@ -1,5 +1,8 @@
-import React, { useContext } from "react";
+import React, { useState, useContext } from "react";
 import { GlobalContext } from "context";
+import TextField from "@material-ui/core/TextField";
+
+import "assets/style/NZS1170Section.css";
 
 const NZS1170Section = () => {
   const {
@@ -30,55 +33,47 @@ const NZS1170Section = () => {
   const onChangeNZS1170SiteClass = (e) => {
     setNZS1170SiteClass(e.target.value);
   };
+  // Z-factor
+  const [localZFactor, setLocalZFactor] = useState(0);
+
   return (
     <div>
       <div className="form-group form-section-title">
         <span>NZS1170</span>
       </div>
 
-      <div className="form-group table">
-        <div className="form-group">
-          <input type="checkbox" onChange={onChangeComputeNZS1170} disabled />
-          <span className="show-nzs">&nbsp;Compute NZS1170.5 hazard</span>
-        </div>
+      <div className="form-group">
+        <input type="checkbox" onChange={onChangeShowNZS1170} disabled />
+        <span className="show-nzs">&nbsp;Show NZS1170.5 hazard</span>
+      </div>
 
-        <div className="form-group">
-          <input type="checkbox" onChange={onChangeShowNZS1170} disabled />
-          <span className="show-nzs">&nbsp;Show NZS1170.5 hazard</span>
-        </div>
-
-        <div className="t-row uhs-params">
-          <div className="t-cell">
-            <span>Z=</span>
-            <input
-              type="number"
-              className="form-control uhs"
-              value={nzs1170Input}
-              onChange={onChangeNZS1170Input}
-              disabled
-            />
-          </div>
-          <div className="t-cell">
-            <span>SiteClass=</span>
-            <select
-              id="site-class"
-              className="form-control"
-              value={nzs1170SiteClass}
-              onChange={onChangeNZS1170SiteClass}
-              disabled
-            >
-              <option value="A">A</option>
-              <option value="B">B</option>
-              <option value="C">C</option>
-              <option value="D">D</option>
-              <option value="E">E</option>
-            </select>
-          </div>
+      <div className="form-group">
+        <div className="d-flex align-items-center">
+          <label
+            id="label-z-factor"
+            htmlFor="z-factor"
+            className="control-label"
+          >
+            Z Factor
+          </label>
+          <TextField
+            id="z-factor"
+            className="flex-grow-1"
+            type="number"
+            value={localZFactor}
+            onChange={(e) => setLocalZFactor(e.target.value)}
+            variant="outlined"
+          />
         </div>
       </div>
 
       <div className="form-group">
-        <button id="prob-update" type="button" className="btn btn-primary" disabled>
+        <button
+          id="prob-update"
+          type="button"
+          className="btn btn-primary"
+          disabled
+        >
           Compute
         </button>
       </div>
