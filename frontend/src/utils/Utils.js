@@ -14,21 +14,33 @@ export const disableScrollOnNumInput = () => {
 };
 
 export const handleErrors = (response) => {
-  if (!response.ok) {
-    /* 
-      Debug purpose
-      This can be replaced if we implement front-end logging just like we did on Core API (Saving logs in a file somehow)
-      Until then, console.log to invest while developing
-    */
-    console.log(Error(response.statusText));
-    throw response.status;
+  // For Promise.all which is sending multiple requests simultaneously
+  if (response.length > 1) {
+    for (const eachResponse of response) {
+      if (eachResponse.status !== 200) {
+        console.log(Error(response.statusText));
+        throw response.status;
+      }
+    }
+    // For a single request.
+  } else {
+    if (response.status !== 200) {
+      /* 
+        Debug purpose
+        This can be replaced if we implement front-end logging just like we did on Core API (Saving logs in a file somehow)
+        Until then, console.log to invest while developing
+      */
+      console.log(Error(response.statusText));
+      throw response.status;
+    }
   }
+
   return response;
 };
 
-/**
- * Converts the Series json (which is a dict with each index value as a key),
- * to two arrays ready for plotting.
+/*
+  Converts the Series json (which is a dict with each index value as a key),
+  to two arrays ready for plotting.
  */
 export const getPlotData = (data) => {
   const index = [];
@@ -41,8 +53,8 @@ export const getPlotData = (data) => {
   return { index: index, values: values };
 };
 
-/**
- * Implement x sig figs for numeric float values
+/*
+  Implement x sig figs for numeric float values
  */
 export const renderSigfigs = (fullprecision, sigfigs) => {
   return Number.parseFloat(fullprecision).toPrecision(sigfigs);

@@ -37,7 +37,7 @@ const HazardViewerHazardCurve = () => {
 
   const [hazardData, setHazardData] = useState(null);
   // NZ Code is now splitted
-  const [nzcodeData, setNZCodeData] = useState(null);
+  const [NZCodeData, setNZCodeData] = useState(null);
 
   const [downloadToken, setDownloadToken] = useState("");
 
@@ -63,31 +63,71 @@ const HazardViewerHazardCurve = () => {
 
           const token = await getTokenSilently();
 
-          let queryString = `?ensemble_id=${selectedEnsemble}&station=${station}&im=${selectedIM}`;
+          let hazardDataQueryString = `?ensemble_id=${selectedEnsemble}&station=${station}&im=${selectedIM}`;
           if (vs30 !== defaultVS30) {
-            queryString += `&vs30=${vs30}`;
+            hazardDataQueryString += `&vs30=${vs30}`;
           }
 
-          await fetch(
-            CONSTANTS.CORE_API_BASE_URL +
-              CONSTANTS.CORE_API_ROUTE_HAZARD_PLOT +
-              queryString,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-              signal: signal,
-            }
-          )
+          let nzCodeDefaultQueryString = `?ensemble_id=${selectedEnsemble}&station=${station}`;
+
+          await Promise.all([
+            fetch(
+              CONSTANTS.CORE_API_BASE_URL +
+                CONSTANTS.CORE_API_ROUTE_HAZARD_PLOT +
+                hazardDataQueryString,
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+                signal: signal,
+              }
+            ),
+            fetch(
+              CONSTANTS.CORE_API_BASE_URL +
+                CONSTANTS.CORE_API_ROUTE_HAZARD_NZCODE_DEFAULT_PARAMS +
+                nzCodeDefaultQueryString,
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+                signal: signal,
+              }
+            ),
+          ])
+            .then(handleErrors)
+            .then(async ([hazardResponse, nzCodeDefaultParams]) => {
+              const hazardData = await hazardResponse.json();
+              const nzCodeDefaultData = await nzCodeDefaultParams.json();
+              setHazardData(hazardData);
+              setDownloadToken(hazardData["download_token"]);
+
+              let nzCodeQueryString = `?ensemble_id=${selectedEnsemble}&station=${station}&im=${selectedIM}&soil_class=${
+                nzCodeDefaultData["soil_class"]
+              }&distance=${Number(
+                nzCodeDefaultData["distance"]
+              )}&z_factor=${Number(nzCodeDefaultData["z_factor"])}`;
+
+              return fetch(
+                CONSTANTS.CORE_API_BASE_URL +
+                  CONSTANTS.CORE_API_ROUTE_HAZARD_NZCODE +
+                  nzCodeQueryString,
+                {
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
+                  signal: signal,
+                }
+              );
+            })
             .then(handleErrors)
             .then(async (response) => {
-              const responseData = await response.json();
-              setHazardData(responseData);
-              setDownloadToken(responseData["download_token"]);
+              const nzCodeData = await response.json();
+              setNZCodeData(nzCodeData["im_values"]);
               setShowSpinnerHazard(false);
               setShowPlotHazard(true);
             })
             .catch((error) => {
+              console.log(error);
               if (error.name !== "AbortError") {
                 setShowSpinnerHazard(false);
                 setShowErrorMessage({ isError: true, errorCode: error });
@@ -136,7 +176,11 @@ const HazardViewerHazardCurve = () => {
             hazardData !== null &&
             showErrorMessage.isError === false && (
               <Fragment>
-                <HazardBranchPlot hazardData={hazardData} im={selectedIM} />
+                <HazardBranchPlot
+                  hazardData={hazardData}
+                  im={selectedIM}
+                  nzCodeData={NZCodeData}
+                />
                 <HazardCurveMetadata
                   selectedEnsemble={selectedEnsemble}
                   station={station}
@@ -171,7 +215,11 @@ const HazardViewerHazardCurve = () => {
             hazardData !== null &&
             showErrorMessage.isError === false && (
               <Fragment>
-                <HazardEnsemblePlot hazardData={hazardData} im={selectedIM} />
+                <HazardEnsemblePlot
+                  hazardData={hazardData}
+                  im={selectedIM}
+                  nzCodeData={NZCodeData}
+                />
                 <HazardCurveMetadata
                   selectedEnsemble={selectedEnsemble}
                   station={station}
