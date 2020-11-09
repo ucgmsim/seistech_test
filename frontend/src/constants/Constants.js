@@ -12,6 +12,7 @@ export const CORE_API_ROUTE_LOCATION = "location";
 export const CORE_API_ROUTE_STATION = "station";
 export const CORE_API_ROUTE_HAZARD_PLOT = "hazard";
 export const CORE_API_ROUTE_HAZARD_NZCODE = "hazard/nz11750";
+export const CORE_API_ROUTE_HAZARD_NZCODE_SOIL_CLASS = "hazard/nz11750/soil_class"
 export const CORE_API_ROUTE_HAZARD_NZCODE_DEFAULT_PARAMS =
   "hazard/nz11750/default";
 export const CORE_API_ROUTE_DISAGG = "disagg";

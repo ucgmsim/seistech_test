@@ -74,6 +74,20 @@ def get_nzcode():
     )
 
 
+@app.route("/hazard/nz11750/soil_class", methods=["GET"])
+@requires_auth
+def get_nzcode_soil_class():
+    if requires_permission("hazard:hazard"):
+        return proxy_to_core_api(flask.request, "api/hazard/nz11750/soil_class", "GET")
+    raise AuthError(
+        {
+            "code": "Unauthorized",
+            "description": "You don't have access to this resource",
+        },
+        403,
+    )
+
+
 @app.route("/hazard/nz11750/default", methods=["GET"])
 @requires_auth
 def get_nzcode_default_params():
