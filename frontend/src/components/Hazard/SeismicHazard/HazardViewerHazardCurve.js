@@ -183,7 +183,6 @@ const HazardViewerHazardCurve = () => {
                 />
                 <HazardCurveMetadata
                   selectedEnsemble={selectedEnsemble}
-                  station={station}
                   selectedIM={selectedIM}
                   vs30={vs30}
                 />
@@ -222,7 +221,6 @@ const HazardViewerHazardCurve = () => {
                 />
                 <HazardCurveMetadata
                   selectedEnsemble={selectedEnsemble}
-                  station={station}
                   selectedIM={selectedIM}
                   vs30={vs30}
                 />
