@@ -36,6 +36,8 @@ const HazardViewerHazardCurve = () => {
   });
 
   const [hazardData, setHazardData] = useState(null);
+  // NZ Code is now splitted
+  const [nzcodeData, setNZCodeData] = useState(null);
 
   const [downloadToken, setDownloadToken] = useState("");
 
