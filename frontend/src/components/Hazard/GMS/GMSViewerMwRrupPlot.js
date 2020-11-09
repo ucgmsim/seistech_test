@@ -6,7 +6,7 @@ import ErrorMessage from "components/common/ErrorMessage";
 
 import "assets/style/GMSPlot.css";
 
-const ThirdPlot = ({ gmsData, causalParamBounds }) => {
+const GMSViewerMwRrupPlot = ({ gmsData, causalParamBounds }) => {
   const validateBounds = () => {
     let isValidated = false;
     Object.values(causalParamBounds).forEach(
@@ -124,4 +124,4 @@ const ThirdPlot = ({ gmsData, causalParamBounds }) => {
   return <ErrorMessage />;
 };
 
-export default ThirdPlot;
+export default GMSViewerMwRrupPlot;

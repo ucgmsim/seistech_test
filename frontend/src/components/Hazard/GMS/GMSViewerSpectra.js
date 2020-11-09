@@ -6,7 +6,7 @@ import ErrorMessage from "components/common/ErrorMessage";
 
 import "assets/style/GMSPlot.css";
 
-const SecondPlot = ({ gmsData, periods }) => {
+const GMSViewerSpectra = ({ gmsData, periods }) => {
   if (gmsData !== null && !gmsData.hasOwnProperty("error") && periods !== []) {
     const cdfX = gmsData["gcim_cdf_x"];
     const cdfY = gmsData["gcim_cdf_y"];
@@ -155,4 +155,4 @@ const SecondPlot = ({ gmsData, periods }) => {
   return <ErrorMessage />;
 };
 
-export default SecondPlot;
+export default GMSViewerSpectra;

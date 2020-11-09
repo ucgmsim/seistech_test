@@ -7,8 +7,8 @@ import * as CONSTANTS from "constants/Constants";
 import { useAuth0 } from "components/common/ReactAuth0SPA";
 
 import GMSViewerIMDistributions from "./GMSViewerIMDistributions";
-import SecondPlot from "./SecondPlot";
-import ThirdPlot from "./ThirdPlot";
+import GMSViewerSpectra from "./GMSViewerSpectra";
+import GMSViewerMwRrupPlot from "./GMSViewerMwRrupPlot";
 import GMSViewerCausalParameters from "./GMSViewerCausalParameters";
 import LoadingSpinner from "components/common/LoadingSpinner";
 import DownloadButton from "components/common/DownloadButton";
@@ -189,10 +189,14 @@ const GMSViewer = () => {
       value: IM,
       label: IM,
     }));
+    localIMs.splice(0, 0, {
+      value: "spectra",
+      label: "Pseudo acceleration response spectra",
+    });
     setLocalIMVectors(localIMs);
 
     // Set the first IM as a default IM for plot
-    setSpecifiedIM(localIMs[0]);
+    setSpecifiedIM(localIMs[1]);
 
     // Create an object key = IM, value = Period
     let localPeriods = {};
@@ -211,9 +215,13 @@ const GMSViewer = () => {
           label: metadata,
         })
       );
+      localMetadatas.splice(0, 0, {
+        value: "mwrrupplot",
+        label: "Magnitue and Rrup plot",
+      });
 
       // Set the first Metadata as a default metadata for plot
-      setSpecifiedMetadata(localMetadatas[0]);
+      setSpecifiedMetadata(localMetadatas[1]);
 
       setLocalMetadatas(localMetadatas);
     }
@@ -267,67 +275,14 @@ const GMSViewer = () => {
                       options={localIMVectors}
                       isSearchable={false}
                     />
-                    <GMSViewerIMDistributions
-                      gmsData={computedGMS}
-                      IM={specifiedIM.value}
-                    />
-                  </Fragment>
-                )}
-              </Fragment>
-            )}
-        </Tab>
-        <Tab eventKey="secondPlot" title="Pseudo acceleration response spectra">
-          {GMSComputeClick === null && (
-            <GuideMessage
-              header={CONSTANTS.GMS}
-              body={CONSTANTS.GMS_VIEWER_GUIDE_MSG}
-              instruction={CONSTANTS.GMS_VIEWER_GUIDE_INSTRUCTION}
-            />
-          )}
-          {isLoading === true && showErrorMessage.isError === false && (
-            <LoadingSpinner />
-          )}
-          {isLoading === false && showErrorMessage.isError === true && (
-            <ErrorMessage errorCode={showErrorMessage.errorCode} />
-          )}
-          {isLoading === false &&
-            computedGMS !== null &&
-            showErrorMessage.isError === false && (
-              <Fragment>
-                {validateComputedGMS() === false ? (
-                  <ErrorMessage />
-                ) : (
-                  <SecondPlot gmsData={computedGMS} periods={periods} />
-                )}
-              </Fragment>
-            )}
-        </Tab>
-        <Tab eventKey="thirdPlot" title="Third Plot">
-          {GMSComputeClick === null && (
-            <GuideMessage
-              header={CONSTANTS.GMS}
-              body={CONSTANTS.GMS_VIEWER_GUIDE_MSG}
-              instruction={CONSTANTS.GMS_VIEWER_GUIDE_INSTRUCTION}
-            />
-          )}
-          {isLoading === true && showErrorMessage.isError === false && (
-            <LoadingSpinner />
-          )}
-          {isLoading === false && showErrorMessage.isError === true && (
-            <ErrorMessage errorCode={showErrorMessage.errorCode} />
-          )}
-          {isLoading === false &&
-            computedGMS !== null &&
-            showErrorMessage.isError === false && (
-              <Fragment>
-                {validateComputedGMS() === false ? (
-                  <ErrorMessage />
-                ) : (
-                  <Fragment>
-                    <ThirdPlot
-                      gmsData={computedGMS}
-                      causalParamBounds={causalParamBounds}
-                    />
+                    {specifiedIM.value === "spectra" ? (
+                      <GMSViewerSpectra gmsData={computedGMS} periods={periods} />
+                    ) : (
+                      <GMSViewerIMDistributions
+                        gmsData={computedGMS}
+                        IM={specifiedIM.value}
+                      />
+                    )}
                   </Fragment>
                 )}
               </Fragment>
@@ -362,12 +317,18 @@ const GMSViewer = () => {
                       options={localMetadatas}
                       isSearchable={false}
                     />
-
-                    <GMSViewerCausalParameters
-                      gmsData={computedGMS}
-                      metadata={specifiedMetadata.value}
-                      causalParamBounds={causalParamBounds}
-                    />
+                    {specifiedMetadata.value === "mwrrupplot" ? (
+                      <GMSViewerMwRrupPlot
+                        gmsData={computedGMS}
+                        causalParamBounds={causalParamBounds}
+                      />
+                    ) : (
+                      <GMSViewerCausalParameters
+                        gmsData={computedGMS}
+                        metadata={specifiedMetadata.value}
+                        causalParamBounds={causalParamBounds}
+                      />
+                    )}
                   </Fragment>
                 )}
               </Fragment>
