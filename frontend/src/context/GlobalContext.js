@@ -55,6 +55,8 @@ export const Provider = (props) => {
 
   const [uhsComputeClick, setUHSComputeClick] = useState(null);
 
+  const [nzCodeDefaultParams, setNzCodeDefaultParams] = useState(null);
+
   /*
     TODO - Future usage
   */
@@ -220,6 +222,8 @@ export const Provider = (props) => {
     setDisaggComputeClick,
     uhsComputeClick,
     setUHSComputeClick,
+    nzCodeDefaultParams,
+    setNzCodeDefaultParams,
 
     nzs1170ComputeClick,
     setNZS1170ComputeClick,
