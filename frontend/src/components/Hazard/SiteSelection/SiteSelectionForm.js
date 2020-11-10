@@ -41,6 +41,7 @@ const SiteSelectionForm = () => {
     setDisaggComputeClick,
     setUHSComputeClick,
     setUHSRateTable,
+    setNzCodeDefaultParams,
   } = useContext(GlobalContext);
 
   useEffect(() => {
@@ -132,6 +133,26 @@ const SiteSelectionForm = () => {
               setStation(responseData.station);
               setVS30(responseData.vs30);
               setDefaultVS30(responseData.vs30);
+
+              let nzCodeDefaultQueryString = `?ensemble_id=${selectedEnsemble}&station=${responseData.station}`;
+
+              return fetch(
+                CONSTANTS.CORE_API_BASE_URL +
+                  CONSTANTS.CORE_API_ROUTE_HAZARD_NZCODE_DEFAULT_PARAMS +
+                  nzCodeDefaultQueryString,
+                {
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
+                  signal: signal,
+                }
+              );
+            })
+            .then(handleErrors)
+            .then(async (response) => {
+              const nzCodeDefaultParams = await response.json();
+              console.log(nzCodeDefaultParams);
+              setNzCodeDefaultParams(nzCodeDefaultParams);
               setLocationSetButton({
                 text: "Set",
                 isFetching: false,
