@@ -88,7 +88,7 @@ const HazardViewerHazardCurve = () => {
               setDownloadToken(hazardData["download_token"]);
 
               let nzCodeQueryString = `?ensemble_id=${selectedEnsemble}&station=${station}&im=${selectedIM}&soil_class=${
-                selectedSoilClass[0]["value"]
+                selectedSoilClass["value"]
               }&distance=${Number(
                 nzCodeDefaultParams["distance"]
               )}&z_factor=${Number(nzCodeDefaultParams["z_factor"])}`;

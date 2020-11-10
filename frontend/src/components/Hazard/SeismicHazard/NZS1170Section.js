@@ -44,6 +44,8 @@ const NZS1170Section = () => {
   // For options
   const [localSoilClasses, setLocalSoilClasses] = useState([]);
 
+  const [localSelectedSoilClass, setLocalSelectedSoilClass] = useState({});
+
   useEffect(() => {
     const tempArr = [];
 
@@ -63,15 +65,19 @@ const NZS1170Section = () => {
         return obj.value === nzCodeDefaultParams["soil_class"];
       });
 
-      setSelectedSoilClass(defaultSoilClass);
+      setSelectedSoilClass(defaultSoilClass[0]);
+      setLocalSelectedSoilClass(defaultSoilClass[0]);
 
-      setLocalZFactor(nzCodeDefaultParams["z_factor"]);
+      // setLocalZFactor(nzCodeDefaultParams["z_factor"]);
     }
   }, [nzCodeDefaultParams]);
 
+  const updateSoilClass = () => {
+    setSelectedSoilClass(localSelectedSoilClass);
+  };
   useEffect(() => {
-    console.log(selectedSoilClass)
-  }, [selectedSoilClass])
+    console.log(selectedSoilClass);
+  }, [selectedSoilClass]);
 
   return (
     <div>
@@ -116,8 +122,9 @@ const NZS1170Section = () => {
           <Select
             id="soil-class"
             className="flex-grow-1"
-            value={selectedSoilClass}
-            onChange={setSelectedSoilClass}
+            value={localSelectedSoilClass}
+            onChange={setLocalSelectedSoilClass}
+            onBlur={() => updateSoilClass()}
             options={localSoilClasses}
             isDisabled={localSoilClasses.length === 0}
           />
