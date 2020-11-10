@@ -18,6 +18,8 @@ const NZS1170Section = () => {
     setNZS1170SiteClass,
     soilClass,
     nzCodeDefaultParams,
+    selectedSoilClass,
+    setSelectedSoilClass,
   } = useContext(GlobalContext);
   // TODO - See whether this can be an another one-liner as we are not dealing with this at this point
   const onChangeComputeNZS1170 = (e) => {
@@ -41,9 +43,6 @@ const NZS1170Section = () => {
 
   // For options
   const [localSoilClasses, setLocalSoilClasses] = useState([]);
-
-  // For a selected soil class
-  const [selectedSoilClass, setSelectedSoilClass] = useState({});
 
   useEffect(() => {
     const tempArr = [];
@@ -69,6 +68,10 @@ const NZS1170Section = () => {
       setLocalZFactor(nzCodeDefaultParams["z_factor"]);
     }
   }, [nzCodeDefaultParams]);
+
+  useEffect(() => {
+    console.log(selectedSoilClass)
+  }, [selectedSoilClass])
 
   return (
     <div>

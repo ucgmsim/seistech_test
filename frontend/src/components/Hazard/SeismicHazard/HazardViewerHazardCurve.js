@@ -26,6 +26,8 @@ const HazardViewerHazardCurve = () => {
     selectedIM,
     selectedEnsemble,
     station,
+    nzCodeDefaultParams,
+    selectedSoilClass,
   } = useContext(GlobalContext);
 
   const [showSpinnerHazard, setShowSpinnerHazard] = useState(false);
@@ -68,44 +70,28 @@ const HazardViewerHazardCurve = () => {
             hazardDataQueryString += `&vs30=${vs30}`;
           }
 
-          let nzCodeDefaultQueryString = `?ensemble_id=${selectedEnsemble}&station=${station}`;
-
-          await Promise.all([
-            fetch(
-              CONSTANTS.CORE_API_BASE_URL +
-                CONSTANTS.CORE_API_ROUTE_HAZARD_PLOT +
-                hazardDataQueryString,
-              {
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
-                signal: signal,
-              }
-            ),
-            fetch(
-              CONSTANTS.CORE_API_BASE_URL +
-                CONSTANTS.CORE_API_ROUTE_HAZARD_NZCODE_DEFAULT_PARAMS +
-                nzCodeDefaultQueryString,
-              {
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
-                signal: signal,
-              }
-            ),
-          ])
+          fetch(
+            CONSTANTS.CORE_API_BASE_URL +
+              CONSTANTS.CORE_API_ROUTE_HAZARD_PLOT +
+              hazardDataQueryString,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+              signal: signal,
+            }
+          )
             .then(handleErrors)
-            .then(async ([hazardResponse, nzCodeDefaultParams]) => {
+            .then(async (hazardResponse) => {
               const hazardData = await hazardResponse.json();
-              const nzCodeDefaultData = await nzCodeDefaultParams.json();
               setHazardData(hazardData);
               setDownloadToken(hazardData["download_token"]);
 
               let nzCodeQueryString = `?ensemble_id=${selectedEnsemble}&station=${station}&im=${selectedIM}&soil_class=${
-                nzCodeDefaultData["soil_class"]
+                selectedSoilClass[0]["value"]
               }&distance=${Number(
-                nzCodeDefaultData["distance"]
-              )}&z_factor=${Number(nzCodeDefaultData["z_factor"])}`;
+                nzCodeDefaultParams["distance"]
+              )}&z_factor=${Number(nzCodeDefaultParams["z_factor"])}`;
 
               return fetch(
                 CONSTANTS.CORE_API_BASE_URL +

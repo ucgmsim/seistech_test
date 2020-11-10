@@ -57,6 +57,11 @@ export const Provider = (props) => {
 
   const [nzCodeDefaultParams, setNzCodeDefaultParams] = useState(null);
 
+  const [soilClass, setSoilClass] = useState([]);
+
+  // For a selected soil class
+  const [selectedSoilClass, setSelectedSoilClass] = useState({});
+
   /*
     TODO - Future usage
   */
@@ -224,6 +229,10 @@ export const Provider = (props) => {
     setUHSComputeClick,
     nzCodeDefaultParams,
     setNzCodeDefaultParams,
+    soilClass,
+    setSoilClass,
+    selectedSoilClass,
+    setSelectedSoilClass,
 
     nzs1170ComputeClick,
     setNZS1170ComputeClick,
