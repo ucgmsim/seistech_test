@@ -55,7 +55,7 @@ export const Provider = (props) => {
 
   const [uhsComputeClick, setUHSComputeClick] = useState(null);
 
-  const [nzCodeDefaultParams, setNzCodeDefaultParams] = useState(null);
+  const [nzCodeDefaultParams, setNzCodeDefaultParams] = useState([]);
 
   const [soilClass, setSoilClass] = useState([]);
 
