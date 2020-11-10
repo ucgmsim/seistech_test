@@ -28,6 +28,7 @@ const SiteSelectionForm = () => {
   const {
     setLocationSetClick,
     setIMs,
+    setSoilClass,
     setVS30,
     setDefaultVS30,
     setStation,
@@ -181,32 +182,47 @@ const SiteSelectionForm = () => {
   }, [localSetClick]);
 
   /*
-    Getting IMs
+    Getting IMs for Seismic Hazard and Soil Class
   */
   useEffect(() => {
     const abortController = new AbortController();
     const signal = abortController.signal;
 
-    const getIM = async () => {
+    const getIMandSoilClass = async () => {
       try {
         const token = await getTokenSilently();
 
-        await fetch(
-          CONSTANTS.CORE_API_BASE_URL +
-            CONSTANTS.CORE_API_ROUTE_IMIDS +
-            "?ensemble_id=" +
-            selectedEnsemble,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-            signal: signal,
-          }
-        )
+        await Promise.all([
+          fetch(
+            CONSTANTS.CORE_API_BASE_URL +
+              CONSTANTS.CORE_API_ROUTE_IMIDS +
+              "?ensemble_id=" +
+              selectedEnsemble,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+              signal: signal,
+            }
+          ),
+          fetch(
+            CONSTANTS.CORE_API_BASE_URL +
+              CONSTANTS.CORE_API_ROUTE_HAZARD_NZCODE_SOIL_CLASS,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+              signal: signal,
+            }
+          ),
+        ])
           .then(handleErrors)
-          .then(async (response) => {
-            const responseData = await response.json();
-            setIMs(responseData["ims"]);
+          .then(async ([responseIM, responseSoilClass]) => {
+            const IMData = await responseIM.json();
+            const soilClass = await responseSoilClass.json();
+
+            setIMs(IMData["ims"]);
+            setSoilClass(soilClass["soil_class"]);
           })
           .catch((error) => {
             console.log(error);
@@ -215,7 +231,7 @@ const SiteSelectionForm = () => {
         console.log(error);
       }
     };
-    getIM();
+    getIMandSoilClass();
 
     return () => {
       abortController.abort();

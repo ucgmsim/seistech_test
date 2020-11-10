@@ -1,6 +1,7 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { GlobalContext } from "context";
 import TextField from "@material-ui/core/TextField";
+import Select from "react-select";
 
 import "assets/style/NZS1170Section.css";
 
@@ -15,6 +16,8 @@ const NZS1170Section = () => {
     setNZS1170Input,
     nzs1170SiteClass,
     setNZS1170SiteClass,
+    soilClass,
+    nzCodeDefaultParams,
   } = useContext(GlobalContext);
   // TODO - See whether this can be an another one-liner as we are not dealing with this at this point
   const onChangeComputeNZS1170 = (e) => {
@@ -35,6 +38,37 @@ const NZS1170Section = () => {
   };
   // Z-factor
   const [localZFactor, setLocalZFactor] = useState(0);
+
+  // For options
+  const [localSoilClasses, setLocalSoilClasses] = useState([]);
+
+  // For a selected soil class
+  const [selectedSoilClass, setSelectedSoilClass] = useState({});
+
+  useEffect(() => {
+    const tempArr = [];
+
+    for (const [key, value] of Object.entries(soilClass)) {
+      tempArr.push({
+        value: key,
+        label: `${key} - ${value.replaceAll("_", " ")}`,
+      });
+    }
+    setLocalSoilClasses(tempArr);
+  }, [soilClass]);
+
+  useEffect(() => {
+    // Creating a default value for react-select
+    if (nzCodeDefaultParams !== null) {
+      let defaultSoilClass = localSoilClasses.filter((obj) => {
+        return obj.value === nzCodeDefaultParams["soil_class"];
+      });
+
+      setSelectedSoilClass(defaultSoilClass);
+
+      setLocalZFactor(nzCodeDefaultParams["z_factor"]);
+    }
+  }, [nzCodeDefaultParams]);
 
   return (
     <div>
@@ -63,6 +97,26 @@ const NZS1170Section = () => {
             value={localZFactor}
             onChange={(e) => setLocalZFactor(e.target.value)}
             variant="outlined"
+          />
+        </div>
+      </div>
+
+      <div className="form-group">
+        <div className="d-flex align-items-center">
+          <label
+            id="label-soil-class"
+            htmlFor="soil-class"
+            className="control-label"
+          >
+            Soil Class
+          </label>
+          <Select
+            id="soil-class"
+            className="flex-grow-1"
+            value={selectedSoilClass}
+            onChange={setSelectedSoilClass}
+            options={localSoilClasses}
+            isDisabled={localSoilClasses.length === 0}
           />
         </div>
       </div>
