@@ -40,5 +40,6 @@ script:
 after_success:
   - python scripts/ec2_send_cmd.py "$EC2USER" "$EC2PASSWD" "cd /home/ec2-user/seistech/docker/master_test;docker-compose down"
 after_script:
+  - python scripts/ec2_send_cmd.py "$EC2USER" "$EC2PASSWD" "docker container prune -f"
   - ls *.zip
   - rm *.zip
