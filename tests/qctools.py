@@ -39,6 +39,7 @@ def clear_input_field(driver,target_by,target_keyword):
  
     while this_field().get_attribute('value')!='':
         this_field().send_keys(Keys.BACKSPACE)
+    this_field().send_keys(Keys.BACKSPACE)
 
 def check_error_display(driver):
     assert len(driver.find_elements(By.CSS_SELECTOR, ".text-white > .card-header")) == 0
