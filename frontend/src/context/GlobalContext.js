@@ -59,6 +59,8 @@ export const Provider = (props) => {
 
   const [soilClass, setSoilClass] = useState([]);
 
+  const [showNZCodePlots, setShowNZCodePlots] = useState(true);
+
   // For a selected soil class
   const [selectedSoilClass, setSelectedSoilClass] = useState({});
   // For a selected Z Factor
@@ -67,13 +69,8 @@ export const Provider = (props) => {
   /*
     TODO - Future usage
   */
-  const [nzs1170ComputeClick, setNZS1170ComputeClick] = useState("false");
-  const [showNZS1170, setShowNZS1170] = useState("false");
 
   const [uhsRateTable, setUHSRateTable] = useState([]);
-
-  const [nzs1170Input, setNZS1170Input] = useState();
-  const [nzs1170SiteClass, setNZS1170SiteClass] = useState("A");
 
   /*
     GMS
@@ -237,21 +234,13 @@ export const Provider = (props) => {
     setSelectedSoilClass,
     selectedZFactor,
     setSelectedZFactor,
-
-    nzs1170ComputeClick,
-    setNZS1170ComputeClick,
-    showNZS1170,
-    setShowNZS1170,
+    showNZCodePlots,
+    setShowNZCodePlots,
 
     uhsRateTable,
     setUHSRateTable,
     uhsTableAddRow,
     uhsTableDeleteRow,
-
-    nzs1170Input,
-    setNZS1170Input,
-    nzs1170SiteClass,
-    setNZS1170SiteClass,
 
     /*
       GMS
