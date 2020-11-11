@@ -174,6 +174,8 @@ const HazardViewerHazardCurve = () => {
                   selectedEnsemble={selectedEnsemble}
                   selectedIM={selectedIM}
                   vs30={vs30}
+                  zFactor={selectedZFactor}
+                  soilClass={selectedSoilClass}
                 />
               </Fragment>
             )}
@@ -213,6 +215,8 @@ const HazardViewerHazardCurve = () => {
                   selectedEnsemble={selectedEnsemble}
                   selectedIM={selectedIM}
                   vs30={vs30}
+                  zFactor={selectedZFactor}
+                  soilClass={selectedSoilClass}
                 />
               </Fragment>
             )}
