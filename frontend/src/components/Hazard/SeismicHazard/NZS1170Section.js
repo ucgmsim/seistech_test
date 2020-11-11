@@ -7,15 +7,8 @@ import "assets/style/NZS1170Section.css";
 
 const NZS1170Section = () => {
   const {
-    nzs1170ComputeClick,
-    setNZS1170ComputeClick,
-    showNZS1170,
-    setShowNZS1170,
-
-    nzs1170Input,
-    setNZS1170Input,
-    nzs1170SiteClass,
-    setNZS1170SiteClass,
+    showNZCodePlots,
+    setShowNZCodePlots,
     soilClass,
     nzCodeDefaultParams,
     selectedSoilClass,
@@ -23,23 +16,7 @@ const NZS1170Section = () => {
     selectedZFactor,
     setSelectedZFactor,
   } = useContext(GlobalContext);
-  // TODO - See whether this can be an another one-liner as we are not dealing with this at this point
-  const onChangeComputeNZS1170 = (e) => {
-    setNZS1170ComputeClick(nzs1170ComputeClick === "true" ? "false" : "true");
-  };
 
-  const onChangeShowNZS1170 = (e) => {
-    setShowNZS1170(showNZS1170 === "true" ? "false" : "true");
-  };
-
-  // TODO - See whether this can be an another one-liner as we are not dealing with this at this point
-  const onChangeNZS1170Input = (e) => {
-    setNZS1170Input(e.target.value);
-  };
-
-  const onChangeNZS1170SiteClass = (e) => {
-    setNZS1170SiteClass(e.target.value);
-  };
   // Z-factor
   const [localZFactor, setLocalZFactor] = useState(-1);
   const [defaultZFactor, setDefaultZFactor] = useState(-1);
@@ -103,7 +80,13 @@ const NZS1170Section = () => {
         </div>
 
         <div className="form-group">
-          <input type="checkbox" onChange={onChangeShowNZS1170} disabled />
+          <input
+            type="checkbox"
+            checked={showNZCodePlots}
+            onChange={() => {
+              setShowNZCodePlots(!showNZCodePlots);
+            }}
+          />
           <span className="show-nzs">&nbsp;Show NZS1170.5 hazard</span>
         </div>
 

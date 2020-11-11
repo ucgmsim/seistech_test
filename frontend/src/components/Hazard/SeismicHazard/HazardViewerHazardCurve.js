@@ -29,6 +29,7 @@ const HazardViewerHazardCurve = () => {
     nzCodeDefaultParams,
     selectedSoilClass,
     selectedZFactor,
+    showNZCodePlots,
   } = useContext(GlobalContext);
 
   const [showSpinnerHazard, setShowSpinnerHazard] = useState(false);
@@ -167,6 +168,7 @@ const HazardViewerHazardCurve = () => {
                   hazardData={hazardData}
                   im={selectedIM}
                   nzCodeData={NZCodeData}
+                  showNzCode={showNZCodePlots}
                 />
                 <HazardCurveMetadata
                   selectedEnsemble={selectedEnsemble}
@@ -205,6 +207,7 @@ const HazardViewerHazardCurve = () => {
                   hazardData={hazardData}
                   im={selectedIM}
                   nzCodeData={NZCodeData}
+                  showNzCode={showNZCodePlots}
                 />
                 <HazardCurveMetadata
                   selectedEnsemble={selectedEnsemble}
