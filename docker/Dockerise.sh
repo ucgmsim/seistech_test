@@ -11,11 +11,11 @@ echo "Removing docker images first"
 docker rmi frontend:${deployment_name} middleware:${deployment_name}
 
 # Switch to target branch in case we're not in the right branch
-echo `Changing to ${target_branch} branch`
+echo "Changing to ${target_branch} branch"
 git checkout ${target_branch}
 
 # To pull latest version
-echo `Pulling latest info from ${target_branch} branch`
+echo "Pulling latest info from ${target_branch} branch"
 git pull
 
 # Set the Time
