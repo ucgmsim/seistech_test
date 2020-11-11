@@ -36,11 +36,3 @@ docker images | grep none | awk '{ print $3; }' | xargs docker rmi
 # Up the docker-compose in background
 echo "docker-compose up"
 docker-compose up -d
-
-# Remove build cache
-echo "Remove build cache"
-docker builder prune -f
-
-# Remove all stopped containers
-echo "Remove all stopped containers"
-docker container prune -f
