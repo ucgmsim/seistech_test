@@ -28,6 +28,7 @@ const HazardViewerHazardCurve = () => {
     station,
     nzCodeDefaultParams,
     selectedSoilClass,
+    selectedZFactor,
   } = useContext(GlobalContext);
 
   const [showSpinnerHazard, setShowSpinnerHazard] = useState(false);
@@ -91,7 +92,7 @@ const HazardViewerHazardCurve = () => {
                 selectedSoilClass["value"]
               }&distance=${Number(
                 nzCodeDefaultParams["distance"]
-              )}&z_factor=${Number(nzCodeDefaultParams["z_factor"])}`;
+              )}&z_factor=${selectedZFactor}`;
 
               return fetch(
                 CONSTANTS.CORE_API_BASE_URL +

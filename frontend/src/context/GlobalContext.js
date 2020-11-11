@@ -61,6 +61,8 @@ export const Provider = (props) => {
 
   // For a selected soil class
   const [selectedSoilClass, setSelectedSoilClass] = useState({});
+  // For a selected Z Factor
+  const [selectedZFactor, setSelectedZFactor] = useState(-1);
 
   /*
     TODO - Future usage
@@ -233,6 +235,8 @@ export const Provider = (props) => {
     setSoilClass,
     selectedSoilClass,
     setSelectedSoilClass,
+    selectedZFactor,
+    setSelectedZFactor,
 
     nzs1170ComputeClick,
     setNZS1170ComputeClick,
