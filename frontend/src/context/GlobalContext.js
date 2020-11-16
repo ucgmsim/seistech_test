@@ -66,8 +66,12 @@ export const Provider = (props) => {
 
   // For a selected soil class
   const [selectedSoilClass, setSelectedSoilClass] = useState({});
+  // For a computed soil class, to validate compute button
+  const [computedSoilClass, setComputedSoilClass] = useState({});
   // For a selected Z Factor
   const [selectedZFactor, setSelectedZFactor] = useState(-1);
+  // For a computed Z Factor, to validate compute button
+  const [computedZFactor, setComputedZFactor] = useState(0);
 
   // To update Metadata after we recompute nzcode
   const [isNZCodeComputed, setIsNZCodeComputed] = useState(false);
@@ -238,8 +242,12 @@ export const Provider = (props) => {
     setSoilClass,
     selectedSoilClass,
     setSelectedSoilClass,
+    computedSoilClass,
+    setComputedSoilClass,
     selectedZFactor,
     setSelectedZFactor,
+    computedZFactor,
+    setComputedZFactor,
     showNZCodePlots,
     setShowNZCodePlots,
     NZCodeData,

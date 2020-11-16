@@ -27,6 +27,11 @@ const NZS1170Section = () => {
     selectedZFactor,
     setSelectedZFactor,
     setIsNZCodeComputed,
+    computedSoilClass,
+    setComputedSoilClass,
+    computedZFactor,
+    setComputedZFactor,
+    hazardCurveComputeClick,
   } = useContext(GlobalContext);
 
   const [computeButton, setComputeButton] = useState({
@@ -114,6 +119,9 @@ const NZS1170Section = () => {
       text: <FontAwesomeIcon icon="spinner" spin />,
       isFetching: true,
     });
+    // To be used to compare with local Z Factor and Soil class to validate Compute Button.
+    setComputedZFactor(selectedZFactor);
+    setComputedSoilClass(selectedSoilClass);
 
     let nzCodeQueryString = `?ensemble_id=${selectedEnsemble}&station=${station}&im=${selectedIM}&soil_class=${
       selectedSoilClass["value"]
@@ -157,8 +165,9 @@ const NZS1170Section = () => {
 
   const computeNZCodeValidate = () => {
     return (
-      selectedSoilClass !== defaultSoilClass ||
-      selectedZFactor !== defaultZFactor
+      (selectedSoilClass !== computedSoilClass ||
+        selectedZFactor !== computedZFactor) &&
+      hazardCurveComputeClick !== null
     );
   };
 

@@ -33,6 +33,8 @@ const HazardViewerHazardCurve = () => {
     NZCodeData,
     setNZCodeData,
     setIsNZCodeComputed,
+    setComputedSoilClass,
+    setComputedZFactor,
   } = useContext(GlobalContext);
 
   const [showSpinnerHazard, setShowSpinnerHazard] = useState(false);
@@ -66,6 +68,8 @@ const HazardViewerHazardCurve = () => {
           setShowSpinnerHazard(true);
           setShowErrorMessage({ isError: false, errorCode: null });
           setIsNZCodeComputed(false);
+          setComputedZFactor(selectedZFactor);
+          setComputedSoilClass(selectedSoilClass);
 
           const token = await getTokenSilently();
 
