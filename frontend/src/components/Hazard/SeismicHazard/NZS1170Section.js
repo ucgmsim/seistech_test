@@ -44,6 +44,11 @@ const NZS1170Section = () => {
 
   const [defaultSoilClass, setDefaultSoilClass] = useState({});
 
+  /*
+    After users set the location from the Site Selection tab,
+    App would get list of soil class options
+    Based on them, create an array to be used in react-select.
+  */
   useEffect(() => {
     const tempArr = [];
 
@@ -56,17 +61,32 @@ const NZS1170Section = () => {
     setLocalSoilClasses(tempArr);
   }, [soilClass]);
 
+  /*
+    When app managed to get a default params (Z Factor and Soil Class)
+    Convert them into a proper form to be used for react-select
+  */
   useEffect(() => {
-    // Creating a default value for react-select
+    // only if nzCodeDefaultParams is not an empty array, its default value is []
     if (nzCodeDefaultParams.length !== 0) {
+      /*
+        Out of options we have, find the array that matches with default Soil Class
+        E.g., if the default Soil Class is D - soft or deep soil,
+        defaultSoilClass will be an object that has a value of D
+      */
       let defaultSoilClass = localSoilClasses.filter((obj) => {
         return obj.value === nzCodeDefaultParams["soil_class"];
       });
 
+      // Set the default soil class to 1. Global, 2. Default, 3. Local - where gets displayed
       setSelectedSoilClass(defaultSoilClass[0]);
       setDefaultSoilClass(defaultSoilClass[0]);
       setLocalSelectedSoilClass(defaultSoilClass[0]);
 
+      /*
+        Based on feedback, Z Factor will never be a negative number, and using this magic number to set default value.
+        This was the only way I could find to avoid a warning about having uncrontrolled & controlled form at the same time.
+        (React doesn't recommend having a form with controlled and uncontrolled at the same time.)
+      */
       if (localZFactor === -1) {
         setLocalZFactor(Number(nzCodeDefaultParams["z_factor"]));
         setSelectedZFactor(Number(nzCodeDefaultParams["z_factor"]));

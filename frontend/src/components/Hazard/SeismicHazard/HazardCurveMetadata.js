@@ -10,6 +10,10 @@ const HazardCurveMetadata = ({ selectedEnsemble, selectedIM, vs30 }) => {
   const [localZFactor, setLocalZFactor] = useState(1);
   const [localSoilClass, setLocalSoilClass] = useState(1);
 
+  /* 
+    We only update Z Factor and Soil Class after user click Compute as then we get updated NZ Code based on those values.
+    Instead of updating everytime users change them
+  */
   useEffect(() => {
     if (isNZCodeComputed === true) {
       setLocalZFactor(selectedZFactor);
