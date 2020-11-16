@@ -133,10 +133,7 @@ const NZS1170Section = () => {
           <input
             type="checkbox"
             checked={showNZCodePlots}
-            onChange={() => {
-              setShowNZCodePlots(!showNZCodePlots);
-              console.log("THIS IS NZCODE DATA: ", NZCodeData);
-            }}
+            onChange={() => setShowNZCodePlots(!showNZCodePlots)}
           />
           <span className="show-nzs">&nbsp;Show NZS1170.5 hazard</span>
         </div>
