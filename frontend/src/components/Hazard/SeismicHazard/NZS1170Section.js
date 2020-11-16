@@ -8,6 +8,8 @@ import { useAuth0 } from "components/common/ReactAuth0SPA";
 import "assets/style/NZS1170Section.css";
 import { handleErrors } from "utils/Utils";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 const NZS1170Section = () => {
   const { getTokenSilently } = useAuth0();
 
@@ -15,7 +17,6 @@ const NZS1170Section = () => {
     selectedEnsemble,
     station,
     selectedIM,
-    NZCodeData,
     setNZCodeData,
     showNZCodePlots,
     setShowNZCodePlots,
@@ -27,6 +28,11 @@ const NZS1170Section = () => {
     setSelectedZFactor,
     setIsNZCodeComputed,
   } = useContext(GlobalContext);
+
+  const [computeButton, setComputeButton] = useState({
+    text: "Compute",
+    isFetching: false,
+  });
 
   // Z-factor
   const [localZFactor, setLocalZFactor] = useState(-1);
@@ -84,6 +90,10 @@ const NZS1170Section = () => {
     const signal = abortController.signal;
 
     const token = await getTokenSilently();
+    setComputeButton({
+      text: <FontAwesomeIcon icon="spinner" spin />,
+      isFetching: true,
+    });
 
     let nzCodeQueryString = `?ensemble_id=${selectedEnsemble}&station=${station}&im=${selectedIM}&soil_class=${
       selectedSoilClass["value"]
@@ -109,8 +119,18 @@ const NZS1170Section = () => {
         const nzCodeDataResponse = await response.json();
         setNZCodeData(nzCodeDataResponse["im_values"]);
         setIsNZCodeComputed(true);
+        setComputeButton({
+          text: "Compute",
+          isFetching: false,
+        });
       })
       .catch((error) => {
+        if (error.name !== "AbortError") {
+          setComputeButton({
+            text: "Compute",
+            isFetching: false,
+          });
+        }
         console.log(error);
       });
   };
@@ -226,7 +246,7 @@ const NZS1170Section = () => {
             disabled={!computeNZCodeValidate()}
             onClick={() => computeNZCode()}
           >
-            Compute
+            {computeButton.text}
           </button>
         </div>
       </form>
