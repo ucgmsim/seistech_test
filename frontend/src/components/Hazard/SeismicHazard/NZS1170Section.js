@@ -25,6 +25,7 @@ const NZS1170Section = () => {
     setSelectedSoilClass,
     selectedZFactor,
     setSelectedZFactor,
+    setIsNZCodeComputed,
   } = useContext(GlobalContext);
 
   // Z-factor
@@ -90,6 +91,8 @@ const NZS1170Section = () => {
       nzCodeDefaultParams["distance"]
     )}&z_factor=${selectedZFactor}`;
 
+    setIsNZCodeComputed(false);
+
     fetch(
       CONSTANTS.CORE_API_BASE_URL +
         CONSTANTS.CORE_API_ROUTE_HAZARD_NZCODE +
@@ -105,6 +108,7 @@ const NZS1170Section = () => {
       .then(async (response) => {
         const nzCodeDataResponse = await response.json();
         setNZCodeData(nzCodeDataResponse["im_values"]);
+        setIsNZCodeComputed(true);
       })
       .catch((error) => {
         console.log(error);

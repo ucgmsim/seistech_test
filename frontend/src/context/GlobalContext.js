@@ -69,6 +69,9 @@ export const Provider = (props) => {
   // For a selected Z Factor
   const [selectedZFactor, setSelectedZFactor] = useState(-1);
 
+  // To update Metadata after we recompute nzcode
+  const [isNZCodeComputed, setIsNZCodeComputed] = useState(false);
+
   /*
     TODO - Future usage
   */
@@ -241,6 +244,8 @@ export const Provider = (props) => {
     setShowNZCodePlots,
     NZCodeData,
     setNZCodeData,
+    isNZCodeComputed,
+    setIsNZCodeComputed,
 
     uhsRateTable,
     setUHSRateTable,

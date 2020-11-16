@@ -32,6 +32,7 @@ const HazardViewerHazardCurve = () => {
     showNZCodePlots,
     NZCodeData,
     setNZCodeData,
+    setIsNZCodeComputed,
   } = useContext(GlobalContext);
 
   const [showSpinnerHazard, setShowSpinnerHazard] = useState(false);
@@ -64,6 +65,7 @@ const HazardViewerHazardCurve = () => {
           setShowPlotHazard(false);
           setShowSpinnerHazard(true);
           setShowErrorMessage({ isError: false, errorCode: null });
+          setIsNZCodeComputed(false);
 
           const token = await getTokenSilently();
 
@@ -111,6 +113,7 @@ const HazardViewerHazardCurve = () => {
             .then(async (response) => {
               const nzCodeDataResponse = await response.json();
               setNZCodeData(nzCodeDataResponse["im_values"]);
+              setIsNZCodeComputed(true);
               setShowSpinnerHazard(false);
               setShowPlotHazard(true);
             })
@@ -172,8 +175,6 @@ const HazardViewerHazardCurve = () => {
                   selectedEnsemble={selectedEnsemble}
                   selectedIM={selectedIM}
                   vs30={vs30}
-                  zFactor={selectedZFactor}
-                  soilClass={selectedSoilClass}
                 />
               </Fragment>
             )}
@@ -213,8 +214,6 @@ const HazardViewerHazardCurve = () => {
                   selectedEnsemble={selectedEnsemble}
                   selectedIM={selectedIM}
                   vs30={vs30}
-                  zFactor={selectedZFactor}
-                  soilClass={selectedSoilClass}
                 />
               </Fragment>
             )}
