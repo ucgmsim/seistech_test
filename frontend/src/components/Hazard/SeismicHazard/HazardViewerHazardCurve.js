@@ -30,6 +30,8 @@ const HazardViewerHazardCurve = () => {
     selectedSoilClass,
     selectedZFactor,
     showNZCodePlots,
+    NZCodeData,
+    setNZCodeData,
   } = useContext(GlobalContext);
 
   const [showSpinnerHazard, setShowSpinnerHazard] = useState(false);
@@ -40,8 +42,6 @@ const HazardViewerHazardCurve = () => {
   });
 
   const [hazardData, setHazardData] = useState(null);
-  // NZ Code is now splitted
-  const [NZCodeData, setNZCodeData] = useState(null);
 
   const [downloadToken, setDownloadToken] = useState("");
 
@@ -109,18 +109,16 @@ const HazardViewerHazardCurve = () => {
             })
             .then(handleErrors)
             .then(async (response) => {
-              const nzCodeData = await response.json();
-              setNZCodeData(nzCodeData["im_values"]);
+              const nzCodeDataResponse = await response.json();
+              setNZCodeData(nzCodeDataResponse["im_values"]);
               setShowSpinnerHazard(false);
               setShowPlotHazard(true);
             })
             .catch((error) => {
-              console.log(error);
               if (error.name !== "AbortError") {
                 setShowSpinnerHazard(false);
                 setShowErrorMessage({ isError: true, errorCode: error });
               }
-
               console.log(error);
             });
         } catch (error) {

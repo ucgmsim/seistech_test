@@ -61,6 +61,9 @@ export const Provider = (props) => {
 
   const [showNZCodePlots, setShowNZCodePlots] = useState(true);
 
+  // NZ Code is now splitted
+  const [NZCodeData, setNZCodeData] = useState(null);
+
   // For a selected soil class
   const [selectedSoilClass, setSelectedSoilClass] = useState({});
   // For a selected Z Factor
@@ -236,6 +239,8 @@ export const Provider = (props) => {
     setSelectedZFactor,
     showNZCodePlots,
     setShowNZCodePlots,
+    NZCodeData,
+    setNZCodeData,
 
     uhsRateTable,
     setUHSRateTable,

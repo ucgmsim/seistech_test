@@ -2,11 +2,21 @@ import React, { useState, useEffect, useContext, Fragment } from "react";
 import { GlobalContext } from "context";
 import TextField from "@material-ui/core/TextField";
 import Select from "react-select";
+import * as CONSTANTS from "constants/Constants";
+import { useAuth0 } from "components/common/ReactAuth0SPA";
 
 import "assets/style/NZS1170Section.css";
+import { handleErrors } from "utils/Utils";
 
 const NZS1170Section = () => {
+  const { getTokenSilently } = useAuth0();
+
   const {
+    selectedEnsemble,
+    station,
+    selectedIM,
+    NZCodeData,
+    setNZCodeData,
     showNZCodePlots,
     setShowNZCodePlots,
     soilClass,
@@ -58,10 +68,6 @@ const NZS1170Section = () => {
     }
   }, [nzCodeDefaultParams]);
 
-  const updateSoilClass = () => {
-    setSelectedSoilClass(localSelectedSoilClass);
-  };
-
   const onClickDefaultZFactor = () => {
     setLocalZFactor(defaultZFactor);
     setSelectedZFactor(defaultZFactor);
@@ -70,6 +76,46 @@ const NZS1170Section = () => {
   const onClickDefaultSoilClass = () => {
     setLocalSelectedSoilClass(defaultSoilClass);
     setSelectedSoilClass(defaultSoilClass);
+  };
+
+  const computeNZCode = async () => {
+    const abortController = new AbortController();
+    const signal = abortController.signal;
+
+    const token = await getTokenSilently();
+
+    let nzCodeQueryString = `?ensemble_id=${selectedEnsemble}&station=${station}&im=${selectedIM}&soil_class=${
+      selectedSoilClass["value"]
+    }&distance=${Number(
+      nzCodeDefaultParams["distance"]
+    )}&z_factor=${selectedZFactor}`;
+
+    fetch(
+      CONSTANTS.CORE_API_BASE_URL +
+        CONSTANTS.CORE_API_ROUTE_HAZARD_NZCODE +
+        nzCodeQueryString,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        signal: signal,
+      }
+    )
+      .then(handleErrors)
+      .then(async (response) => {
+        const nzCodeDataResponse = await response.json();
+        setNZCodeData(nzCodeDataResponse["im_values"]);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const computeNZCodeValidate = () => {
+    return (
+      selectedSoilClass === defaultSoilClass ||
+      selectedZFactor === defaultZFactor
+    );
   };
 
   return (
@@ -85,6 +131,7 @@ const NZS1170Section = () => {
             checked={showNZCodePlots}
             onChange={() => {
               setShowNZCodePlots(!showNZCodePlots);
+              console.log("THIS IS NZCODE DATA: ", NZCodeData);
             }}
           />
           <span className="show-nzs">&nbsp;Show NZS1170.5 hazard</span>
@@ -167,6 +214,17 @@ const NZS1170Section = () => {
             onClick={() => onClickDefaultSoilClass()}
           >
             Use Default
+          </button>
+        </div>
+
+        <div className="form-row">
+          <button
+            id="compute-nz-code"
+            type="button"
+            className="btn btn-primary"
+            onClick={() => computeNZCode()}
+          >
+            Compute
           </button>
         </div>
       </form>
