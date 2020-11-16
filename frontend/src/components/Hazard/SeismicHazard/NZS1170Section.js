@@ -117,8 +117,8 @@ const NZS1170Section = () => {
 
   const computeNZCodeValidate = () => {
     return (
-      selectedSoilClass === defaultSoilClass ||
-      selectedZFactor === defaultZFactor
+      selectedSoilClass !== defaultSoilClass ||
+      selectedZFactor !== defaultZFactor
     );
   };
 
@@ -226,6 +226,7 @@ const NZS1170Section = () => {
             id="compute-nz-code"
             type="button"
             className="btn btn-primary"
+            disabled={!computeNZCodeValidate()}
             onClick={() => computeNZCode()}
           >
             Compute
