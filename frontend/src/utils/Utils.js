@@ -14,7 +14,7 @@ export const disableScrollOnNumInput = () => {
 };
 
 export const handleErrors = (response) => {
-  if (!response.ok) {
+  if (response.status !== 200) {
     /* 
       Debug purpose
       This can be replaced if we implement front-end logging just like we did on Core API (Saving logs in a file somehow)

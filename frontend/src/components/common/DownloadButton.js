@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { CORE_API_BASE_URL } from "constants/Constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { handleErrors } from "utils/Utils";
+import axios from "axios";
 
 const DownloadButton = ({ downloadURL, downloadToken, fileName, disabled }) => {
   const [downloadButtonLabel, setDownloadButtonLabel] = useState({
@@ -15,7 +16,11 @@ const DownloadButton = ({ downloadURL, downloadToken, fileName, disabled }) => {
       isFetching: true,
     });
 
-    fetch(CORE_API_BASE_URL + downloadURL + downloadToken)
+    axios({
+      url: CORE_API_BASE_URL + downloadURL + downloadToken,
+      method: "GET",
+      responseType: "blob",
+    })
       .then(handleErrors)
       .then((response) => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
