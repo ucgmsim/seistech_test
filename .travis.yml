@@ -38,7 +38,7 @@ script:
   - echo "Testing $DEPLOY_NAME"
   - pytest -s 
 after_success:
-  - python scripts/ec2_send_cmd.py "$EC2USER" "$EC2PASSWD" "cd /home/ec2-user/seistech/docker/master_test;docker-compose down"
+  - python scripts/ec2_send_cmd.py "$EC2USER" "$EC2PASSWD" "cd /home/ec2-user/seistech_psha_frontend/docker/master_test;docker-compose down"
 after_script:
   - python scripts/ec2_send_cmd.py "$EC2USER" "$EC2PASSWD" "docker container prune -f"
   - python scripts/ec2_send_cmd.py "$EC2USER" "$EC2PASSWD" "docker builder prune -f"
