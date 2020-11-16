@@ -152,7 +152,6 @@ const SiteSelectionForm = () => {
             .then(handleErrors)
             .then(async (response) => {
               const nzCodeDefaultParams = await response.json();
-              console.log(nzCodeDefaultParams);
               setNzCodeDefaultParams(nzCodeDefaultParams);
               setLocationSetButton({
                 text: "Set",
