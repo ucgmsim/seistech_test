@@ -134,7 +134,7 @@ const HazardViewerUhs = () => {
           showPlotUHS === true &&
           showErrorMessage.isError === false && (
             <Fragment>
-              <UHSPlot uhsData={uhsData} />
+              <UHSPlot uhsData={uhsData} station={station} />
             </Fragment>
           )}
       </div>

@@ -134,7 +134,11 @@ const HazardViewerHazardCurve = () => {
             hazardData !== null &&
             showErrorMessage.isError === false && (
               <Fragment>
-                <HazardBranchPlot hazardData={hazardData} im={selectedIM} />
+                <HazardBranchPlot
+                  hazardData={hazardData}
+                  im={selectedIM}
+                  station={station}
+                />
                 <HazardCurveMetadata
                   selectedEnsemble={selectedEnsemble}
                   station={station}
@@ -169,7 +173,11 @@ const HazardViewerHazardCurve = () => {
             hazardData !== null &&
             showErrorMessage.isError === false && (
               <Fragment>
-                <HazardEnsemblePlot hazardData={hazardData} im={selectedIM} />
+                <HazardEnsemblePlot
+                  hazardData={hazardData}
+                  im={selectedIM}
+                  station={station}
+                />
                 <HazardCurveMetadata
                   selectedEnsemble={selectedEnsemble}
                   station={station}
