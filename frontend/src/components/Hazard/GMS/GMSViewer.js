@@ -120,7 +120,7 @@ const GMSViewer = () => {
                 ensemble_id: selectedEnsemble,
                 station: station,
                 IM_j: GMSIMType,
-                IMs: orderIMs(newIMVector),
+                IMs: newIMVector,
                 n_gms: Number(GMSNum),
                 gm_source_ids: ["nga_west_2"],
                 im_level: Number(GMSIMLevel),
@@ -138,7 +138,7 @@ const GMSViewer = () => {
                 ensemble_id: selectedEnsemble,
                 station: station,
                 IM_j: GMSIMType,
-                IMs: orderIMs(newIMVector),
+                IMs: newIMVector,
                 n_gms: Number(GMSNum),
                 gm_source_ids: ["nga_west_2"],
                 exceedance: Number(GMSExcdRate),
@@ -203,7 +203,7 @@ const GMSViewer = () => {
     orderIMs(selectedIMVectors).forEach((IM) => {
       localPeriods[IM] = IM.split("_")[1];
     });
-    setPeriods(localPeriods);
+    setPeriods(selectedIMVectors);
   }, [selectedIMVectors]);
 
   useEffect(() => {
@@ -276,7 +276,16 @@ const GMSViewer = () => {
                       isSearchable={false}
                     />
                     {specifiedIM.value === "spectra" ? (
-                      <GMSViewerSpectra gmsData={computedGMS} periods={periods} />
+                      <GMSViewerSpectra
+                        gmsData={computedGMS}
+                        periods={periods}
+                        im_type={GMSIMType}
+                        im_j={
+                          GMSRadio === "im-level"
+                            ? Number(GMSIMLevel)
+                            : Number(GMSExcdRate)
+                        }
+                      />
                     ) : (
                       <GMSViewerIMDistributions
                         gmsData={computedGMS}
