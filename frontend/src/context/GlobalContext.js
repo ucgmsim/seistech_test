@@ -64,7 +64,6 @@ export const Provider = (props) => {
   /*
     GMS
   */
-  const [selectedIMVectors, setSelectedIMVectors] = useState([]);
   const [GMSComputeClick, setGMSComputeClick] = useState(null);
   const [GMSIMLevel, setGMSIMLevel] = useState("");
   const [GMSExcdRate, setGMSExcdRate] = useState("");
@@ -243,8 +242,6 @@ export const Provider = (props) => {
     /*
       GMS
     */
-    selectedIMVectors,
-    setSelectedIMVectors,
     GMSComputeClick,
     setGMSComputeClick,
     GMSIMLevel,
