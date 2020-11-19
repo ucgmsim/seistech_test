@@ -9,33 +9,25 @@ import "assets/style/GMSPlot.css";
 
 const GMSViewerSpectra = ({ gmsData, periods, im_type, im_j }) => {
   if (gmsData !== null && !gmsData.hasOwnProperty("error") && periods !== []) {
-    console.log("IM_j : ", im_type);
-    console.log("Periods : ", periods);
-    console.log("NOW ITS im_j: ", im_j);
     const cdfX = gmsData["gcim_cdf_x"];
     const cdfY = gmsData["gcim_cdf_y"];
     const realisations = gmsData["realisations"];
     const selectedGMs = gmsData["selected_GMs"];
-    console.log(realisations);
-    console.log(selectedGMs)
 
     // If IM Type starts with pSA, add it to periods
     if (im_type.startsWith("pSA")) {
       periods.push(im_type);
     }
-    console.log(`Updated periods: ${periods}`);
 
     // Create an object key = IM, value = Period
-    let localPeriods = {};
+    const localPeriods = {};
     orderIMs(periods).forEach((IM) => {
-      localPeriods[IM] = IM.split("_")[1];
+      // With out current format, IM starts with pSA, they have period.
+      // So we can find whether its the one with period or not
+      if (IM.startsWith("pSA")) {
+        localPeriods[IM] = IM.split("_")[1];
+      }
     });
-
-    console.log("----------Array Object----------")
-    for (const [key, value] of Object.entries(localPeriods)){
-      console.log(`${key}: ${value}`);
-    }
-    console.log("----------Array Object----------")
 
     const periodsArray = Object.values(localPeriods);
     const scatterArr = [];
@@ -44,7 +36,13 @@ const GMSViewerSpectra = ({ gmsData, periods, im_type, im_j }) => {
     const sortedRealisations = {};
     const sortedSelectedGMs = {};
 
+    /*
+      Loop through the period object (That is in the right order).
+      Create another objects in the right order as response data may not be in the right order.
+      So we can plot in order.
+    */
     for (const [IM, values] of Object.entries(localPeriods)) {
+      // If IM (IM from IM Vectors) is not same as IM_Type, we do different approach.
       if (IM !== im_type) {
         sortedCDFX[IM] = cdfX[IM];
         sortedCDFY[IM] = cdfY[IM];
@@ -81,9 +79,9 @@ const GMSViewerSpectra = ({ gmsData, periods, im_type, im_j }) => {
         const higherPercentileFound = values.find((element) => element >= 0.84);
         higherPercenIndexObj[IM] = values.indexOf(higherPercentileFound);
       } else {
-        medianIndexObj[IM] = im_j
-        lowerPercenIndexObj[IM] = im_j
-        higherPercenIndexObj[IM] = im_j
+        medianIndexObj[IM] = im_j;
+        lowerPercenIndexObj[IM] = im_j;
+        higherPercenIndexObj[IM] = im_j;
       }
     }
 
@@ -98,9 +96,9 @@ const GMSViewerSpectra = ({ gmsData, periods, im_type, im_j }) => {
         medianValues.push(values[medianIndexObj[IM]]);
         lowerPercenValues.push(values[lowerPercenIndexObj[IM]]);
       } else {
-        upperPercenValues.push(im_j)
-        medianValues.push(im_j)
-        lowerPercenValues.push(im_j)
+        upperPercenValues.push(im_j);
+        medianValues.push(im_j);
+        lowerPercenValues.push(im_j);
       }
     }
 
@@ -132,17 +130,30 @@ const GMSViewerSpectra = ({ gmsData, periods, im_type, im_j }) => {
       }
     );
 
-    console.log(`WHAT AM I?: ${sortedRealisations}`)
     /*
       Realisations calculation
+      Object.values(sortedRealisations)[0] - number of elements in each values which is basically same as Num Ground Motions input
+      First for loop is there to set the index
+      Second for loop is there to put every IM's index realisation value.
+
+      E.g.,
+      pSA_0.01: [1,2,3]
+      pSA_0.02: [2,3,4]
+      pSA_0.03: [4,5,6]
+
+      after this loop, we plot three lines like the following,
+      X array = [0.01, 0.02, 0.03] (Because X-axis is periods)
+      Y array = [1,2,4] (first index)
+              = [2,3,5] (second index)
+              = [3,4,6] (third index)
    */
     for (let i = 0; i < Object.values(sortedRealisations)[0].length; i++) {
       let yCoords = [];
-      for (const [IM, period] of Object.entries(sortedRealisations)) {
-        if (IM !== im_type){
+      for (const IM of Object.keys(sortedRealisations)) {
+        if (IM !== im_type) {
           yCoords.push(sortedRealisations[IM][i]);
         } else {
-          yCoords.push(sortedRealisations[IM])
+          yCoords.push(sortedRealisations[IM]);
         }
       }
       scatterArr.push({
@@ -158,10 +169,13 @@ const GMSViewerSpectra = ({ gmsData, periods, im_type, im_j }) => {
     }
     /*
       Selected GMs calculation
+      Same as Realisations caluclation above.
+      Except, because Selected GMs come with selected IM Type's values.
+      So no need to check whether the IM Type is same to IM.
    */
     for (let i = 0; i < Object.values(sortedSelectedGMs)[0].length; i++) {
       let yCoords = [];
-      for (const [IM, period] of Object.entries(sortedSelectedGMs)) {
+      for (const IM of Object.keys(sortedSelectedGMs)) {
         yCoords.push(sortedSelectedGMs[IM][i]);
       }
       scatterArr.push({
