@@ -15,7 +15,7 @@ import DownloadButton from "components/common/DownloadButton";
 import GuideMessage from "components/common/GuideMessage";
 import ErrorMessage from "components/common/ErrorMessage";
 
-import { handleErrors, orderIMs } from "utils/Utils";
+import { handleErrors } from "utils/Utils";
 
 import "assets/style/GMSViewer.css";
 
@@ -26,8 +26,6 @@ const GMSViewer = () => {
     selectedEnsemble,
     station,
     vs30,
-    selectedIMVectors,
-    setSelectedIMVectors,
     GMSComputeClick,
     GMSIMLevel,
     GMSExcdRate,
@@ -44,6 +42,8 @@ const GMSViewer = () => {
     GMSVS30Min,
     GMSVS30Max,
   } = useContext(GlobalContext);
+
+  const [selectedIMVectors, setSelectedIMVectors] = useState([]);
 
   const [computedGMS, setComputedGMS] = useState(null);
 
@@ -198,32 +198,28 @@ const GMSViewer = () => {
     // Set the first IM as a default IM for plot
     setSpecifiedIM(localIMs[1]);
 
-    // Create an object key = IM, value = Period
-    let localPeriods = {};
-    orderIMs(selectedIMVectors).forEach((IM) => {
-      localPeriods[IM] = IM.split("_")[1];
-    });
+    //
     setPeriods(selectedIMVectors);
   }, [selectedIMVectors]);
 
   useEffect(() => {
     if (computedGMS !== null) {
       const metadatas = computedGMS["metadata"];
-      let localMetadatas = Object.getOwnPropertyNames(metadatas).map(
+      let tempMetadatas = Object.getOwnPropertyNames(metadatas).map(
         (metadata) => ({
           value: metadata,
           label: metadata,
         })
       );
-      localMetadatas.splice(0, 0, {
+      tempMetadatas.splice(0, 0, {
         value: "mwrrupplot",
         label: "Magnitue and Rrup plot",
       });
 
       // Set the first Metadata as a default metadata for plot
-      setSpecifiedMetadata(localMetadatas[1]);
+      setSpecifiedMetadata(tempMetadatas[1]);
 
-      setLocalMetadatas(localMetadatas);
+      setLocalMetadatas(tempMetadatas);
     }
   }, [computedGMS]);
 
@@ -262,6 +258,7 @@ const GMSViewer = () => {
           )}
           {isLoading === false &&
             computedGMS !== null &&
+            computedGMS["IM_j"] === GMSIMType &&
             showErrorMessage.isError === false && (
               <Fragment>
                 {validateComputedGMS() === false ? (
@@ -278,7 +275,7 @@ const GMSViewer = () => {
                     {specifiedIM.value === "spectra" ? (
                       <GMSViewerSpectra
                         gmsData={computedGMS}
-                        periods={periods}
+                        periods={selectedIMVectors}
                         im_type={GMSIMType}
                         im_j={
                           GMSRadio === "im-level"
