@@ -32,14 +32,14 @@ const GMSViewerIMDistributions = ({ gmsData, IM }) => {
     const yLimitAtZero = lowerBounds.find((element) => element >= 0);
     const yLimitAtZeroIndex = lowerBounds.indexOf(yLimitAtZero);
 
-    // double the elements
+    // sort & duplicate the elements
     const newRealisations = realisations
       .sort((a, b) => {
         return a - b;
       })
       .flatMap((x) => Array(2).fill(x));
 
-    // double the elements
+    // sort & duplicate the elements
     const newSelectedGMs = selectedGMs
       .sort((a, b) => {
         return a - b;
@@ -49,6 +49,7 @@ const GMSViewerIMDistributions = ({ gmsData, IM }) => {
     // Create an array for Y axis
     const rangeY = range(0, 1, 1 / realisations.length);
 
+    // Double the elements except the first and the last element
     const newRangeY = rangeY.flatMap((x, i) =>
       Array(i === 0 || i === rangeY.length - 1 ? 1 : 2).fill(x)
     );

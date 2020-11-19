@@ -7,20 +7,27 @@ import { range } from "utils/Utils";
 
 import "assets/style/GMSPlot.css";
 
-const GMSViewerCausalParameters = ({ gmsData, metadata, causalParamBounds }) => {
+const GMSViewerCausalParameters = ({
+  gmsData,
+  metadata,
+  causalParamBounds,
+}) => {
   if (
     gmsData !== null &&
     !gmsData.hasOwnProperty("error") &&
     metadata !== undefined
   ) {
+    // Sort metadata then duplicate each element
     const xRange = gmsData["metadata"][metadata]
       .sort((a, b) => {
         return a - b;
       })
       .flatMap((x) => Array(2).fill(x));
 
+    // Create an array with range 0 and 1 with third argument as step
     const rangeY = range(0, 1, 1 / gmsData["metadata"][metadata].length);
 
+    // Then we duplicate each element that is not the first and last index's element
     const newRangeY = rangeY.flatMap((x, i) =>
       Array(i === 0 || i === rangeY.length - 1 ? 1 : 2).fill(x)
     );
@@ -43,6 +50,7 @@ const GMSViewerCausalParameters = ({ gmsData, metadata, causalParamBounds }) => 
       },
     ];
 
+    // If selected metadata is not sf, we add bounds (Min / Max)
     if (metadata !== "sf") {
       scattersArray.push(
         {
@@ -72,6 +80,7 @@ const GMSViewerCausalParameters = ({ gmsData, metadata, causalParamBounds }) => 
         }
       );
 
+      // If selected metadata is vs30, not only the min and max bounds, we also add solid line with vs30 value from site selection
       if (metadata === "vs30") {
         scattersArray.push({
           x: [
