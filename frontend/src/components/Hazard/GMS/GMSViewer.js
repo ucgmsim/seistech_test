@@ -338,7 +338,7 @@ const GMSViewer = () => {
         </Tab>
       </Tabs>
       <DownloadButton
-        disabled={computedGMS === null}
+        disabled={computedGMS === null || computedGMS["IM_j"] !== GMSIMType}
         downloadURL={CONSTANTS.INTE_API_DOWNLOAD_GMS}
         downloadToken={downloadToken}
         fileName="gms.zip"
