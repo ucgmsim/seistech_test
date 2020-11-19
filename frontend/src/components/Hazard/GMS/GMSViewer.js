@@ -49,7 +49,6 @@ const GMSViewer = () => {
 
   const [specifiedIM, setSpecifiedIM] = useState([]);
   const [localIMVectors, setLocalIMVectors] = useState([]);
-  const [periods, setPeriods] = useState([]);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -197,9 +196,6 @@ const GMSViewer = () => {
 
     // Set the first IM as a default IM for plot
     setSpecifiedIM(localIMs[1]);
-
-    //
-    setPeriods(selectedIMVectors);
   }, [selectedIMVectors]);
 
   useEffect(() => {
