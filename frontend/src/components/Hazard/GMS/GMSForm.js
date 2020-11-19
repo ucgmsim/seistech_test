@@ -121,6 +121,9 @@ const GMSForm = () => {
     true: downArrow,
     false: upArrow,
   };
+
+  const [arrow, setArrow] = useState(true);
+
   const [selectedIMType, setSelectedIMType] = useState(null);
 
   const [localNumGMS, setLocalNumGMS] = useState("");
@@ -187,7 +190,6 @@ const GMSForm = () => {
     }
   }, [localVS30Max, setIsLocalVS30MaxChosen]);
 
-  const [arrow, setArrow] = useState(true);
 
   /*
     IM Level/Exceedance Rate Section
