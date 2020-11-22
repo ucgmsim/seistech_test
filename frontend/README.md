@@ -1,20 +1,41 @@
 # Seistech Web App
 
 ## Contents
+
 - [Naming](#naming)
 - [Overview](#overview)
 - [Requirements](#requirements)
-   - [Frontend](#frontend)
-      - [DEV Version](#dev-version)
-      - [EA Version](#ea-version)
-   - [Middleware](#middleware)
-      - [Without .env](#without-env)
-      - [With .env](#with-env)
+  - [Frontend](#frontend)
+    - [DEV Version](#dev-version)
+    - [EA Version](#ea-version)
+  - [Middleware](#middleware)
+    - [Without .env](#without-env)
+    - [With .env](#with-env)
 - [Running locally](#running-locally)
-   - [Without Docker](#without-docker)
-   - [With Docker](#with-docker)
+  - [Without Docker](#without-docker)
+  - [With Docker](#with-docker)
 - [Deploying to AWS](#deploying-to-aws)
-
+- [Application](#application)
+  - [Hazard Analysis](#hazard-analysis)
+    - [Site Selection](#site-selection)
+      - [Ensemble](#ensemble)
+      - [Location](#location)
+      - [Site Conditions](#site-conditions)
+    - [Seismic Hazard](#seismic-hazard)
+      - [Hazard Curve](#hazard-curve)
+      - [Disaggregation](#disaggregation)
+      - [Uniform Hazard Spectrum](#uniform-hazard-spectrum)
+      - [NZ Code](#nz-code)
+    - [GMS](#gms)
+      - [IM Type](#im-type)
+      - [IM Level or Exceedance Rate](#im-level-or-exceedance-rate)
+      - [IM Vector](#im-vector)
+      - [Num Ground Motions](#num-ground-motions)
+      - [Advanced](#advanced)
+        - [Pre-GM Filtering Parameters](#pre-gm-filtering-parameters)
+        - [Weights](#weights)
+        - [Database](#database)
+        - [Replicates](#replicates)
 
 ## Naming
 
@@ -110,7 +131,7 @@ load_dotenv()
 
 Assuming we are using Core API that is on Epicentre
 
-**Make sure you have an access to `ucgmsim/seistech` git repo via SSH as we need to access private repo to download**
+**Make sure you have an access to `ucgmsim/seistech` git repo via SSH as we need to access the private repo to download**
 
 ### Without Docker
 
@@ -219,7 +240,6 @@ REACT_APP_AUTH0_AUDIENCE_EA=
 
 REACT_APP_MAP_BOX_TOKEN_EA=
 
-
 ##### Steps
 
 1. Change the directory to either `docker/dev` or `docker/ea`
@@ -269,3 +289,118 @@ It runs both Frontend & Intermediate API
 With a directory called `docker`, there are two more directories, `dev` and `ea`. Each directory has different settings with `docker-compose.yml` file.
 
 They also include a shell script called `Dockerise.sh`. By running this shell script inside EC2, it will automatically pull the latest version (Frontend & Intermediate API) from our repo, create Docker images then run them.
+
+## Application
+
+### Hazard Analysis
+
+#### Site Selection
+
+##### Ensemble
+
+If it is in DEV version, you see two options, **v20p5emp** and **v20p45sim**.
+But in EA and PROD.
+
+##### Location
+
+Users can put Lat and Lng within NZ coordinates. Then click **Set** button to get a station, regional map and vs30 map.
+
+##### Site Conditions
+
+By setting the location, users get a default VS30. They can also update VS30 if they want by updating the input field and click **Set VS30**. By clicking the **Use Default**, it goes back to what it was. (The value from API when users set the location)
+
+#### Seismic Hazard
+
+Users need to set the location first in **Site Selection** tab to get into this tab.
+
+##### Hazard Curve
+
+Users can choose one IM from the dropdown, then click **Compute** button to get the following plots.
+
+- Ensemble branches
+- Fault/distributed seismicity contribution
+
+##### Disaggregation
+
+Users must choose IM first to do this job.
+
+Users can put **Annual Exceedance Rate** anywhere between 0 and 1. Click **Compute** to get following things.
+
+- Epsilon (image)
+- Fault/distributed seismicity (image)
+- Source contributions (table)
+
+##### Uniform Hazard Spectrum
+
+Similar to **Disaggregation**. Users can put **Annual Exceedance Rate** but they can put more than one. Click **Compute** to get a plot.
+
+##### NZ Code
+
+Will add this from NZ Code branch.
+
+#### GMS
+
+Users need to set the location first in **Site Selection** tab to get into this tab.
+
+##### IM Type
+
+The options are similar to IM (Intensity Measure) from the Hazard Curve in Seismic Hazard but slightly different. Those options are specialised for GMS. Users need to choose one of them.
+
+##### IM Level or Exceedance Rate
+
+Users can choose either **IM Level** or **Exceedance Rate**. The urrent setup is, by choosing **IM Type** first then putting **IM Level** or **Exceedance Rate**. If the focus gets outside of the input box, then it sends a request to Core API to get default parameters which are for **Pre-GM Filtering parameters** inside the advanced tab.
+
+##### IM Vector
+
+Identical list to IM Type. Except, the chosen **IM Type** will be filtered out. For instance, if you choose PGA from **IM Type**, there is now PGA in **IM Vector**. Also, users can choose multiple IMs.
+
+Also, just like above, when the focus gets out of this select box, it sends a request to the Core API to get default weights which are for **Weights** inside the advanced tab.
+
+##### Num Ground Motions
+
+Just a number.
+
+##### Compute button
+
+After users have done the following steps:
+
+- Choose IM Type
+- Choose IM Level or Exceedance Rate
+- Put its value
+- Choose IM Vector(s)
+- Put Num Ground Motions
+
+Compute button will be waiting for the following responses from Core API:
+
+- Pre-GM Filtering Parameters
+- Weights
+
+Once it gets all the responses from the Core API, the compute button gets enabled and users can click it to send a request to Core API to get the following plots:
+
+- IM Distributions
+  - Pseudo acceleration response spectra
+  - IM Vectors
+- Causal Parameters - Using **Pre-GM Filtering Parameters**'s Min/Max for the red dashed-dot lines
+  - Magnitude and Rrup plot
+  - Magnitude
+  - Rrup
+  - Scale Factor
+  - VS30 - Red solid line is from Site Selection, VS30 value.
+
+##### Advanced
+
+###### Pre-GM Filtering Parameters
+
+A table with inputs, afters user choose **IM Type** and either **IM Level** or **Exceedance Rate**, we get the default values. But users can also change to their values.
+
+###### Weights
+
+A table with multiple columns (number of chosen IM Vectors). Weights are allocated by the Core API.
+
+###### Database
+
+Currently, we don't have any database but will be there as a dropdown option.
+
+###### Replicates
+
+Currently, it defaults to 1.
