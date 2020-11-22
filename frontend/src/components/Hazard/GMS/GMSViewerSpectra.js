@@ -38,8 +38,13 @@ const GMSViewerSpectra = ({ gmsData, periods, im_type, im_j }) => {
 
     /*
       Loop through the period object (That is in the right order).
-      Create another objects in the right order as response data may not be in the right order.
-      So we can plot in order.
+      Create another objects in the right order for the following data:
+      - CDF X
+      - CDF Y
+      - Realisations
+      - Selected GMs
+      as response data may not be in the right order.
+      So we can plot them in the right order.
     */
     for (const [IM, values] of Object.entries(localPeriods)) {
       // If IM (IM from IM Vectors) is not same as IM_Type, we do different approach.
@@ -48,6 +53,7 @@ const GMSViewerSpectra = ({ gmsData, periods, im_type, im_j }) => {
         sortedCDFY[IM] = cdfY[IM];
         sortedRealisations[IM] = realisations[IM];
         sortedSelectedGMs[IM] = selectedGMs[IM];
+      // If IM is equal to IM Type, we put im_j as a y value, selectedGMs is a bit different as the Core API returns with its own data for this IM (which is equal to IM Type)
       } else {
         sortedCDFX[IM] = values;
         sortedCDFY[IM] = im_j;
@@ -78,6 +84,7 @@ const GMSViewerSpectra = ({ gmsData, periods, im_type, im_j }) => {
         // 0.84 (84th percentile)
         const higherPercentileFound = values.find((element) => element >= 0.84);
         higherPercenIndexObj[IM] = values.indexOf(higherPercentileFound);
+      // If IM is equal to IM Type, then we want to make one point to be met for whole lines, regardless of percentiles
       } else {
         medianIndexObj[IM] = im_j;
         lowerPercenIndexObj[IM] = im_j;
