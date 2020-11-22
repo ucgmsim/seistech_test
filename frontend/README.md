@@ -1,7 +1,7 @@
 # Seistech Web App
 
 ## Contents
-- [Naming](#purpose)
+- [Naming](#naming)
 - [Overview](#overview)
 - [Requirements](#requirements)
    - [Frontend](#frontend)
