@@ -1,5 +1,21 @@
 # Seistech Web App
 
+## Contents
+- [Naming](#purpose)
+- [Overview](#overview)
+- [Requirements](#requirements)
+   - [Frontend](#frontend)
+      - [DEV Version](#dev-version)
+      - [EA Version](#ea-version)
+   - [Middleware](#middleware)
+      - [Without .env](#without-env)
+      - [With .env](#with-env)
+- [Running locally](#running-locally)
+   - [Without Docker](#without-docker)
+   - [With Docker](#with-docker)
+- [Deploying to AWS](#deploying-to-aws)
+
+
 ## Naming
 
 - **Filename** : PascalCase (ex: SiteSelection.js, SiteSelectionVS30.js) except index files (ex: index.js, index.html, index.css...)
@@ -10,11 +26,13 @@
 
 This is a React/javascript SPA, using Auth0 authentication, talking to a python flask API, running on a Linux host.
 
-## Requirements - Frontend (seistech_web)
+## Requirements - Environment variables
 
 Please contact **Tom** to get values.
 
-### DEVELOPMENT Version
+### Frontend
+
+#### DEV Version
 
 You will need a `.env.dev` file with the following environment variables.
 
@@ -28,9 +46,9 @@ You will need a `.env.dev` file with the following environment variables.
 - REACT_APP_AUTH0_CLIENTID=
 - REACT_APP_AUTH0_AUDIENCE=
 
-#### To run Frontend: `npm run start:dev`
+##### To run Frontend: `npm run start:dev`
 
-### EA Version
+#### EA Version
 
 You will need a `.env.test` file with the following environment variables.
 
@@ -41,11 +59,13 @@ You will need a `.env.test` file with the following environment variables.
 - REACT_APP_AUTH0_CLIENTID=
 - REACT_APP_AUTH0_AUDIENCE=
 
-#### To run Frontend: `npm run start:ea`
+##### To run Frontend: `npm run start:ea`
 
-## Requirements - Intermediate API (seistech_inter_api)
+### Middleware
 
-### With `~/.bashrc` (I encourage using this approach so you do not need to install another package.)
+We do not separate middleware for DEV and EA. However, we run simultaneously (One for DEV and another one for EA). However, you don't have to worry about this if you run it locally.
+
+#### Without .env
 
 Add the following code to `~/.bashrc`
 
@@ -58,9 +78,9 @@ export CORE_API_BASE=
 export N_PROCS=
 export INTER_PORT=
 
-#### To run Intermediate API: `python app.py`
+##### To run Intermediate API: `python app.py`
 
-### With .env
+#### With .env
 
 You will need a `.env` file with the following environment variables.
 
@@ -84,7 +104,7 @@ from dotenv import load_dotenv
 load_dotenv()
 ```
 
-#### To run Intermediate API: `python app.py`
+##### To run Intermediate API: `python app.py`
 
 ## Running locally
 
@@ -139,7 +159,7 @@ npm run start:ea
 
 Please check **Requirements** above.
 
-### With Docker and docker-compose
+### With Docker
 
 #### Requirements
 
@@ -249,73 +269,3 @@ It runs both Frontend & Intermediate API
 With a directory called `docker`, there are two more directories, `dev` and `ea`. Each directory has different settings with `docker-compose.yml` file.
 
 They also include a shell script called `Dockerise.sh`. By running this shell script inside EC2, it will automatically pull the latest version (Frontend & Intermediate API) from our repo, create Docker images then run them.
-
-## Anything below from here may not be relevant to us anymore but will keep it in case I can use as a reference.
-
-Build the app for production by running
-
-> npm run build
-
-The builds ingest a corresponding .env.<...> file
-
-> npn run build:dev will use .env.development
-
-For each Azure environment download the "publishProfile" - from the Web App Overview page - and save it in src/Azure/publishProfiles as "seistech-<tag>.PublishSettings.xml
-eg., seistech-dev.publishSettings.xml
-
-This file contains, among other things, the ftp credentials. To deploy to a particular environment (dev, test, or prod) run the following
-
-> npm run-script deploy-dev
-
-Or use an ftp client such as FileZilla.
-
-### Azure Linux Web App
-
-This is a container running a standard Linux image - hence, every time the web app restarts the image is reset - meaning that system changes outside the /home directory aren't persisted. This is dealt with currently by running "pip install -r requirements.txt" in the startup script. This makes startup longer than ideal. Longterm, a customised Linux image will be the correct approach. This can be created locally and uploaded to an Azure container store, and then the Azure web app container can load the customised image instead.
-
-## Environment Variables
-
-REACT_APP_SHOW_DEBUG_PANEL=false will disable the debug panel (assuming it is still in the project, possibly console.log is better)
-
-.env contains REACT_APP_SW_VERSION
-
-## Changes to the App
-
-Changes to React packages will be handled through the build process.
-
-Changes to Python packages will necessitate updating and deploying "requirements.txt" by running
-
-> pip freeze > src/wwwroot/requirements.txt
-
-requirements.txt is then deployed to wwwroot, and processed by "wwwroot/startup.sh" when the container starts.
-
-## React build details
-
-At the point where "plotly" was added, the react build began throwing stack overflow errors.
-
-Hence, an increase to the default stack allocation - up to 8192 MB - has been added in the parameters
-
-> env-cmd -f .env.production react-scripts build -- --node-flags --max-old-space-size=8192
-
-Where "env-cmd" is a plugin which passes the file .env.production to the build, and "-- --node-flags --max-old-space-size=8192" increase the stack allocation.
-
-I've found that I need to run these commands in my gitBash terminal, as they don't work reliable using the vsCode commandline.
-
-## sqlite3 - is included in the python distribution
-
-No installation necessary.
-
-## Manual FTP Deploy
-
-Open the Azure publish profile (xml) and format it to improve readability.
-
-Deploy the following [from] ---> [to]
-
-/build/\* ---> /site/wwwroot
-/src/wwwroot/ ---> /site/wwwroot
-startup.sh (this is run by the Azure startup command whenever the container is warm-started)
-requirements.txt
-/src/py/ ---> /site/wwwroot/py
-application.py
-
-db create GUID - 6df1f9c6-5baf-4eaf-81d6-416c28d674ab
