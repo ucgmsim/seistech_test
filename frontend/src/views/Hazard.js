@@ -15,7 +15,7 @@ import GmsViewer from "components/Hazard/GMS/GmsViewer";
 import HazardForm from "components/Hazard/SeismicHazard/HazardForm";
 import HazardViewer from "components/Hazard/SeismicHazard/HazardViewer";
 
-const Home = () => {
+const Hazard = () => {
   const { vs30, locationSetClick } = useContext(GlobalContext);
 
   return (
@@ -50,4 +50,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Hazard;
