@@ -31,8 +31,15 @@ const HazardCurveSection = () => {
         <span>Hazard Curve</span>
       </div>
       <div className="form-group">
+        <label
+          id="label-project-im"
+          htmlFor="project-im"
+          className="control-label"
+        >
+          Intensity Measure
+        </label>
         <Select
-          id="intensity-measure-id"
+          id="project-im"
           placeholder={options.length === 0 ? "Loading..." : "Select..."}
           onChange={(e) => setProjectSelectedIM(e.value)}
           options={options}

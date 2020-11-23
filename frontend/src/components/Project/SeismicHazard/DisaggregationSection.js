@@ -37,8 +37,15 @@ const HazardCurveSection = () => {
         <span>Disaggregation</span>
       </div>
       <div className="form-group">
+        <label
+          id="label-disagg-return-period"
+          htmlFor="disagg-return-period"
+          className="control-label"
+        >
+          Return Period
+        </label>
         <Select
-          id="return-period-id"
+          id="disagg-return-period"
           placeholder={options.length === 0 ? "Loading..." : "Select..."}
           onChange={(e) => setReturnPeriod(e.value)}
           options={options}

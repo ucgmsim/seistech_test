@@ -40,14 +40,14 @@ const UHSSection = () => {
         </div>
         <div className="form-group">
           <label
-            id="label-annual-rate"
-            htmlFor="uhs-annual-rate"
+            id="label-uhs-return-period"
+            htmlFor="uhs-return-period"
             className="control-label"
           >
-            Annual Exceedance Rate
+            Return Period
           </label>
           <Select
-            id="uhs-rate"
+            id="uhs-return-period"
             closeMenuOnSelect={false}
             components={animatedComponents}
             isMulti
