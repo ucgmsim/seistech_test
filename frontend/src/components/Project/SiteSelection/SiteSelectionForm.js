@@ -73,33 +73,53 @@ const SiteSelectionForm = () => {
   return (
     <Fragment>
       <div className="form-row form-section-title">Project ID</div>
-      <Select
-        id="project-id-select"
-        placeholder={projectIdOptions.length === 0 ? "Loading..." : "Select..."}
-        onChange={(e) => setProjectId(e.value)}
-        options={projectIdOptions}
-        isDisabled={projectIdOptions.length === 0}
-      />
-      <div className="form-row form-section-title">Location</div>
-      <Select
-        id="location-select"
-        placeholder={locationOptions.length === 0 ? "Loading..." : "Select..."}
-        onChange={(e) => setLocation(e.value)}
-        options={locationOptions}
-        isDisabled={locationOptions.length === 0}
-      />
-      <div className="form-row form-section-title">VS 30</div>
-      <Select
-        id="vs-30-select"
-        placeholder={vs30Options.length === 0 ? "Loading..." : "Select..."}
-        onChange={(e) => setVs30(e.value)}
-        options={vs30Options}
-        isDisabled={vs30Options.length === 0}
-      />
+      <div className="form-group">
+        <Select
+          id="project-id-select"
+          placeholder={
+            projectIdOptions.length === 0 ? "Loading..." : "Select..."
+          }
+          onChange={(e) => setProjectId(e.value)}
+          options={projectIdOptions}
+          isDisabled={projectIdOptions.length === 0}
+        />
+      </div>
 
-      <button onClick={displayInConsole}>
-        Click Me to display whats chosen.
-      </button>
+      <div className="form-row form-section-title">Location</div>
+      <div className="form-group">
+        <Select
+          id="location-select"
+          placeholder={
+            locationOptions.length === 0 ? "Loading..." : "Select..."
+          }
+          onChange={(e) => setLocation(e.value)}
+          options={locationOptions}
+          isDisabled={locationOptions.length === 0}
+        />
+      </div>
+
+      <div className="form-row form-section-title">VS 30</div>
+      <div className="form-group">
+        <Select
+          id="vs-30-select"
+          placeholder={vs30Options.length === 0 ? "Loading..." : "Select..."}
+          onChange={(e) => setVs30(e.value)}
+          options={vs30Options}
+          isDisabled={vs30Options.length === 0}
+        />
+      </div>
+
+      <div className="form-group">
+        <button
+          id="project-site-selection-get"
+          type="button"
+          className="btn btn-primary mt-2"
+          disabled={projectId === null || location === null}
+          onClick={() => displayInConsole()}
+        >
+          Click Me to display whats chosen.
+        </button>
+      </div>
     </Fragment>
   );
 };
