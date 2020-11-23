@@ -1,9 +1,8 @@
 import React, { useState, useContext, useEffect, Fragment } from "react";
+
 import { v4 as uuidv4 } from "uuid";
 import { GlobalContext } from "context";
 import * as CONSTANTS from "constants/Constants";
-import { disableScrollOnNumInput } from "utils/Utils";
-import TextField from "@material-ui/core/TextField";
 import Select from "react-select";
 
 const HazardCurveSection = () => {
