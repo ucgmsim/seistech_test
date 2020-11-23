@@ -29,7 +29,7 @@ const UHSSection = () => {
   ];
 
   const displayInConsole = () => {
-    console.log(Object.values(localExdRate));
+    console.log("UHS: " + Object.values(localExdRate));
   };
 
   return (

@@ -10,6 +10,9 @@ export const Context = createContext({});
 export const Provider = (props) => {
   const { children } = props;
 
+  /*
+    Hazard Analysis Tab
+  */
   /* 
     Site Selection
   */
@@ -70,6 +73,11 @@ export const Provider = (props) => {
     GMS
   */
   const [computedGMS, setComputedGMS] = useState(null);
+
+  /*
+    Project Tab
+  */
+  const [projectSelectedIM, setProjectSelectedIM] = useState(null);
 
   /* 
     User Permissions
@@ -174,6 +182,9 @@ export const Provider = (props) => {
     isTabEnabled,
 
     /*
+      Hazard Analysis Tab
+    */
+    /*
       Site Selection
     */
     station,
@@ -241,6 +252,12 @@ export const Provider = (props) => {
     */
     computedGMS,
     setComputedGMS,
+
+    /*
+      Project Tab
+    */
+    projectSelectedIM,
+    setProjectSelectedIM,
   };
 
   // pass the value in provider and return
