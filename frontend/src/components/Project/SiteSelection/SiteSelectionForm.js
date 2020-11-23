@@ -6,6 +6,7 @@ import { useAuth0 } from "components/common/ReactAuth0SPA";
 import * as CONSTANTS from "constants/Constants";
 import { disableScrollOnNumInput, handleErrors } from "utils/Utils";
 import Select from "react-select";
+import ProjectSelect from "components/common/ProjectSelect";
 
 import "assets/style/HazardForms.css";
 
@@ -20,49 +21,16 @@ const SiteSelectionForm = () => {
 
   // Will be replaced to the responses from API
   const projectIdOptions = [
-    {
-      value: "Project A Test",
-      label: "Project A Test",
-    },
-    {
-      value: "Project B Test",
-      label: "Project B Test",
-    },
-    {
-      value: "Project C Test",
-      label: "Project C Test",
-    },
+    "Project A Test",
+    "Project B Test",
+    "Project C Test",
   ];
-
   const locationOptions = [
-    {
-      value: "Location A Test",
-      label: "Location A Test",
-    },
-    {
-      value: "Location B Test",
-      label: "Location B Test",
-    },
-    {
-      value: "Location C Test",
-      label: "Location C Test",
-    },
+    "Project A Test",
+    "Project B Test",
+    "Project C Test",
   ];
-
-  const vs30Options = [
-    {
-      value: "VS30 A Test",
-      label: "VS30 A Test",
-    },
-    {
-      value: "VS30 B Test",
-      label: "VS30 B Test",
-    },
-    {
-      value: "VS30 C Test",
-      label: "VS30 C Test",
-    },
-  ];
+  const vs30Options = ["Project A Test", "Project B Test", "Project C Test"];
 
   const displayInConsole = () => {
     console.log(`Im Project ID: ${projectId}`);
@@ -74,38 +42,28 @@ const SiteSelectionForm = () => {
     <Fragment>
       <div className="form-row form-section-title">Project ID</div>
       <div className="form-group">
-        <Select
+        <ProjectSelect
           id="project-id-select"
-          placeholder={
-            projectIdOptions.length === 0 ? "Loading..." : "Select..."
-          }
-          onChange={(e) => setProjectId(e.value)}
+          setSelect={setProjectId}
           options={projectIdOptions}
-          isDisabled={projectIdOptions.length === 0}
         />
       </div>
 
       <div className="form-row form-section-title">Location</div>
       <div className="form-group">
-        <Select
+        <ProjectSelect
           id="location-select"
-          placeholder={
-            locationOptions.length === 0 ? "Loading..." : "Select..."
-          }
-          onChange={(e) => setLocation(e.value)}
+          setSelect={setLocation}
           options={locationOptions}
-          isDisabled={locationOptions.length === 0}
         />
       </div>
 
       <div className="form-row form-section-title">VS 30</div>
       <div className="form-group">
-        <Select
+        <ProjectSelect
           id="vs-30-select"
-          placeholder={vs30Options.length === 0 ? "Loading..." : "Select..."}
-          onChange={(e) => setVs30(e.value)}
+          setSelect={setVs30}
           options={vs30Options}
-          isDisabled={vs30Options.length === 0}
         />
       </div>
 
