@@ -5,6 +5,7 @@ import { GlobalContext } from "context";
 import { useAuth0 } from "components/common/ReactAuth0SPA";
 import * as CONSTANTS from "constants/Constants";
 import ProjectSelect from "components/common/ProjectSelect";
+import { handleErrors } from "utils/Utils";
 
 import "assets/style/HazardForms.css";
 
@@ -16,13 +17,51 @@ const SiteSelectionForm = () => {
   const [projectId, setProjectId] = useState(null);
   const [location, setLocation] = useState(null);
   const [vs30, setVs30] = useState(null);
+  const [projectIdOptions, setProjectIdOptions] = useState([]);
+
+  useEffect(() => {
+    const abortController = new AbortController();
+    const signal = abortController.signal;
+
+    const getProjectID = async () => {
+      try {
+        const token = await getTokenSilently();
+
+        await fetch(
+          CONSTANTS.CORE_API_BASE_URL + CONSTANTS.CORE_API_ROUTE_PROJECT_IDS,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            signal: signal,
+          }
+        )
+          .then(handleErrors)
+          .then(async (response) => {
+            const responseData = await response.json();
+            setProjectIdOptions(responseData["project_ids"]);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getProjectID();
+
+    return () => {
+      abortController.abort();
+    };
+  }, []);
 
   // Will be replaced to the responses from API
-  const projectIdOptions = [
-    "Project A Test",
-    "Project B Test",
-    "Project C Test",
-  ];
+  // const projectIdOptions = [
+  //   "Project A Test",
+  //   "Project B Test",
+  //   "Project C Test",
+  // ];
   const locationOptions = [
     "Project A Test",
     "Project B Test",
