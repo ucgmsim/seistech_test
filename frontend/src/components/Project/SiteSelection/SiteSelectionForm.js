@@ -117,7 +117,7 @@ const SiteSelectionForm = () => {
           disabled={projectId === null || location === null}
           onClick={() => displayInConsole()}
         >
-          Click Me to display whats chosen.
+          Get
         </button>
       </div>
     </Fragment>
