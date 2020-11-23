@@ -58,7 +58,7 @@ const SiteSelectionForm = () => {
         />
       </div>
 
-      <div className="form-row form-section-title">VS 30</div>
+      <div className="form-row form-section-title">VS30</div>
       <div className="form-group">
         <ProjectSelect
           id="vs-30-select"
