@@ -17,6 +17,10 @@ export const CORE_API_ROUTE_GMS_COMPUTE = "gms/ensemble_gms";
 export const CORE_API_ROUTE_GMS_DEFAULT_IM_WEIGHTS = "gms/default_im_weights";
 export const CORE_API_ROUTE_GMS_DEFAULT_CAUSAL_PARAMS =
   "gms/default_causal_params";
+export const CORE_API_ROUTE_PROJECT_IDS = "project/ids/get";
+export const CORE_API_ROUTE_PROJECT_SITES = "project/sites/get";
+export const CORE_API_ROUTE_PROJECT_IMS = "project/ims/get";
+export const CORE_API_ROUTE_PROJECT_HAZARD = "project/hazard/get";
 
 /* Download URL */
 export const INTE_API_DOWNLOAD_HAZARD = "hazard_download/";
