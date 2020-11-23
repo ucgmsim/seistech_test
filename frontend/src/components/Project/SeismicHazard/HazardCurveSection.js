@@ -1,25 +1,14 @@
 import React, { useState, useContext, useEffect, Fragment } from "react";
-import Select from "react-select";
+
 import { v4 as uuidv4 } from "uuid";
 import { GlobalContext } from "context";
+
+import ProjectSelect from "components/common/ProjectSelect";
 
 const HazardCurveSection = () => {
   const { projectSelectedIM, setProjectSelectedIM } = useContext(GlobalContext);
 
-  const options = [
-    {
-      value: "A Test",
-      label: "A Test",
-    },
-    {
-      value: "B Test",
-      label: "B Test",
-    },
-    {
-      value: "C Test",
-      label: "C Test",
-    },
-  ];
+  const options = ["A Test", "B Test", "C Test"];
 
   const displayInConsole = () => {
     console.log(`Im chosen IM: ${projectSelectedIM}`);
@@ -38,12 +27,10 @@ const HazardCurveSection = () => {
         >
           Intensity Measure
         </label>
-        <Select
+        <ProjectSelect
           id="project-im"
-          placeholder={options.length === 0 ? "Loading..." : "Select..."}
-          onChange={(e) => setProjectSelectedIM(e.value)}
+          setSelect={setProjectSelectedIM}
           options={options}
-          isDisabled={options.length === 0}
         />
       </div>
 
