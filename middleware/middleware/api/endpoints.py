@@ -9,7 +9,7 @@ from ..server import (
     get_token_auth_header,
 )
 
-
+# Site Selection
 @app.route("/ensembleids", methods=["GET"])
 @requires_auth
 def get_ensemble_ids():
@@ -46,6 +46,7 @@ def get_station():
     return proxy_to_core_api(flask.request, "api/site/station/location/get", "GET")
 
 
+# Seismic Hazard
 @app.route("/hazard", methods=["GET"])
 @requires_auth
 def get_hazard():
@@ -88,6 +89,50 @@ def get_uhs():
     )
 
 
+# GMS
+@app.route("/gms/ensemble_gms", methods=["POST"])
+def compute_ensemble_GMS():
+    return proxy_to_core_api(
+        flask.request.data.decode(), "api/gms/ensemble_gms/compute", "POST"
+    )
+
+
+@app.route("/gms/default_im_weights", methods=["GET"])
+def get_default_IM_weights():
+    return proxy_to_core_api(
+        flask.request, "api/gms/ensemble_gms/get_default_IM_weights", "GET"
+    )
+
+
+@app.route("/gms/default_causal_params", methods=["GET"])
+def get_default_causal_params():
+    return proxy_to_core_api(
+        flask.request, "api/gms/ensemble_gms/get_default_causal_params", "GET"
+    )
+
+
+# Project
+@app.route("/project/ids/get", methods=["GET"])
+def get_project_ids():
+    return proxy_to_core_api(flask.request, "api/project/ids/get", "GET")
+
+
+@app.route("/project/sites/get", methods=["GET"])
+def get_project_sites():
+    return proxy_to_core_api(flask.request, "api/project/sites/get", "GET")
+
+
+@app.route("/project/ims/get", methods=["GET"])
+def get_project_ims():
+    return proxy_to_core_api(flask.request, "api/project/ims/get", "GET")
+
+
+@app.route("/project/hazard/get", methods=["GET"])
+def get_project_hazard():
+    return proxy_to_core_api(flask.request, "api/project/hazard/get", "GET")
+
+
+# Download
 @app.route("/hazard_download/<token>", methods=["GET"])
 def download_hazard(token):
     core_response = proxy_to_core_api(
@@ -140,27 +185,6 @@ def download_gms(token):
     )
 
     return core_response
-
-
-@app.route("/gms/ensemble_gms", methods=["POST"])
-def compute_ensemble_GMS():
-    return proxy_to_core_api(
-        flask.request.data.decode(), "api/gms/ensemble_gms/compute", "POST"
-    )
-
-
-@app.route("/gms/default_im_weights", methods=["GET"])
-def get_default_IM_weights():
-    return proxy_to_core_api(
-        flask.request, "api/gms/ensemble_gms/get_default_IM_weights", "GET"
-    )
-
-
-@app.route("/gms/default_causal_params", methods=["GET"])
-def get_default_causal_params():
-    return proxy_to_core_api(
-        flask.request, "api/gms/ensemble_gms/get_default_causal_params", "GET"
-    )
 
 
 @app.route("/user", methods=["GET"])

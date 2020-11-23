@@ -22,9 +22,13 @@ API_AUDIENCE = os.environ["API_AUDIENCE"]
 ALGORITHMS = os.environ["ALGORITHMS"]
 
 # For DEV/EA/PROD with ENV
-coreApiBase = os.environ["CORE_API_BASE"]
-# In case I need to make a change locally
+# coreApiBase = os.environ["CORE_API_BASE"]
+# For Project API with ENV
+coreApiBase = os.environ["PROJECT_API_BASE"]
+# In case I need to make a change locally - for SeisTech
 # coreApiBase = "http://localhost:10022/"
+# For SeisTech - Project tab
+# coreApiBase = "http://localhost:10066/"
 
 # Generate the coreAPI token
 coreApiToken = "Bearer {}".format(
