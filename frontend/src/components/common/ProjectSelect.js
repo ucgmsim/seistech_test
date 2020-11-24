@@ -12,7 +12,7 @@ const ProjectSelect = ({
   const [localOptions, setLocalOptions] = useState([]);
 
   useEffect(() => {
-    if (options.length !== 0) {
+    if (options !== undefined && options.length !== 0) {
       let tempOptions = createSelectArray(options);
 
       setLocalOptions(tempOptions);

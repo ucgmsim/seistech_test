@@ -72,6 +72,7 @@ export const Provider = (props) => {
   const [projectLocations, setProjectLocations] = useState([]);
   const [projectId, setProjectId] = useState(null);
   const [projectLocationCode, setProjectLocationCode] = useState({});
+  const [projectVS30, setProjectVS30] = useState(null);
 
   // Seismic Hazard
   const [projectSelectedIM, setProjectSelectedIM] = useState(null);
@@ -251,6 +252,8 @@ export const Provider = (props) => {
     setProjectId,
     projectLocationCode,
     setProjectLocationCode,
+    projectVS30,
+    setProjectVS30,
 
     // Seismic Hazard
     projectSelectedIM,

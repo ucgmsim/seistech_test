@@ -20,15 +20,13 @@ const SiteSelectionForm = () => {
     setProjectId,
     projectLocationCode,
     setProjectLocationCode,
+    projectVS30,
+    setProjectVS30,
   } = useContext(GlobalContext);
 
   const { getTokenSilently } = useAuth0();
 
-  // TODO 25th
-  // Move these to GlobalContext so these can be used to get Hazard data.
-
   const [location, setLocation] = useState(null);
-  const [vs30, setVs30] = useState(null);
 
   // Response for Project ID option and is an array, can use straightaway
   const [projectIdOptions, setProjectIdOptions] = useState([]);
@@ -168,7 +166,7 @@ const SiteSelectionForm = () => {
   const displayInConsole = () => {
     console.log(`Im Project ID: ${projectId}`);
     console.log(`Im location: ${location}`);
-    console.log(`Im vs30: ${vs30}`);
+    console.log(`Im projectVS30: ${projectVS30}`);
     console.log(`Im the location code: ${projectLocationCode[location]}`);
   };
 
@@ -197,7 +195,7 @@ const SiteSelectionForm = () => {
       <div className="form-group">
         <ProjectSelect
           id="vs-30-select"
-          setSelect={setVs30}
+          setSelect={setProjectVS30}
           options={vs30Options}
           placeholder="Please select the Location first..."
         />
@@ -208,7 +206,9 @@ const SiteSelectionForm = () => {
           id="project-site-selection-get"
           type="button"
           className="btn btn-primary mt-2"
-          disabled={projectId === null || location === null || vs30 === null}
+          disabled={
+            projectId === null || location === null || projectVS30 === null
+          }
           onClick={() => displayInConsole()}
         >
           Get
