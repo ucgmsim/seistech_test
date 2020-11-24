@@ -6,12 +6,26 @@ import { GlobalContext } from "context";
 import ProjectSelect from "components/common/ProjectSelect";
 
 const HazardCurveSection = () => {
-  const { projectSelectedIM, setProjectSelectedIM, projectIMs } = useContext(
-    GlobalContext
-  );
+  const {
+    projectSelectedIM,
+    setProjectSelectedIM,
+    projectIMs,
+    projectId,
+    projectVS30,
+    projectLocation,
+    projectLocationCode,
+    setProjectHazardCurveGetClick,
+  } = useContext(GlobalContext);
 
   const displayInConsole = () => {
     console.log(`Im chosen IM: ${projectSelectedIM}`);
+    console.log(`Im chosen Project ID: ${projectId}`);
+    console.log(`IM chosen project VS30: ${projectVS30}`);
+    console.log(`IM CHOSEN PROJECT LOCATION: ${projectLocation}`);
+    console.log(
+      `IM CHOSEN PROJECT LOCATION CODE: ${projectLocationCode[projectLocation]}`
+    );
+    setProjectHazardCurveGetClick(uuidv4());
   };
 
   return (
@@ -29,6 +43,7 @@ const HazardCurveSection = () => {
         </label>
         <ProjectSelect
           id="project-im"
+          value={projectSelectedIM}
           setSelect={setProjectSelectedIM}
           options={projectIMs}
         />

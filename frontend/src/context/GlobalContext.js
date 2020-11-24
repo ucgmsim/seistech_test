@@ -77,6 +77,9 @@ export const Provider = (props) => {
   // Seismic Hazard
   const [projectSelectedIM, setProjectSelectedIM] = useState(null);
   const [projectIMs, setProjectIMs] = useState([]);
+  const [projectHazardCurveGetClick, setProjectHazardCurveGetClick] = useState(
+    null
+  );
 
   /* 
     User Permissions
@@ -260,6 +263,8 @@ export const Provider = (props) => {
     setProjectSelectedIM,
     projectIMs,
     setProjectIMs,
+    projectHazardCurveGetClick,
+    setProjectHazardCurveGetClick,
   };
 
   // pass the value in provider and return

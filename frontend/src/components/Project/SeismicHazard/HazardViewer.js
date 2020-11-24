@@ -1,58 +1,17 @@
-import React, { Fragment, useContext, useState, useEffect } from "react";
+import React, { Fragment } from "react";
 import Tabs from "react-bootstrap/Tabs";
 import { Tab } from "react-bootstrap";
 
-import { GlobalContext } from "context";
-
 import "assets/style/HazardForms.css";
 
+import HazardViewerHazardCurve from "./HazardViewerHazardCurve";
+
 const HazardViewer = () => {
-  const {
-    isTabEnabled,
-    selectedIM,
-    hazardCurveComputeClick,
-    disaggComputeClick,
-    uhsComputeClick,
-  } = useContext(GlobalContext);
-
-  const [selectedTab, setSelectedTab] = useState("hazardCurve");
-
-  // Hazard Form, IM selected and "Compute" clicked
-  useEffect(() => {
-    if (
-      hazardCurveComputeClick !== null &&
-      selectedIM !== null &&
-      isTabEnabled("hazard:hazard")
-    ) {
-      setSelectedTab("hazardCurve");
-    }
-  }, [hazardCurveComputeClick]);
-
-  useEffect(() => {
-    if (
-      disaggComputeClick !== null &&
-      selectedIM !== null &&
-      isTabEnabled("hazard:disagg")
-    ) {
-      setSelectedTab("disagg");
-    }
-  }, [disaggComputeClick]);
-
-  useEffect(() => {
-    if (uhsComputeClick !== null && isTabEnabled("hazard:uhs")) {
-      setSelectedTab("uhs");
-    }
-  }, [uhsComputeClick]);
-
   return (
     <Fragment>
-      <Tabs
-        activeKey={selectedTab}
-        className="hazard-viewer-tabs"
-        onSelect={(k) => setSelectedTab(k)}
-      >
+      <Tabs defaultActiveKey="hazardCurve" className="hazard-viewer-tabs">
         <Tab eventKey="hazardCurve" title="Hazard Curve">
-          Project - Hazard Curve
+          <HazardViewerHazardCurve />
         </Tab>
         <Tab eventKey="disagg" title="Disaggregation">
           Project - Disaggregation
