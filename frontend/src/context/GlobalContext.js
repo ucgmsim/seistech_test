@@ -71,6 +71,7 @@ export const Provider = (props) => {
   // Response for Location is an object and we need an array for dropdowns
   const [projectLocations, setProjectLocations] = useState([]);
   const [projectId, setProjectId] = useState(null);
+  const [projectLocationCode, setProjectLocationCode] = useState({});
 
   // Seismic Hazard
   const [projectSelectedIM, setProjectSelectedIM] = useState(null);
@@ -248,6 +249,8 @@ export const Provider = (props) => {
     setProjectLocations,
     projectId,
     setProjectId,
+    projectLocationCode,
+    setProjectLocationCode,
 
     // Seismic Hazard
     projectSelectedIM,

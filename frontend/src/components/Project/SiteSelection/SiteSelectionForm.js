@@ -18,6 +18,8 @@ const SiteSelectionForm = () => {
     setProjectLocations,
     projectId,
     setProjectId,
+    projectLocationCode,
+    setProjectLocationCode,
   } = useContext(GlobalContext);
 
   const { getTokenSilently } = useAuth0();
@@ -134,15 +136,21 @@ const SiteSelectionForm = () => {
   }, [projectId]);
 
   // Based on the location's response, we create an array for Location dropdown
+  // Also create a special object to create
   useEffect(() => {
     // We originally set projectLocations as an array but after update with the response
     // It changes to object and object.length is undefined which is not 0
     if (projectLocations.length !== 0) {
-      let tempArray = [];
+      let tempOptionArray = [];
+      let tempLocationCodeObj = {};
       for (const key of Object.keys(projectLocations)) {
-        tempArray.push(projectLocations[key]["name"]);
+        // Only pushing names into an array, ex: Christchurch and Dunedin
+        tempOptionArray.push(projectLocations[key]["name"]);
+        // Looks like { Christchurch: chch, Dunedin: dud}, to get station code easy
+        tempLocationCodeObj[projectLocations[key]["name"]] = key;
       }
-      setLocationOptions(tempArray);
+      setLocationOptions(tempOptionArray);
+      setProjectLocationCode(tempLocationCodeObj);
     }
   }, [projectLocations]);
 
@@ -161,6 +169,7 @@ const SiteSelectionForm = () => {
     console.log(`Im Project ID: ${projectId}`);
     console.log(`Im location: ${location}`);
     console.log(`Im vs30: ${vs30}`);
+    console.log(`Im the location code: ${projectLocationCode[location]}`);
   };
 
   return (
