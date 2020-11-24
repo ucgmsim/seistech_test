@@ -1,15 +1,15 @@
 import React, { Fragment, useEffect, useState } from "react";
 import Select from "react-select";
 
+import { createSelectArray } from "utils/Utils";
+
 const ProjectSelect = ({ id, setSelect, options }) => {
   const [localOptions, setLocalOptions] = useState([]);
 
   useEffect(() => {
     if (options.length !== 0) {
-      let tempOptions = options.map((option) => ({
-        value: option,
-        label: option,
-      }));
+      let tempOptions = createSelectArray(options);
+
       setLocalOptions(tempOptions);
     }
   }, [options]);

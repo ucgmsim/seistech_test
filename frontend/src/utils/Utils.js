@@ -47,3 +47,15 @@ export const getPlotData = (data) => {
 export const renderSigfigs = (fullprecision, sigfigs) => {
   return Number.parseFloat(fullprecision).toPrecision(sigfigs);
 };
+
+/*
+  Create an special aray for react-select
+*/
+export const createSelectArray = (options) => {
+  let selectOptions = options.map((option) => ({
+    value: option,
+    label: option,
+  }));
+
+  return selectOptions;
+};
