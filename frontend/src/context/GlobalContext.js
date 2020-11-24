@@ -13,9 +13,8 @@ export const Provider = (props) => {
   /*
     Hazard Analysis Tab
   */
-  /* 
-    Site Selection
-  */
+
+  // Site Selection
   const [station, setStation] = useState("");
   const [vs30, setVS30] = useState("");
   const [defaultVS30, setDefaultVS30] = useState("");
@@ -32,21 +31,14 @@ export const Provider = (props) => {
     lng: CONSTANTS.DEFAULT_MAPBOX_LNG,
   });
 
-  /* 
-    For IMs
-    The only exception regards naming conventions as 'ims' seems very odd
-  */
+  // For IMs
+  // The only exception regards naming conventions as 'ims' seems very odd
   const [IMs, setIMs] = useState([]);
 
-  /*
-    Seismic Hazard & GMS
-  */
+  // Seismic Hazard & GMS
   const [IMVectors, setIMVectors] = useState([]);
 
-  /*
-    Seismic Hazard
-  */
-
+  //  Seismic Hazard
   const [selectedIM, setSelectedIM] = useState(null);
   const [disaggAnnualProb, setDisaggAnnualProb] = useState(
     CONSTANTS.DEFAULT_ANNUAL_PROB
@@ -69,15 +61,16 @@ export const Provider = (props) => {
   const [nzs1170Input, setNZS1170Input] = useState();
   const [nzs1170SiteClass, setNZS1170SiteClass] = useState("A");
 
-  /*
-    GMS
-  */
+  // GMS
   const [computedGMS, setComputedGMS] = useState(null);
 
   /*
     Project Tab
   */
   const [projectSelectedIM, setProjectSelectedIM] = useState(null);
+
+  // Seismic Hazard
+  const [projectIMs, setProjectIMs] = useState([]);
 
   /* 
     User Permissions
@@ -184,9 +177,8 @@ export const Provider = (props) => {
     /*
       Hazard Analysis Tab
     */
-    /*
-      Site Selection
-    */
+
+    //Site Selection
     station,
     setStation,
     vs30,
@@ -207,20 +199,11 @@ export const Provider = (props) => {
     IMs,
     setIMs,
 
-    /*
-      GMS - IM Vector
-    */
-    IMVectors,
-    setIMVectors,
-
     // MapBox
     mapBoxCoordinate,
     setMapBoxCoordinate,
 
-    /*
-      Seismic Hazard
-    */
-
+    // Seismic Hazard
     selectedIM,
     setSelectedIM,
     disaggAnnualProb,
@@ -247,17 +230,20 @@ export const Provider = (props) => {
     nzs1170SiteClass,
     setNZS1170SiteClass,
 
-    /*
-      GMS
-    */
+    // GMS
     computedGMS,
     setComputedGMS,
+    IMVectors,
+    setIMVectors,
 
     /*
       Project Tab
     */
     projectSelectedIM,
     setProjectSelectedIM,
+    // Seismic Hazard
+    projectIMs,
+    setProjectIMs,
   };
 
   // pass the value in provider and return
