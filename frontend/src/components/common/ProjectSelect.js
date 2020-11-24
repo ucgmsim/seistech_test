@@ -5,6 +5,7 @@ import { createSelectArray } from "utils/Utils";
 
 const ProjectSelect = ({
   id,
+  value,
   setSelect,
   options,
   placeholder = "Loading...",
@@ -23,6 +24,7 @@ const ProjectSelect = ({
     <Fragment>
       <Select
         id={id}
+        value={value === undefined || value === null ? [] : value.value}
         placeholder={localOptions.length === 0 ? placeholder : "Select..."}
         onChange={(e) => setSelect(e.value)}
         options={localOptions}
