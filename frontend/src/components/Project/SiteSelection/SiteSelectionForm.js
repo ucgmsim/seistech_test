@@ -12,20 +12,26 @@ import "assets/style/HazardForms.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const SiteSelectionForm = () => {
-  const { setProjectIMs } = useContext(GlobalContext);
+  const {
+    setProjectIMs,
+    projectLocations,
+    setProjectLocations,
+    projectId,
+    setProjectId,
+  } = useContext(GlobalContext);
 
   const { getTokenSilently } = useAuth0();
 
-  const [projectId, setProjectId] = useState(null);
+  // TODO 25th
+  // Move these to GlobalContext so these can be used to get Hazard data.
+
   const [location, setLocation] = useState(null);
   const [vs30, setVs30] = useState(null);
 
   // Response for Project ID option and is an array, can use straightaway
   const [projectIdOptions, setProjectIdOptions] = useState([]);
 
-  // Response for Location is an object and we need an array for dropdowns
-  const [locationResponse, setLocationResponse] = useState([]);
-  // Using locationResponse which is an object to create two different arrays for dropdowns
+  // Using projectLocations which is an object to create two different arrays for dropdowns
   const [locationOptions, setLocationOptions] = useState([]);
   const [vs30Options, setVs30Options] = useState([]);
 
@@ -107,7 +113,7 @@ const SiteSelectionForm = () => {
               const responseIMData = await im.json();
               // Need to create another object based on the response (Object)
               // To be able to use in Dropdown, react-select
-              setLocationResponse(responseLocationData["locations"]);
+              setProjectLocations(responseLocationData["locations"]);
               // Setting IMs
               setProjectIMs(sortIMs(responseIMData["ims"]));
             })
@@ -129,29 +135,27 @@ const SiteSelectionForm = () => {
 
   // Based on the location's response, we create an array for Location dropdown
   useEffect(() => {
-    // We originally set locationResponse as an array but after update with the response
+    // We originally set projectLocations as an array but after update with the response
     // It changes to object and object.length is undefined which is not 0
-    if (locationResponse.length !== 0) {
+    if (projectLocations.length !== 0) {
       let tempArray = [];
-      for (const key of Object.keys(locationResponse)) {
-        tempArray.push(locationResponse[key]["name"]);
+      for (const key of Object.keys(projectLocations)) {
+        tempArray.push(projectLocations[key]["name"]);
       }
       setLocationOptions(tempArray);
     }
-  }, [locationResponse]);
+  }, [projectLocations]);
 
   // Based on the chosen Location, we create an array for VS30 dropdown
   useEffect(() => {
     if (location !== null) {
-      for (const key of Object.keys(locationResponse)) {
-        if (location === locationResponse[key]["name"]) {
-          setVs30Options(locationResponse[key]["vs30"]);
+      for (const key of Object.keys(projectLocations)) {
+        if (location === projectLocations[key]["name"]) {
+          setVs30Options(projectLocations[key]["vs30"]);
         }
       }
     }
   }, [location]);
-
-  // const vs30Options = ["Project A Test", "Project B Test", "Project C Test"];
 
   const displayInConsole = () => {
     console.log(`Im Project ID: ${projectId}`);

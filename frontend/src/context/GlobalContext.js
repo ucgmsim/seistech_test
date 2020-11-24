@@ -67,9 +67,13 @@ export const Provider = (props) => {
   /*
     Project Tab
   */
-  const [projectSelectedIM, setProjectSelectedIM] = useState(null);
+  // Site Selection
+  // Response for Location is an object and we need an array for dropdowns
+  const [projectLocations, setProjectLocations] = useState([]);
+  const [projectId, setProjectId] = useState(null);
 
   // Seismic Hazard
+  const [projectSelectedIM, setProjectSelectedIM] = useState(null);
   const [projectIMs, setProjectIMs] = useState([]);
 
   /* 
@@ -239,9 +243,15 @@ export const Provider = (props) => {
     /*
       Project Tab
     */
+    // Site Selection
+    projectLocations,
+    setProjectLocations,
+    projectId,
+    setProjectId,
+
+    // Seismic Hazard
     projectSelectedIM,
     setProjectSelectedIM,
-    // Seismic Hazard
     projectIMs,
     setProjectIMs,
   };
