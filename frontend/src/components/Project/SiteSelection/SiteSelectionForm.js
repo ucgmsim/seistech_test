@@ -5,13 +5,15 @@ import { GlobalContext } from "context";
 import { useAuth0 } from "components/common/ReactAuth0SPA";
 import * as CONSTANTS from "constants/Constants";
 import ProjectSelect from "components/common/ProjectSelect";
-import { handleErrors } from "utils/Utils";
+import { handleErrors, sortIMs } from "utils/Utils";
 
 import "assets/style/HazardForms.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const SiteSelectionForm = () => {
+  const { setProjectIMs } = useContext(GlobalContext);
+
   const { getTokenSilently } = useAuth0();
 
   const [projectId, setProjectId] = useState(null);
@@ -65,7 +67,7 @@ const SiteSelectionForm = () => {
     };
   }, []);
 
-  // Getting location when ID gets changed
+  // Getting location and IMs (for Hazard Curve) when ID gets changed
   useEffect(() => {
     const abortController = new AbortController();
     const signal = abortController.signal;
@@ -75,24 +77,39 @@ const SiteSelectionForm = () => {
         try {
           const token = await getTokenSilently();
 
-          await fetch(
-            CONSTANTS.CORE_API_BASE_URL +
-              CONSTANTS.CORE_API_ROUTE_PROJECT_SITES +
-              `?project_id=${projectId}`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-              signal: signal,
-            }
-          )
+          await Promise.all([
+            fetch(
+              CONSTANTS.CORE_API_BASE_URL +
+                CONSTANTS.CORE_API_ROUTE_PROJECT_SITES +
+                `?project_id=${projectId}`,
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+                signal: signal,
+              }
+            ),
+            fetch(
+              CONSTANTS.CORE_API_BASE_URL +
+                CONSTANTS.CORE_API_ROUTE_PROJECT_IMS +
+                `?project_id=${projectId}`,
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+                signal: signal,
+              }
+            ),
+          ])
             .then(handleErrors)
-            .then(async (response) => {
-              const responseData = await response.json();
+            .then(async ([location, im]) => {
+              const responseLocationData = await location.json();
+              const responseIMData = await im.json();
               // Need to create another object based on the response (Object)
               // To be able to use in Dropdown, react-select
-              console.log(responseData["locations"]);
-              setLocationResponse(responseData["locations"]);
+              setLocationResponse(responseLocationData["locations"]);
+              // Setting IMs
+              setProjectIMs(sortIMs(responseIMData["ims"]));
             })
             .catch((error) => {
               console.log(error);

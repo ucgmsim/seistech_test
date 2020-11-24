@@ -6,9 +6,9 @@ import { GlobalContext } from "context";
 import ProjectSelect from "components/common/ProjectSelect";
 
 const HazardCurveSection = () => {
-  const { projectSelectedIM, setProjectSelectedIM } = useContext(GlobalContext);
-
-  const options = ["A Test", "B Test", "C Test"];
+  const { projectSelectedIM, setProjectSelectedIM, projectIMs } = useContext(
+    GlobalContext
+  );
 
   const displayInConsole = () => {
     console.log(`Im chosen IM: ${projectSelectedIM}`);
@@ -30,7 +30,7 @@ const HazardCurveSection = () => {
         <ProjectSelect
           id="project-im"
           setSelect={setProjectSelectedIM}
-          options={options}
+          options={projectIMs}
         />
       </div>
 
