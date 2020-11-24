@@ -11,8 +11,8 @@ import GuideMessage from "components/common/GuideMessage";
 import ErrorMessage from "components/common/ErrorMessage";
 import { handleErrors } from "utils/Utils";
 
-import HazardEnsemblePlot from "./HazardEnsemblePlot";
-import HazardBranchPlot from "./HazardBranchPlot";
+import HazardEnsemblePlot from "../../common/HazardCurve/HazardEnsemblePlot";
+import HazardBranchPlot from "../../common/HazardCurve/HazardBranchPlot";
 import HazardCurveMetadata from "./HazardCurveMetadata";
 
 const HazardViewerHazardCurve = () => {
