@@ -14,23 +14,22 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const SiteSelectionForm = () => {
   const {
     setProjectIMs,
-    projectLocations,
-    setProjectLocations,
-    projectId,
     setProjectId,
+    setProjectVS30,
+    setProjectLocation,
     projectLocationCode,
     setProjectLocationCode,
-    projectVS30,
-    setProjectVS30,
   } = useContext(GlobalContext);
 
   const { getTokenSilently } = useAuth0();
 
-  const [location, setLocation] = useState(null);
-
   // Response for Project ID option and is an array, can use straightaway
   const [projectIdOptions, setProjectIdOptions] = useState([]);
 
+  const [localProjectId, setLocalProjectId] = useState(null);
+  const [localLocation, setLocalLocation] = useState(null);
+  const [localVS30, setLocalVS30] = useState(null);
+  const [localProjectLocations, setLocalProjectLocations] = useState([]);
   // Using projectLocations which is an object to create two different arrays for dropdowns
   const [locationOptions, setLocationOptions] = useState([]);
   const [vs30Options, setVs30Options] = useState([]);
@@ -79,7 +78,7 @@ const SiteSelectionForm = () => {
     const signal = abortController.signal;
 
     const getLocation = async () => {
-      if (projectId !== null) {
+      if (localProjectId !== null) {
         try {
           const token = await getTokenSilently();
 
@@ -87,7 +86,7 @@ const SiteSelectionForm = () => {
             fetch(
               CONSTANTS.CORE_API_BASE_URL +
                 CONSTANTS.CORE_API_ROUTE_PROJECT_SITES +
-                `?project_id=${projectId}`,
+                `?project_id=${localProjectId}`,
               {
                 headers: {
                   Authorization: `Bearer ${token}`,
@@ -98,7 +97,7 @@ const SiteSelectionForm = () => {
             fetch(
               CONSTANTS.CORE_API_BASE_URL +
                 CONSTANTS.CORE_API_ROUTE_PROJECT_IMS +
-                `?project_id=${projectId}`,
+                `?project_id=${localProjectId}`,
               {
                 headers: {
                   Authorization: `Bearer ${token}`,
@@ -113,9 +112,12 @@ const SiteSelectionForm = () => {
               const responseIMData = await im.json();
               // Need to create another object based on the response (Object)
               // To be able to use in Dropdown, react-select
-              setProjectLocations(responseLocationData["locations"]);
+              setLocalProjectLocations(responseLocationData["locations"]);
               // Setting IMs
               setProjectIMs(sortIMs(responseIMData["ims"]));
+              // Reset dropdowns
+              setLocalLocation(null);
+              setLocalVS30(null);
             })
             .catch((error) => {
               console.log(error);
@@ -131,43 +133,48 @@ const SiteSelectionForm = () => {
     return () => {
       abortController.abort();
     };
-  }, [projectId]);
+  }, [localProjectId]);
 
   // Based on the location's response, we create an array for Location dropdown
   // Also create a special object to create
   useEffect(() => {
     // We originally set projectLocations as an array but after update with the response
     // It changes to object and object.length is undefined which is not 0
-    if (projectLocations.length !== 0) {
+    if (localProjectLocations.length !== 0) {
       let tempOptionArray = [];
       let tempLocationCodeObj = {};
-      for (const key of Object.keys(projectLocations)) {
+      for (const key of Object.keys(localProjectLocations)) {
         // Only pushing names into an array, ex: Christchurch and Dunedin
-        tempOptionArray.push(projectLocations[key]["name"]);
+        tempOptionArray.push(localProjectLocations[key]["name"]);
         // Looks like { Christchurch: chch, Dunedin: dud}, to get station code easy
-        tempLocationCodeObj[projectLocations[key]["name"]] = key;
+        tempLocationCodeObj[localProjectLocations[key]["name"]] = key;
       }
       setLocationOptions(tempOptionArray);
       setProjectLocationCode(tempLocationCodeObj);
     }
-  }, [projectLocations]);
+  }, [localProjectLocations]);
 
   // Based on the chosen Location, we create an array for VS30 dropdown
   useEffect(() => {
-    if (location !== null) {
-      for (const key of Object.keys(projectLocations)) {
-        if (location === projectLocations[key]["name"]) {
-          setVs30Options(projectLocations[key]["vs30"]);
+    if (localLocation !== null) {
+      for (const key of Object.keys(localProjectLocations)) {
+        if (localLocation === localProjectLocations[key]["name"]) {
+          setVs30Options(localProjectLocations[key]["vs30"]);
+          // Reset the VS30 value
+          setLocalVS30(null);
         }
       }
     }
-  }, [location]);
+  }, [localLocation]);
 
-  const displayInConsole = () => {
-    console.log(`Im Project ID: ${projectId}`);
-    console.log(`Im location: ${location}`);
-    console.log(`Im projectVS30: ${projectVS30}`);
-    console.log(`Im the location code: ${projectLocationCode[location]}`);
+  const setGlobalVariables = () => {
+    console.log(`Im Project ID: ${localProjectId}`);
+    console.log(`Im location: ${localLocation}`);
+    console.log(`Im projectVS30: ${localVS30}`);
+    console.log(`Im the location code: ${projectLocationCode[localLocation]}`);
+    setProjectId(localProjectId);
+    setProjectLocation(localLocation);
+    setProjectVS30(localVS30);
   };
 
   return (
@@ -176,7 +183,8 @@ const SiteSelectionForm = () => {
       <div className="form-group">
         <ProjectSelect
           id="project-id-select"
-          setSelect={setProjectId}
+          value={localProjectId}
+          setSelect={setLocalProjectId}
           options={projectIdOptions}
         />
       </div>
@@ -185,7 +193,8 @@ const SiteSelectionForm = () => {
       <div className="form-group">
         <ProjectSelect
           id="location-select"
-          setSelect={setLocation}
+          value={localLocation}
+          setSelect={setLocalLocation}
           options={locationOptions}
           placeholder="Please select the Project ID first..."
         />
@@ -195,7 +204,8 @@ const SiteSelectionForm = () => {
       <div className="form-group">
         <ProjectSelect
           id="vs-30-select"
-          setSelect={setProjectVS30}
+          value={localVS30}
+          setSelect={setLocalVS30}
           options={vs30Options}
           placeholder="Please select the Location first..."
         />
@@ -207,9 +217,11 @@ const SiteSelectionForm = () => {
           type="button"
           className="btn btn-primary mt-2"
           disabled={
-            projectId === null || location === null || projectVS30 === null
+            localProjectId === null ||
+            localLocation === null ||
+            localVS30 === null
           }
-          onClick={() => displayInConsole()}
+          onClick={() => setGlobalVariables()}
         >
           Get
         </button>
