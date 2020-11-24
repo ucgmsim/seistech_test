@@ -30,7 +30,7 @@ const SiteSelectionForm = () => {
   const [localLocation, setLocalLocation] = useState(null);
   const [localVS30, setLocalVS30] = useState(null);
   const [localProjectLocations, setLocalProjectLocations] = useState([]);
-  // Using projectLocations which is an object to create two different arrays for dropdowns
+  // Using localProjectLocations which is an object to create two different arrays for dropdowns
   const [locationOptions, setLocationOptions] = useState([]);
   const [vs30Options, setVs30Options] = useState([]);
 
@@ -138,7 +138,7 @@ const SiteSelectionForm = () => {
   // Based on the location's response, we create an array for Location dropdown
   // Also create a special object to create
   useEffect(() => {
-    // We originally set projectLocations as an array but after update with the response
+    // We originally set localProjectLocations as an array but after update with the response
     // It changes to object and object.length is undefined which is not 0
     if (localProjectLocations.length !== 0) {
       let tempOptionArray = [];
