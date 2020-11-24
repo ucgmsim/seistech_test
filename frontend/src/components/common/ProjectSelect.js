@@ -3,7 +3,12 @@ import Select from "react-select";
 
 import { createSelectArray } from "utils/Utils";
 
-const ProjectSelect = ({ id, setSelect, options }) => {
+const ProjectSelect = ({
+  id,
+  setSelect,
+  options,
+  placeholder = "Loading...",
+}) => {
   const [localOptions, setLocalOptions] = useState([]);
 
   useEffect(() => {
@@ -18,7 +23,7 @@ const ProjectSelect = ({ id, setSelect, options }) => {
     <Fragment>
       <Select
         id={id}
-        placeholder={localOptions.length === 0 ? "Loading..." : "Select..."}
+        placeholder={localOptions.length === 0 ? placeholder : "Select..."}
         onChange={(e) => setSelect(e.value)}
         options={localOptions}
         isDisabled={localOptions.length === 0}
