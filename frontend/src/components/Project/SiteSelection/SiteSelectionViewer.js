@@ -2,21 +2,16 @@ import React, { Fragment } from "react";
 import Tabs from "react-bootstrap/Tabs";
 import { Tab } from "react-bootstrap";
 
-
 const SiteSelectionViewer = () => {
   return (
     <Fragment>
-      <Tabs defaultActiveKey="map">
-        <Tab eventKey="map" title="Map">
-          Project - Site Selection Map
-        </Tab>
-
+      <Tabs defaultActiveKey="regional">
         <Tab eventKey="regional" title="Regional">
-        Project - Regional Map
+          Project - Regional Map
         </Tab>
 
         <Tab eventKey="vs30" title="VS30">
-        Project - VS30 Map
+          Project - VS30 Map
         </Tab>
       </Tabs>
     </Fragment>
