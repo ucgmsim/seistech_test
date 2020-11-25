@@ -14,6 +14,8 @@ const HazardViewer = () => {
     GlobalContext
   );
 
+  const [selectedTab, setSelectedTab] = useState("hazardCurve");
+
   useEffect(() => {
     if (projectHazardCurveGetClick !== null) {
       setSelectedTab("hazardCurve");
@@ -26,10 +28,13 @@ const HazardViewer = () => {
     }
   }, [projectDisaggGetClick]);
 
-  const [selectedTab, setSelectedTab] = useState("hazardCurve");
   return (
     <Fragment>
-      <Tabs activeKey={selectedTab} className="hazard-viewer-tabs">
+      <Tabs
+        activeKey={selectedTab}
+        className="hazard-viewer-tabs"
+        onSelect={(key) => setSelectedTab(key)}
+      >
         <Tab eventKey="hazardCurve" title="Hazard Curve">
           <HazardViewerHazardCurve />
         </Tab>
