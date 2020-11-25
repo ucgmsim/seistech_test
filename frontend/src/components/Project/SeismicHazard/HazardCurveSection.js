@@ -7,7 +7,6 @@ import ProjectSelect from "components/common/ProjectSelect";
 
 const HazardCurveSection = () => {
   const {
-    projectSelectedIM,
     setProjectSelectedIM,
     projectIMs,
     projectId,
@@ -17,14 +16,17 @@ const HazardCurveSection = () => {
     setProjectHazardCurveGetClick,
   } = useContext(GlobalContext);
 
+  const [localSelectedIM, setLocalSelectedIM] = useState(null);
+
   const displayInConsole = () => {
-    console.log(`Im chosen IM: ${projectSelectedIM}`);
+    console.log(`Im chosen IM: ${localSelectedIM}`);
     console.log(`Im chosen Project ID: ${projectId}`);
     console.log(`IM chosen project VS30: ${projectVS30}`);
     console.log(`IM CHOSEN PROJECT LOCATION: ${projectLocation}`);
     console.log(
       `IM CHOSEN PROJECT LOCATION CODE: ${projectLocationCode[projectLocation]}`
     );
+    setProjectSelectedIM(localSelectedIM);
     setProjectHazardCurveGetClick(uuidv4());
   };
 
@@ -43,8 +45,8 @@ const HazardCurveSection = () => {
         </label>
         <ProjectSelect
           id="project-im"
-          value={projectSelectedIM}
-          setSelect={setProjectSelectedIM}
+          value={localSelectedIM}
+          setSelect={setLocalSelectedIM}
           options={projectIMs}
         />
       </div>
@@ -54,7 +56,7 @@ const HazardCurveSection = () => {
           id="project-hazard-curve-get-btn"
           type="button"
           className="btn btn-primary"
-          disabled={projectSelectedIM === null}
+          disabled={localSelectedIM === null}
           onClick={() => {
             displayInConsole();
           }}
