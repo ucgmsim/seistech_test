@@ -140,7 +140,7 @@ const HazardViewerUhs = () => {
 
       <DownloadButton
         disabled={!showPlotUHS}
-        downloadURL={CONSTANTS.INTE_API_DOWNLOAD_UHS}
+        downloadURL={CONSTANTS.CORE_API_DOWNLOAD_UHS}
         downloadToken={downloadToken}
         fileName="uniform_hazard_spectrum.zip"
       />

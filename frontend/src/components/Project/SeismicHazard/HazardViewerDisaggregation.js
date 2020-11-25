@@ -115,7 +115,7 @@ const HazadViewerDisaggregation = () => {
 
           await fetch(
             CONSTANTS.CORE_API_BASE_URL +
-              CONSTANTS.CORE_API_ROUTE_PROJECT_DISAGG_GET +
+              CONSTANTS.PROJECT_API_ROUTE_PROJECT_DISAGG_GET +
               queryString,
             {
               headers: {
@@ -312,7 +312,7 @@ const HazadViewerDisaggregation = () => {
       {/* Not needed yet */}
       {/* <DownloadButton
         disabled={!showContribTable}
-        downloadURL={CONSTANTS.INTE_API_DOWNLOAD_DISAGG}
+        downloadURL={CONSTANTS.CORE_API_DOWNLOAD_DISAGG}
         downloadToken={downloadToken}
         fileName="disaggregation.zip"
       /> */}

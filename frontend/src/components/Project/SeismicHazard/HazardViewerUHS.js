@@ -68,7 +68,7 @@ const HazardViewerUhs = () => {
 
           await fetch(
             CONSTANTS.CORE_API_BASE_URL +
-              CONSTANTS.CORE_API_ROUTE_PORJECT_UHS_GET +
+              CONSTANTS.PROJECT_API_ROUTE_PROJECT_UHS_GET +
               queryString,
             {
               headers: {
@@ -138,7 +138,7 @@ const HazardViewerUhs = () => {
 
       {/* <DownloadButton
         disabled={!showPlotUHS}
-        downloadURL={CONSTANTS.INTE_API_DOWNLOAD_UHS}
+        downloadURL={CONSTANTS.CORE_API_DOWNLOAD_UHS}
         downloadToken={downloadToken}
         fileName="uniform_hazard_spectrum.zip"
       /> */}

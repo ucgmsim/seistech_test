@@ -183,7 +183,7 @@ const HazardViewerHazardCurve = () => {
 
       <DownloadButton
         disabled={!showPlotHazard}
-        downloadURL={CONSTANTS.INTE_API_DOWNLOAD_HAZARD}
+        downloadURL={CONSTANTS.CORE_API_DOWNLOAD_HAZARD}
         downloadToken={downloadToken}
         fileName="hazard.zip"
       />

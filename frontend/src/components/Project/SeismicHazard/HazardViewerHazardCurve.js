@@ -67,7 +67,7 @@ const HazardViewerHazardCurve = () => {
 
           await fetch(
             CONSTANTS.CORE_API_BASE_URL +
-              CONSTANTS.CORE_API_ROUTE_PROJECT_HAZARD_GET +
+              CONSTANTS.PROJECT_API_ROUTE_PROJECT_HAZARD_GET +
               queryString,
             {
               headers: {
@@ -188,7 +188,7 @@ const HazardViewerHazardCurve = () => {
       {/* Will eventually have it but not now */}
       {/* <DownloadButton
         disabled={!showPlotHazard}
-        downloadURL={CONSTANTS.INTE_API_DOWNLOAD_HAZARD}
+        downloadURL={CONSTANTS.CORE_API_DOWNLOAD_HAZARD}
         downloadToken={downloadToken}
         fileName="hazard.zip"
       /> */}

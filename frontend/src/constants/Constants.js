@@ -4,34 +4,38 @@ export const CORE_API_BASE_URL =
   process.env.REACT_APP_CONSTANT_CORE_API_BASE_URL;
 
 export const APP_API_ROUTE_USERDATA = "user";
-export const CORE_API_ROUTE_ENSEMBLEIDS = "ensembleids";
-export const CORE_API_ROUTE_IMIDS = "imids";
-export const CORE_API_ROUTE_CONTEXT_MAP = "contextmap";
-export const CORE_API_ROUTE_VS30_MAP = "vs30map";
-export const CORE_API_ROUTE_LOCATION = "location";
-export const CORE_API_ROUTE_STATION = "station";
-export const CORE_API_ROUTE_HAZARD_PLOT = "hazard";
-export const CORE_API_ROUTE_DISAGG = "disagg";
-export const CORE_API_ROUTE_UHS = "uhs";
-export const CORE_API_ROUTE_GMS_COMPUTE = "gms/ensemble_gms";
-export const CORE_API_ROUTE_GMS_DEFAULT_IM_WEIGHTS = "gms/default_im_weights";
+
+export const CORE_API_ROUTE_ENSEMBLEIDS = "coreAPI/ensembleids";
+export const CORE_API_ROUTE_IMIDS = "coreAPI/imids";
+export const CORE_API_ROUTE_CONTEXT_MAP = "coreAPI/contextmap";
+export const CORE_API_ROUTE_VS30_MAP = "coreAPI/vs30map";
+export const CORE_API_ROUTE_LOCATION = "coreAPI/location";
+export const CORE_API_ROUTE_STATION = "coreAPI/station";
+export const CORE_API_ROUTE_HAZARD_PLOT = "coreAPI/hazard";
+export const CORE_API_ROUTE_DISAGG = "coreAPI/disagg";
+export const CORE_API_ROUTE_UHS = "coreAPI/uhs";
+
+export const CORE_API_ROUTE_GMS_COMPUTE = "coreAPI/gms/ensemble_gms";
+export const CORE_API_ROUTE_GMS_DEFAULT_IM_WEIGHTS =
+  "coreAPI/gms/default_im_weights";
 export const CORE_API_ROUTE_GMS_DEFAULT_CAUSAL_PARAMS =
-  "gms/default_causal_params";
-export const CORE_API_ROUTE_PROJECT_IDS = "project/ids/get";
-export const CORE_API_ROUTE_PROJECT_SITES = "project/sites/get";
-export const CORE_API_ROUTE_PROJECT_IMS = "project/ims/get";
-export const CORE_API_ROUTE_PROJECT_HAZARD_GET = "project/hazard/get";
-export const CORE_API_ROUTE_PROJECT_DISAGG_GET = "project/disagg/get";
-export const CORE_API_ROUTE_PROJECT_DISAGG_RPS = "project/disagg/rps/get";
-export const CORE_API_ROUTE_PROJECT_UHS_RPS = "project/uhs/rps/get";
-export const CORE_API_ROUTE_PORJECT_UHS_GET = "project/uhs/get";
-export const CORE_API_ROUTE_PROJECT_MAPS = "project/maps/get";
+  "coreAPI/gms/default_causal_params";
+
+export const PROJECT_API_ROUTE_PROJECT_IDS = "projectAPI/ids/get";
+export const PROJECT_API_ROUTE_PROJECT_SITES = "projectAPI/sites/get";
+export const PROJECT_API_ROUTE_PROJECT_IMS = "projectAPI/ims/get";
+export const PROJECT_API_ROUTE_PROJECT_HAZARD_GET = "projectAPI/hazard/get";
+export const PROJECT_API_ROUTE_PROJECT_DISAGG_GET = "projectAPI/disagg/get";
+export const PROJECT_API_ROUTE_PROJECT_DISAGG_RPS = "projectAPI/disagg/rps/get";
+export const PROJECT_API_ROUTE_PROJECT_UHS_RPS = "projectAPI/uhs/rps/get";
+export const PROJECT_API_ROUTE_PROJECT_UHS_GET = "projectAPI/uhs/get";
+export const PROJECT_API_ROUTE_PROJECT_MAPS = "projectAPI/maps/get";
 
 /* Download URL */
-export const INTE_API_DOWNLOAD_HAZARD = "hazard_download/";
-export const INTE_API_DOWNLOAD_DISAGG = "disagg_download/";
-export const INTE_API_DOWNLOAD_UHS = "uhs_download/";
-export const INTE_API_DOWNLOAD_GMS = "gms_download/";
+export const CORE_API_DOWNLOAD_HAZARD = "coreAPI/hazard_download/";
+export const CORE_API_DOWNLOAD_DISAGG = "coreAPI/disagg_download/";
+export const CORE_API_DOWNLOAD_UHS = "coreAPI/uhs_download/";
+export const CORE_API_DOWNLOAD_GMS = "coreAPI/gms_download/";
 
 /* 
   Words 

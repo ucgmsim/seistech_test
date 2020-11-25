@@ -52,7 +52,7 @@ const SiteSelectionViewer = () => {
 
           await fetch(
             CONSTANTS.CORE_API_BASE_URL +
-              CONSTANTS.CORE_API_ROUTE_PROJECT_MAPS +
+              CONSTANTS.PROJECT_API_ROUTE_PROJECT_MAPS +
               queryString,
             {
               headers: {
