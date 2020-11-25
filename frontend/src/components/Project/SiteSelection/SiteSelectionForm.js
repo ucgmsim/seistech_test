@@ -9,8 +9,6 @@ import { handleErrors, sortIMs } from "utils/Utils";
 
 import "assets/style/HazardForms.css";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 const SiteSelectionForm = () => {
   const {
     setProjectIMs,
@@ -19,7 +17,6 @@ const SiteSelectionForm = () => {
     setProjectId,
     setProjectVS30,
     setProjectLocation,
-    projectLocationCode,
     setProjectLocationCode,
     setProjectSiteSelectionGetClick,
   } = useContext(GlobalContext);
@@ -37,7 +34,7 @@ const SiteSelectionForm = () => {
   const [locationOptions, setLocationOptions] = useState([]);
   const [vs30Options, setVs30Options] = useState([]);
 
-  // Getting station
+  // Getting Project IDs
   useEffect(() => {
     const abortController = new AbortController();
     const signal = abortController.signal;
