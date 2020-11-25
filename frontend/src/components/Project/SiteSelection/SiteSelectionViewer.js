@@ -104,9 +104,9 @@ const SiteSelectionViewer = () => {
         <Tab eventKey="regional" title="Regional">
           {projectSiteSelectionGetClick === null && (
             <GuideMessage
-              header={CONSTANTS.HAZARD_CURVE}
-              body={CONSTANTS.HAZARD_CURVE_WARNING_MSG}
-              instruction={CONSTANTS.HAZARD_CURVE_INSTRUCTION}
+              header={CONSTANTS.SITE_SELECTION_REGIONAL_TITLE}
+              body={CONSTANTS.PROJECT_SITE_SELECTION_WARNING_MSG}
+              instruction={CONSTANTS.PROJECT_SITE_SELECTION_INSTRUCTION}
             />
           )}
           {showSpinner === true &&
@@ -130,9 +130,9 @@ const SiteSelectionViewer = () => {
         <Tab eventKey="vs30" title="VS30">
           {projectSiteSelectionGetClick === null && (
             <GuideMessage
-              header={CONSTANTS.HAZARD_CURVE}
-              body={CONSTANTS.HAZARD_CURVE_WARNING_MSG}
-              instruction={CONSTANTS.HAZARD_CURVE_INSTRUCTION}
+              header={CONSTANTS.SITE_SELECTION_VS30_TITLE}
+              body={CONSTANTS.PROJECT_SITE_SELECTION_WARNING_MSG}
+              instruction={CONSTANTS.PROJECT_SITE_SELECTION_INSTRUCTION}
             />
           )}
           {showSpinner === true &&

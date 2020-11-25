@@ -144,6 +144,35 @@ export const UNIFORM_HAZARD_SPECTRUM_INSTRUCTION = [
 ];
 
 /*
+  Project Tabs
+*/
+export const PROJECT_SITE_SELECTION_WARNING_MSG =
+  "Please do the following steps to see images.";
+export const PROJECT_SITE_SELECTION_INSTRUCTION = [
+  "Choose the Project ID.",
+  "Choose the Location.",
+  "Choose the VS30.",
+  "Click the Get button to see an image",
+];
+
+export const PROJECT_HAZARD_CURVE_INSTRUCTION = [
+  "Choose the Intensity Measure.",
+  "Click the Get buton in the 'Hazard Curve' section to see plots.",
+];
+
+export const PROJECT_DISAGG_INSTRUCTION_PLOT = [
+  "Choose the Intensity Measure.",
+  "Choose the Return Period",
+  "Click the Get buton in the 'Disaggregation' section to see plots.",
+];
+
+export const PROJECT_DISAGG_INSTRUCTION_TABLE = [
+  "Choose the Intensity Measure.",
+  "Choose the Return Period",
+  "Click the Get buton in the 'Disaggregation' section to see contribution table.",
+];
+
+/*
   Error Messages
 */
 

@@ -111,7 +111,7 @@ const HazardViewerHazardCurve = () => {
             <GuideMessage
               header={CONSTANTS.HAZARD_CURVE}
               body={CONSTANTS.HAZARD_CURVE_WARNING_MSG}
-              instruction={CONSTANTS.HAZARD_CURVE_INSTRUCTION}
+              instruction={CONSTANTS.PROJECT_HAZARD_CURVE_INSTRUCTION}
             />
           )}
 
@@ -149,7 +149,7 @@ const HazardViewerHazardCurve = () => {
             <GuideMessage
               header={CONSTANTS.HAZARD_CURVE}
               body={CONSTANTS.HAZARD_CURVE_WARNING_MSG}
-              instruction={CONSTANTS.HAZARD_CURVE_INSTRUCTION}
+              instruction={CONSTANTS.PROJECT_HAZARD_CURVE_INSTRUCTION}
             />
           )}
 
