@@ -132,6 +132,16 @@ def get_project_hazard():
     return proxy_to_core_api(flask.request, "api/project/hazard/get", "GET")
 
 
+@app.route("/project/disagg/get", methods=["GET"])
+def get_project_disagg():
+    return proxy_to_core_api(flask.request, "api/project/disagg/get", "GET")
+
+
+@app.route("/project/disagg/rps/get", methods=["GET"])
+def get_project_disagg_rps():
+    return proxy_to_core_api(flask.request, "api/project/disagg/rps/get", "GET")
+
+
 # Download
 @app.route("/hazard_download/<token>", methods=["GET"])
 def download_hazard(token):
