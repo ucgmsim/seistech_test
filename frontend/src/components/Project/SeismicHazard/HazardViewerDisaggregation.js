@@ -11,7 +11,7 @@ import GuideMessage from "components/common/GuideMessage";
 import ErrorMessage from "components/common/ErrorMessage";
 
 import { GlobalContext } from "context";
-import ContributionTable from "./ContributionTable";
+import ContributionTable from "../../common/Disaggregation/ContributionTable";
 import { handleErrors } from "utils/Utils";
 
 const HazadViewerDisaggregation = () => {
@@ -93,9 +93,9 @@ const HazadViewerDisaggregation = () => {
     const signal = abortController.signal;
 
     const getHazardData = async () => {
-      console.log("AM IHERE?")
+      console.log("AM IHERE?");
       if (projectDisaggGetClick !== null) {
-        console.log("WHATS GOING ON!?")
+        console.log("WHATS GOING ON!?");
         try {
           const token = await getTokenSilently();
           setShowErrorMessage({ isError: false, errorCode: null });
@@ -308,12 +308,13 @@ const HazadViewerDisaggregation = () => {
             )}
         </Tab>
       </Tabs>
-      <DownloadButton
+      {/* Not needed yet */}
+      {/* <DownloadButton
         disabled={!showContribTable}
         downloadURL={CONSTANTS.INTE_API_DOWNLOAD_DISAGG}
         downloadToken={downloadToken}
         fileName="disaggregation.zip"
-      />
+      /> */}
     </div>
   );
 };

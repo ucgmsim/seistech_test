@@ -11,7 +11,7 @@ import GuideMessage from "components/common/GuideMessage";
 import ErrorMessage from "components/common/ErrorMessage";
 
 import { GlobalContext } from "context";
-import ContributionTable from "./ContributionTable";
+import ContributionTable from "../../common/Disaggregation/ContributionTable";
 import { handleErrors } from "utils/Utils";
 
 const HazadViewerDisaggregation = () => {
