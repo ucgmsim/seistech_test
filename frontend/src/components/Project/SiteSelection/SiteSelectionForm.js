@@ -20,6 +20,7 @@ const SiteSelectionForm = () => {
     setProjectLocation,
     projectLocationCode,
     setProjectLocationCode,
+    setProjectSiteSelectionGetClick,
   } = useContext(GlobalContext);
 
   const { getTokenSilently } = useAuth0();
@@ -183,13 +184,10 @@ const SiteSelectionForm = () => {
   }, [localLocation]);
 
   const setGlobalVariables = () => {
-    console.log(`Im Project ID: ${localProjectId}`);
-    console.log(`Im location: ${localLocation}`);
-    console.log(`Im projectVS30: ${localVS30}`);
-    console.log(`Im the location code: ${projectLocationCode[localLocation]}`);
     setProjectId(localProjectId);
     setProjectLocation(localLocation);
     setProjectVS30(localVS30);
+    setProjectSiteSelectionGetClick(uuidv4());
   };
 
   return (
