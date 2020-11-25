@@ -21,7 +21,7 @@ const Project = () => {
   return (
     <Fragment>
       <Tabs defaultActiveKey="siteselection" className="hazard-tabs">
-        <Tab eventKey="siteselection" title="Site Selection" tabClassName="site-selection-tab">
+        <Tab eventKey="siteselection" title="Site Selection">
           <TwoColumnView
             cpanel={SiteSelectionForm}
             viewer={SiteSelectionViewer}
