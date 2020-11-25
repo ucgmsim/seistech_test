@@ -50,7 +50,7 @@ const HazardCurveSection = () => {
           id="project-hazard-curve-get-btn"
           type="button"
           className="btn btn-primary"
-          disabled={localSelectedRP === null}
+          disabled={localSelectedRP === null || projectSelectedIM === null}
           onClick={() => {
             displayInConsole();
           }}
