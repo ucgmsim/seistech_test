@@ -22,8 +22,8 @@ const HazardViewerHazardCurve = () => {
     projectHazardCurveGetClick,
     setProjectHazardCurveGetClick,
     projectId,
-    projectVS30,
     projectLocation,
+    projectVS30,
     projectLocationCode,
     projectSelectedIM,
   } = useContext(GlobalContext);
@@ -134,12 +134,12 @@ const HazardViewerHazardCurve = () => {
                   hazardData={hazardData}
                   im={projectSelectedIM}
                 />
-                {/* <HazardCurveMetadata
-                  selectedEnsemble={selectedEnsemble}
-                  station={station}
-                  selectedIM={selectedIM}
-                  vs30={vs30}
-                /> */}
+                <HazardCurveMetadata
+                  projectId={projectId}
+                  projectLocation={projectLocation}
+                  projectVS30={projectVS30}
+                  projectSelectedIM={projectSelectedIM}
+                />
               </Fragment>
             )}
         </Tab>
@@ -172,12 +172,12 @@ const HazardViewerHazardCurve = () => {
                   hazardData={hazardData}
                   im={projectSelectedIM}
                 />
-                {/* <HazardCurveMetadata
-                  selectedEnsemble={selectedEnsemble}
-                  station={station}
-                  selectedIM={selectedIM}
-                  vs30={vs30}
-                /> */}
+                <HazardCurveMetadata
+                  projectId={projectId}
+                  projectLocation={projectLocation}
+                  projectVS30={projectVS30}
+                  projectSelectedIM={projectSelectedIM}
+                />
               </Fragment>
             )}
         </Tab>

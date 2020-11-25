@@ -1,10 +1,10 @@
 import React from "react";
 
 const HazardCurveMetadata = ({
-  selectedEnsemble,
-  station,
-  selectedIM,
-  vs30,
+  projectId,
+  projectLocation,
+  projectVS30,
+  projectSelectedIM,
 }) => {
   return (
     <div className="form-group">
@@ -13,7 +13,7 @@ const HazardCurveMetadata = ({
         className="form-control"
         disabled
         rows="5"
-        value={`Ensemble: ${selectedEnsemble}\nStation: ${station}\nIntensity Measure: ${selectedIM}\nVS30: ${vs30}`}
+        value={`Project ID: ${projectId}\nLocation: ${projectLocation}\nVS30: ${projectVS30}\nIntensity Measure: ${projectSelectedIM}`}
       ></textarea>
     </div>
   );
