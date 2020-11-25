@@ -84,9 +84,12 @@ export const Provider = (props) => {
   const [projectHazardCurveGetClick, setProjectHazardCurveGetClick] = useState(
     null
   );
-  const [projectRPs, setProjectRPs] = useState([]);
+  const [projectDisagRPs, setProjectDisagRPs] = useState([]);
+  const [projectUHSRPs, setProjectUHSRPs] = useState([]);
   const [projectSelectedDisagRP, setProjectSelectedDisagRP] = useState(null);
   const [projectDisaggGetClick, setProjectDisaggGetClick] = useState(null);
+  const [projectUHSGetClick, setProjectUHSGetClick] = useState(null);
+  const [projectSelectedUHSRP, setProjectSelectedUHSRP] = useState([]);
 
   /* 
     User Permissions
@@ -274,12 +277,18 @@ export const Provider = (props) => {
     setProjectIMs,
     projectHazardCurveGetClick,
     setProjectHazardCurveGetClick,
-    projectRPs,
-    setProjectRPs,
+    projectDisagRPs,
+    setProjectDisagRPs,
+    projectUHSRPs,
+    setProjectUHSRPs,
     projectSelectedDisagRP,
     setProjectSelectedDisagRP,
     projectDisaggGetClick,
     setProjectDisaggGetClick,
+    projectUHSGetClick,
+    setProjectUHSGetClick,
+    projectSelectedUHSRP,
+    setProjectSelectedUHSRP,
   };
 
   // pass the value in provider and return

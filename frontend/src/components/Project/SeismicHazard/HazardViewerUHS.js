@@ -25,52 +25,47 @@ const HazardViewerUhs = () => {
   const [downloadToken, setDownloadToken] = useState("");
 
   const {
-    uhsComputeClick,
-    vs30,
-    defaultVS30,
-    selectedEnsemble,
-    station,
-    uhsRateTable,
+    projectId,
+    projectLocation,
+    projectVS30,
+    projectLocationCode,
+    projectSelectedUHSRP,
+    projectUHSGetClick,
   } = useContext(GlobalContext);
 
   /*
     Reset tabs if users change IM or VS30
   */
 
-  useEffect(() => {
-    setShowPlotUHS(false);
-    setShowSpinnerUHS(false);
-  }, [vs30]);
+  // useEffect(() => {
+  //   setShowPlotUHS(false);
+  //   setShowSpinnerUHS(false);
+  // }, [vs30]);
 
   useEffect(() => {
     const abortController = new AbortController();
     const signal = abortController.signal;
-
+    console.log(projectSelectedUHSRP);
     const loadUHSData = async () => {
-      if (uhsComputeClick !== null) {
+      if (projectUHSGetClick !== null) {
         try {
           setShowPlotUHS(false);
           setShowSpinnerUHS(true);
           setShowErrorMessage({ isError: false, errorCode: null });
+
           const token = await getTokenSilently();
 
-          const exceedences = uhsRateTable.map((entry, idx) => {
-            return parseFloat(entry) > 0
-              ? parseFloat(entry)
-              : 1 / parseFloat(entry);
-          });
+          let tempArray = [];
 
-          let queryString = `?ensemble_id=${selectedEnsemble}&station=${station}&exceedances=${exceedences.join(
-            ","
-          )}`;
+          projectSelectedUHSRP.forEach((RP) => tempArray.push(RP.value));
 
-          if (vs30 !== defaultVS30) {
-            queryString += `&vs30=${vs30}`;
-          }
+          let queryString = `?project_id=${projectId}&station_id=${
+            projectLocationCode[projectLocation]
+          }_${projectVS30}&rp=${tempArray.join(",")}`;
 
           await fetch(
             CONSTANTS.CORE_API_BASE_URL +
-              CONSTANTS.CORE_API_ROUTE_UHS +
+              CONSTANTS.CORE_API_ROUTE_PORJECT_UHS_GET +
               queryString,
             {
               headers: {
@@ -83,7 +78,7 @@ const HazardViewerUhs = () => {
             .then(async (response) => {
               const responseData = await response.json();
               setUHSData(responseData);
-              setDownloadToken(responseData["download_token"]);
+              // setDownloadToken(responseData["download_token"]);
               setShowSpinnerUHS(false);
               setShowPlotUHS(true);
             })
@@ -106,12 +101,12 @@ const HazardViewerUhs = () => {
     return () => {
       abortController.abort();
     };
-  }, [uhsComputeClick]);
+  }, [projectUHSGetClick]);
 
   return (
     <div className="uhs-viewer">
       <div className="tab-content">
-        {uhsComputeClick === null && (
+        {projectUHSGetClick === null && (
           <GuideMessage
             header={CONSTANTS.UNIFORM_HAZARD_SPECTRUM}
             body={CONSTANTS.UNIFORM_HAZARD_SPECTRUM_MSG}
@@ -120,10 +115,10 @@ const HazardViewerUhs = () => {
         )}
 
         {showSpinnerUHS === true &&
-          uhsComputeClick !== null &&
+          projectUHSGetClick !== null &&
           showErrorMessage.isError === false && <LoadingSpinner />}
 
-        {uhsComputeClick !== null &&
+        {projectUHSGetClick !== null &&
           showSpinnerUHS === false &&
           showErrorMessage.isError === true && (
             <ErrorMessage errorCode={showErrorMessage.errorCode} />
@@ -138,12 +133,12 @@ const HazardViewerUhs = () => {
           )}
       </div>
 
-      <DownloadButton
+      {/* <DownloadButton
         disabled={!showPlotUHS}
         downloadURL={CONSTANTS.INTE_API_DOWNLOAD_UHS}
         downloadToken={downloadToken}
         fileName="uniform_hazard_spectrum.zip"
-      />
+      /> */}
     </div>
   );
 };

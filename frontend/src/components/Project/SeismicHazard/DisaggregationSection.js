@@ -7,7 +7,7 @@ import ProjectSelect from "components/common/ProjectSelect";
 
 const HazardCurveSection = () => {
   const {
-    projectRPs,
+    projectDisagRPs,
     projectSelectedIM,
     setProjectSelectedDisagRP,
     setProjectDisaggGetClick,
@@ -41,7 +41,7 @@ const HazardCurveSection = () => {
           id="project-rp"
           value={localSelectedRP}
           setSelect={setLocalSelectedRP}
-          options={projectRPs}
+          options={projectDisagRPs}
         />
       </div>
 

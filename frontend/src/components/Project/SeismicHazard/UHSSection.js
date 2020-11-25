@@ -3,35 +3,34 @@ import * as CONSTANTS from "constants/Constants";
 import { v4 as uuidv4 } from "uuid";
 import { GlobalContext } from "context";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { renderSigfigs, disableScrollOnNumInput } from "utils/Utils";
+import {
+  createSelectArray,
+  renderSigfigs,
+  disableScrollOnNumInput,
+} from "utils/Utils";
 import TextField from "@material-ui/core/TextField";
 
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 
 const UHSSection = () => {
-  const animatedComponents = makeAnimated();
-  const [localExdRate, setLocalExdRate] = useState([]);
+  const {
+    projectDisagRPs,
+    setProjectSelectedUHSRP,
+    setProjectUHSGetClick,
+  } = useContext(GlobalContext);
 
-  const options = [
-    {
-      value: "72.13",
-      label: "72.13",
-    },
-    {
-      value: "54.95",
-      label: "54.95",
-    },
-    {
-      value: "84.75",
-      label: "84.75",
-    },
-  ];
+  const animatedComponents = makeAnimated();
+  const [localRPs, setLocalRPs] = useState([]);
+
+  const options = createSelectArray(projectDisagRPs);
 
   const displayInConsole = () => {
-    localExdRate.forEach((rate) => {
-      console.log(`OH BOI!: ${rate.value}`)
-    })
+    localRPs.forEach((rate) => {
+      console.log(`OH BOI!: ${rate.value}`);
+    });
+    setProjectSelectedUHSRP(localRPs);
+    setProjectUHSGetClick(uuidv4());
   };
 
   return (
@@ -54,7 +53,7 @@ const UHSSection = () => {
             components={animatedComponents}
             isMulti
             placeholder={options.length === 0 ? "Loading..." : "Select..."}
-            onChange={(value) => setLocalExdRate(value || [])}
+            onChange={(value) => setLocalRPs(value || [])}
             options={options}
             isDisabled={options.length === 0}
           />
@@ -66,7 +65,7 @@ const UHSSection = () => {
           id="uhs-update-plot"
           type="button"
           className="btn btn-primary mt-2"
-          disabled={localExdRate.length === 0}
+          disabled={localRPs.length === 0}
           onClick={() => {
             displayInConsole();
           }}

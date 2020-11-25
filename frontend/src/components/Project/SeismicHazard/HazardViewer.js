@@ -8,11 +8,14 @@ import "assets/style/HazardForms.css";
 
 import HazardViewerHazardCurve from "./HazardViewerHazardCurve";
 import HazardViewerDisaggregation from "./HazardViewerDisaggregation";
+import HazardViewerUHS from "./HazardViewerUHS";
 
 const HazardViewer = () => {
-  const { projectHazardCurveGetClick, projectDisaggGetClick } = useContext(
-    GlobalContext
-  );
+  const {
+    projectHazardCurveGetClick,
+    projectDisaggGetClick,
+    projectUHSGetClick,
+  } = useContext(GlobalContext);
 
   const [selectedTab, setSelectedTab] = useState("hazardCurve");
 
@@ -28,6 +31,12 @@ const HazardViewer = () => {
     }
   }, [projectDisaggGetClick]);
 
+  useEffect(() => {
+    if (projectUHSGetClick !== null) {
+      setSelectedTab("uhs");
+    }
+  }, [projectUHSGetClick]);
+
   return (
     <Fragment>
       <Tabs
@@ -42,7 +51,7 @@ const HazardViewer = () => {
           <HazardViewerDisaggregation />
         </Tab>
         <Tab eventKey="uhs" title="Uniform Hazard Spectrum">
-          Project - UHS
+          <HazardViewerUHS />
         </Tab>
       </Tabs>
     </Fragment>
