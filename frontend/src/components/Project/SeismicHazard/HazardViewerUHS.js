@@ -30,17 +30,20 @@ const HazardViewerUhs = () => {
     projectVS30,
     projectLocationCode,
     projectSelectedUHSRP,
+    setProjectSelectedUHSRP,
     projectUHSGetClick,
+    setProjectUHSGetClick,
   } = useContext(GlobalContext);
 
   /*
     Reset tabs if users change IM or VS30
   */
-
-  // useEffect(() => {
-  //   setShowPlotUHS(false);
-  //   setShowSpinnerUHS(false);
-  // }, [vs30]);
+  useEffect(() => {
+    setShowPlotUHS(false);
+    setShowSpinnerUHS(false);
+    setProjectSelectedUHSRP([]);
+    setProjectUHSGetClick(null);
+  }, [projectId, projectLocation, projectVS30]);
 
   useEffect(() => {
     const abortController = new AbortController();

@@ -50,6 +50,7 @@ const HazadViewerDisaggregation = () => {
     projectLocationCode,
     projectSelectedIM,
     projectSelectedDisagRP,
+    setProjectSelectedDisagRP,
   } = useContext(GlobalContext);
 
   const [rowsToggled, setRowsToggled] = useState(true);
@@ -86,7 +87,9 @@ const HazadViewerDisaggregation = () => {
     setShowSpinnerContribTable(false);
 
     setProjectDisaggGetClick(null);
-  }, [projectSelectedIM]);
+
+    setProjectSelectedDisagRP(null);
+  }, [projectId, projectVS30, projectLocation, projectSelectedIM]);
 
   useEffect(() => {
     const abortController = new AbortController();

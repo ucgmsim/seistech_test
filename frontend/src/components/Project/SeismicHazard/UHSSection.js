@@ -1,14 +1,9 @@
 import React, { useState, useContext, useEffect, Fragment } from "react";
-import * as CONSTANTS from "constants/Constants";
+
 import { v4 as uuidv4 } from "uuid";
 import { GlobalContext } from "context";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  createSelectArray,
-  renderSigfigs,
-  disableScrollOnNumInput,
-} from "utils/Utils";
-import TextField from "@material-ui/core/TextField";
+
+import { createSelectArray } from "utils/Utils";
 
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
@@ -16,6 +11,7 @@ import makeAnimated from "react-select/animated";
 const UHSSection = () => {
   const {
     projectDisagRPs,
+    projectSelectedUHSRP,
     setProjectSelectedUHSRP,
     setProjectUHSGetClick,
   } = useContext(GlobalContext);
@@ -24,6 +20,12 @@ const UHSSection = () => {
   const [localRPs, setLocalRPs] = useState([]);
 
   const options = createSelectArray(projectDisagRPs);
+
+  useEffect(() => {
+    if (projectSelectedUHSRP.length === 0) {
+      setLocalRPs([]);
+    }
+  }, [projectSelectedUHSRP]);
 
   const displayInConsole = () => {
     setProjectSelectedUHSRP(localRPs);
@@ -50,6 +52,7 @@ const UHSSection = () => {
             components={animatedComponents}
             isMulti
             placeholder={options.length === 0 ? "Loading..." : "Select..."}
+            value={localRPs.length === 0 ? [] : localRPs}
             onChange={(value) => setLocalRPs(value || [])}
             options={options}
             isDisabled={options.length === 0}

@@ -7,16 +7,19 @@ import ProjectSelect from "components/common/ProjectSelect";
 
 const HazardCurveSection = () => {
   const {
+    projectSelectedIM,
     setProjectSelectedIM,
     projectIMs,
-    projectId,
-    projectVS30,
-    projectLocation,
-    projectLocationCode,
     setProjectHazardCurveGetClick,
   } = useContext(GlobalContext);
 
   const [localSelectedIM, setLocalSelectedIM] = useState(null);
+
+  useEffect(() => {
+    if (projectSelectedIM === null) {
+      setLocalSelectedIM(null);
+    }
+  }, [projectSelectedIM]);
 
   const displayInConsole = () => {
     setProjectSelectedIM(localSelectedIM);

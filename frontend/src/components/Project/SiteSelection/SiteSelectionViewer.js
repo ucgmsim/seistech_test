@@ -36,11 +36,6 @@ const SiteSelectionViewer = () => {
   const [vs30Map, setVS30Map] = useState(null);
 
   useEffect(() => {
-    setShowSpinner(false);
-    setShowImages(false);
-  }, [projectId, projectVS30, projectLocation]);
-
-  useEffect(() => {
     const abortController = new AbortController();
     const signal = abortController.signal;
 

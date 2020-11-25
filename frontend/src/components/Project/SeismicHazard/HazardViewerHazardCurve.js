@@ -26,6 +26,7 @@ const HazardViewerHazardCurve = () => {
     projectVS30,
     projectLocationCode,
     projectSelectedIM,
+    setProjectSelectedIM,
   } = useContext(GlobalContext);
 
   const [showSpinnerHazard, setShowSpinnerHazard] = useState(false);
@@ -46,6 +47,7 @@ const HazardViewerHazardCurve = () => {
     setShowSpinnerHazard(false);
     setShowPlotHazard(false);
     setProjectHazardCurveGetClick(null);
+    setProjectSelectedIM(null);
   }, [projectId, projectVS30, projectLocation]);
 
   useEffect(() => {

@@ -2,18 +2,24 @@ import React, { useState, useContext, useEffect, Fragment } from "react";
 
 import { v4 as uuidv4 } from "uuid";
 import { GlobalContext } from "context";
-import * as CONSTANTS from "constants/Constants";
 import ProjectSelect from "components/common/ProjectSelect";
 
 const HazardCurveSection = () => {
   const {
     projectDisagRPs,
     projectSelectedIM,
+    projectSelectedDisagRP,
     setProjectSelectedDisagRP,
     setProjectDisaggGetClick,
   } = useContext(GlobalContext);
 
   const [localSelectedRP, setLocalSelectedRP] = useState(null);
+
+  useEffect(() => {
+    if (projectSelectedDisagRP === null) {
+      setLocalSelectedRP(null);
+    }
+  }, [projectSelectedDisagRP]);
 
   const displayInConsole = () => {
     setProjectSelectedDisagRP(localSelectedRP);
