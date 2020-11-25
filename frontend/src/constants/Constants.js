@@ -23,7 +23,7 @@ export const CORE_API_ROUTE_PROJECT_IMS = "project/ims/get";
 export const CORE_API_ROUTE_PROJECT_HAZARD_GET = "project/hazard/get";
 export const CORE_API_ROUTE_PROJECT_DISAGG_GET = "project/disagg/get";
 export const CORE_API_ROUTE_PROJECT_DISAGG_RPS = "project/disagg/rps/get";
-export const CORE_API_ROUTE_PROJECT_UHS_RPS = "project/uhs/rpgs/get";
+export const CORE_API_ROUTE_PROJECT_UHS_RPS = "project/uhs/rps/get";
 export const CORE_API_ROUTE_PORJECT_UHS_GET = "project/uhs/get";
 export const CORE_API_ROUTE_PROJECT_MAPS = "project/maps/get";
 
