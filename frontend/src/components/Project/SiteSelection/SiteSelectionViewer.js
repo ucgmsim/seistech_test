@@ -12,7 +12,6 @@ import LoadingSpinner from "components/common/LoadingSpinner";
 import GuideMessage from "components/common/GuideMessage";
 import ErrorMessage from "components/common/ErrorMessage";
 
-import MapImage from "components/common/SiteSelection/MapImage";
 import { handleErrors } from "utils/Utils";
 
 const SiteSelectionViewer = () => {
@@ -122,7 +121,11 @@ const SiteSelectionViewer = () => {
             showImages === true &&
             regionalMap !== null &&
             showErrorMessage.isError === false && (
-              <MapImage source={regionalMap} alt="Regional Map" />
+              <img
+                className="rounded mx-auto d-block img-fluid"
+                src={`data:image/png;base64,${regionalMap}`}
+                alt="Regional Map"
+              />
             )}
         </Tab>
 
@@ -148,7 +151,11 @@ const SiteSelectionViewer = () => {
             showImages === true &&
             regionalMap !== null &&
             showErrorMessage.isError === false && (
-              <MapImage source={vs30Map} alt="VS30 Map" />
+              <img
+                className="rounded mx-auto d-block img-fluid"
+                src={`data:image/png;base64,${vs30Map}`}
+                alt="VS30 Map"
+              />
             )}
         </Tab>
       </Tabs>
