@@ -142,6 +142,21 @@ def get_project_disagg_rps():
     return proxy_to_core_api(flask.request, "api/project/disagg/rps/get", "GET")
 
 
+@app.route("/project/uhs/rps/get", methods=["GET"])
+def get_project_uhs_rps():
+    return proxy_to_core_api(flask.request, "api/project/uhs/rps/get", "GET")
+
+
+@app.route("/project/uhs/get", methods=["GET"])
+def get_project_uhs():
+    return proxy_to_core_api(flask.request, "api/project/uhs/get", "GET")
+
+
+@app.route("/project/maps/get", methods=["GET"])
+def get_project_maps():
+    return proxy_to_core_api(flask.request, "api/project/maps/get", "GET")
+
+
 # Download
 @app.route("/hazard_download/<token>", methods=["GET"])
 def download_hazard(token):
