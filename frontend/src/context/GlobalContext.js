@@ -82,6 +82,7 @@ export const Provider = (props) => {
   );
   const [projectRPs, setProjectRPs] = useState([]);
   const [projectSelectedDisagRP, setProjectSelectedDisagRP] = useState(null);
+  const [projectDisaggGetClick, setProjectDisaggGetClick] = useState(null);
 
   /* 
     User Permissions
@@ -271,6 +272,8 @@ export const Provider = (props) => {
     setProjectRPs,
     projectSelectedDisagRP,
     setProjectSelectedDisagRP,
+    projectDisaggGetClick,
+    setProjectDisaggGetClick,
   };
 
   // pass the value in provider and return

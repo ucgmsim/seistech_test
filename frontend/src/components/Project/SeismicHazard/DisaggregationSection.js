@@ -6,18 +6,22 @@ import * as CONSTANTS from "constants/Constants";
 import ProjectSelect from "components/common/ProjectSelect";
 
 const HazardCurveSection = () => {
-  const [returnPeriod, setReturnPeriod] = useState(null);
   const {
     projectRPs,
     projectSelectedIM,
-    projectSelectedDisagRP,
     setProjectSelectedDisagRP,
+    setProjectDisaggGetClick,
   } = useContext(GlobalContext);
+
+  const [localSelectedRP, setLocalSelectedRP] = useState(null);
 
   const displayInConsole = () => {
     console.log(
-      `Im Disaggregation Return Period: ${returnPeriod} and selected IM ${projectSelectedIM}`
+      `Im Disaggregation Return Period: ${localSelectedRP} and selected IM ${projectSelectedIM}`
     );
+
+    setProjectSelectedDisagRP(localSelectedRP);
+    setProjectDisaggGetClick(uuidv4());
   };
 
   return (
@@ -35,8 +39,8 @@ const HazardCurveSection = () => {
         </label>
         <ProjectSelect
           id="project-rp"
-          value={projectSelectedDisagRP}
-          setSelect={setProjectSelectedDisagRP}
+          value={localSelectedRP}
+          setSelect={setLocalSelectedRP}
           options={projectRPs}
         />
       </div>
@@ -46,7 +50,7 @@ const HazardCurveSection = () => {
           id="project-hazard-curve-get-btn"
           type="button"
           className="btn btn-primary"
-          disabled={projectSelectedDisagRP === null}
+          disabled={localSelectedRP === null}
           onClick={() => {
             displayInConsole();
           }}
