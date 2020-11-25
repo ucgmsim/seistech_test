@@ -65,7 +65,7 @@ const HazardViewerHazardCurve = () => {
 
           await fetch(
             CONSTANTS.CORE_API_BASE_URL +
-              CONSTANTS.CORE_API_ROUTE_PROJECT_HAZARD +
+              CONSTANTS.CORE_API_ROUTE_PROJECT_HAZARD_GET +
               queryString,
             {
               headers: {
