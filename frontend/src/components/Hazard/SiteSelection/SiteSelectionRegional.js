@@ -8,6 +8,8 @@ import LoadingSpinner from "components/common/LoadingSpinner";
 
 import GuideMessage from "components/common/GuideMessage";
 import ErrorMessage from "components/common/ErrorMessage";
+import MapImage from "components/common/SiteSelection/MapImage";
+
 import { handleErrors } from "utils/Utils";
 
 const SiteSelectionRegional = () => {
@@ -97,11 +99,7 @@ const SiteSelectionRegional = () => {
       {contextPlot !== null &&
         showSpinner === false &&
         showErrorMessage.isError === false && (
-          <img
-            className="rounded mx-auto d-block img-fluid"
-            src={`data:image/png;base64,${contextPlot}`}
-            alt="Regional Map"
-          />
+          <MapImage source={contextPlot} alt="Regional Map" />
         )}
     </Fragment>
   );

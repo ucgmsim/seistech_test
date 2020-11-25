@@ -1,15 +1,15 @@
 import React, { Fragment } from "react";
 
-const SiteSelectionRegional = ({ source }) => {
+const MapImage = ({ source, alt }) => {
   return (
     <Fragment>
       <img
         className="rounded mx-auto d-block img-fluid"
         src={`data:image/png;base64,${source}`}
-        alt="Regional Map"
+        alt={alt}
       />
     </Fragment>
   );
 };
 
-export default SiteSelectionRegional;
+export default MapImage;
