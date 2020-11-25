@@ -26,9 +26,6 @@ const UHSSection = () => {
   const options = createSelectArray(projectDisagRPs);
 
   const displayInConsole = () => {
-    localRPs.forEach((rate) => {
-      console.log(`OH BOI!: ${rate.value}`);
-    });
     setProjectSelectedUHSRP(localRPs);
     setProjectUHSGetClick(uuidv4());
   };

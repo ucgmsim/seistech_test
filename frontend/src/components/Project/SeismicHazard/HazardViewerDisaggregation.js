@@ -93,9 +93,7 @@ const HazadViewerDisaggregation = () => {
     const signal = abortController.signal;
 
     const getHazardData = async () => {
-      console.log("AM IHERE?");
       if (projectDisaggGetClick !== null) {
-        console.log("WHATS GOING ON!?");
         try {
           const token = await getTokenSilently();
           setShowErrorMessage({ isError: false, errorCode: null });

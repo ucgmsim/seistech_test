@@ -45,7 +45,7 @@ const HazardViewerUhs = () => {
   useEffect(() => {
     const abortController = new AbortController();
     const signal = abortController.signal;
-    console.log(projectSelectedUHSRP);
+
     const loadUHSData = async () => {
       if (projectUHSGetClick !== null) {
         try {

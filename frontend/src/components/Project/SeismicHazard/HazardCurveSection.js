@@ -19,13 +19,6 @@ const HazardCurveSection = () => {
   const [localSelectedIM, setLocalSelectedIM] = useState(null);
 
   const displayInConsole = () => {
-    console.log(`Im chosen IM: ${localSelectedIM}`);
-    console.log(`Im chosen Project ID: ${projectId}`);
-    console.log(`IM chosen project VS30: ${projectVS30}`);
-    console.log(`IM CHOSEN PROJECT LOCATION: ${projectLocation}`);
-    console.log(
-      `IM CHOSEN PROJECT LOCATION CODE: ${projectLocationCode[projectLocation]}`
-    );
     setProjectSelectedIM(localSelectedIM);
     setProjectHazardCurveGetClick(uuidv4());
   };

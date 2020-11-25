@@ -16,10 +16,6 @@ const HazardCurveSection = () => {
   const [localSelectedRP, setLocalSelectedRP] = useState(null);
 
   const displayInConsole = () => {
-    console.log(
-      `Im Disaggregation Return Period: ${localSelectedRP} and selected IM ${projectSelectedIM}`
-    );
-
     setProjectSelectedDisagRP(localSelectedRP);
     setProjectDisaggGetClick(uuidv4());
   };
