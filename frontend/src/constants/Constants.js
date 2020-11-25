@@ -20,7 +20,9 @@ export const CORE_API_ROUTE_GMS_DEFAULT_CAUSAL_PARAMS =
 export const CORE_API_ROUTE_PROJECT_IDS = "project/ids/get";
 export const CORE_API_ROUTE_PROJECT_SITES = "project/sites/get";
 export const CORE_API_ROUTE_PROJECT_IMS = "project/ims/get";
-export const CORE_API_ROUTE_PROJECT_HAZARD = "project/hazard/get";
+export const CORE_API_ROUTE_PROJECT_HAZARD_GET = "project/hazard/get";
+export const CORE_API_ROUTE_PROJECT_DISAGG_GET = "project/disagg/get"
+export const CORE_API_ROUTE_PROJECT_DISAGG_RPS = "project/disagg/rps/get"
 
 /* Download URL */
 export const INTE_API_DOWNLOAD_HAZARD = "hazard_download/";

@@ -3,26 +3,16 @@ import React, { useState, useContext, useEffect, Fragment } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { GlobalContext } from "context";
 import * as CONSTANTS from "constants/Constants";
-import Select from "react-select";
+import ProjectSelect from "components/common/ProjectSelect";
 
 const HazardCurveSection = () => {
   const [returnPeriod, setReturnPeriod] = useState(null);
-  const { projectSelectedIM } = useContext(GlobalContext);
-
-  const options = [
-    {
-      value: "A Test",
-      label: "A Test",
-    },
-    {
-      value: "B Test",
-      label: "B Test",
-    },
-    {
-      value: "C Test",
-      label: "C Test",
-    },
-  ];
+  const {
+    projectRPs,
+    projectSelectedIM,
+    projectSelectedDisagRP,
+    setProjectSelectedDisagRP,
+  } = useContext(GlobalContext);
 
   const displayInConsole = () => {
     console.log(
@@ -43,12 +33,11 @@ const HazardCurveSection = () => {
         >
           Return Period
         </label>
-        <Select
-          id="disagg-return-period"
-          placeholder={options.length === 0 ? "Loading..." : "Select..."}
-          onChange={(e) => setReturnPeriod(e.value)}
-          options={options}
-          isDisabled={options.length === 0 || projectSelectedIM === null}
+        <ProjectSelect
+          id="project-rp"
+          value={projectSelectedDisagRP}
+          setSelect={setProjectSelectedDisagRP}
+          options={projectRPs}
         />
       </div>
 
@@ -57,7 +46,7 @@ const HazardCurveSection = () => {
           id="project-hazard-curve-get-btn"
           type="button"
           className="btn btn-primary"
-          disabled={returnPeriod === null}
+          disabled={projectSelectedDisagRP === null}
           onClick={() => {
             displayInConsole();
           }}

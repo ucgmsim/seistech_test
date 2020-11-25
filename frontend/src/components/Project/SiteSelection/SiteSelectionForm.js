@@ -14,6 +14,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const SiteSelectionForm = () => {
   const {
     setProjectIMs,
+    setProjectRPs,
     setProjectId,
     setProjectVS30,
     setProjectLocation,
@@ -72,7 +73,7 @@ const SiteSelectionForm = () => {
     };
   }, []);
 
-  // Getting location and IMs (for Hazard Curve) when ID gets changed
+  // Getting location, IMs (for Hazard Curve) and RPs (for Disaggregation) when ID gets changed
   useEffect(() => {
     const abortController = new AbortController();
     const signal = abortController.signal;
@@ -105,16 +106,30 @@ const SiteSelectionForm = () => {
                 signal: signal,
               }
             ),
+            fetch(
+              CONSTANTS.CORE_API_BASE_URL +
+                CONSTANTS.CORE_API_ROUTE_PROJECT_DISAGG_RPS +
+                `?project_id=${localProjectId}`,
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+                signal: signal,
+              }
+            ),
           ])
             .then(handleErrors)
-            .then(async ([location, im]) => {
+            .then(async ([location, im, rps]) => {
               const responseLocationData = await location.json();
               const responseIMData = await im.json();
+              const responseRPData = await rps.json();
               // Need to create another object based on the response (Object)
               // To be able to use in Dropdown, react-select
               setLocalProjectLocations(responseLocationData["locations"]);
               // Setting IMs
               setProjectIMs(sortIMs(responseIMData["ims"]));
+              // Setting RPs
+              setProjectRPs(responseRPData["rps"]);
               // Reset dropdowns
               setLocalLocation(null);
               setLocalVS30(null);
