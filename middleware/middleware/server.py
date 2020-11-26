@@ -47,7 +47,7 @@ def handle_auth_error(ex):
     return response
 
 
-def proxy_to_core_api(
+def proxy_to_api(
     request,
     route,
     methods,
