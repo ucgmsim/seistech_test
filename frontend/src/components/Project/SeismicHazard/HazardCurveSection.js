@@ -22,8 +22,14 @@ const HazardCurveSection = () => {
     }
   }, [projectSelectedIM]);
 
+  // When local IM gets changed, update the global instantly so can do disaggregation without getting Hazard Curve data
+  useEffect(() => {
+    if (localSelectedIM !== null) {
+      setProjectSelectedIM(localSelectedIM);
+    }
+  }, [localSelectedIM]);
+
   const getHazardCurve = () => {
-    setProjectSelectedIM(localSelectedIM);
     setProjectHazardCurveGetClick(uuidv4());
   };
 
