@@ -5,7 +5,7 @@ import { getPlotData } from "utils/Utils";
 import { PLOT_MARGIN } from "constants/Constants";
 import ErrorMessage from "components/common/ErrorMessage";
 
-const HazardEnsemblePlot = ({ hazardData, im, station }) => {
+const HazardEnsemblePlot = ({ hazardData, im, lat, lng }) => {
   if (hazardData !== null && !hazardData.hasOwnProperty("error")) {
     const ensHazard = hazardData["ensemble_hazard"];
 
@@ -78,7 +78,11 @@ const HazardEnsemblePlot = ({ hazardData, im, station }) => {
         config={{
           displayModeBar: true,
           toImageButtonOptions: {
-            filename: `Hazard_Plot_${im}_${station}`,
+            filename: `Hazard_Plot_${im}_Lat_${String(
+              parseFloat(lat).toFixed(4)
+            ).replace(".", "p")}_Lng_${String(
+              parseFloat(lng).toFixed(4)
+            ).replace(".", "p")}`,
           },
         }}
       />
