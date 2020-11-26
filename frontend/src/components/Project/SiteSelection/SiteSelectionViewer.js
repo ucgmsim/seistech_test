@@ -23,6 +23,7 @@ const SiteSelectionViewer = () => {
     projectVS30,
     projectLocationCode,
     projectSiteSelectionGetClick,
+    setProjectSiteSelectionGetClick,
   } = useContext(GlobalContext);
 
   const [showSpinner, setShowSpinner] = useState(false);
@@ -34,6 +35,14 @@ const SiteSelectionViewer = () => {
 
   const [regionalMap, setRegionalMap] = useState(null);
   const [vs30Map, setVS30Map] = useState(null);
+
+  // Reset when it first renders 
+  // E.g. change tab between Pojrects to Hazard Analyis
+  useEffect(() => {
+    setShowImages(false);
+    setShowSpinner(false);
+    setProjectSiteSelectionGetClick(null);
+  }, []);
 
   useEffect(() => {
     const abortController = new AbortController();
