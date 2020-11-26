@@ -36,6 +36,11 @@ const SiteSelectionForm = () => {
 
   // Getting Project IDs
   useEffect(() => {
+    // Also resetting those to default to disable tabs
+    setProjectId(null);
+    setProjectLocation(null);
+    setProjectVS30(null);
+
     const abortController = new AbortController();
     const signal = abortController.signal;
 
