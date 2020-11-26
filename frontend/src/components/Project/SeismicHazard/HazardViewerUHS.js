@@ -36,7 +36,7 @@ const HazardViewerUhs = () => {
   } = useContext(GlobalContext);
 
   /*
-    Reset tabs if users change IM or VS30
+    Reset tabs if users change project id, project location or project vs30
   */
   useEffect(() => {
     setShowPlotUHS(false);

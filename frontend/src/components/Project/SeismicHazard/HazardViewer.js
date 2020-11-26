@@ -19,6 +19,7 @@ const HazardViewer = () => {
 
   const [selectedTab, setSelectedTab] = useState("hazardCurve");
 
+  // When users click Get button, change the current to tab its tab to display plots/images
   useEffect(() => {
     if (projectHazardCurveGetClick !== null) {
       setSelectedTab("hazardCurve");

@@ -15,13 +15,14 @@ const HazardCurveSection = () => {
 
   const [localSelectedIM, setLocalSelectedIM] = useState(null);
 
+  // Reset local variable to null when global changed to null (Reset)
   useEffect(() => {
     if (projectSelectedIM === null) {
       setLocalSelectedIM(null);
     }
   }, [projectSelectedIM]);
 
-  const displayInConsole = () => {
+  const getHazardCurve = () => {
     setProjectSelectedIM(localSelectedIM);
     setProjectHazardCurveGetClick(uuidv4());
   };
@@ -54,7 +55,7 @@ const HazardCurveSection = () => {
           className="btn btn-primary"
           disabled={localSelectedIM === null}
           onClick={() => {
-            displayInConsole();
+            getHazardCurve();
           }}
         >
           Get

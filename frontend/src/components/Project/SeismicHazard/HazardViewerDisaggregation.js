@@ -74,7 +74,7 @@ const HazadViewerDisaggregation = () => {
   };
 
   /*
-    Reset tabs if users change IM
+    Reset tabs if users change project id, project vs30, project location or project im
   */
   useEffect(() => {
     setShowSpinnerDisaggEpsilon(false);
@@ -111,7 +111,11 @@ const HazadViewerDisaggregation = () => {
           setShowContribTable(false);
           setShowSpinnerContribTable(true);
 
-          let queryString = `?project_id=${projectId}&station_id=${projectLocationCode[projectLocation]}_${projectVS30}&im=${projectSelectedIM}&rp=${projectSelectedDisagRP}`;
+          let queryString =
+            `?project_id=${projectId}` +
+            `&station_id=${projectLocationCode[projectLocation]}_${projectVS30}` +
+            `&im=${projectSelectedIM}` +
+            `&rp=${projectSelectedDisagRP}`;
 
           await fetch(
             CONSTANTS.CORE_API_BASE_URL +

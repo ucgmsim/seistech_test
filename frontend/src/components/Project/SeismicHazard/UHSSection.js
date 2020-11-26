@@ -21,13 +21,14 @@ const UHSSection = () => {
 
   const options = createSelectArray(projectDisagRPs);
 
+  // Reset local variable to empty array when global changed to empty array (Reset)
   useEffect(() => {
     if (projectSelectedUHSRP.length === 0) {
       setLocalRPs([]);
     }
   }, [projectSelectedUHSRP]);
 
-  const displayInConsole = () => {
+  const getUHS = () => {
     setProjectSelectedUHSRP(localRPs);
     setProjectUHSGetClick(uuidv4());
   };
@@ -67,7 +68,7 @@ const UHSSection = () => {
           className="btn btn-primary mt-2"
           disabled={localRPs.length === 0}
           onClick={() => {
-            displayInConsole();
+            getUHS();
           }}
         >
           Get
