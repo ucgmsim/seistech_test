@@ -436,7 +436,7 @@ Users need to set the location first in **Site Selection** tab to get into this 
 
 ##### Project Hazard Curve
 
-Users can choose one **Intensit Measure** from the dropdown, then click **Get** button to get the following plots.
+Users can choose one **Intensity Measure** from the dropdown, then click **Get** button to get the following plots.
 
 - Ensemble branches
 - Fault/distributed seismicity contribution
