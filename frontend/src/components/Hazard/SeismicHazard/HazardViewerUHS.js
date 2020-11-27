@@ -35,6 +35,12 @@ const HazardViewerUhs = () => {
     siteSelectionLng,
   } = useContext(GlobalContext);
 
+  const extraInfo = {
+    from: "hazard",
+    lat: siteSelectionLat,
+    lng: siteSelectionLng,
+  };
+
   /*
     Reset tabs if users change IM or VS30
   */
@@ -135,11 +141,7 @@ const HazardViewerUhs = () => {
           showPlotUHS === true &&
           showErrorMessage.isError === false && (
             <Fragment>
-              <UHSPlot
-                uhsData={uhsData}
-                lat={siteSelectionLat}
-                lng={siteSelectionLng}
-              />
+              <UHSPlot uhsData={uhsData} extra={extraInfo} />
             </Fragment>
           )}
       </div>

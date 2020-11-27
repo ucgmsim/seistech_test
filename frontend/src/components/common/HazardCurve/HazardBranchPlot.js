@@ -5,7 +5,7 @@ import { getPlotData } from "utils/Utils";
 import { PLOT_MARGIN } from "constants/Constants";
 import ErrorMessage from "components/common/ErrorMessage";
 
-const HazardBranchPlot = ({ hazardData, im, lat, lng }) => {
+const HazardBranchPlot = ({ hazardData, im, extra }) => {
   if (hazardData !== null && !hazardData.hasOwnProperty("error")) {
     const branchHazard = hazardData["branches_hazard"];
     // // Create the scatter objects for the branch totals
@@ -74,11 +74,14 @@ const HazardBranchPlot = ({ hazardData, im, lat, lng }) => {
         config={{
           displayModeBar: true,
           toImageButtonOptions: {
-            filename: `Branches_Hazard_Plot_${im}_Lat_${String(
-              parseFloat(lat).toFixed(4)
-            ).replace(".", "p")}_Lng_${String(
-              parseFloat(lng).toFixed(4)
-            ).replace(".", "p")}`,
+            filename:
+              extra.from === "hazard"
+                ? `Branches_Hazard_Plot_${im}_Lat_${String(
+                    parseFloat(extra.lat).toFixed(4)
+                  ).replace(".", "p")}_Lng_${String(
+                    parseFloat(extra.lng).toFixed(4)
+                  ).replace(".", "p")}`
+                : `Branches_Hazard_Plot_${im}_project_id_${extra.id}_location_${extra.location}_vs30_${extra.vs30}`,
           },
         }}
       />
