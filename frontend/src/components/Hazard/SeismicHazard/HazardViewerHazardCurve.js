@@ -26,6 +26,8 @@ const HazardViewerHazardCurve = () => {
     selectedIM,
     selectedEnsemble,
     station,
+    siteSelectionLat,
+    siteSelectionLng,
   } = useContext(GlobalContext);
 
   const [showSpinnerHazard, setShowSpinnerHazard] = useState(false);
@@ -134,7 +136,12 @@ const HazardViewerHazardCurve = () => {
             hazardData !== null &&
             showErrorMessage.isError === false && (
               <Fragment>
-                <HazardBranchPlot hazardData={hazardData} im={selectedIM} />
+                <HazardBranchPlot
+                  hazardData={hazardData}
+                  im={selectedIM}
+                  lat={siteSelectionLat}
+                  lng={siteSelectionLng}
+                />
                 <HazardCurveMetadata
                   selectedEnsemble={selectedEnsemble}
                   station={station}
@@ -169,7 +176,12 @@ const HazardViewerHazardCurve = () => {
             hazardData !== null &&
             showErrorMessage.isError === false && (
               <Fragment>
-                <HazardEnsemblePlot hazardData={hazardData} im={selectedIM} />
+                <HazardEnsemblePlot
+                  hazardData={hazardData}
+                  im={selectedIM}
+                  lat={siteSelectionLat}
+                  lng={siteSelectionLng}
+                />
                 <HazardCurveMetadata
                   selectedEnsemble={selectedEnsemble}
                   station={station}

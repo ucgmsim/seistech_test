@@ -31,6 +31,8 @@ const HazardViewerUhs = () => {
     selectedEnsemble,
     station,
     uhsRateTable,
+    siteSelectionLat,
+    siteSelectionLng,
   } = useContext(GlobalContext);
 
   /*
@@ -133,7 +135,11 @@ const HazardViewerUhs = () => {
           showPlotUHS === true &&
           showErrorMessage.isError === false && (
             <Fragment>
-              <UHSPlot uhsData={uhsData} />
+              <UHSPlot
+                uhsData={uhsData}
+                lat={siteSelectionLat}
+                lng={siteSelectionLng}
+              />
             </Fragment>
           )}
       </div>
