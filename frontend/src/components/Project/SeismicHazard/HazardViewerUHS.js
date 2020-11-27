@@ -35,6 +35,13 @@ const HazardViewerUhs = () => {
     setProjectUHSGetClick,
   } = useContext(GlobalContext);
 
+  const extraInfo = {
+    from: "project",
+    id: projectId,
+    location: projectLocation,
+    vs30: projectVS30,
+  };
+
   /*
     Reset tabs if users change project id, project location or project vs30
   */
@@ -131,7 +138,7 @@ const HazardViewerUhs = () => {
           showPlotUHS === true &&
           showErrorMessage.isError === false && (
             <Fragment>
-              <UHSPlot uhsData={uhsData} />
+              <UHSPlot uhsData={uhsData} extra={extraInfo} />
             </Fragment>
           )}
       </div>

@@ -81,7 +81,7 @@ const HazardBranchPlot = ({ hazardData, im, extra }) => {
                   ).replace(".", "p")}_Lng_${String(
                     parseFloat(extra.lng).toFixed(4)
                   ).replace(".", "p")}`
-                : `Branches_Hazard_Plot_${im}_project_id_${extra.id}_location_${extra.location}_vs30_${extra.vs30}`,
+                : `Branches_Hazard_Plot_${extra.im}_project_id_${extra.id}_location_${extra.location}_vs30_${extra.vs30}`,
           },
         }}
       />

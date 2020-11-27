@@ -40,6 +40,14 @@ const HazardViewerHazardCurve = () => {
 
   const [downloadToken, setDownloadToken] = useState("");
 
+  const extraInfo = {
+    from: "project",
+    id: projectId,
+    location: projectLocation,
+    vs30: projectVS30,
+    im: projectSelectedIM,
+  };
+
   /*
     Reset tabs if users change Project ID, VS30 or Location
   */
@@ -135,6 +143,7 @@ const HazardViewerHazardCurve = () => {
                 <HazardBranchPlot
                   hazardData={hazardData}
                   im={projectSelectedIM}
+                  extra={extraInfo}
                 />
                 <HazardCurveMetadata
                   projectId={projectId}
@@ -173,6 +182,7 @@ const HazardViewerHazardCurve = () => {
                 <HazardEnsemblePlot
                   hazardData={hazardData}
                   im={projectSelectedIM}
+                  extra={extraInfo}
                 />
                 <HazardCurveMetadata
                   projectId={projectId}
