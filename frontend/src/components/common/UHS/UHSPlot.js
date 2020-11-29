@@ -6,7 +6,7 @@ import ErrorMessage from "components/common/ErrorMessage";
 
 import "assets/style/UHSPlot.css";
 
-const UHSPlot = ({ uhsData, lat, lng }) => {
+const UHSPlot = ({ uhsData, extra }) => {
   if (uhsData !== null && !uhsData.hasOwnProperty("error")) {
     // Create NZ code UHS scatter objs
     const scatterObjs = [];
@@ -53,11 +53,14 @@ const UHSPlot = ({ uhsData, lat, lng }) => {
         config={{
           displayModeBar: true,
           toImageButtonOptions: {
-            filename: `UHS_Plot_Lat_${String(
-              parseFloat(lat).toFixed(4)
-            ).replace(".", "p")}_Lng_${String(
-              parseFloat(lng).toFixed(4)
-            ).replace(".", "p")}`,
+            filename:
+              extra.from === "hazard"
+                ? `UHS_Plot_Lat_${String(
+                    parseFloat(extra.lat).toFixed(4)
+                  ).replace(".", "p")}_Lng_${String(
+                    parseFloat(extra.lng).toFixed(4)
+                  ).replace(".", "p")}`
+                : `UHS_Plot_project_id_${extra.id}_location_${extra.location}_vs30_${extra.vs30}`,
           },
         }}
       />

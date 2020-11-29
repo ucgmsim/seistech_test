@@ -11,8 +11,6 @@ from flask import Flask, request, jsonify, _request_ctx_stack, Response
 
 app = Flask("seistech_web")
 
-# TODO: Configure CORS properly - After I managed to host api under development.seistech.nz/api
-# cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 CORS(app)
 
 ENV = os.environ["ENV"]
@@ -23,8 +21,12 @@ ALGORITHMS = os.environ["ALGORITHMS"]
 
 # For DEV/EA/PROD with ENV
 coreApiBase = os.environ["CORE_API_BASE"]
-# In case I need to make a change locally
+# For Project API with ENV
+projectApiBase = os.environ["PROJECT_API_BASE"]
+# In case I need to make a change locally - for SeisTech
 # coreApiBase = "http://localhost:10022/"
+# For SeisTech - Project tab
+# coreApiBase = "http://localhost:10066/"
 
 # Generate the coreAPI token
 coreApiToken = "Bearer {}".format(
@@ -45,7 +47,7 @@ def handle_auth_error(ex):
     return response
 
 
-def proxy_to_core_api(
+def proxy_to_api(
     request,
     route,
     methods,
@@ -53,6 +55,9 @@ def proxy_to_core_api(
     headers: Dict = None,
 ):
     """Middleware - Handling the communication between Frontend and Core API.
+    We check the request.full_path (e.g., projectAPI/ids/get)
+    If it contains projectAPI, we siwtch APIBase to Project API path.
+    Default is Core API path.
 
     Parameters
     ----------
@@ -67,9 +72,15 @@ def proxy_to_core_api(
     headers: object
         An object that stores some headers.
     """
+
+    APIBase = coreApiBase
+
+    if "projectAPI" in request.full_path:
+        APIBase = projectApiBase
+
     if methods == "POST":
         resp = requests.post(
-            coreApiBase + route, data=request, headers={"Authorization": coreApiToken}
+            APIBase + route, data=request, headers={"Authorization": coreApiToken}
         )
 
     elif methods == "GET":
@@ -79,7 +90,7 @@ def proxy_to_core_api(
             querystring = "?" + querystring
 
         resp = requests.get(
-            coreApiBase + route + querystring, headers={"Authorization": coreApiToken}
+            APIBase + route + querystring, headers={"Authorization": coreApiToken}
         )
 
     response = Response(
@@ -90,8 +101,7 @@ def proxy_to_core_api(
 
 
 def get_token_auth_header():
-    """Obtains the Access Token from the Authorization Header
-    """
+    """Obtains the Access Token from the Authorization Header"""
     auth = request.headers.get("Authorization", None)
     if not auth:
         raise AuthError(
@@ -130,8 +140,7 @@ def get_token_auth_header():
 
 
 def requires_auth(f):
-    """Determines if the Access Token is valid
-    """
+    """Determines if the Access Token is valid"""
 
     @wraps(f)
     def decorated(*args, **kwargs):

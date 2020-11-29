@@ -15,3 +15,6 @@ middleware/middleware.egg-info/
 
 # Pthon virtual environment
 /venv
+
+# vscode setting file
+/.vscode
