@@ -307,8 +307,7 @@ They also include a shell script called `Dockerise.sh`. By running this shell sc
 
 ##### Ensemble
 
-If it is in DEV version, you see two options, **v20p5emp** and **v20p45sim**.
-But in EA and PROD.
+If it is in DEV version, you see two options, **v20p5emp** and **v20p45sim** for **Ensemble** but in EA and PROD, they are not visible.
 
 ##### Location
 
