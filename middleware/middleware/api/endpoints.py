@@ -68,7 +68,7 @@ def get_hazard():
 @requires_auth
 def get_nzcode():
     if requires_permission("hazard:hazard"):
-        return proxy_to_core_api(flask.request, "api/hazard/nz11750/get", "GET")
+        return proxy_to_api(flask.request, "api/hazard/nz11750/get", "GET")
     raise AuthError(
         {
             "code": "Unauthorized",
@@ -82,7 +82,7 @@ def get_nzcode():
 @requires_auth
 def get_nzcode_soil_class():
     if requires_permission("hazard:hazard"):
-        return proxy_to_core_api(flask.request, "api/hazard/nz11750/soil_class", "GET")
+        return proxy_to_api(flask.request, "api/hazard/nz11750/soil_class", "GET")
     raise AuthError(
         {
             "code": "Unauthorized",
@@ -96,7 +96,7 @@ def get_nzcode_soil_class():
 @requires_auth
 def get_nzcode_default_params():
     if requires_permission("hazard:hazard"):
-        return proxy_to_core_api(
+        return proxy_to_api(
             flask.request, "api/hazard/nz11750/default_params", "GET"
         )
     raise AuthError(
