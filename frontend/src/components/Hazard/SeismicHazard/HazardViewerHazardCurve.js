@@ -124,7 +124,7 @@ const HazardViewerHazardCurve = () => {
             .then(handleErrors)
             .then(async (response) => {
               const nzCodeDataResponse = await response.json();
-              setNZCodeData(nzCodeDataResponse["im_values"]);
+              setNZCodeData(nzCodeDataResponse["nz11750_hazard"]["im_values"]);
               setIsNZCodeComputed(true);
               setShowSpinnerHazard(false);
               setShowPlotHazard(true);
