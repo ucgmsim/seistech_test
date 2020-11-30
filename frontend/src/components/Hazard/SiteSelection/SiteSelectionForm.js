@@ -23,7 +23,17 @@ const SiteSelectionForm = () => {
   });
   const [localLat, setLocalLat] = useState(CONSTANTS.DEFAULT_LAT);
   const [localLng, setLocalLng] = useState(CONSTANTS.DEFAULT_LNG);
+  /* 
+    InputSource is either `input` or `mapbox`
+    `input` for input fields
+    `mapbox` for MapBox click
+  */
+  const [inputSource, setInputSource] = useState({
+    lat: "input",
+    lng: "input",
+  });
   const [localSetClick, setLocalSetClick] = useState(null);
+  let inputStatus = "doUpdate";
 
   const {
     setLocationSetClick,
@@ -44,6 +54,14 @@ const SiteSelectionForm = () => {
   } = useContext(GlobalContext);
 
   useEffect(() => {
+    if (inputStatus === "doUpdate") {
+      console.log("IM HERE!")
+      setInputSource({
+        lat: "mapbox",
+        lng: "mapbox",
+      });
+    }
+
     setLocalLat(mapBoxCoordinate.lat);
     setLocalLng(mapBoxCoordinate.lng);
   }, [mapBoxCoordinate]);
@@ -62,14 +80,43 @@ const SiteSelectionForm = () => {
   };
 
   const onClickLocationSet = () => {
+    console.log(`YOU JUST CLICKED ME, STATUS: ${inputStatus}`)
+    inputStatus = "doNotUpdate";
+
+    console.log(`WE JUST UPDATED STATUS: ${inputStatus}`)
+    setLocalSetClick(uuidv4());
+    setSiteSelectionLat(localLat);
+    setSiteSelectionLng(localLng);
+
     setMapBoxCoordinate({
       lat: localLat,
       lng: localLng,
     });
-    setSiteSelectionLat(localLat);
-    setSiteSelectionLng(localLng);
+
+    setInputSource({
+      lat: "input",
+      lng: "input",
+    });
+
     setLocationSetClick(uuidv4());
-    setLocalSetClick(uuidv4());
+    inputStatus = "doUpdate";
+    console.log(`WE JUST UPDATED STATUS: ${inputStatus}`)
+  };
+
+  const setttingLocalLat = (e) => {
+    setInputSource((prevState) => ({
+      ...prevState,
+      lat: "input",
+    }));
+    setLocalLat(e);
+  };
+
+  const settingLocalLng = (e) => {
+    setInputSource((prevState) => ({
+      ...prevState,
+      lng: "input",
+    }));
+    setLocalLng(e);
   };
 
   /*
@@ -230,8 +277,12 @@ const SiteSelectionForm = () => {
               id="haz-lat"
               className="flex-grow-1"
               type="number"
-              value={localLat}
-              onChange={(e) => setLocalLat(e.target.value)}
+              value={
+                inputSource.lat === "input"
+                  ? localLat
+                  : Number(localLat).toFixed(4)
+              }
+              onChange={(e) => setttingLocalLat(e.target.value)}
               placeholder="[-47.4, -34.3]"
               error={
                 (localLat >= -47.4 && localLat <= -34.3) || localLat === ""
@@ -260,8 +311,12 @@ const SiteSelectionForm = () => {
                 id="haz-lng"
                 className="flex-grow-1"
                 type="number"
-                value={localLng}
-                onChange={(e) => setLocalLng(e.target.value)}
+                value={
+                  inputSource.lng === "input"
+                    ? localLng
+                    : Number(localLng).toFixed(4)
+                }
+                onChange={(e) => settingLocalLng(e.target.value)}
                 placeholder="[165, 180]"
                 error={
                   (localLng >= 165 && localLng <= 180) || localLng === ""

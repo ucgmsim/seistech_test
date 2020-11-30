@@ -7,7 +7,11 @@ import ReactMapGL, {
 import { GlobalContext } from "context";
 import SiteSelectionMapPin from "./SiteSelectionMapPin";
 import "assets/style/SiteSelectionMap.css";
-import { MAP_BOX_WIDTH, MAP_BOX_HEIGHT, MAP_BOX_TOKEN } from "constants/Constants";
+import {
+  MAP_BOX_WIDTH,
+  MAP_BOX_HEIGHT,
+  MAP_BOX_TOKEN,
+} from "constants/Constants";
 
 const SiteSelectionMap = () => {
   const { mapBoxCoordinate, setMapBoxCoordinate } = useContext(GlobalContext);
