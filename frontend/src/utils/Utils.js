@@ -59,3 +59,68 @@ export const getPlotData = (data) => {
 export const renderSigfigs = (fullprecision, sigfigs) => {
   return Number.parseFloat(fullprecision).toPrecision(sigfigs);
 };
+
+/*
+  Create an special aray for react-select
+*/
+export const createSelectArray = (options) => {
+  let selectOptions = options.map((option) => ({
+    value: option,
+    label: option,
+  }));
+
+  return selectOptions;
+};
+
+/*
+  JS version of qcore IM Sort
+*/
+
+const DEFAULT_PATTERN_ORDER = [
+  "station",
+  "component",
+  "PGA",
+  "PGV",
+  "CAV",
+  "AI",
+  "Ds575",
+  "Ds595",
+  "Ds2080",
+  "MMI",
+  "pSA",
+  "FAS",
+  "IESDR",
+];
+
+export const sortIMs = (unsortedIMs) => {
+  const adjIMs = [];
+
+  if (unsortedIMs.length !== 0) {
+    for (const pattern of DEFAULT_PATTERN_ORDER) {
+      const curIMs = Array.from(unsortedIMs, (x) => {
+        if (x.startsWith(pattern) === true) {
+          return x;
+        }
+      });
+
+      const filteredCurIMs = curIMs.filter((element) => {
+        return element !== undefined;
+      });
+
+      if (filteredCurIMs.length === 0) {
+        continue;
+      } else if (filteredCurIMs.length === 1) {
+        adjIMs.push(filteredCurIMs[0]);
+      } else {
+        const tempSortedIMs = filteredCurIMs.sort((a, b) => {
+          return a.split("_")[1] - b.split("_")[1];
+        });
+        tempSortedIMs.forEach((x) => {
+          adjIMs.push(x);
+        });
+      }
+    }
+  }
+
+  return adjIMs;
+};

@@ -3,16 +3,16 @@ import Select from "react-select";
 
 import { GlobalContext } from "context";
 
+import { createSelectArray } from "utils/Utils";
+
 const IMSelect = ({ title, setIM }) => {
   const { IMs, setIMVectors } = useContext(GlobalContext);
 
   const [localIMs, setLocalIMs] = useState([]);
 
   useEffect(() => {
-    let localIMs = IMs.map((IM) => ({
-      value: IM,
-      label: IM,
-    }));
+    let localIMs = createSelectArray(IMs);
+
     setLocalIMs(localIMs);
     setIMVectors(localIMs);
   }, [IMs]);

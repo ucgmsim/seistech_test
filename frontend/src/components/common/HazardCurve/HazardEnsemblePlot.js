@@ -5,7 +5,7 @@ import { getPlotData } from "utils/Utils";
 import { PLOT_MARGIN } from "constants/Constants";
 import ErrorMessage from "components/common/ErrorMessage";
 
-const HazardEnsemblePlot = ({ hazardData, im, nzCodeData, showNzCode }) => {
+const HazardEnsemblePlot = ({ hazardData, im, nzCodeData, showNzCode, extra }) => {
   if (
     hazardData !== null &&
     !hazardData.hasOwnProperty("error") &&
@@ -83,6 +83,16 @@ const HazardEnsemblePlot = ({ hazardData, im, nzCodeData, showNzCode }) => {
         useResizeHandler={true}
         config={{
           displayModeBar: true,
+          toImageButtonOptions: {
+            filename:
+              extra.from === "hazard"
+                ? `Hazard_Plot_${im}_Lat_${String(
+                    parseFloat(extra.lat).toFixed(4)
+                  ).replace(".", "p")}_Lng_${String(
+                    parseFloat(extra.lng).toFixed(4)
+                  ).replace(".", "p")}`
+                : `Hazard_Plot_${extra.im}_project_id_${extra.id}_location_${extra.location}_vs30_${extra.vs30}`,
+          },
         }}
       />
     );

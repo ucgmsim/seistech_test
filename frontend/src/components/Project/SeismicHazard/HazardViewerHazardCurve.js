@@ -19,24 +19,14 @@ const HazardViewerHazardCurve = () => {
   const { getTokenSilently } = useAuth0();
 
   const {
-    hazardCurveComputeClick,
-    setHazardCurveComputeClick,
-    vs30,
-    defaultVS30,
-    selectedIM,
-    selectedEnsemble,
-    station,
-    nzCodeDefaultParams,
-    selectedSoilClass,
-    selectedZFactor,
-    showNZCodePlots,
-    NZCodeData,
-    setNZCodeData,
-    setIsNZCodeComputed,
-    setComputedSoilClass,
-    setComputedZFactor,
-    siteSelectionLat,
-    siteSelectionLng,
+    projectHazardCurveGetClick,
+    setProjectHazardCurveGetClick,
+    projectId,
+    projectLocation,
+    projectVS30,
+    projectLocationCode,
+    projectSelectedIM,
+    setProjectSelectedIM,
   } = useContext(GlobalContext);
 
   const [showSpinnerHazard, setShowSpinnerHazard] = useState(false);
@@ -51,45 +41,42 @@ const HazardViewerHazardCurve = () => {
   const [downloadToken, setDownloadToken] = useState("");
 
   const extraInfo = {
-    from: "hazard",
-    lat: siteSelectionLat,
-    lng: siteSelectionLng,
+    from: "project",
+    id: projectId,
+    location: projectLocation,
+    vs30: projectVS30,
+    im: projectSelectedIM,
   };
 
   /*
-    Reset tabs if users change IM or VS30
+    Reset tabs if users change Project ID, VS30 or Location
   */
   useEffect(() => {
     setShowSpinnerHazard(false);
     setShowPlotHazard(false);
-    setHazardCurveComputeClick(null);
-  }, [selectedIM, vs30]);
+    setProjectHazardCurveGetClick(null);
+    setProjectSelectedIM(null);
+  }, [projectId, projectVS30, projectLocation]);
 
   useEffect(() => {
     const abortController = new AbortController();
     const signal = abortController.signal;
 
     const getHazardCurve = async () => {
-      if (hazardCurveComputeClick !== null) {
+      if (projectHazardCurveGetClick !== null) {
         try {
           setShowPlotHazard(false);
           setShowSpinnerHazard(true);
           setShowErrorMessage({ isError: false, errorCode: null });
-          setIsNZCodeComputed(false);
-          setComputedZFactor(selectedZFactor);
-          setComputedSoilClass(selectedSoilClass);
 
           const token = await getTokenSilently();
 
-          let hazardDataQueryString = `?ensemble_id=${selectedEnsemble}&station=${station}&im=${selectedIM}`;
-          if (vs30 !== defaultVS30) {
-            hazardDataQueryString += `&vs30=${vs30}`;
-          }
+          let queryString = `?project_id=${projectId}&station_id=${projectLocationCode[projectLocation]}_${projectVS30}&im=${projectSelectedIM}`;
 
-          fetch(
+          await fetch(
             CONSTANTS.CORE_API_BASE_URL +
-              CONSTANTS.CORE_API_ROUTE_HAZARD_PLOT +
-              hazardDataQueryString,
+              CONSTANTS.PROJECT_API_ROUTE_PROJECT_HAZARD_GET +
+              queryString,
             {
               headers: {
                 Authorization: `Bearer ${token}`,
@@ -98,34 +85,9 @@ const HazardViewerHazardCurve = () => {
             }
           )
             .then(handleErrors)
-            .then(async (hazardResponse) => {
-              const hazardData = await hazardResponse.json();
-              setHazardData(hazardData);
-              setDownloadToken(hazardData["download_token"]);
-
-              let nzCodeQueryString = `?ensemble_id=${selectedEnsemble}&station=${station}&im=${selectedIM}&soil_class=${
-                selectedSoilClass["value"]
-              }&distance=${Number(
-                nzCodeDefaultParams["distance"]
-              )}&z_factor=${selectedZFactor}`;
-
-              return fetch(
-                CONSTANTS.CORE_API_BASE_URL +
-                  CONSTANTS.CORE_API_ROUTE_HAZARD_NZCODE +
-                  nzCodeQueryString,
-                {
-                  headers: {
-                    Authorization: `Bearer ${token}`,
-                  },
-                  signal: signal,
-                }
-              );
-            })
-            .then(handleErrors)
             .then(async (response) => {
-              const nzCodeDataResponse = await response.json();
-              setNZCodeData(nzCodeDataResponse["im_values"]);
-              setIsNZCodeComputed(true);
+              const responseData = await response.json();
+              setHazardData(responseData);
               setShowSpinnerHazard(false);
               setShowPlotHazard(true);
             })
@@ -134,6 +96,7 @@ const HazardViewerHazardCurve = () => {
                 setShowSpinnerHazard(false);
                 setShowErrorMessage({ isError: true, errorCode: error });
               }
+
               console.log(error);
             });
         } catch (error) {
@@ -148,25 +111,25 @@ const HazardViewerHazardCurve = () => {
     return () => {
       abortController.abort();
     };
-  }, [hazardCurveComputeClick]);
+  }, [projectHazardCurveGetClick]);
 
   return (
     <div className="hazard-curve-viewer">
       <Tabs defaultActiveKey="ensemble" className="pivot-tabs">
         <Tab eventKey="ensemble" title="Ensemble branches">
-          {hazardCurveComputeClick === null && (
+          {projectHazardCurveGetClick === null && (
             <GuideMessage
               header={CONSTANTS.HAZARD_CURVE}
               body={CONSTANTS.HAZARD_CURVE_WARNING_MSG}
-              instruction={CONSTANTS.HAZARD_CURVE_INSTRUCTION}
+              instruction={CONSTANTS.PROJECT_HAZARD_CURVE_INSTRUCTION}
             />
           )}
 
           {showSpinnerHazard === true &&
-            hazardCurveComputeClick !== null &&
+            projectHazardCurveGetClick !== null &&
             showErrorMessage.isError === false && <LoadingSpinner />}
 
-          {hazardCurveComputeClick !== null &&
+          {projectHazardCurveGetClick !== null &&
             showSpinnerHazard === false &&
             showErrorMessage.isError === true && (
               <ErrorMessage errorCode={showErrorMessage.errorCode} />
@@ -179,34 +142,33 @@ const HazardViewerHazardCurve = () => {
               <Fragment>
                 <HazardBranchPlot
                   hazardData={hazardData}
-                  im={selectedIM}
-                  nzCodeData={NZCodeData}
-                  showNzCode={showNZCodePlots}
+                  im={projectSelectedIM}
                   extra={extraInfo}
                 />
                 <HazardCurveMetadata
-                  selectedEnsemble={selectedEnsemble}
-                  selectedIM={selectedIM}
-                  vs30={vs30}
+                  projectId={projectId}
+                  projectLocation={projectLocation}
+                  projectVS30={projectVS30}
+                  projectSelectedIM={projectSelectedIM}
                 />
               </Fragment>
             )}
         </Tab>
 
         <Tab eventKey="fault" title="Fault/distributed seismicity contribution">
-          {hazardCurveComputeClick === null && (
+          {projectHazardCurveGetClick === null && (
             <GuideMessage
               header={CONSTANTS.HAZARD_CURVE}
               body={CONSTANTS.HAZARD_CURVE_WARNING_MSG}
-              instruction={CONSTANTS.HAZARD_CURVE_INSTRUCTION}
+              instruction={CONSTANTS.PROJECT_HAZARD_CURVE_INSTRUCTION}
             />
           )}
 
           {showSpinnerHazard === true &&
-            hazardCurveComputeClick !== null &&
+            projectHazardCurveGetClick !== null &&
             showErrorMessage.isError === false && <LoadingSpinner />}
 
-          {hazardCurveComputeClick !== null &&
+          {projectHazardCurveGetClick !== null &&
             showSpinnerHazard === false &&
             showErrorMessage.isError === true && (
               <ErrorMessage errorCode={showErrorMessage.errorCode} />
@@ -219,27 +181,27 @@ const HazardViewerHazardCurve = () => {
               <Fragment>
                 <HazardEnsemblePlot
                   hazardData={hazardData}
-                  im={selectedIM}
-                  nzCodeData={NZCodeData}
-                  showNzCode={showNZCodePlots}
+                  im={projectSelectedIM}
                   extra={extraInfo}
                 />
                 <HazardCurveMetadata
-                  selectedEnsemble={selectedEnsemble}
-                  selectedIM={selectedIM}
-                  vs30={vs30}
+                  projectId={projectId}
+                  projectLocation={projectLocation}
+                  projectVS30={projectVS30}
+                  projectSelectedIM={projectSelectedIM}
                 />
               </Fragment>
             )}
         </Tab>
       </Tabs>
 
-      <DownloadButton
+      {/* Will eventually have it but not now */}
+      {/* <DownloadButton
         disabled={!showPlotHazard}
         downloadURL={CONSTANTS.CORE_API_DOWNLOAD_HAZARD}
         downloadToken={downloadToken}
         fileName="hazard.zip"
-      />
+      /> */}
     </div>
   );
 };

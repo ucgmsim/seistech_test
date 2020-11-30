@@ -10,7 +10,7 @@ const SiteSelectionViewer = () => {
   return (
     <Fragment>
       <Tabs defaultActiveKey="map">
-        <Tab eventKey="map" title="Map" className="tab-content">
+        <Tab eventKey="map" title="Map">
           <SiteSelectionMap />
         </Tab>
 

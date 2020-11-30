@@ -42,14 +42,15 @@ const HazadViewerDisaggregation = () => {
   });
 
   const {
-    disaggComputeClick,
-    setDisaggComputeClick,
-    vs30,
-    defaultVS30,
-    station,
-    selectedIM,
-    selectedEnsemble,
-    disaggAnnualProb,
+    projectDisaggGetClick,
+    setProjectDisaggGetClick,
+    projectId,
+    projectVS30,
+    projectLocation,
+    projectLocationCode,
+    projectSelectedIM,
+    projectSelectedDisagRP,
+    setProjectSelectedDisagRP,
   } = useContext(GlobalContext);
 
   const [rowsToggled, setRowsToggled] = useState(true);
@@ -73,7 +74,7 @@ const HazadViewerDisaggregation = () => {
   };
 
   /*
-    Reset tabs if users change IM or VS30
+    Reset tabs if users change project id, project vs30, project location or project im
   */
   useEffect(() => {
     setShowSpinnerDisaggEpsilon(false);
@@ -85,15 +86,17 @@ const HazadViewerDisaggregation = () => {
     setShowContribTable(false);
     setShowSpinnerContribTable(false);
 
-    setDisaggComputeClick(null);
-  }, [selectedIM, vs30]);
+    setProjectDisaggGetClick(null);
+
+    setProjectSelectedDisagRP(null);
+  }, [projectId, projectVS30, projectLocation, projectSelectedIM]);
 
   useEffect(() => {
     const abortController = new AbortController();
     const signal = abortController.signal;
 
     const getHazardData = async () => {
-      if (disaggComputeClick !== null) {
+      if (projectDisaggGetClick !== null) {
         try {
           const token = await getTokenSilently();
           setShowErrorMessage({ isError: false, errorCode: null });
@@ -108,15 +111,15 @@ const HazadViewerDisaggregation = () => {
           setShowContribTable(false);
           setShowSpinnerContribTable(true);
 
-          let queryString = `?ensemble_id=${selectedEnsemble}&station=${station}&im=${selectedIM}&exceedance=${disaggAnnualProb}&gmt_plot=True`;
-
-          if (vs30 !== defaultVS30) {
-            queryString += `&vs30=${vs30}`;
-          }
+          let queryString =
+            `?project_id=${projectId}` +
+            `&station_id=${projectLocationCode[projectLocation]}_${projectVS30}` +
+            `&im=${projectSelectedIM}` +
+            `&rp=${projectSelectedDisagRP}`;
 
           await fetch(
             CONSTANTS.CORE_API_BASE_URL +
-              CONSTANTS.CORE_API_ROUTE_DISAGG +
+              CONSTANTS.PROJECT_API_ROUTE_PROJECT_DISAGG_GET +
               queryString,
             {
               headers: {
@@ -129,7 +132,7 @@ const HazadViewerDisaggregation = () => {
             .then(async (response) => {
               const responseData = await response.json();
 
-              setDownloadToken(responseData["download_token"]);
+              // setDownloadToken(responseData["download_token"]);
 
               setShowSpinnerDisaggEpsilon(false);
 
@@ -207,25 +210,25 @@ const HazadViewerDisaggregation = () => {
     return () => {
       abortController.abort();
     };
-  }, [disaggComputeClick]);
+  }, [projectDisaggGetClick]);
 
   return (
     <div className="disaggregation-viewer">
       <Tabs defaultActiveKey="epsilon" className="pivot-tabs">
         <Tab eventKey="epsilon" title="Epsilon">
-          {disaggComputeClick === null && (
+          {projectDisaggGetClick === null && (
             <GuideMessage
               header={CONSTANTS.DISAGGREGATION}
               body={CONSTANTS.DISAGGREGATION_WARNING_MSG_PLOT}
-              instruction={CONSTANTS.DISAGGREGATION_INSTRUCTION_PLOT}
+              instruction={CONSTANTS.PROJECT_DISAGG_INSTRUCTION_PLOT}
             />
           )}
 
           {showSpinnerDisaggEpsilon === true &&
-            disaggComputeClick !== null &&
+            projectDisaggGetClick !== null &&
             showErrorMessage.isError === false && <LoadingSpinner />}
 
-          {disaggComputeClick !== null &&
+          {projectDisaggGetClick !== null &&
             showSpinnerDisaggEpsilon === false &&
             showErrorMessage.isError === true && (
               <ErrorMessage errorCode={showErrorMessage.errorCode} />
@@ -245,19 +248,19 @@ const HazadViewerDisaggregation = () => {
         </Tab>
 
         <Tab eventKey="fault" title="Fault/distributed seismicity">
-          {disaggComputeClick === null && (
+          {projectDisaggGetClick === null && (
             <GuideMessage
               header={CONSTANTS.DISAGGREGATION}
               body={CONSTANTS.DISAGGREGATION_WARNING_MSG_PLOT}
-              instruction={CONSTANTS.DISAGGREGATION_INSTRUCTION_PLOT}
+              instruction={CONSTANTS.PROJECT_DISAGG_INSTRUCTION_PLOT}
             />
           )}
 
           {showSpinnerDisaggFault === true &&
-            disaggComputeClick !== null &&
+            projectDisaggGetClick !== null &&
             showErrorMessage.isError === false && <LoadingSpinner />}
 
-          {disaggComputeClick !== null &&
+          {projectDisaggGetClick !== null &&
             showSpinnerDisaggFault === false &&
             showErrorMessage.isError === true && (
               <ErrorMessage errorCode={showErrorMessage.errorCode} />
@@ -277,19 +280,19 @@ const HazadViewerDisaggregation = () => {
         </Tab>
 
         <Tab eventKey="contributions" title="Source contributions">
-          {disaggComputeClick === null && (
+          {projectDisaggGetClick === null && (
             <GuideMessage
               header={CONSTANTS.DISAGGREGATION}
               body={CONSTANTS.DISAGGREGATION_WARNING_MSG_TABLE}
-              instruction={CONSTANTS.DISAGGREGATION_INSTRUCTION_TABLE}
+              instruction={CONSTANTS.PROJECT_DISAGG_INSTRUCTION_TABLE}
             />
           )}
 
           {showSpinnerContribTable === true &&
-            disaggComputeClick !== null &&
+            projectDisaggGetClick !== null &&
             showErrorMessage.isError === false && <LoadingSpinner />}
 
-          {disaggComputeClick !== null &&
+          {projectDisaggGetClick !== null &&
             showSpinnerContribTable === false &&
             showErrorMessage.isError === true && (
               <ErrorMessage errorCode={showErrorMessage.errorCode} />
@@ -310,12 +313,13 @@ const HazadViewerDisaggregation = () => {
             )}
         </Tab>
       </Tabs>
-      <DownloadButton
+      {/* Not needed yet */}
+      {/* <DownloadButton
         disabled={!showContribTable}
         downloadURL={CONSTANTS.CORE_API_DOWNLOAD_DISAGG}
         downloadToken={downloadToken}
         fileName="disaggregation.zip"
-      />
+      /> */}
     </div>
   );
 };

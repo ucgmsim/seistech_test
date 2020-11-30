@@ -1,5 +1,51 @@
 # Seistech Web App
 
+## Contents
+
+- [Naming](#naming)
+- [Overview](#overview)
+- [Requirements](#requirements)
+  - [Frontend](#frontend)
+    - [DEV Version](#dev-version)
+    - [EA Version](#ea-version)
+  - [Middleware](#middleware)
+    - [Without .env](#without-env)
+    - [With .env](#with-env)
+- [Running locally](#running-locally)
+  - [Without Docker](#without-docker)
+  - [With Docker](#with-docker)
+- [Deploying to AWS](#deploying-to-aws)
+- [Application](#application)
+  - [Hazard Analysis](#hazard-analysis)
+    - [Site Selection](#site-selection)
+      - [Ensemble](#ensemble)
+      - [Location](#location)
+      - [Site Conditions](#site-conditions)
+    - [Seismic Hazard](#seismic-hazard)
+      - [Hazard Curve](#hazard-curve)
+      - [Disaggregation](#disaggregation)
+      - [Uniform Hazard Spectrum](#uniform-hazard-spectrum)
+      - [NZ Code](#nz-code)
+    - [GMS](#gms)
+      - [IM Type](#im-type)
+      - [IM Level or Exceedance Rate](#im-level-or-exceedance-rate)
+      - [IM Vector](#im-vector)
+      - [Num Ground Motions](#num-ground-motions)
+      - [Advanced](#advanced)
+        - [Pre-GM Filtering Parameters](#pre-gm-filtering-parameters)
+        - [Weights](#weights)
+        - [Database](#database)
+        - [Replicates](#replicates)
+  - [Projects](#projects)
+    - [Project Site Selection](#project-site-selection)
+      - [Project ID](#project-id)
+      - [Project Location](#project-location)
+      - [Project VS30](#Project-vs30)
+    - [Project Seismic Hazard](#project-seismic-hazard)
+      - [Project Hazard Curve](#project-hazard-curve)
+      - [Project Disaggregation](#project-disaggregation)
+      - [Project Uniform Hazard Spectrum](#project-uniform-hazard-spectrum)
+
 ## Naming
 
 - **Filename** : PascalCase (ex: SiteSelection.js, SiteSelectionVS30.js) except index files (ex: index.js, index.html, index.css...)
@@ -10,11 +56,13 @@
 
 This is a React/javascript SPA, using Auth0 authentication, talking to a python flask API, running on a Linux host.
 
-## Requirements - Frontend (seistech_web)
+## Requirements - Environment variables
 
 Please contact **Tom** to get values.
 
-### DEVELOPMENT Version
+### Frontend
+
+#### DEV Version
 
 You will need a `.env.dev` file with the following environment variables.
 
@@ -28,9 +76,9 @@ You will need a `.env.dev` file with the following environment variables.
 - REACT_APP_AUTH0_CLIENTID=
 - REACT_APP_AUTH0_AUDIENCE=
 
-#### To run Frontend: `npm run start:dev`
+##### To run Frontend: `npm run start:dev`
 
-### EA Version
+#### EA Version
 
 You will need a `.env.test` file with the following environment variables.
 
@@ -41,11 +89,13 @@ You will need a `.env.test` file with the following environment variables.
 - REACT_APP_AUTH0_CLIENTID=
 - REACT_APP_AUTH0_AUDIENCE=
 
-#### To run Frontend: `npm run start:ea`
+##### To run Frontend: `npm run start:ea`
 
-## Requirements - Intermediate API (seistech_inter_api)
+### Middleware
 
-### With `~/.bashrc` (I encourage using this approach so you do not need to install another package.)
+We do not separate middleware for DEV and EA. However, we run simultaneously (One for DEV and another one for EA). However, you don't have to worry about this if you run it locally.
+
+#### Without .env
 
 Add the following code to `~/.bashrc`
 
@@ -58,9 +108,9 @@ export CORE_API_BASE=
 export N_PROCS=
 export INTER_PORT=
 
-#### To run Intermediate API: `python app.py`
+##### To run Intermediate API: `python app.py`
 
-### With .env
+#### With .env
 
 You will need a `.env` file with the following environment variables.
 
@@ -84,13 +134,13 @@ from dotenv import load_dotenv
 load_dotenv()
 ```
 
-#### To run Intermediate API: `python app.py`
+##### To run Intermediate API: `python app.py`
 
 ## Running locally
 
 Assuming we are using Core API that is on Epicentre
 
-**Make sure you have an access to `ucgmsim/seistech` git repo via SSH as we need to access private repo to download**
+**Make sure you have an access to `ucgmsim/seistech` git repo via SSH as we need to access the private repo to download**
 
 ### Without Docker
 
@@ -139,7 +189,7 @@ npm run start:ea
 
 Please check **Requirements** above.
 
-### With Docker and docker-compose
+### With Docker
 
 #### Requirements
 
@@ -199,7 +249,6 @@ REACT_APP_AUTH0_AUDIENCE_EA=
 
 REACT_APP_MAP_BOX_TOKEN_EA=
 
-
 ##### Steps
 
 1. Change the directory to either `docker/dev` or `docker/ea`
@@ -250,72 +299,157 @@ With a directory called `docker`, there are two more directories, `dev` and `ea`
 
 They also include a shell script called `Dockerise.sh`. By running this shell script inside EC2, it will automatically pull the latest version (Frontend & Intermediate API) from our repo, create Docker images then run them.
 
-## Anything below from here may not be relevant to us anymore but will keep it in case I can use as a reference.
+## Application
 
-Build the app for production by running
+### Hazard Analysis
 
-> npm run build
+#### Site Selection
 
-The builds ingest a corresponding .env.<...> file
+##### Ensemble
 
-> npn run build:dev will use .env.development
+If it is in DEV version, you see two options, **v20p5emp** and **v20p45sim** for **Ensemble** but in EA and PROD, they are not visible.
 
-For each Azure environment download the "publishProfile" - from the Web App Overview page - and save it in src/Azure/publishProfiles as "seistech-<tag>.PublishSettings.xml
-eg., seistech-dev.publishSettings.xml
+##### Location
 
-This file contains, among other things, the ftp credentials. To deploy to a particular environment (dev, test, or prod) run the following
+Users can put Lat and Lng within NZ coordinates. Then click **Set** button to get a station, regional map and vs30 map.
 
-> npm run-script deploy-dev
+##### Site Conditions
 
-Or use an ftp client such as FileZilla.
+By setting the location, users get a default VS30. They can also update VS30 if they want by updating the input field and click **Set VS30**. By clicking the **Use Default**, it goes back to what it was. (The value from API when users set the location)
 
-### Azure Linux Web App
+#### Seismic Hazard
 
-This is a container running a standard Linux image - hence, every time the web app restarts the image is reset - meaning that system changes outside the /home directory aren't persisted. This is dealt with currently by running "pip install -r requirements.txt" in the startup script. This makes startup longer than ideal. Longterm, a customised Linux image will be the correct approach. This can be created locally and uploaded to an Azure container store, and then the Azure web app container can load the customised image instead.
+Users need to set the location first in **Site Selection** tab to get into this tab.
 
-## Environment Variables
+##### Hazard Curve
 
-REACT_APP_SHOW_DEBUG_PANEL=false will disable the debug panel (assuming it is still in the project, possibly console.log is better)
+Users can choose one IM from the dropdown, then click **Compute** button to get the following plots.
 
-.env contains REACT_APP_SW_VERSION
+- Ensemble branches
+- Fault/distributed seismicity contribution
 
-## Changes to the App
+##### Disaggregation
 
-Changes to React packages will be handled through the build process.
+Users must choose IM first to do this job.
 
-Changes to Python packages will necessitate updating and deploying "requirements.txt" by running
+Users can put **Annual Exceedance Rate** anywhere between 0 and 1. Click **Compute** to get following things.
 
-> pip freeze > src/wwwroot/requirements.txt
+- Epsilon (image)
+- Fault/distributed seismicity (image)
+- Source contributions (table)
 
-requirements.txt is then deployed to wwwroot, and processed by "wwwroot/startup.sh" when the container starts.
+##### Uniform Hazard Spectrum
 
-## React build details
+Similar to **Disaggregation**. Users can put **Annual Exceedance Rate** but they can put more than one. Click **Compute** to get a plot.
 
-At the point where "plotly" was added, the react build began throwing stack overflow errors.
+##### NZ Code
 
-Hence, an increase to the default stack allocation - up to 8192 MB - has been added in the parameters
+Will add this from NZ Code branch.
 
-> env-cmd -f .env.production react-scripts build -- --node-flags --max-old-space-size=8192
+#### GMS
 
-Where "env-cmd" is a plugin which passes the file .env.production to the build, and "-- --node-flags --max-old-space-size=8192" increase the stack allocation.
+Users need to set the location first in **Site Selection** tab to get into this tab.
 
-I've found that I need to run these commands in my gitBash terminal, as they don't work reliable using the vsCode commandline.
+##### IM Type
 
-## sqlite3 - is included in the python distribution
+The options are similar to IM (Intensity Measure) from the Hazard Curve in Seismic Hazard but slightly different. Those options are specialised for GMS. Users need to choose one of them.
 
-No installation necessary.
+##### IM Level or Exceedance Rate
 
-## Manual FTP Deploy
+Users can choose either **IM Level** or **Exceedance Rate**. The urrent setup is, by choosing **IM Type** first then putting **IM Level** or **Exceedance Rate**. If the focus gets outside of the input box, then it sends a request to Core API to get default parameters which are for **Pre-GM Filtering parameters** inside the advanced tab.
 
-Open the Azure publish profile (xml) and format it to improve readability.
+##### IM Vector
 
-Deploy the following [from] ---> [to]
+Identical list to IM Type. Except, the chosen **IM Type** will be filtered out. For instance, if you choose PGA from **IM Type**, there is now PGA in **IM Vector**. Also, users can choose multiple IMs.
 
-/build/\* ---> /site/wwwroot
-/src/wwwroot/ ---> /site/wwwroot
-startup.sh (this is run by the Azure startup command whenever the container is warm-started)
-requirements.txt
-/src/py/ ---> /site/wwwroot/py
-application.py
+Also, just like above, when the focus gets out of this select box, it sends a request to the Core API to get default weights which are for **Weights** inside the advanced tab.
 
-db create GUID - 6df1f9c6-5baf-4eaf-81d6-416c28d674ab
+##### Num Ground Motions
+
+Just a number.
+
+##### Compute button
+
+After users have done the following steps:
+
+- Choose IM Type
+- Choose IM Level or Exceedance Rate
+- Put its value
+- Choose IM Vector(s)
+- Put Num Ground Motions
+
+Compute button will be waiting for the following responses from Core API:
+
+- Pre-GM Filtering Parameters
+- Weights
+
+Once it gets all the responses from the Core API, the compute button gets enabled and users can click it to send a request to Core API to get the following plots:
+
+- IM Distributions
+  - Pseudo acceleration response spectra
+  - IM Vectors
+- Causal Parameters - Using **Pre-GM Filtering Parameters**'s Min/Max for the red dashed-dot lines
+  - Magnitude and Rrup plot
+  - Magnitude
+  - Rrup
+  - Scale Factor
+  - VS30 - Red solid line is from Site Selection, VS30 value.
+
+##### Advanced
+
+###### Pre-GM Filtering Parameters
+
+A table with inputs, afters user choose **IM Type** and either **IM Level** or **Exceedance Rate**, we get the default values. But users can also change to their values.
+
+###### Weights
+
+A table with multiple columns (number of chosen IM Vectors). Weights are allocated by the Core API.
+
+###### Database
+
+Currently, we don't have any database but will be there as a dropdown option.
+
+###### Replicates
+
+Currently, it defaults to 1.
+
+### Projects
+
+#### Project Site Selection
+
+##### Project ID
+
+Select(Dropdown) with available **Project IDs**.
+
+##### Project Location
+
+Select(Dropdown) with available **Project Locations**.
+
+##### Project VS30
+
+Select(Dropdown) with available **Project VS30s**.
+
+#### Project Seismic Hazard
+
+Users need to set the location first in **Site Selection** tab to get into this tab.
+
+##### Project Hazard Curve
+
+Users can choose one **Intensity Measure** from the dropdown, then click **Get** button to get the following plots.
+
+- Ensemble branches
+- Fault/distributed seismicity contribution
+
+##### Project Disaggregation
+
+Users must choose **IM** first to do this job.
+
+Users can choose one **Return Period** from the dropdown, then click **Get** to get following things.
+
+- Epsilon (image)
+- Fault/distributed seismicity (image)
+- Source contributions (table)
+
+##### Project Uniform Hazard Spectrum
+
+Similar to **Disaggregation**. Users can choose **Return Period** from the dropdown but they can choose more than one. Click **Get** to get a plot.

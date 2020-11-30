@@ -2,23 +2,26 @@ import React, { Fragment, useContext } from "react";
 
 import { Tabs, Tab } from "react-bootstrap";
 import { GlobalContext } from "context";
-import { ENV } from "constants/Constants";
 
 import TwoColumnView from "components/common/TwoColumnView";
 
-import SiteSelectionForm from "components/Hazard/SiteSelection/SiteSelectionForm";
-import SiteSelectionViewer from "components/Hazard/SiteSelection/SiteSelectionViewer";
+import SiteSelectionForm from "components/Project/SiteSelection/SiteSelectionForm";
+import SiteSelectionViewer from "components/Project/SiteSelection/SiteSelectionViewer";
 
-import GmsForm from "components/Hazard/GMS/GmsForm";
-import GmsViewer from "components/Hazard/GMS/GmsViewer";
+import GmsForm from "components/Project/GMS/GmsForm";
+import GmsViewer from "components/Project/GMS/GmsViewer";
 
-import HazardForm from "components/Hazard/SeismicHazard/HazardForm";
-import HazardViewer from "components/Hazard/SeismicHazard/HazardViewer";
+import HazardForm from "components/Project/SeismicHazard/HazardForm";
+import HazardViewer from "components/Project/SeismicHazard/HazardViewer";
 
-const Hazard = () => {
-  const { vs30, locationSetClick, nzCodeDefaultParams } = useContext(
-    GlobalContext
-  );
+const Project = () => {
+  const { projectId, projectLocation, projectVS30 } = useContext(GlobalContext);
+
+  const validateTab = () => {
+    return (
+      projectId === null || projectLocation === null || projectVS30 === null
+    );
+  };
 
   return (
     <Fragment>
@@ -33,11 +36,7 @@ const Hazard = () => {
         <Tab
           eventKey="hazard"
           title="Seismic Hazard"
-          disabled={
-            locationSetClick === null ||
-            vs30 === "" ||
-            nzCodeDefaultParams.length === 0
-          }
+          disabled={validateTab()}
           tabClassName="seismic-hazard-tab"
         >
           <TwoColumnView cpanel={HazardForm} viewer={HazardViewer} />
@@ -46,7 +45,7 @@ const Hazard = () => {
         <Tab
           eventKey="gms"
           title="GMS"
-          disabled={ENV !== "DEV" || locationSetClick === null || vs30 === ""}
+          disabled={validateTab()}
           tabClassName="gms-tab"
         >
           <TwoColumnView cpanel={GmsForm} viewer={GmsViewer} />
@@ -56,4 +55,4 @@ const Hazard = () => {
   );
 };
 
-export default Hazard;
+export default Project;

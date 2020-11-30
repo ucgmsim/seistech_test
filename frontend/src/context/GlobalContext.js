@@ -10,9 +10,11 @@ export const Context = createContext({});
 export const Provider = (props) => {
   const { children } = props;
 
-  /* 
-    Site Selection
+  /*
+    Hazard Analysis Tab
   */
+
+  // Site Selection
   const [station, setStation] = useState("");
   const [vs30, setVS30] = useState("");
   const [defaultVS30, setDefaultVS30] = useState("");
@@ -29,21 +31,14 @@ export const Provider = (props) => {
     lng: CONSTANTS.DEFAULT_MAPBOX_LNG,
   });
 
-  /* 
-    For IMs
-    The only exception regards naming conventions as 'ims' seems very odd
-  */
+  // For IMs
+  // The only exception regards naming conventions as 'ims' seems very odd
   const [IMs, setIMs] = useState([]);
 
-  /*
-    Seismic Hazard & GMS
-  */
+  // Seismic Hazard & GMS
   const [IMVectors, setIMVectors] = useState([]);
 
-  /*
-    Seismic Hazard
-  */
-
+  //  Seismic Hazard
   const [selectedIM, setSelectedIM] = useState(null);
   const [disaggAnnualProb, setDisaggAnnualProb] = useState(
     CONSTANTS.DEFAULT_ANNUAL_PROB
@@ -83,9 +78,31 @@ export const Provider = (props) => {
   const [uhsRateTable, setUHSRateTable] = useState([]);
 
   /*
-    GMS
+    Project Tab
   */
-  const [computedGMS, setComputedGMS] = useState(null);
+  // Site Selection
+  // Response for Location is an object and we need an array for dropdowns
+  const [projectId, setProjectId] = useState(null);
+  const [projectLocationCode, setProjectLocationCode] = useState({});
+  const [projectVS30, setProjectVS30] = useState(null);
+  const [projectLocation, setProjectLocation] = useState(null);
+  const [
+    projectSiteSelectionGetClick,
+    setProjectSiteSelectionGetClick,
+  ] = useState(null);
+
+  // Seismic Hazard
+  const [projectSelectedIM, setProjectSelectedIM] = useState(null);
+  const [projectIMs, setProjectIMs] = useState([]);
+  const [projectHazardCurveGetClick, setProjectHazardCurveGetClick] = useState(
+    null
+  );
+  const [projectDisagRPs, setProjectDisagRPs] = useState([]);
+  const [projectUHSRPs, setProjectUHSRPs] = useState([]);
+  const [projectSelectedDisagRP, setProjectSelectedDisagRP] = useState(null);
+  const [projectDisaggGetClick, setProjectDisaggGetClick] = useState(null);
+  const [projectUHSGetClick, setProjectUHSGetClick] = useState(null);
+  const [projectSelectedUHSRP, setProjectSelectedUHSRP] = useState([]);
 
   /* 
     User Permissions
@@ -190,8 +207,10 @@ export const Provider = (props) => {
     isTabEnabled,
 
     /*
-      Site Selection
+      Hazard Analysis Tab
     */
+
+    //Site Selection
     station,
     setStation,
     vs30,
@@ -212,20 +231,11 @@ export const Provider = (props) => {
     IMs,
     setIMs,
 
-    /*
-      GMS - IM Vector
-    */
-    IMVectors,
-    setIMVectors,
-
     // MapBox
     mapBoxCoordinate,
     setMapBoxCoordinate,
 
-    /*
-      Seismic Hazard
-    */
-
+    // Seismic Hazard
     selectedIM,
     setSelectedIM,
     disaggAnnualProb,
@@ -265,6 +275,43 @@ export const Provider = (props) => {
     */
     computedGMS,
     setComputedGMS,
+    IMVectors,
+    setIMVectors,
+
+    /*
+      Project Tab
+    */
+    // Site Selection
+    projectId,
+    setProjectId,
+    projectLocationCode,
+    setProjectLocationCode,
+    projectVS30,
+    setProjectVS30,
+    projectLocation,
+    setProjectLocation,
+    projectSiteSelectionGetClick,
+    setProjectSiteSelectionGetClick,
+
+    // Seismic Hazard
+    projectSelectedIM,
+    setProjectSelectedIM,
+    projectIMs,
+    setProjectIMs,
+    projectHazardCurveGetClick,
+    setProjectHazardCurveGetClick,
+    projectDisagRPs,
+    setProjectDisagRPs,
+    projectUHSRPs,
+    setProjectUHSRPs,
+    projectSelectedDisagRP,
+    setProjectSelectedDisagRP,
+    projectDisaggGetClick,
+    setProjectDisaggGetClick,
+    projectUHSGetClick,
+    setProjectUHSGetClick,
+    projectSelectedUHSRP,
+    setProjectSelectedUHSRP,
   };
 
   // pass the value in provider and return

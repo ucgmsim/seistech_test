@@ -30,6 +30,14 @@ const MainNav = () => {
       >
         Hazard Analysis
       </NavLink>
+      <NavLink
+        tag={RouterNavLink}
+        to="/project"
+        exact
+        activeClassName="router-link-exact-active"
+      >
+        Projects
+      </NavLink>
     </Nav>
   );
 };
