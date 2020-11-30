@@ -273,8 +273,6 @@ export const Provider = (props) => {
     /*
       GMS
     */
-    computedGMS,
-    setComputedGMS,
     IMVectors,
     setIMVectors,
 
