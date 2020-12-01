@@ -9,7 +9,7 @@ const HazardBranchPlot = ({
   hazardData,
   im,
   nzCodeData,
-  showNzCode,
+  showNzCode = true,
   extra,
 }) => {
   if (
