@@ -38,6 +38,9 @@ const HazardViewerHazardCurve = () => {
 
   const [hazardData, setHazardData] = useState(null);
 
+  // NZ Code is now splitted
+  const [hazardNZCodeData, setHazardNZCodeData] = useState(null);
+
   const [downloadToken, setDownloadToken] = useState("");
 
   const extraInfo = {
@@ -88,6 +91,7 @@ const HazardViewerHazardCurve = () => {
             .then(async (response) => {
               const responseData = await response.json();
               setHazardData(responseData);
+              setHazardNZCodeData(responseData["nz_code_hazard"].im_values);
               setShowSpinnerHazard(false);
               setShowPlotHazard(true);
             })
@@ -143,6 +147,7 @@ const HazardViewerHazardCurve = () => {
                 <HazardBranchPlot
                   hazardData={hazardData}
                   im={projectSelectedIM}
+                  nzCodeData={hazardNZCodeData}
                   extra={extraInfo}
                 />
                 <HazardCurveMetadata
@@ -182,6 +187,7 @@ const HazardViewerHazardCurve = () => {
                 <HazardEnsemblePlot
                   hazardData={hazardData}
                   im={projectSelectedIM}
+                  nzCodeData={hazardNZCodeData}
                   extra={extraInfo}
                 />
                 <HazardCurveMetadata

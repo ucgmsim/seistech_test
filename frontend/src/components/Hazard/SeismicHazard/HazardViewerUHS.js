@@ -27,8 +27,8 @@ const HazardViewerUhs = () => {
     siteSelectionLng,
   } = useContext(GlobalContext);
 
-  const [uhsNZCodeData, setUHSNZCodeData] = useState(null);
   const [uhsData, setUHSData] = useState(null);
+  const [uhsNZCodeData, setUHSNZCodeData] = useState(null);
 
   const [showSpinnerUHS, setShowSpinnerUHS] = useState(false);
   const [showPlotUHS, setShowPlotUHS] = useState(false);
