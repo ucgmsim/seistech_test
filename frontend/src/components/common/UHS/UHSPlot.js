@@ -6,11 +6,11 @@ import ErrorMessage from "components/common/ErrorMessage";
 
 import "assets/style/UHSPlot.css";
 
-const UHSPlot = ({ uhsData, extra }) => {
+const UHSPlot = ({ uhsData, nzCodeData, extra }) => {
   if (uhsData !== null && !uhsData.hasOwnProperty("error")) {
     // Create NZ code UHS scatter objs
     const scatterObjs = [];
-    for (let [curExcd, curData] of Object.entries(uhsData["nz_code_uhs_df"])) {
+    for (let [curExcd, curData] of Object.entries(nzCodeData)) {
       let curPlotData = getPlotData(curData);
       scatterObjs.push({
         x: curPlotData.index,

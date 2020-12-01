@@ -13,6 +13,21 @@ import { handleErrors } from "utils/Utils";
 const HazardViewerUhs = () => {
   const { getTokenSilently } = useAuth0();
 
+  const {
+    uhsComputeClick,
+    selectedSoilClass,
+    nzCodeDefaultParams,
+    selectedZFactor,
+    vs30,
+    defaultVS30,
+    selectedEnsemble,
+    station,
+    uhsRateTable,
+    siteSelectionLat,
+    siteSelectionLng,
+  } = useContext(GlobalContext);
+
+  const [uhsNZCodeData, setUHSNZCodeData] = useState(null);
   const [uhsData, setUHSData] = useState(null);
 
   const [showSpinnerUHS, setShowSpinnerUHS] = useState(false);
@@ -23,17 +38,6 @@ const HazardViewerUhs = () => {
   });
 
   const [downloadToken, setDownloadToken] = useState("");
-
-  const {
-    uhsComputeClick,
-    vs30,
-    defaultVS30,
-    selectedEnsemble,
-    station,
-    uhsRateTable,
-    siteSelectionLat,
-    siteSelectionLng,
-  } = useContext(GlobalContext);
 
   const extraInfo = {
     from: "hazard",
@@ -88,10 +92,34 @@ const HazardViewerUhs = () => {
             }
           )
             .then(handleErrors)
-            .then(async (response) => {
-              const responseData = await response.json();
+            .then(async (uhsResponse) => {
+              const responseData = await uhsResponse.json();
               setUHSData(responseData);
               setDownloadToken(responseData["download_token"]);
+
+              let nzCodeQueryString = `?ensemble_id=${selectedEnsemble}&station=${station}&exceedances=${exceedences.join(
+                ","
+              )}&soil_class=${selectedSoilClass["value"]}&distance=${Number(
+                nzCodeDefaultParams["distance"]
+              )}&z_factor=${selectedZFactor}`;
+
+              return fetch(
+                CONSTANTS.CORE_API_BASE_URL +
+                  CONSTANTS.CORE_API_ROUTE_UHS_NZCODE +
+                  nzCodeQueryString,
+                {
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
+                  signal: signal,
+                }
+              );
+            })
+            .then(handleErrors)
+            .then(async (nzCodeResponse) => {
+              const nzCodeDataResponse = await nzCodeResponse.json();
+              setUHSNZCodeData(nzCodeDataResponse["nz_code_uhs_df"]);
+
               setShowSpinnerUHS(false);
               setShowPlotUHS(true);
             })
@@ -141,7 +169,11 @@ const HazardViewerUhs = () => {
           showPlotUHS === true &&
           showErrorMessage.isError === false && (
             <Fragment>
-              <UHSPlot uhsData={uhsData} extra={extraInfo} />
+              <UHSPlot
+                uhsData={uhsData}
+                nzCodeData={uhsNZCodeData}
+                extra={extraInfo}
+              />
             </Fragment>
           )}
       </div>

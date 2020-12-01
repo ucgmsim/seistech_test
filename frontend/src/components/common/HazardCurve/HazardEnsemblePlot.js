@@ -5,7 +5,13 @@ import { getPlotData } from "utils/Utils";
 import { PLOT_MARGIN } from "constants/Constants";
 import ErrorMessage from "components/common/ErrorMessage";
 
-const HazardEnsemblePlot = ({ hazardData, im, nzCodeData, showNzCode, extra }) => {
+const HazardEnsemblePlot = ({
+  hazardData,
+  im,
+  nzCodeData,
+  showNzCode,
+  extra,
+}) => {
   if (
     hazardData !== null &&
     !hazardData.hasOwnProperty("error") &&
@@ -60,7 +66,7 @@ const HazardEnsemblePlot = ({ hazardData, im, nzCodeData, showNzCode, extra }) =
             name: "NZ code",
             marker: { symbol: "triangle-up" },
             line: { color: "black", dash: "dot" },
-            visible: showNzCode
+            visible: showNzCode,
           },
         ]}
         layout={{

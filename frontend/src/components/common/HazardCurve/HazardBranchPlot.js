@@ -5,7 +5,13 @@ import { getPlotData } from "utils/Utils";
 import { PLOT_MARGIN } from "constants/Constants";
 import ErrorMessage from "components/common/ErrorMessage";
 
-const HazardBranchPlot = ({ hazardData, im, nzCodeData, showNzCode, extra }) => {
+const HazardBranchPlot = ({
+  hazardData,
+  im,
+  nzCodeData,
+  showNzCode,
+  extra,
+}) => {
   if (
     hazardData !== null &&
     !hazardData.hasOwnProperty("error") &&

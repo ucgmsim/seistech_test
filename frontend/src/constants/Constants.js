@@ -12,9 +12,10 @@ export const CORE_API_ROUTE_VS30_MAP = "coreAPI/vs30map";
 export const CORE_API_ROUTE_LOCATION = "coreAPI/location";
 export const CORE_API_ROUTE_STATION = "coreAPI/station";
 export const CORE_API_ROUTE_HAZARD_PLOT = "coreAPI/hazard";
+export const CORE_API_ROUTE_HAZARD_NZCODE = "coreAPI/hazard/nz11750";
 export const CORE_API_ROUTE_DISAGG = "coreAPI/disagg";
 export const CORE_API_ROUTE_UHS = "coreAPI/uhs";
-export const CORE_API_ROUTE_HAZARD_NZCODE = "coreAPI/hazard/nz11750";
+export const CORE_API_ROUTE_UHS_NZCODE = "coreAPI/uhs/nz11750";
 export const CORE_API_ROUTE_HAZARD_NZCODE_SOIL_CLASS =
   "coreAPI/hazard/nz11750/soil_class";
 export const CORE_API_ROUTE_HAZARD_NZCODE_DEFAULT_PARAMS =

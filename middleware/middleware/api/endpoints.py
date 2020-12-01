@@ -66,7 +66,7 @@ def get_hazard():
 
 @app.route("/coreAPI/hazard/nz11750", methods=["GET"])
 @requires_auth
-def get_nzcode():
+def get_hazard_nzcode():
     if requires_permission("hazard:hazard"):
         return proxy_to_api(flask.request, "api/hazard/nz11750/get", "GET")
     raise AuthError(
@@ -127,6 +127,19 @@ def get_disagg():
 def get_uhs():
     if requires_permission("hazard:uhs"):
         return proxy_to_api(flask.request, "api/uhs/ensemble_uhs/get", "GET")
+    raise AuthError(
+        {
+            "code": "Unauthorized",
+            "description": "You don't have access to this resource",
+        },
+        403,
+    )
+
+@app.route("/coreAPI/uhs/nz11750", methods=["GET"])
+@requires_auth
+def get_uhs_nzcode():
+    if requires_permission("hazard:hazard"):
+        return proxy_to_api(flask.request, "api/uhs/nz11750/get", "GET")
     raise AuthError(
         {
             "code": "Unauthorized",

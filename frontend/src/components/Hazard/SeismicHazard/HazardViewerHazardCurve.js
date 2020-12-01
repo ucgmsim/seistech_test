@@ -30,8 +30,6 @@ const HazardViewerHazardCurve = () => {
     selectedSoilClass,
     selectedZFactor,
     showNZCodePlots,
-    NZCodeData,
-    setNZCodeData,
     setIsNZCodeComputed,
     setComputedSoilClass,
     setComputedZFactor,
@@ -47,6 +45,9 @@ const HazardViewerHazardCurve = () => {
   });
 
   const [hazardData, setHazardData] = useState(null);
+
+  // NZ Code is now splitted
+  const [hazardNZCodeData, setHazardNZCodeData] = useState(null);
 
   const [downloadToken, setDownloadToken] = useState("");
 
@@ -124,7 +125,9 @@ const HazardViewerHazardCurve = () => {
             .then(handleErrors)
             .then(async (response) => {
               const nzCodeDataResponse = await response.json();
-              setNZCodeData(nzCodeDataResponse["nz11750_hazard"]["im_values"]);
+              setHazardNZCodeData(
+                nzCodeDataResponse["nz11750_hazard"]["im_values"]
+              );
               setIsNZCodeComputed(true);
               setShowSpinnerHazard(false);
               setShowPlotHazard(true);
@@ -180,7 +183,7 @@ const HazardViewerHazardCurve = () => {
                 <HazardBranchPlot
                   hazardData={hazardData}
                   im={selectedIM}
-                  nzCodeData={NZCodeData}
+                  nzCodeData={hazardNZCodeData}
                   showNzCode={showNZCodePlots}
                   extra={extraInfo}
                 />
@@ -220,7 +223,7 @@ const HazardViewerHazardCurve = () => {
                 <HazardEnsemblePlot
                   hazardData={hazardData}
                   im={selectedIM}
-                  nzCodeData={NZCodeData}
+                  nzCodeData={hazardNZCodeData}
                   showNzCode={showNZCodePlots}
                   extra={extraInfo}
                 />
