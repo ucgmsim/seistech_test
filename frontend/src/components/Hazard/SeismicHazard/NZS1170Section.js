@@ -285,46 +285,6 @@ const NZS1170Section = () => {
         <div className="form-group">
           <div className="d-flex align-items-center">
             <label
-              id="label-z-factor"
-              htmlFor="z-factor"
-              className="control-label"
-            >
-              Z Factor
-            </label>
-            <TextField
-              id="z-factor"
-              className="flex-grow-1"
-              type="number"
-              value={localZFactor}
-              onChange={(e) => setLocalZFactor(e.target.value)}
-              variant="outlined"
-            />
-          </div>
-        </div>
-        <div className="form-row">
-          <button
-            id="set-z-factor"
-            type="button"
-            className="btn btn-primary"
-            disabled={localZFactor === ""}
-            onClick={() => setSelectedZFactor(localZFactor)}
-          >
-            Set Z-factor
-          </button>
-          <button
-            id="vs30useDefault"
-            type="button"
-            className="btn btn-primary default-button"
-            disabled={selectedZFactor === defaultZFactor}
-            onClick={() => onClickDefaultZFactor()}
-          >
-            Use Default
-          </button>
-        </div>
-
-        <div className="form-group">
-          <div className="d-flex align-items-center">
-            <label
               id="label-soil-class"
               htmlFor="soil-class"
               className="control-label"
@@ -357,6 +317,46 @@ const NZS1170Section = () => {
             className="btn btn-primary default-button"
             disabled={selectedSoilClass === defaultSoilClass}
             onClick={() => onClickDefaultSoilClass()}
+          >
+            Use Default
+          </button>
+        </div>
+
+        <div className="form-group">
+          <div className="d-flex align-items-center">
+            <label
+              id="label-z-factor"
+              htmlFor="z-factor"
+              className="control-label"
+            >
+              Z Factor
+            </label>
+            <TextField
+              id="z-factor"
+              className="flex-grow-1"
+              type="number"
+              value={localZFactor}
+              onChange={(e) => setLocalZFactor(e.target.value)}
+              variant="outlined"
+            />
+          </div>
+        </div>
+        <div className="form-row">
+          <button
+            id="set-z-factor"
+            type="button"
+            className="btn btn-primary"
+            disabled={localZFactor === ""}
+            onClick={() => setSelectedZFactor(localZFactor)}
+          >
+            Set Z-factor
+          </button>
+          <button
+            id="vs30useDefault"
+            type="button"
+            className="btn btn-primary default-button"
+            disabled={selectedZFactor === defaultZFactor}
+            onClick={() => onClickDefaultZFactor()}
           >
             Use Default
           </button>
