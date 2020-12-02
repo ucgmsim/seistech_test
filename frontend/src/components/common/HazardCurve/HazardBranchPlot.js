@@ -9,7 +9,7 @@ const HazardBranchPlot = ({
   hazardData,
   im,
   nzCodeData,
-  showNzCode = true,
+  showNZCode = true,
   extra,
 }) => {
   if (
@@ -57,7 +57,7 @@ const HazardBranchPlot = ({
         name: "NZ code",
         marker: { symbol: "triangle-up" },
         line: { color: "black", dash: "dot" },
-        visible: showNzCode,
+        visible: showNZCode,
       }
     );
     return (

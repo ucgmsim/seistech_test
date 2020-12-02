@@ -29,6 +29,7 @@ const HazardViewerUhs = () => {
     setUHSNZCodeData,
     uhsNZCodeToken,
     setUHSNZCodeToken,
+    showNZCodePlots,
   } = useContext(GlobalContext);
 
   const [uhsData, setUHSData] = useState(null);
@@ -175,6 +176,7 @@ const HazardViewerUhs = () => {
               <UHSPlot
                 uhsData={uhsData}
                 nzCodeData={uhsNZCodeData}
+                showNZCode={showNZCodePlots}
                 extra={extraInfo}
               />
             </Fragment>

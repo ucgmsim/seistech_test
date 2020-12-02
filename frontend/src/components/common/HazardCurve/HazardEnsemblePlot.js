@@ -9,7 +9,7 @@ const HazardEnsemblePlot = ({
   hazardData,
   im,
   nzCodeData,
-  showNzCode = true,
+  showNZCode = true,
   extra,
 }) => {
   if (
@@ -66,7 +66,7 @@ const HazardEnsemblePlot = ({
             name: "NZ code",
             marker: { symbol: "triangle-up" },
             line: { color: "black", dash: "dot" },
-            visible: showNzCode,
+            visible: showNZCode,
           },
         ]}
         layout={{

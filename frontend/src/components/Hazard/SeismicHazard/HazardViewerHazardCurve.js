@@ -186,7 +186,7 @@ const HazardViewerHazardCurve = () => {
                   hazardData={hazardData}
                   im={selectedIM}
                   nzCodeData={hazardNZCodeData}
-                  showNzCode={showNZCodePlots}
+                  showNZCode={showNZCodePlots}
                   extra={extraInfo}
                 />
                 <HazardCurveMetadata
@@ -226,7 +226,7 @@ const HazardViewerHazardCurve = () => {
                   hazardData={hazardData}
                   im={selectedIM}
                   nzCodeData={hazardNZCodeData}
-                  showNzCode={showNZCodePlots}
+                  showNZCode={showNZCodePlots}
                   extra={extraInfo}
                 />
                 <HazardCurveMetadata
