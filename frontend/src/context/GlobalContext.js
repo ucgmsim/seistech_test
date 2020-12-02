@@ -56,6 +56,10 @@ export const Provider = (props) => {
 
   const [showNZCodePlots, setShowNZCodePlots] = useState(true);
 
+  // NZ Code is now splitted
+  const [hazardNZCodeData, setHazardNZCodeData] = useState(null);
+  const [uhsNZCodeData, setUHSNZCodeData] = useState(null);
+
   // For a selected soil class
   const [selectedSoilClass, setSelectedSoilClass] = useState({});
   // For a computed soil class, to validate compute button
@@ -67,6 +71,11 @@ export const Provider = (props) => {
 
   // To update Metadata after we recompute nzcode
   const [isNZCodeComputed, setIsNZCodeComputed] = useState(false);
+
+  // Download Token which is needed for Hazard Curve
+  const [hazardNZCodeToken, setHazardNZCodeToken] = useState("");
+  // and UHS
+  const [uhsNZCodeToken, setUHSNZCodeToken] = useState("");
 
   /*
     TODO - Future usage
@@ -257,8 +266,16 @@ export const Provider = (props) => {
     setComputedZFactor,
     showNZCodePlots,
     setShowNZCodePlots,
+    hazardNZCodeData,
+    setHazardNZCodeData,
+    uhsNZCodeData,
+    setUHSNZCodeData,
     isNZCodeComputed,
     setIsNZCodeComputed,
+    hazardNZCodeToken,
+    setHazardNZCodeToken,
+    uhsNZCodeToken,
+    setUHSNZCodeToken,
 
     uhsRateTable,
     setUHSRateTable,

@@ -313,7 +313,9 @@ const HazadViewerDisaggregation = () => {
       <DownloadButton
         disabled={!showContribTable}
         downloadURL={CONSTANTS.CORE_API_DOWNLOAD_DISAGG}
-        downloadToken={downloadToken}
+        downloadToken={{
+          disagg_token: downloadToken,
+        }}
         fileName="disaggregation.zip"
       />
     </div>

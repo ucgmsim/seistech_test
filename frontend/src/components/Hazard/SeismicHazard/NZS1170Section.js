@@ -17,7 +17,8 @@ const NZS1170Section = () => {
     selectedEnsemble,
     station,
     selectedIM,
-    setNZCodeData,
+    setHazardNZCodeData,
+    setUHSNZCodeData,
     showNZCodePlots,
     setShowNZCodePlots,
     soilClass,
@@ -32,6 +33,9 @@ const NZS1170Section = () => {
     computedZFactor,
     setComputedZFactor,
     hazardCurveComputeClick,
+    uhsRateTable,
+    setHazardNZCodeToken,
+    setUHSNZCodeToken,
   } = useContext(GlobalContext);
 
   const [computeButton, setComputeButton] = useState({
@@ -110,20 +114,108 @@ const NZS1170Section = () => {
     setSelectedSoilClass(defaultSoilClass);
   };
 
-  const computeNZCode = async () => {
+  const computeBothNZCode = async () => {
+    console.log("UPDATING BOTH");
     const abortController = new AbortController();
     const signal = abortController.signal;
 
     const token = await getTokenSilently();
+
+    const exceedances = uhsRateTable.map((entry, idx) => {
+      return parseFloat(entry) > 0 ? parseFloat(entry) : 1 / parseFloat(entry);
+    });
+
     setComputeButton({
       text: <FontAwesomeIcon icon="spinner" spin />,
       isFetching: true,
     });
+
     // To be used to compare with local Z Factor and Soil class to validate Compute Button.
     setComputedZFactor(selectedZFactor);
     setComputedSoilClass(selectedSoilClass);
 
-    let nzCodeQueryString = `?ensemble_id=${selectedEnsemble}&station=${station}&im=${selectedIM}&soil_class=${
+    let hazardNZCodeQuery = `?ensemble_id=${selectedEnsemble}&station=${station}&im=${selectedIM}&soil_class=${
+      selectedSoilClass["value"]
+    }&distance=${Number(
+      nzCodeDefaultParams["distance"]
+    )}&z_factor=${selectedZFactor}`;
+
+    let uhsNZCodeQuery = `?ensemble_id=${selectedEnsemble}&station=${station}&exceedances=${exceedances.join(
+      ","
+    )}&soil_class=${selectedSoilClass["value"]}&distance=${Number(
+      nzCodeDefaultParams["distance"]
+    )}&z_factor=${selectedZFactor}`;
+
+    setIsNZCodeComputed(false);
+
+    await Promise.all([
+      fetch(
+        CONSTANTS.CORE_API_BASE_URL +
+          CONSTANTS.CORE_API_ROUTE_HAZARD_NZCODE +
+          hazardNZCodeQuery,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          signal: signal,
+        }
+      ),
+      fetch(
+        CONSTANTS.CORE_API_BASE_URL +
+          CONSTANTS.CORE_API_ROUTE_UHS_NZCODE +
+          uhsNZCodeQuery,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          signal: signal,
+        }
+      ),
+    ])
+      .then(handleErrors)
+      .then(async ([hazard, uhs]) => {
+        const hazardNZCodeData = await hazard.json();
+        const uhsNZCodeData = await uhs.json();
+        setHazardNZCodeData(hazardNZCodeData["nz11750_hazard"]["im_values"]);
+        setUHSNZCodeData(uhsNZCodeData["nz_code_uhs_df"]);
+
+        setHazardNZCodeToken(hazardNZCodeData["download_token"]);
+        setUHSNZCodeToken(uhsNZCodeData["download_token"]);
+
+        setIsNZCodeComputed(true);
+        setComputeButton({
+          text: "Compute",
+          isFetching: false,
+        });
+      })
+      .catch((error) => {
+        if (error.name !== "AbortError") {
+          setComputeButton({
+            text: "Compute",
+            isFetching: false,
+          });
+        }
+        console.log(error);
+      });
+  };
+
+  const computeHazardNZCode = async () => {
+    console.log("UPDATE HAZARD ONLY");
+    const abortController = new AbortController();
+    const signal = abortController.signal;
+
+    const token = await getTokenSilently();
+
+    setComputeButton({
+      text: <FontAwesomeIcon icon="spinner" spin />,
+      isFetching: true,
+    });
+
+    // To be used to compare with local Z Factor and Soil class to validate Compute Button.
+    setComputedZFactor(selectedZFactor);
+    setComputedSoilClass(selectedSoilClass);
+
+    let hazardNZCodeQuery = `?ensemble_id=${selectedEnsemble}&station=${station}&im=${selectedIM}&soil_class=${
       selectedSoilClass["value"]
     }&distance=${Number(
       nzCodeDefaultParams["distance"]
@@ -131,10 +223,10 @@ const NZS1170Section = () => {
 
     setIsNZCodeComputed(false);
 
-    fetch(
+    await fetch(
       CONSTANTS.CORE_API_BASE_URL +
         CONSTANTS.CORE_API_ROUTE_HAZARD_NZCODE +
-        nzCodeQueryString,
+        hazardNZCodeQuery,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -144,8 +236,11 @@ const NZS1170Section = () => {
     )
       .then(handleErrors)
       .then(async (response) => {
-        const nzCodeDataResponse = await response.json();
-        setNZCodeData(nzCodeDataResponse["im_values"]);
+        const hazardNZCodeData = await response.json();
+        setHazardNZCodeData(hazardNZCodeData["nz11750_hazard"]["im_values"]);
+
+        setHazardNZCodeToken(hazardNZCodeData["download_token"]);
+
         setIsNZCodeComputed(true);
         setComputeButton({
           text: "Compute",
@@ -273,7 +368,11 @@ const NZS1170Section = () => {
             type="button"
             className="btn btn-primary"
             disabled={!computeNZCodeValidate()}
-            onClick={() => computeNZCode()}
+            onClick={() =>
+              uhsRateTable.length === 0
+                ? computeHazardNZCode()
+                : computeBothNZCode()
+            }
           >
             {computeButton.text}
           </button>

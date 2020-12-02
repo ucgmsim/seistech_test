@@ -26,6 +26,8 @@ const HazardViewerHazardCurve = () => {
     selectedIM,
     selectedEnsemble,
     station,
+    hazardNZCodeData,
+    setHazardNZCodeData,
     nzCodeDefaultParams,
     selectedSoilClass,
     selectedZFactor,
@@ -35,6 +37,8 @@ const HazardViewerHazardCurve = () => {
     setComputedZFactor,
     siteSelectionLat,
     siteSelectionLng,
+    hazardNZCodeToken,
+    setHazardNZCodeToken,
   } = useContext(GlobalContext);
 
   const [showSpinnerHazard, setShowSpinnerHazard] = useState(false);
@@ -46,10 +50,7 @@ const HazardViewerHazardCurve = () => {
 
   const [hazardData, setHazardData] = useState(null);
 
-  // NZ Code is now splitted
-  const [hazardNZCodeData, setHazardNZCodeData] = useState(null);
-
-  const [downloadToken, setDownloadToken] = useState("");
+  const [downloadHazardToken, setDownloadHazardToken] = useState("");
 
   const extraInfo = {
     from: "hazard",
@@ -102,7 +103,7 @@ const HazardViewerHazardCurve = () => {
             .then(async (hazardResponse) => {
               const hazardData = await hazardResponse.json();
               setHazardData(hazardData);
-              setDownloadToken(hazardData["download_token"]);
+              setDownloadHazardToken(hazardData["download_token"]);
 
               let nzCodeQueryString = `?ensemble_id=${selectedEnsemble}&station=${station}&im=${selectedIM}&soil_class=${
                 selectedSoilClass["value"]
@@ -128,6 +129,7 @@ const HazardViewerHazardCurve = () => {
               setHazardNZCodeData(
                 nzCodeDataResponse["nz11750_hazard"]["im_values"]
               );
+              setHazardNZCodeToken(nzCodeDataResponse["download_token"]);
               setIsNZCodeComputed(true);
               setShowSpinnerHazard(false);
               setShowPlotHazard(true);
@@ -240,7 +242,10 @@ const HazardViewerHazardCurve = () => {
       <DownloadButton
         disabled={!showPlotHazard}
         downloadURL={CONSTANTS.CORE_API_DOWNLOAD_HAZARD}
-        downloadToken={downloadToken}
+        downloadToken={{
+          hazard_token: downloadHazardToken,
+          nz11750_hazard_token: hazardNZCodeToken,
+        }}
         fileName="hazard.zip"
       />
     </div>

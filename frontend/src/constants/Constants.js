@@ -37,10 +37,10 @@ export const PROJECT_API_ROUTE_PROJECT_UHS_GET = "projectAPI/uhs/get";
 export const PROJECT_API_ROUTE_PROJECT_MAPS = "projectAPI/maps/get";
 
 /* Download URL */
-export const CORE_API_DOWNLOAD_HAZARD = "coreAPI/hazard_download/";
-export const CORE_API_DOWNLOAD_DISAGG = "coreAPI/disagg_download/";
-export const CORE_API_DOWNLOAD_UHS = "coreAPI/uhs_download/";
-export const CORE_API_DOWNLOAD_GMS = "coreAPI/gms_download/";
+export const CORE_API_DOWNLOAD_HAZARD = "coreAPI/hazard_download";
+export const CORE_API_DOWNLOAD_DISAGG = "coreAPI/disagg_download";
+export const CORE_API_DOWNLOAD_UHS = "coreAPI/uhs_download";
+export const CORE_API_DOWNLOAD_GMS = "coreAPI/gms_download";
 
 /* 
   Words 
