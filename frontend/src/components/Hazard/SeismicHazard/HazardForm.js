@@ -13,15 +13,15 @@ const HazardForm = () => {
 
       <div className="hr"></div>
 
-      <NZS1170Section />
-
-      <div className="hr"></div>
-
       <DisaggregationSection />
 
       <div className="hr"></div>
 
       <UHSSection />
+
+      <div className="hr"></div>
+
+      <NZS1170Section />
     </Fragment>
   );
 };
