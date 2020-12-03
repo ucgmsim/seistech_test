@@ -258,11 +258,82 @@ const NZS1170Section = () => {
       });
   };
 
+  const computeUHSNZCode = async () => {
+    console.log("UPDATE UHS ONLY");
+    const abortController = new AbortController();
+    const signal = abortController.signal;
+
+    const token = await getTokenSilently();
+
+    setComputeButton({
+      text: <FontAwesomeIcon icon="spinner" spin />,
+      isFetching: true,
+    });
+
+    // To be used to compare with local Z Factor and Soil class to validate Compute Button.
+    setComputedZFactor(selectedZFactor);
+    setComputedSoilClass(selectedSoilClass);
+
+    const exceedances = uhsRateTable.map((entry, idx) => {
+      return parseFloat(entry) > 0 ? parseFloat(entry) : 1 / parseFloat(entry);
+    });
+
+    let uhsNZCodeQuery = `?ensemble_id=${selectedEnsemble}&station=${station}&exceedances=${exceedances.join(
+      ","
+    )}&soil_class=${selectedSoilClass["value"]}&distance=${Number(
+      nzCodeDefaultParams["distance"]
+    )}&z_factor=${selectedZFactor}`;
+
+    setIsNZCodeComputed(false);
+
+    await fetch(
+      CONSTANTS.CORE_API_BASE_URL +
+        CONSTANTS.CORE_API_ROUTE_UHS_NZCODE +
+        uhsNZCodeQuery,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        signal: signal,
+      }
+    )
+      .then(handleErrors)
+      .then(async (response) => {
+        const uhsNZCodeData = await response.json();
+        setUHSNZCodeData(uhsNZCodeData["nz_code_uhs_df"]);
+
+        setUHSNZCodeToken(uhsNZCodeData["download_token"]);
+
+        setIsNZCodeComputed(true);
+        setComputeButton({
+          text: "Compute",
+          isFetching: false,
+        });
+      })
+      .catch((error) => {
+        if (error.name !== "AbortError") {
+          setComputeButton({
+            text: "Compute",
+            isFetching: false,
+          });
+        }
+        console.log(error);
+      });
+  };
+
+  const computeNZCode = () => {
+    if (hazardCurveComputeClick === null) {
+      computeUHSNZCode();
+    } else if (uhsRateTable.length === 0) {
+      computeHazardNZCode();
+    } else {
+      computeBothNZCode();
+    }
+  };
   const computeNZCodeValidate = () => {
     return (
-      (selectedSoilClass !== computedSoilClass ||
-        selectedZFactor !== computedZFactor) &&
-      hazardCurveComputeClick !== null
+      selectedSoilClass !== computedSoilClass ||
+      selectedZFactor !== computedZFactor
     );
   };
 
@@ -368,11 +439,7 @@ const NZS1170Section = () => {
             type="button"
             className="btn btn-primary"
             disabled={!computeNZCodeValidate()}
-            onClick={() =>
-              uhsRateTable.length === 0
-                ? computeHazardNZCode()
-                : computeBothNZCode()
-            }
+            onClick={() => computeNZCode()}
           >
             {computeButton.text}
           </button>
