@@ -323,13 +323,20 @@ const NZS1170Section = () => {
   };
 
   const computeNZCode = () => {
-    if (hazardCurveComputeClick === null) {
+    if (hazardCurveComputeClick === null && uhsComputeClick !== null) {
       computeUHSNZCode();
-    } else if (uhsComputeClick === null) {
+    } else if (uhsComputeClick === null && hazardCurveComputeClick !== null) {
       computeHazardNZCode();
-    } else {
+    } else if (uhsComputeClick !== null && hazardCurveComputeClick !== null) {
       computeBothNZCode();
     }
+  };
+
+  const computeBtnValidator = () => {
+    return (
+      selectedSoilClass !== computedSoilClass ||
+      selectedZFactor !== computedZFactor
+    );
   };
 
   return (
@@ -433,6 +440,7 @@ const NZS1170Section = () => {
             id="compute-nz-code"
             type="button"
             className="btn btn-primary"
+            disabled={computeBtnValidator()}
             onClick={() => computeNZCode()}
           >
             {computeButton.text}
