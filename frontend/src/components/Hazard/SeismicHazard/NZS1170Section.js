@@ -115,8 +115,10 @@ const NZS1170Section = () => {
     setSelectedSoilClass(defaultSoilClass);
   };
 
+  /*
+   API calls that wil be eventually separated
+  */
   const computeBothNZCode = async () => {
-    console.log("UPDATING BOTH");
     const abortController = new AbortController();
     const signal = abortController.signal;
 
@@ -201,7 +203,6 @@ const NZS1170Section = () => {
   };
 
   const computeHazardNZCode = async () => {
-    console.log("UPDATE HAZARD ONLY");
     const abortController = new AbortController();
     const signal = abortController.signal;
 
@@ -260,7 +261,6 @@ const NZS1170Section = () => {
   };
 
   const computeUHSNZCode = async () => {
-    console.log("UPDATE UHS ONLY");
     const abortController = new AbortController();
     const signal = abortController.signal;
 
@@ -322,6 +322,14 @@ const NZS1170Section = () => {
       });
   };
 
+  /*
+    When NZ Code's Compute gets clicked
+    Depends on the situation, it has three different scenarios
+    1. Only Hazard Curve is valid, call Hazard Curve's NZCode to update its NZ Code data
+    2. Only UHS is valid, call UHSs NZCode to update its NZ Code data
+    3. Both Hazad Curve and UHS are valid, call both API to update their NZ Code data.
+  */
+
   const computeNZCode = () => {
     if (hazardCurveComputeClick === null && uhsComputeClick !== null) {
       computeUHSNZCode();
@@ -332,10 +340,17 @@ const NZS1170Section = () => {
     }
   };
 
+  /*
+    Compute button is disabled when users haven't computed UHS nor Hazard Curve.
+    After either of both get computed, until they update Soil Class and/or Z Factor, it stays disabled.
+    It only gets enabled when at least one data is there (compare with computeClick is not null for Hazard Curve and UHS)
+    and Z factor and/or Soil Class get changed.
+  */
   const computeBtnValidator = () => {
     return (
-      selectedSoilClass !== computedSoilClass ||
-      selectedZFactor !== computedZFactor
+      (selectedSoilClass !== computedSoilClass ||
+        selectedZFactor !== computedZFactor) &&
+      (hazardCurveComputeClick !== null || uhsComputeClick !== null)
     );
   };
 
@@ -440,7 +455,7 @@ const NZS1170Section = () => {
             id="compute-nz-code"
             type="button"
             className="btn btn-primary"
-            disabled={computeBtnValidator()}
+            disabled={!computeBtnValidator()}
             onClick={() => computeNZCode()}
           >
             {computeButton.text}
