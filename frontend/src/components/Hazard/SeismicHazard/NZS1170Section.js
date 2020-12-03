@@ -330,12 +330,6 @@ const NZS1170Section = () => {
       computeBothNZCode();
     }
   };
-  const computeNZCodeValidate = () => {
-    return (
-      selectedSoilClass !== computedSoilClass ||
-      selectedZFactor !== computedZFactor
-    );
-  };
 
   return (
     <Fragment>
@@ -438,7 +432,6 @@ const NZS1170Section = () => {
             id="compute-nz-code"
             type="button"
             className="btn btn-primary"
-            disabled={!computeNZCodeValidate()}
             onClick={() => computeNZCode()}
           >
             {computeButton.text}
