@@ -33,6 +33,7 @@ const NZS1170Section = () => {
     computedZFactor,
     setComputedZFactor,
     hazardCurveComputeClick,
+    uhsComputeClick,
     uhsRateTable,
     setHazardNZCodeToken,
     setUHSNZCodeToken,
@@ -324,7 +325,7 @@ const NZS1170Section = () => {
   const computeNZCode = () => {
     if (hazardCurveComputeClick === null) {
       computeUHSNZCode();
-    } else if (uhsRateTable.length === 0) {
+    } else if (uhsComputeClick === null) {
       computeHazardNZCode();
     } else {
       computeBothNZCode();
