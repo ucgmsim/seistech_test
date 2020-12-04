@@ -34,6 +34,7 @@ const SiteSelectionMap = () => {
     setMapBoxCoordinate({
       lat: event.lngLat[1],
       lng: event.lngLat[0],
+      input: "MapBox",
     });
   };
 

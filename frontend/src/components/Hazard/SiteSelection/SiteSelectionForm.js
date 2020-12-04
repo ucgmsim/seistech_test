@@ -17,24 +17,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const SiteSelectionForm = () => {
   const { getTokenSilently } = useAuth0();
 
-  const [locationSetButton, setLocationSetButton] = useState({
-    text: "Set",
-    isFetching: false,
-  });
-  const [localLat, setLocalLat] = useState(CONSTANTS.DEFAULT_LAT);
-  const [localLng, setLocalLng] = useState(CONSTANTS.DEFAULT_LNG);
-  /* 
-    InputSource is either `input` or `mapbox`
-    `input` for input fields
-    `mapbox` for MapBox click
-  */
-  const [inputSource, setInputSource] = useState({
-    lat: "input",
-    lng: "input",
-  });
-  const [localSetClick, setLocalSetClick] = useState(null);
-  let inputStatus = "doUpdate";
-
   const {
     setLocationSetClick,
     setIMs,
@@ -53,17 +35,33 @@ const SiteSelectionForm = () => {
     setUHSRateTable,
   } = useContext(GlobalContext);
 
-  useEffect(() => {
-    if (inputStatus === "doUpdate") {
-      console.log("IM HERE!")
-      setInputSource({
-        lat: "mapbox",
-        lng: "mapbox",
-      });
-    }
+  const [locationSetButton, setLocationSetButton] = useState({
+    text: "Set",
+    isFetching: false,
+  });
+  const [localLat, setLocalLat] = useState(CONSTANTS.DEFAULT_LAT);
+  const [localLng, setLocalLng] = useState(CONSTANTS.DEFAULT_LNG);
+  /* 
+    InputSource is either `input` or `mapbox`
+    `input` for input fields
+    `mapbox` for MapBox click
+  */
+  const [inputSource, setInputSource] = useState({
+    lat: "input",
+    lng: "input",
+  });
+  const [localSetClick, setLocalSetClick] = useState(null);
 
-    setLocalLat(mapBoxCoordinate.lat);
-    setLocalLng(mapBoxCoordinate.lng);
+  useEffect(() => {
+    if (mapBoxCoordinate.input === "MapBox") {
+      setInputSource({ lat: "MapBox", lng: "MapBox" });
+      setLocalLat(mapBoxCoordinate.lat);
+      setLocalLng(mapBoxCoordinate.lng);
+    } else {
+      setInputSource({ lat: "input", lng: "input" });
+      setLocalLat(mapBoxCoordinate.lat);
+      setLocalLng(mapBoxCoordinate.lng);
+    }
   }, [mapBoxCoordinate]);
 
   disableScrollOnNumInput();
@@ -80,27 +78,27 @@ const SiteSelectionForm = () => {
   };
 
   const onClickLocationSet = () => {
-    console.log(`YOU JUST CLICKED ME, STATUS: ${inputStatus}`)
-    inputStatus = "doNotUpdate";
-
-    console.log(`WE JUST UPDATED STATUS: ${inputStatus}`)
-    setLocalSetClick(uuidv4());
-    setSiteSelectionLat(localLat);
-    setSiteSelectionLng(localLng);
-
-    setMapBoxCoordinate({
-      lat: localLat,
-      lng: localLng,
-    });
-
-    setInputSource({
-      lat: "input",
-      lng: "input",
-    });
-
-    setLocationSetClick(uuidv4());
-    inputStatus = "doUpdate";
-    console.log(`WE JUST UPDATED STATUS: ${inputStatus}`)
+    if (inputSource.lat === "input" || inputSource.lng === "input") {
+      setLocalSetClick(uuidv4());
+      setSiteSelectionLat(localLat);
+      setSiteSelectionLng(localLng);
+      setMapBoxCoordinate({
+        lat: localLat,
+        lng: localLng,
+        input: "input",
+      });
+      setLocationSetClick(uuidv4());
+    } else {
+      setLocalSetClick(uuidv4());
+      setSiteSelectionLat(localLat);
+      setSiteSelectionLng(localLng);
+      setMapBoxCoordinate({
+        lat: localLat,
+        lng: localLng,
+        input: "MapBox",
+      });
+      setLocationSetClick(uuidv4());
+    }
   };
 
   const setttingLocalLat = (e) => {
