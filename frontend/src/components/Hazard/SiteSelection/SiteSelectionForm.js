@@ -52,6 +52,12 @@ const SiteSelectionForm = () => {
   });
   const [localSetClick, setLocalSetClick] = useState(null);
 
+  /*
+    Two scenarios
+    1. User click on the MapBox
+    2. User clicks Set after they put Lat and/or Lng
+    By setting inputSource differently, app knows whether they display in 4dp or full
+  */
   useEffect(() => {
     if (mapBoxCoordinate.input === "MapBox") {
       setInputSource({ lat: "MapBox", lng: "MapBox" });
@@ -76,6 +82,9 @@ const SiteSelectionForm = () => {
     );
   };
 
+  /*
+    When Set button is clicked, chech whether the last action is from input fields or MapBox
+  */
   const onClickLocationSet = () => {
     setLocalSetClick(uuidv4());
     setSiteSelectionLat(localLat);
