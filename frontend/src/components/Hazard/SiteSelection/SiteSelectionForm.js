@@ -57,7 +57,7 @@ const SiteSelectionForm = () => {
       setInputSource({ lat: "MapBox", lng: "MapBox" });
       setLocalLat(mapBoxCoordinate.lat);
       setLocalLng(mapBoxCoordinate.lng);
-    } else {
+    } else if (mapBoxCoordinate.input === "input") {
       setInputSource({ lat: "input", lng: "input" });
       setLocalLat(mapBoxCoordinate.lat);
       setLocalLng(mapBoxCoordinate.lng);
@@ -78,16 +78,16 @@ const SiteSelectionForm = () => {
   };
 
   const onClickLocationSet = () => {
+    setLocalSetClick(uuidv4());
+    setSiteSelectionLat(localLat);
+    setSiteSelectionLng(localLng);
+
     if (inputSource.lat === "input" || inputSource.lng === "input") {
-      setLocalSetClick(uuidv4());
-      setSiteSelectionLat(localLat);
-      setSiteSelectionLng(localLng);
       setMapBoxCoordinate({
         lat: localLat,
         lng: localLng,
         input: "input",
       });
-      setLocationSetClick(uuidv4());
     } else {
       setLocalSetClick(uuidv4());
       setSiteSelectionLat(localLat);
@@ -97,8 +97,9 @@ const SiteSelectionForm = () => {
         lng: localLng,
         input: "MapBox",
       });
-      setLocationSetClick(uuidv4());
     }
+
+    setLocationSetClick(uuidv4());
   };
 
   const setttingLocalLat = (e) => {
