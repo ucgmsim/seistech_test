@@ -55,13 +55,12 @@ const SiteSelectionForm = () => {
   useEffect(() => {
     if (mapBoxCoordinate.input === "MapBox") {
       setInputSource({ lat: "MapBox", lng: "MapBox" });
-      setLocalLat(mapBoxCoordinate.lat);
-      setLocalLng(mapBoxCoordinate.lng);
     } else if (mapBoxCoordinate.input === "input") {
       setInputSource({ lat: "input", lng: "input" });
-      setLocalLat(mapBoxCoordinate.lat);
-      setLocalLng(mapBoxCoordinate.lng);
     }
+
+    setLocalLat(mapBoxCoordinate.lat);
+    setLocalLng(mapBoxCoordinate.lng);
   }, [mapBoxCoordinate]);
 
   disableScrollOnNumInput();
@@ -89,9 +88,6 @@ const SiteSelectionForm = () => {
         input: "input",
       });
     } else {
-      setLocalSetClick(uuidv4());
-      setSiteSelectionLat(localLat);
-      setSiteSelectionLng(localLng);
       setMapBoxCoordinate({
         lat: localLat,
         lng: localLng,
