@@ -188,7 +188,7 @@ const HazardViewerUhs = () => {
         downloadURL={CONSTANTS.CORE_API_DOWNLOAD_UHS}
         downloadToken={{
           uhs_token: downloadUHSToken,
-          nz11750_hazard_token: uhsNZCodeToken,
+          nz1170p5_hazard_token: uhsNZCodeToken,
         }}
         fileName="uniform_hazard_spectrum.zip"
       />

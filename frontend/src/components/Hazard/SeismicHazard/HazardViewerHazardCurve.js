@@ -127,7 +127,7 @@ const HazardViewerHazardCurve = () => {
             .then(async (response) => {
               const nzCodeDataResponse = await response.json();
               setHazardNZCodeData(
-                nzCodeDataResponse["nz11750_hazard"]["im_values"]
+                nzCodeDataResponse["nz1170p5_hazard"]["im_values"]
               );
               setHazardNZCodeToken(nzCodeDataResponse["download_token"]);
               setIsNZCodeComputed(true);
@@ -244,7 +244,7 @@ const HazardViewerHazardCurve = () => {
         downloadURL={CONSTANTS.CORE_API_DOWNLOAD_HAZARD}
         downloadToken={{
           hazard_token: downloadHazardToken,
-          nz11750_hazard_token: hazardNZCodeToken,
+          nz1170p5_hazard_token: hazardNZCodeToken,
         }}
         fileName="hazard.zip"
       />

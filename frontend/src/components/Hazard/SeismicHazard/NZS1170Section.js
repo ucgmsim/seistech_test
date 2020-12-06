@@ -179,7 +179,7 @@ const NZS1170Section = () => {
       .then(async ([hazard, uhs]) => {
         const hazardNZCodeData = await hazard.json();
         const uhsNZCodeData = await uhs.json();
-        setHazardNZCodeData(hazardNZCodeData["nz11750_hazard"]["im_values"]);
+        setHazardNZCodeData(hazardNZCodeData["nz1170p5_hazard"]["im_values"]);
         setUHSNZCodeData(uhsNZCodeData["nz_code_uhs_df"]);
 
         setHazardNZCodeToken(hazardNZCodeData["download_token"]);
@@ -239,7 +239,7 @@ const NZS1170Section = () => {
       .then(handleErrors)
       .then(async (response) => {
         const hazardNZCodeData = await response.json();
-        setHazardNZCodeData(hazardNZCodeData["nz11750_hazard"]["im_values"]);
+        setHazardNZCodeData(hazardNZCodeData["nz1170p5_hazard"]["im_values"]);
 
         setHazardNZCodeToken(hazardNZCodeData["download_token"]);
 

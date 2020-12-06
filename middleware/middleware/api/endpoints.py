@@ -64,11 +64,11 @@ def get_hazard():
     )
 
 
-@app.route("/coreAPI/hazard/nz11750", methods=["GET"])
+@app.route("/coreAPI/hazard/nz1170p5", methods=["GET"])
 @requires_auth
 def get_hazard_nzcode():
     if requires_permission("hazard:hazard"):
-        return proxy_to_api(flask.request, "api/hazard/nz11750/get", "GET")
+        return proxy_to_api(flask.request, "api/hazard/nz1170p5/get", "GET")
     raise AuthError(
         {
             "code": "Unauthorized",
@@ -78,11 +78,11 @@ def get_hazard_nzcode():
     )
 
 
-@app.route("/coreAPI/hazard/nz11750/soil_class", methods=["GET"])
+@app.route("/coreAPI/hazard/nz1170p5/soil_class", methods=["GET"])
 @requires_auth
 def get_nzcode_soil_class():
     if requires_permission("hazard:hazard"):
-        return proxy_to_api(flask.request, "api/hazard/nz11750/soil_class", "GET")
+        return proxy_to_api(flask.request, "api/hazard/nz1170p5/soil_class", "GET")
     raise AuthError(
         {
             "code": "Unauthorized",
@@ -92,11 +92,11 @@ def get_nzcode_soil_class():
     )
 
 
-@app.route("/coreAPI/hazard/nz11750/default", methods=["GET"])
+@app.route("/coreAPI/hazard/nz1170p5/default", methods=["GET"])
 @requires_auth
 def get_nzcode_default_params():
     if requires_permission("hazard:hazard"):
-        return proxy_to_api(flask.request, "api/hazard/nz11750/default_params", "GET")
+        return proxy_to_api(flask.request, "api/hazard/nz1170p5/default_params", "GET")
     raise AuthError(
         {
             "code": "Unauthorized",
@@ -134,11 +134,11 @@ def get_uhs():
     )
 
 
-@app.route("/coreAPI/uhs/nz11750", methods=["GET"])
+@app.route("/coreAPI/uhs/nz1170p5", methods=["GET"])
 @requires_auth
 def get_uhs_nzcode():
     if requires_permission("hazard:hazard"):
-        return proxy_to_api(flask.request, "api/uhs/nz11750/get", "GET")
+        return proxy_to_api(flask.request, "api/uhs/nz1170p5/get", "GET")
     raise AuthError(
         {
             "code": "Unauthorized",
