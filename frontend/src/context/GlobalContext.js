@@ -54,7 +54,9 @@ export const Provider = (props) => {
 
   const [soilClass, setSoilClass] = useState([]);
 
-  const [showNZCodePlots, setShowNZCodePlots] = useState(true);
+  // Check box stats for Hazard Curve and UHS for NZCode, default is true
+  const [showHazardNZCode, setShowHazardNZCode] = useState(true);
+  const [showUHSNZCode, setShowUHSNZCode] = useState(true);
 
   // NZ Code is now splitted
   const [hazardNZCodeData, setHazardNZCodeData] = useState(null);
@@ -264,8 +266,10 @@ export const Provider = (props) => {
     setSelectedZFactor,
     computedZFactor,
     setComputedZFactor,
-    showNZCodePlots,
-    setShowNZCodePlots,
+    showHazardNZCode,
+    setShowHazardNZCode,
+    showUHSNZCode,
+    setShowUHSNZCode,
     hazardNZCodeData,
     setHazardNZCodeData,
     uhsNZCodeData,

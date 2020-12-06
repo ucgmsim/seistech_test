@@ -31,7 +31,7 @@ const HazardViewerHazardCurve = () => {
     nzCodeDefaultParams,
     selectedSoilClass,
     selectedZFactor,
-    showNZCodePlots,
+    showHazardNZCode,
     setIsNZCodeComputed,
     setComputedSoilClass,
     setComputedZFactor,
@@ -186,7 +186,7 @@ const HazardViewerHazardCurve = () => {
                   hazardData={hazardData}
                   im={selectedIM}
                   nzCodeData={hazardNZCodeData}
-                  showNZCode={showNZCodePlots}
+                  showNZCode={showHazardNZCode}
                   extra={extraInfo}
                 />
                 <HazardCurveMetadata
@@ -226,7 +226,7 @@ const HazardViewerHazardCurve = () => {
                   hazardData={hazardData}
                   im={selectedIM}
                   nzCodeData={hazardNZCodeData}
-                  showNZCode={showNZCodePlots}
+                  showNZCode={showHazardNZCode}
                   extra={extraInfo}
                 />
                 <HazardCurveMetadata

@@ -19,8 +19,6 @@ const NZS1170Section = () => {
     selectedIM,
     setHazardNZCodeData,
     setUHSNZCodeData,
-    showNZCodePlots,
-    setShowNZCodePlots,
     soilClass,
     nzCodeDefaultParams,
     selectedSoilClass,
@@ -358,16 +356,7 @@ const NZS1170Section = () => {
     <Fragment>
       <form autoComplete="off" onSubmit={(e) => e.preventDefault()}>
         <div className="form-group form-section-title">
-          <span>NZS1170</span>
-        </div>
-
-        <div className="form-group">
-          <input
-            type="checkbox"
-            checked={showNZCodePlots}
-            onChange={() => setShowNZCodePlots(!showNZCodePlots)}
-          />
-          <span className="show-nzs">&nbsp;Show NZS1170.5 hazard</span>
+          <span>NZS1170.5</span>
         </div>
 
         <div className="form-group">
