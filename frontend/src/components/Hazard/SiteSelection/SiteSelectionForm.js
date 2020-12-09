@@ -17,14 +17,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const SiteSelectionForm = () => {
   const { getTokenSilently } = useAuth0();
 
-  const [locationSetButton, setLocationSetButton] = useState({
-    text: "Set",
-    isFetching: false,
-  });
-  const [localLat, setLocalLat] = useState(CONSTANTS.DEFAULT_LAT);
-  const [localLng, setLocalLng] = useState(CONSTANTS.DEFAULT_LNG);
-  const [localSetClick, setLocalSetClick] = useState(null);
-
   const {
     setLocationSetClick,
     setIMs,
@@ -43,7 +35,36 @@ const SiteSelectionForm = () => {
     setUHSRateTable,
   } = useContext(GlobalContext);
 
+  const [locationSetButton, setLocationSetButton] = useState({
+    text: "Set",
+    isFetching: false,
+  });
+  const [localLat, setLocalLat] = useState(CONSTANTS.DEFAULT_LAT);
+  const [localLng, setLocalLng] = useState(CONSTANTS.DEFAULT_LNG);
+  /* 
+    InputSource is either `input` or `mapbox`
+    `input` for input fields
+    `mapbox` for MapBox click
+  */
+  const [inputSource, setInputSource] = useState({
+    lat: "input",
+    lng: "input",
+  });
+  const [localSetClick, setLocalSetClick] = useState(null);
+
+  /*
+    Two scenarios
+    1. User click on the MapBox
+    2. User clicks Set after they put Lat and/or Lng
+    By setting inputSource differently, app knows whether they display in 4dp or full
+  */
   useEffect(() => {
+    if (mapBoxCoordinate.input === "MapBox") {
+      setInputSource({ lat: "MapBox", lng: "MapBox" });
+    } else if (mapBoxCoordinate.input === "input") {
+      setInputSource({ lat: "input", lng: "input" });
+    }
+
     setLocalLat(mapBoxCoordinate.lat);
     setLocalLng(mapBoxCoordinate.lng);
   }, [mapBoxCoordinate]);
@@ -61,15 +82,45 @@ const SiteSelectionForm = () => {
     );
   };
 
+  /*
+    When Set button is clicked, chech whether the last action is from input fields or MapBox
+  */
   const onClickLocationSet = () => {
-    setMapBoxCoordinate({
-      lat: localLat,
-      lng: localLng,
-    });
+    setLocalSetClick(uuidv4());
     setSiteSelectionLat(localLat);
     setSiteSelectionLng(localLng);
+
+    if (inputSource.lat === "input" || inputSource.lng === "input") {
+      setMapBoxCoordinate({
+        lat: localLat,
+        lng: localLng,
+        input: "input",
+      });
+    } else {
+      setMapBoxCoordinate({
+        lat: localLat,
+        lng: localLng,
+        input: "MapBox",
+      });
+    }
+
     setLocationSetClick(uuidv4());
-    setLocalSetClick(uuidv4());
+  };
+
+  const setttingLocalLat = (e) => {
+    setInputSource((prevState) => ({
+      ...prevState,
+      lat: "input",
+    }));
+    setLocalLat(e);
+  };
+
+  const settingLocalLng = (e) => {
+    setInputSource((prevState) => ({
+      ...prevState,
+      lng: "input",
+    }));
+    setLocalLng(e);
   };
 
   /*
@@ -230,8 +281,12 @@ const SiteSelectionForm = () => {
               id="haz-lat"
               className="flex-grow-1"
               type="number"
-              value={localLat}
-              onChange={(e) => setLocalLat(e.target.value)}
+              value={
+                inputSource.lat === "input"
+                  ? localLat
+                  : Number(localLat).toFixed(4)
+              }
+              onChange={(e) => setttingLocalLat(e.target.value)}
               placeholder="[-47.4, -34.3]"
               error={
                 (localLat >= -47.4 && localLat <= -34.3) || localLat === ""
@@ -260,8 +315,12 @@ const SiteSelectionForm = () => {
                 id="haz-lng"
                 className="flex-grow-1"
                 type="number"
-                value={localLng}
-                onChange={(e) => setLocalLng(e.target.value)}
+                value={
+                  inputSource.lng === "input"
+                    ? localLng
+                    : Number(localLng).toFixed(4)
+                }
+                onChange={(e) => settingLocalLng(e.target.value)}
                 placeholder="[165, 180]"
                 error={
                   (localLng >= 165 && localLng <= 180) || localLng === ""
