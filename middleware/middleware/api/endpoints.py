@@ -64,6 +64,48 @@ def get_hazard():
     )
 
 
+@app.route("/coreAPI/hazard/nz1170p5", methods=["GET"])
+@requires_auth
+def get_hazard_nzcode():
+    if requires_permission("hazard:hazard"):
+        return proxy_to_api(flask.request, "api/hazard/nz1170p5/get", "GET")
+    raise AuthError(
+        {
+            "code": "Unauthorized",
+            "description": "You don't have access to this resource",
+        },
+        403,
+    )
+
+
+@app.route("/coreAPI/hazard/nz1170p5/soil_class", methods=["GET"])
+@requires_auth
+def get_nzcode_soil_class():
+    if requires_permission("hazard:hazard"):
+        return proxy_to_api(flask.request, "api/hazard/nz1170p5/soil_class", "GET")
+    raise AuthError(
+        {
+            "code": "Unauthorized",
+            "description": "You don't have access to this resource",
+        },
+        403,
+    )
+
+
+@app.route("/coreAPI/hazard/nz1170p5/default", methods=["GET"])
+@requires_auth
+def get_nzcode_default_params():
+    if requires_permission("hazard:hazard"):
+        return proxy_to_api(flask.request, "api/hazard/nz1170p5/default_params", "GET")
+    raise AuthError(
+        {
+            "code": "Unauthorized",
+            "description": "You don't have access to this resource",
+        },
+        403,
+    )
+
+
 @app.route("/coreAPI/disagg", methods=["GET"])
 @requires_auth
 def get_disagg():
@@ -83,6 +125,20 @@ def get_disagg():
 def get_uhs():
     if requires_permission("hazard:uhs"):
         return proxy_to_api(flask.request, "api/uhs/ensemble_uhs/get", "GET")
+    raise AuthError(
+        {
+            "code": "Unauthorized",
+            "description": "You don't have access to this resource",
+        },
+        403,
+    )
+
+
+@app.route("/coreAPI/uhs/nz1170p5", methods=["GET"])
+@requires_auth
+def get_uhs_nzcode():
+    if requires_permission("hazard:hazard"):
+        return proxy_to_api(flask.request, "api/uhs/nz1170p5/get", "GET")
     raise AuthError(
         {
             "code": "Unauthorized",
@@ -169,11 +225,11 @@ We send requests to Core API for now.
 """
 
 # Download
-@app.route("/coreAPI/hazard_download/<token>", methods=["GET"])
-def download_hazard(token):
+@app.route("/coreAPI/hazard_download", methods=["GET"])
+def download_hazard():
     core_response = proxy_to_api(
         flask.request,
-        f"api/hazard/ensemble_hazard/download/{token}",
+        "api/hazard/ensemble_hazard/download",
         "GET",
         content_type="application/zip",
         headers={"Content-Disposition": "attachment; filename=hazard.zip"},
@@ -182,11 +238,11 @@ def download_hazard(token):
     return core_response
 
 
-@app.route("/coreAPI/disagg_download/<token>", methods=["GET"])
-def download_disagg(token):
+@app.route("/coreAPI/disagg_download", methods=["GET"])
+def download_disagg():
     core_response = proxy_to_api(
         flask.request,
-        f"api/disagg/ensemble_disagg/download/{token}",
+        "api/disagg/ensemble_disagg/download",
         "GET",
         content_type="application/zip",
         headers={"Content-Disposition": "attachment; filename=disaggregation.zip"},
@@ -195,11 +251,11 @@ def download_disagg(token):
     return core_response
 
 
-@app.route("/coreAPI/uhs_download/<token>", methods=["GET"])
-def download_uhs(token):
+@app.route("/coreAPI/uhs_download", methods=["GET"])
+def download_uhs():
     core_response = proxy_to_api(
         flask.request,
-        f"api/uhs/ensemble_uhs/download/{token}",
+        "api/uhs/ensemble_uhs/download",
         "GET",
         content_type="application/zip",
         headers={
@@ -210,11 +266,11 @@ def download_uhs(token):
     return core_response
 
 
-@app.route("/coreAPI/gms_download/<token>", methods=["GET"])
-def download_gms(token):
+@app.route("/coreAPI/gms_download", methods=["GET"])
+def download_gms():
     core_response = proxy_to_api(
         flask.request,
-        f"api/gms/ensemble_gms/download/{token}",
+        "api/gms/ensemble_gms/download",
         "GET",
         content_type="application/zip",
         headers={"Content-Disposition": "attachment; filename=gms.zip"},

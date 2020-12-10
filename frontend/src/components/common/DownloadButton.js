@@ -16,8 +16,18 @@ const DownloadButton = ({ downloadURL, downloadToken, fileName, disabled }) => {
       isFetching: true,
     });
 
+    let queryString = "?";
+
+    // downloadToken is now an object form
+    for (const [param, value] of Object.entries(downloadToken)) {
+      queryString += `${param}=${value}&`;
+    }
+
+    // remove the last character which is an extra &
+    queryString.slice(0, -1);
+
     axios({
-      url: CORE_API_BASE_URL + downloadURL + downloadToken,
+      url: CORE_API_BASE_URL + downloadURL + queryString,
       method: "GET",
       responseType: "blob",
     })

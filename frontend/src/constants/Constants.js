@@ -12,9 +12,14 @@ export const CORE_API_ROUTE_VS30_MAP = "coreAPI/vs30map";
 export const CORE_API_ROUTE_LOCATION = "coreAPI/location";
 export const CORE_API_ROUTE_STATION = "coreAPI/station";
 export const CORE_API_ROUTE_HAZARD_PLOT = "coreAPI/hazard";
+export const CORE_API_ROUTE_HAZARD_NZCODE = "coreAPI/hazard/nz1170p5";
 export const CORE_API_ROUTE_DISAGG = "coreAPI/disagg";
 export const CORE_API_ROUTE_UHS = "coreAPI/uhs";
-
+export const CORE_API_ROUTE_UHS_NZCODE = "coreAPI/uhs/nz1170p5";
+export const CORE_API_ROUTE_HAZARD_NZCODE_SOIL_CLASS =
+  "coreAPI/hazard/nz1170p5/soil_class";
+export const CORE_API_ROUTE_HAZARD_NZCODE_DEFAULT_PARAMS =
+  "coreAPI/hazard/nz1170p5/default";
 export const CORE_API_ROUTE_GMS_COMPUTE = "coreAPI/gms/ensemble_gms";
 export const CORE_API_ROUTE_GMS_DEFAULT_IM_WEIGHTS =
   "coreAPI/gms/default_im_weights";
@@ -32,10 +37,10 @@ export const PROJECT_API_ROUTE_PROJECT_UHS_GET = "projectAPI/uhs/get";
 export const PROJECT_API_ROUTE_PROJECT_MAPS = "projectAPI/maps/get";
 
 /* Download URL */
-export const CORE_API_DOWNLOAD_HAZARD = "coreAPI/hazard_download/";
-export const CORE_API_DOWNLOAD_DISAGG = "coreAPI/disagg_download/";
-export const CORE_API_DOWNLOAD_UHS = "coreAPI/uhs_download/";
-export const CORE_API_DOWNLOAD_GMS = "coreAPI/gms_download/";
+export const CORE_API_DOWNLOAD_HAZARD = "coreAPI/hazard_download";
+export const CORE_API_DOWNLOAD_DISAGG = "coreAPI/disagg_download";
+export const CORE_API_DOWNLOAD_UHS = "coreAPI/uhs_download";
+export const CORE_API_DOWNLOAD_GMS = "coreAPI/gms_download";
 
 /* 
   Words 

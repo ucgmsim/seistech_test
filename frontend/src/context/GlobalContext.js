@@ -51,19 +51,40 @@ export const Provider = (props) => {
 
   const [uhsComputeClick, setUHSComputeClick] = useState(null);
 
+  const [nzCodeDefaultParams, setNzCodeDefaultParams] = useState([]);
+
+  const [soilClass, setSoilClass] = useState([]);
+
+  // Check box stats for Hazard Curve and UHS for NZCode, default is true
+  const [showHazardNZCode, setShowHazardNZCode] = useState(true);
+  const [showUHSNZCode, setShowUHSNZCode] = useState(true);
+
+  // NZ Code is now splitted
+  const [hazardNZCodeData, setHazardNZCodeData] = useState(null);
+  const [uhsNZCodeData, setUHSNZCodeData] = useState(null);
+
+  // For a selected soil class
+  const [selectedSoilClass, setSelectedSoilClass] = useState({});
+  // For a computed soil class, to validate compute button
+  const [computedSoilClass, setComputedSoilClass] = useState({});
+  // For a selected Z Factor
+  const [selectedZFactor, setSelectedZFactor] = useState(-1);
+  // For a computed Z Factor, to validate compute button
+  const [computedZFactor, setComputedZFactor] = useState(0);
+
+  // To update Metadata after we recompute nzcode
+  const [isNZCodeComputed, setIsNZCodeComputed] = useState(false);
+
+  // Download Token which is needed for Hazard Curve
+  const [hazardNZCodeToken, setHazardNZCodeToken] = useState("");
+  // and UHS
+  const [uhsNZCodeToken, setUHSNZCodeToken] = useState("");
+
   /*
     TODO - Future usage
   */
-  const [nzs1170ComputeClick, setNZS1170ComputeClick] = useState("false");
-  const [showNZS1170, setShowNZS1170] = useState("false");
 
   const [uhsRateTable, setUHSRateTable] = useState([]);
-
-  const [nzs1170Input, setNZS1170Input] = useState();
-  const [nzs1170SiteClass, setNZS1170SiteClass] = useState("A");
-
-  // GMS
-  const [computedGMS, setComputedGMS] = useState(null);
 
   /*
     Project Tab
@@ -234,25 +255,41 @@ export const Provider = (props) => {
     setDisaggComputeClick,
     uhsComputeClick,
     setUHSComputeClick,
-
-    nzs1170ComputeClick,
-    setNZS1170ComputeClick,
-    showNZS1170,
-    setShowNZS1170,
+    nzCodeDefaultParams,
+    setNzCodeDefaultParams,
+    soilClass,
+    setSoilClass,
+    selectedSoilClass,
+    setSelectedSoilClass,
+    computedSoilClass,
+    setComputedSoilClass,
+    selectedZFactor,
+    setSelectedZFactor,
+    computedZFactor,
+    setComputedZFactor,
+    showHazardNZCode,
+    setShowHazardNZCode,
+    showUHSNZCode,
+    setShowUHSNZCode,
+    hazardNZCodeData,
+    setHazardNZCodeData,
+    uhsNZCodeData,
+    setUHSNZCodeData,
+    isNZCodeComputed,
+    setIsNZCodeComputed,
+    hazardNZCodeToken,
+    setHazardNZCodeToken,
+    uhsNZCodeToken,
+    setUHSNZCodeToken,
 
     uhsRateTable,
     setUHSRateTable,
     uhsTableAddRow,
     uhsTableDeleteRow,
 
-    nzs1170Input,
-    setNZS1170Input,
-    nzs1170SiteClass,
-    setNZS1170SiteClass,
-
-    // GMS
-    computedGMS,
-    setComputedGMS,
+    /*
+      GMS
+    */
     IMVectors,
     setIMVectors,
 

@@ -13,6 +13,8 @@ const UHSSection = () => {
     isTabEnabled,
     uhsTableAddRow,
     uhsTableDeleteRow,
+    showUHSNZCode,
+    setShowUHSNZCode,
   } = useContext(GlobalContext);
 
   const [disableButtonUHSCompute, setDisableButtonUHSCompute] = useState(true);
@@ -150,6 +152,15 @@ const UHSSection = () => {
         >
           Compute
         </button>
+      </div>
+
+      <div className="form-group">
+        <input
+          type="checkbox"
+          checked={showUHSNZCode}
+          onChange={() => setShowUHSNZCode(!showUHSNZCode)}
+        />
+        <span className="show-nzs">&nbsp;Show NZS1170.5</span>
       </div>
     </Fragment>
   );

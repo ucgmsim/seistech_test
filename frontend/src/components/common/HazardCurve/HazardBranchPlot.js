@@ -5,8 +5,18 @@ import { getPlotData } from "utils/Utils";
 import { PLOT_MARGIN } from "constants/Constants";
 import ErrorMessage from "components/common/ErrorMessage";
 
-const HazardBranchPlot = ({ hazardData, im, extra }) => {
-  if (hazardData !== null && !hazardData.hasOwnProperty("error")) {
+const HazardBranchPlot = ({
+  hazardData,
+  im,
+  nzCodeData,
+  showNZCode = true,
+  extra,
+}) => {
+  if (
+    hazardData !== null &&
+    !hazardData.hasOwnProperty("error") &&
+    nzCodeData !== null
+  ) {
     const branchHazard = hazardData["branches_hazard"];
     // // Create the scatter objects for the branch totals
     const scatterObjs = [];
@@ -22,8 +32,8 @@ const HazardBranchPlot = ({ hazardData, im, extra }) => {
       });
     }
 
-    // // For NZ Code
-    const nzCode = getPlotData(hazardData["nz_code_hazard"].im_values);
+    // For NZ Code
+    const nzCode = getPlotData(nzCodeData);
 
     // Add the scatter object for the ensemble total
     const ensHazard = hazardData["ensemble_hazard"];
@@ -47,6 +57,7 @@ const HazardBranchPlot = ({ hazardData, im, extra }) => {
         name: "NZ code",
         marker: { symbol: "triangle-up" },
         line: { color: "black", dash: "dot" },
+        visible: showNZCode,
       }
     );
     return (

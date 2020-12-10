@@ -14,6 +14,7 @@ const HazardViewerUhs = () => {
   const { getTokenSilently } = useAuth0();
 
   const [uhsData, setUHSData] = useState(null);
+  const [uhsNZCodeData, setUHSNZCodeData] = useState(null);
 
   const [showSpinnerUHS, setShowSpinnerUHS] = useState(false);
   const [showPlotUHS, setShowPlotUHS] = useState(false);
@@ -88,6 +89,7 @@ const HazardViewerUhs = () => {
             .then(async (response) => {
               const responseData = await response.json();
               setUHSData(responseData);
+              setUHSNZCodeData(responseData["nz_code_uhs_df"]);
               // setDownloadToken(responseData["download_token"]);
               setShowSpinnerUHS(false);
               setShowPlotUHS(true);
@@ -138,7 +140,11 @@ const HazardViewerUhs = () => {
           showPlotUHS === true &&
           showErrorMessage.isError === false && (
             <Fragment>
-              <UHSPlot uhsData={uhsData} extra={extraInfo} />
+              <UHSPlot
+                uhsData={uhsData}
+                nzCodeData={uhsNZCodeData}
+                extra={extraInfo}
+              />
             </Fragment>
           )}
       </div>

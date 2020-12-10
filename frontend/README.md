@@ -344,7 +344,7 @@ Similar to **Disaggregation**. Users can put **Annual Exceedance Rate** but they
 
 ##### NZ Code
 
-Will add this from NZ Code branch.
+NZ Code is now separated with its section. When users set the location from **Site Selection**, the app sends another request to Core API to get default parameters, such as distance(not displaying), soil class and z factor. Then when users try to compute **Hazard Curve** and/or **UHS**, the app sens NZCode calls right after the Hazard and/or UHS to get NZ Code data to plot. So basically, we send NZ Code call with **Hazard Curve** and/or **UHS**. However, users can update NZ Code by itself by changing **Soil Class** and/or **Z Factor** then click the compute button in NZS1170 section.
 
 #### GMS
 

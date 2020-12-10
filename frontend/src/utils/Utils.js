@@ -38,9 +38,9 @@ export const handleErrors = (response) => {
   return response;
 };
 
-/**
- * Converts the Series json (which is a dict with each index value as a key),
- * to two arrays ready for plotting.
+/*
+  Converts the Series json (which is a dict with each index value as a key),
+  to two arrays ready for plotting.
  */
 export const getPlotData = (data) => {
   const index = [];
@@ -53,8 +53,8 @@ export const getPlotData = (data) => {
   return { index: index, values: values };
 };
 
-/**
- * Implement x sig figs for numeric float values
+/*
+  Implement x sig figs for numeric float values
  */
 export const renderSigfigs = (fullprecision, sigfigs) => {
   return Number.parseFloat(fullprecision).toPrecision(sigfigs);

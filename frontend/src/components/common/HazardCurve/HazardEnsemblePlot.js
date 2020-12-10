@@ -5,15 +5,26 @@ import { getPlotData } from "utils/Utils";
 import { PLOT_MARGIN } from "constants/Constants";
 import ErrorMessage from "components/common/ErrorMessage";
 
-const HazardEnsemblePlot = ({ hazardData, im, extra }) => {
-  if (hazardData !== null && !hazardData.hasOwnProperty("error")) {
+const HazardEnsemblePlot = ({
+  hazardData,
+  im,
+  nzCodeData,
+  showNZCode = true,
+  extra,
+}) => {
+  if (
+    hazardData !== null &&
+    !hazardData.hasOwnProperty("error") &&
+    nzCodeData !== null
+  ) {
     const ensHazard = hazardData["ensemble_hazard"];
-
     const plotData = {};
+
     for (let typeKey of ["fault", "ds", "total"]) {
       plotData[typeKey] = getPlotData(ensHazard[typeKey]);
     }
-    plotData["nzCode"] = getPlotData(hazardData["nz_code_hazard"].im_values);
+
+    plotData["nzCode"] = getPlotData(nzCodeData);
 
     return (
       <Plot
@@ -55,6 +66,7 @@ const HazardEnsemblePlot = ({ hazardData, im, extra }) => {
             name: "NZ code",
             marker: { symbol: "triangle-up" },
             line: { color: "black", dash: "dot" },
+            visible: showNZCode,
           },
         ]}
         layout={{

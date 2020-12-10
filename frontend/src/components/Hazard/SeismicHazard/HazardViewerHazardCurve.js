@@ -26,8 +26,19 @@ const HazardViewerHazardCurve = () => {
     selectedIM,
     selectedEnsemble,
     station,
+    hazardNZCodeData,
+    setHazardNZCodeData,
+    nzCodeDefaultParams,
+    selectedSoilClass,
+    selectedZFactor,
+    showHazardNZCode,
+    setIsNZCodeComputed,
+    setComputedSoilClass,
+    setComputedZFactor,
     siteSelectionLat,
     siteSelectionLng,
+    hazardNZCodeToken,
+    setHazardNZCodeToken,
   } = useContext(GlobalContext);
 
   const [showSpinnerHazard, setShowSpinnerHazard] = useState(false);
@@ -39,7 +50,7 @@ const HazardViewerHazardCurve = () => {
 
   const [hazardData, setHazardData] = useState(null);
 
-  const [downloadToken, setDownloadToken] = useState("");
+  const [downloadHazardToken, setDownloadHazardToken] = useState("");
 
   const extraInfo = {
     from: "hazard",
@@ -66,18 +77,21 @@ const HazardViewerHazardCurve = () => {
           setShowPlotHazard(false);
           setShowSpinnerHazard(true);
           setShowErrorMessage({ isError: false, errorCode: null });
+          setIsNZCodeComputed(false);
+          setComputedZFactor(selectedZFactor);
+          setComputedSoilClass(selectedSoilClass);
 
           const token = await getTokenSilently();
 
-          let queryString = `?ensemble_id=${selectedEnsemble}&station=${station}&im=${selectedIM}`;
+          let hazardDataQueryString = `?ensemble_id=${selectedEnsemble}&station=${station}&im=${selectedIM}`;
           if (vs30 !== defaultVS30) {
-            queryString += `&vs30=${vs30}`;
+            hazardDataQueryString += `&vs30=${vs30}`;
           }
 
-          await fetch(
+          fetch(
             CONSTANTS.CORE_API_BASE_URL +
               CONSTANTS.CORE_API_ROUTE_HAZARD_PLOT +
-              queryString,
+              hazardDataQueryString,
             {
               headers: {
                 Authorization: `Bearer ${token}`,
@@ -86,10 +100,37 @@ const HazardViewerHazardCurve = () => {
             }
           )
             .then(handleErrors)
+            .then(async (hazardResponse) => {
+              const hazardData = await hazardResponse.json();
+              setHazardData(hazardData);
+              setDownloadHazardToken(hazardData["download_token"]);
+
+              let nzCodeQueryString = `?ensemble_id=${selectedEnsemble}&station=${station}&im=${selectedIM}&soil_class=${
+                selectedSoilClass["value"]
+              }&distance=${Number(
+                nzCodeDefaultParams["distance"]
+              )}&z_factor=${selectedZFactor}`;
+
+              return fetch(
+                CONSTANTS.CORE_API_BASE_URL +
+                  CONSTANTS.CORE_API_ROUTE_HAZARD_NZCODE +
+                  nzCodeQueryString,
+                {
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
+                  signal: signal,
+                }
+              );
+            })
+            .then(handleErrors)
             .then(async (response) => {
-              const responseData = await response.json();
-              setHazardData(responseData);
-              setDownloadToken(responseData["download_token"]);
+              const nzCodeDataResponse = await response.json();
+              setHazardNZCodeData(
+                nzCodeDataResponse["nz1170p5_hazard"]["im_values"]
+              );
+              setHazardNZCodeToken(nzCodeDataResponse["download_token"]);
+              setIsNZCodeComputed(true);
               setShowSpinnerHazard(false);
               setShowPlotHazard(true);
             })
@@ -98,7 +139,6 @@ const HazardViewerHazardCurve = () => {
                 setShowSpinnerHazard(false);
                 setShowErrorMessage({ isError: true, errorCode: error });
               }
-
               console.log(error);
             });
         } catch (error) {
@@ -145,11 +185,12 @@ const HazardViewerHazardCurve = () => {
                 <HazardBranchPlot
                   hazardData={hazardData}
                   im={selectedIM}
+                  nzCodeData={hazardNZCodeData}
+                  showNZCode={showHazardNZCode}
                   extra={extraInfo}
                 />
                 <HazardCurveMetadata
                   selectedEnsemble={selectedEnsemble}
-                  station={station}
                   selectedIM={selectedIM}
                   vs30={vs30}
                 />
@@ -184,11 +225,12 @@ const HazardViewerHazardCurve = () => {
                 <HazardEnsemblePlot
                   hazardData={hazardData}
                   im={selectedIM}
+                  nzCodeData={hazardNZCodeData}
+                  showNZCode={showHazardNZCode}
                   extra={extraInfo}
                 />
                 <HazardCurveMetadata
                   selectedEnsemble={selectedEnsemble}
-                  station={station}
                   selectedIM={selectedIM}
                   vs30={vs30}
                 />
@@ -200,7 +242,10 @@ const HazardViewerHazardCurve = () => {
       <DownloadButton
         disabled={!showPlotHazard}
         downloadURL={CONSTANTS.CORE_API_DOWNLOAD_HAZARD}
-        downloadToken={downloadToken}
+        downloadToken={{
+          hazard_token: downloadHazardToken,
+          nz1170p5_hazard_token: hazardNZCodeToken,
+        }}
         fileName="hazard.zip"
       />
     </div>

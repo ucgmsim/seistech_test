@@ -4,9 +4,13 @@ import { v4 as uuidv4 } from "uuid";
 import { GlobalContext } from "context";
 
 const HazardCurveSection = () => {
-  const { selectedIM, setSelectedIM, setHazardCurveComputeClick } = useContext(
-    GlobalContext
-  );
+  const {
+    selectedIM,
+    setSelectedIM,
+    setHazardCurveComputeClick,
+    showHazardNZCode,
+    setShowHazardNZCode,
+  } = useContext(GlobalContext);
 
   const [
     disabledButtonHazardCurveCompute,
@@ -38,6 +42,14 @@ const HazardCurveSection = () => {
         >
           Compute
         </button>
+      </div>
+      <div className="form-group">
+        <input
+          type="checkbox"
+          checked={showHazardNZCode}
+          onChange={() => setShowHazardNZCode(!showHazardNZCode)}
+        />
+        <span className="show-nzs">&nbsp;Show NZS1170.5</span>
       </div>
     </Fragment>
   );
