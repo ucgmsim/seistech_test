@@ -5,7 +5,7 @@ from selenium.webdriver.common.by import By
 
 def set_chrome_options():
     chrome_options = Options()
-    if os.environ.get('HOST_NAME') and os.environ['HOST_NAME'].startswith("travis"):
+    if os.environ.get('USER') and os.environ['USER']=='jenkins':
         chrome_options.add_argument("--headless")
 
     return chrome_options
