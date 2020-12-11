@@ -225,8 +225,9 @@ We send requests to Core API for now.
 """
 
 # Download
+# CORE API
 @app.route("/coreAPI/hazard_download", methods=["GET"])
-def download_hazard():
+def core_api_download_hazard():
     core_response = proxy_to_api(
         flask.request,
         "api/hazard/ensemble_hazard/download",
@@ -239,7 +240,7 @@ def download_hazard():
 
 
 @app.route("/coreAPI/disagg_download", methods=["GET"])
-def download_disagg():
+def core_api_download_disagg():
     core_response = proxy_to_api(
         flask.request,
         "api/disagg/ensemble_disagg/download",
@@ -252,7 +253,7 @@ def download_disagg():
 
 
 @app.route("/coreAPI/uhs_download", methods=["GET"])
-def download_uhs():
+def core_api_download_uhs():
     core_response = proxy_to_api(
         flask.request,
         "api/uhs/ensemble_uhs/download",
@@ -267,7 +268,7 @@ def download_uhs():
 
 
 @app.route("/coreAPI/gms_download", methods=["GET"])
-def download_gms():
+def core_api_download_gms():
     core_response = proxy_to_api(
         flask.request,
         "api/gms/ensemble_gms/download",
@@ -277,6 +278,61 @@ def download_gms():
     )
 
     return core_response
+
+
+# PROJECT
+@app.route("/projectAPI/hazard_download", methods=["GET"])
+def project_api_download_hazard():
+    project_response = proxy_to_api(
+        flask.request,
+        "api/project/hazard/download",
+        "GET",
+        content_type="application/zip",
+        headers={"Content-Disposition": "attachment; filename=hazard.zip"},
+    )
+
+    return project_response
+
+
+@app.route("/projectAPI/disagg_download", methods=["GET"])
+def project_api_download_disagg():
+    project_response = proxy_to_api(
+        flask.request,
+        "api/project/disagg/download",
+        "GET",
+        content_type="application/zip",
+        headers={"Content-Disposition": "attachment; filename=disaggregation.zip"},
+    )
+
+    return project_response
+
+
+@app.route("/projectAPI/uhs_download", methods=["GET"])
+def project_api_download_uhs():
+    project_response = proxy_to_api(
+        flask.request,
+        "api/project/uhs/download",
+        "GET",
+        content_type="application/zip",
+        headers={
+            "Content-Disposition": "attachment; filename=uniform_hazard_spectrum.zip"
+        },
+    )
+
+    return project_response
+
+
+@app.route("/projectAPI/gms_download", methods=["GET"])
+def project_api_download_gms():
+    project_response = proxy_to_api(
+        flask.request,
+        "api/gms/ensemble_gms/download",
+        "GET",
+        content_type="application/zip",
+        headers={"Content-Disposition": "attachment; filename=gms.zip"},
+    )
+
+    return project_response
 
 
 @app.route("/user", methods=["GET"])

@@ -90,7 +90,7 @@ const HazardViewerUhs = () => {
               const responseData = await response.json();
               setUHSData(responseData);
               setUHSNZCodeData(responseData["nz_code_uhs_df"]);
-              // setDownloadToken(responseData["download_token"]);
+              setDownloadToken(responseData["download_token"]);
               setShowSpinnerUHS(false);
               setShowPlotUHS(true);
             })
@@ -149,12 +149,14 @@ const HazardViewerUhs = () => {
           )}
       </div>
 
-      {/* <DownloadButton
+      <DownloadButton
         disabled={!showPlotUHS}
-        downloadURL={CONSTANTS.CORE_API_DOWNLOAD_UHS}
-        downloadToken={downloadToken}
+        downloadURL={CONSTANTS.PROJECT_API_DOWNLOAD_UHS}
+        downloadToken={{
+          uhs_token: downloadToken,
+        }}
         fileName="uniform_hazard_spectrum.zip"
-      /> */}
+      />
     </div>
   );
 };
