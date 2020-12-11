@@ -26,6 +26,7 @@ pipeline {
                 echo 'Run pytest'
                 sh """
                 source /var/lib/jenkins/py3env/bin/activate
+		whereis chromedriver
                 cd ${env.WORKSPACE}
 		echo 'Wait for the deployment to be ready'
 		sleep 30
