@@ -11,10 +11,7 @@ pipeline {
                 source /var/lib/jenkins/py3env/bin/activate
                 cd ${env.WORKSPACE}
                 pip install -r requirements.txt
-		export BRANCH_NAME=${env.ghprbActualCommit}
-		echo $BRANCH_NAME
-		ssh ec2-user@seistech.nz "cd /home/ec2-user/seistech_psha_frontend/docker/master_test;../Dockerise.sh master_test $BRANCH_NAME"
-
+		ssh ec2-user@seistech.nz "cd /home/ec2-user/seistech_psha_frontend/docker/master_test;../Dockerise.sh master_test ${env.ghprbActualCommit}"
                 echo ${env.JOB_NAME}
                 mkdir -p /tmp/${env.JOB_NAME}
                 cd /tmp/${env.JOB_NAME}
@@ -32,8 +29,7 @@ pipeline {
                 cd ${env.WORKSPACE}
 		echo 'Wait for the deployment to be ready'
 		sleep 30
-		export DEPLOY_NAME='psha-test'
-		echo 'Testing $DEPLOY_NAME'
+		echo 'Testing psha-test deployment'
                 pytest -vs
                 """
             }
