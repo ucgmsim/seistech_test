@@ -51,8 +51,7 @@ pipeline {
 		cd ${env.WORKSPACE}
 		ssh ec2-user@seistech.nz "docker container prune -f"
 		ssh ec2-user@seistech.nz "docker builder prune -f"
-		ls *.zip
-		rm *.zip
+		rm -f *.zip
                 """
             }
 	success {
