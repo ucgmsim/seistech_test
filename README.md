@@ -1,5 +1,5 @@
-Master Dev: [![Build Status](https://travis-ci.org/ucgmsim/seistech_psha_frontend.svg?branch=master_dev)](https://travis-ci.org/ucgmsim/seistech_psha_frontend)
+Master Dev: [![Build Status](http://13.238.107.244:8080/job/seistech_psha_frontend/badge/icon?job=master_dev)](http://13.238.107.244:8080/job/seistech_psha_frontend/)
 
-Master EA: [![Build Status](https://travis-ci.org/ucgmsim/seistech_psha_frontend.svg?branch=master_ea)](https://travis-ci.org/ucgmsim/seistech_psha_frontend)
+Master EA: [![Build Status](http://13.238.107.244:8080/job/seistech_psha_frontend/badge/icon?job=master_ea)](http://13.238.107.244:8080/job/seistech_psha_frontend/)
 
-Master: [![Build Status](https://travis-ci.org/ucgmsim/seistech_psha_frontend.svg?branch=master)](https://travis-ci.org/ucgmsim/seistech_psha_frontend)
+Master: [![Build Status](http://13.238.107.244:8080/job/seistech_psha_frontend/badge/icon?job=master)](http://13.238.107.244:8080/job/seistech_psha_frontend/)
