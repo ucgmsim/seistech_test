@@ -39,7 +39,7 @@ class TestComputeSeisTech_Psha_Frontend():
     self.driver.find_element(By.ID, "qs-login-btn").click()
     self.driver.find_element(By.ID, "username").click()
     self.driver.find_element(By.ID, "username").send_keys("sungeunbae@live.com")
-    self.driver.find_element(By.ID, "password").send_keys("Yonsei96!")
+    self.driver.find_element(By.ID, "password").send_keys("randompassword1234@")
     self.driver.find_element(By.NAME, "action").click()
 
     #Wait until the page is loaded
