@@ -14,19 +14,13 @@ from selenium.webdriver.chrome.options import Options
 import glob
 import os
 
-from qctools import set_chrome_options, wait_and_click_button, wait_and_click, clear_input_field, check_error_display
+from qctools import get_chrome_driver, wait_and_click_button, wait_and_click, clear_input_field, check_error_display
 
-chrome_driver_path = "/usr/local/bin/chromedriver"
 
-chrome_options = set_chrome_options()
 
 class TestComputeSeisTech_Psha_Frontend():
   def setup_method(self, method):
-    if os.path.exists(chrome_driver_path):
-      self.driver = webdriver.Chrome(options=chrome_options,executable_path=chrome_driver_path)
-    else:
-      self.driver = webdriver.Chrome(options=chrome_options) 
-     
+    self.driver = get_chrome_driver() 
     self.vars = {}
     try:
       self.deploy_name=os.environ['DEPLOY_NAME']
