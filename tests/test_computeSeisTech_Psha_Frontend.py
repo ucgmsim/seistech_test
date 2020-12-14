@@ -22,17 +22,16 @@ chrome_options = set_chrome_options()
 
 class TestComputeSeisTech_Psha_Frontend():
   def setup_method(self, method):
-        if os.path.exists(chrome_driver_path):
-            self.driver = webdriver.Chrome(options=chrome_options,executable_path=chrome_driver_path)
-        else:
-            self.driver = webdriver.Chrome(options=chrome_options) 
-
+    if os.path.exists(chrome_driver_path):
+      self.driver = webdriver.Chrome(options=chrome_options,executable_path=chrome_driver_path)
+    else:
+      self.driver = webdriver.Chrome(options=chrome_options) 
      
     self.vars = {}
     try:
-        self.deploy_name=os.environ['DEPLOY_NAME']
+      self.deploy_name=os.environ['DEPLOY_NAME']
     except:
-        self.deploy_name="psha-test"
+      self.deploy_name="psha-test"
 
   def teardown_method(self, method):
     self.driver.quit()
