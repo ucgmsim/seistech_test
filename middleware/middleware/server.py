@@ -6,12 +6,28 @@ from functools import wraps
 import requests
 from jose import jwt
 from flask_cors import CORS
+from flask_sqlalchemy import SQLAlchemy
 from six.moves.urllib.request import urlopen
 from flask import Flask, request, jsonify, _request_ctx_stack, Response
 
+DATABASE = "mysql+pymysql://{0}:{1}@127.0.0.1:{2}/{3}".format(
+    os.environ["USERNAME"],
+    os.environ["PASSWORD"],
+    os.environ["PORT"],
+    os.environ["DBNAME"],
+)
+
 app = Flask("seistech_web")
+app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+db = SQLAlchemy(app)
 
 CORS(app)
+
+from models import *
+
+db.create_all()
+db.session.commit()
 
 ENV = os.environ["ENV"]
 JWT_SECRET = os.environ["CORE_API_SECRET"]
