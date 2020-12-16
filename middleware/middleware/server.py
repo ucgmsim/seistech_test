@@ -18,14 +18,18 @@ DATABASE = "mysql+pymysql://{0}:{1}@127.0.0.1:{2}/{3}".format(
 )
 
 app = Flask("seistech_web")
+# Connect to DB
 app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
 CORS(app)
 
+# Import models before creating tables
+# We need to import after initializing db object as it will be used in models.py
 from models import *
 
+# Create tables
 db.create_all()
 db.session.commit()
 
