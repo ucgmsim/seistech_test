@@ -41,7 +41,8 @@ class History(db.Model):
     date = db.Column(db.DateTime, default=datetime.utcnow)
     history_requests = db.relationship("History_Request", backref="record")
 
-    def __init__(self, endpoint):
+    def __init__(self, user_id, endpoint):
+        self.user_id = user_id
         self.endpoint = endpoint
 
 
@@ -51,6 +52,7 @@ class History_Request(db.Model):
     attribute = db.Column(db.String(30))
     value = db.Column(db.String(50))
 
-    def __init__(self, attribute, value):
+    def __init__(self, history_id, attribute, value):
+        self.history_id = history_id
         self.attribute = attribute
         self.value = value
