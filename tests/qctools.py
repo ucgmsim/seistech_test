@@ -2,13 +2,19 @@ import os
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
+from selenium import webdriver
 
-def set_chrome_options():
-    chrome_options = Options()
-    if os.environ.get('HOST_NAME') and os.environ['HOST_NAME'].startswith("travis"):
+
+def get_chrome_driver():
+    chrome_driver_path = "/usr/local/bin/chromedriver"
+    if os.environ.get('USER') and os.environ['USER']=='jenkins':
+        chrome_options = Options()
         chrome_options.add_argument("--headless")
-
-    return chrome_options
+	return webdriver.Chrome(options=chrome_options,executable_path=chrome_driver_path)
+    else:
+	return webdriver.Chrome()
+    
+    
 
 def wait_and_click_button(driver,target_by,target_keyword):
     #works with a button usually searched by CSS_SELECTOR

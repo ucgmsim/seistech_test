@@ -31,7 +31,7 @@ docker-compose build --build-arg SSH_PRIVATE_KEY="$(cat ~/.ssh/id_rsa)" --no-cac
 
 # Remove <none> tag which is part of multi staging for Docker to keep SSH Key secret
 echo "Removing unnecessary image that was used to install from a private repo"
-docker images | grep none | awk '{ print $3; }' | xargs docker rmi
+docker images | grep none | awk '{ print $3; }' | xargs docker rmi -f
 
 # Up the docker-compose in background
 echo "docker-compose up"

@@ -14,19 +14,18 @@ from selenium.webdriver.chrome.options import Options
 import glob
 import os
 
-from qctools import set_chrome_options, wait_and_click_button, wait_and_click, clear_input_field, check_error_display
+from qctools import get_chrome_driver, wait_and_click_button, wait_and_click, clear_input_field, check_error_display
 
 
-chrome_options = set_chrome_options()
 
 class TestComputeSeisTech_Psha_Frontend():
   def setup_method(self, method):
-    self.driver = webdriver.Chrome(options=chrome_options)
+    self.driver = get_chrome_driver() 
     self.vars = {}
     try:
-        self.deploy_name=os.environ['DEPLOY_NAME']
+      self.deploy_name=os.environ['DEPLOY_NAME']
     except:
-        self.deploy_name="psha-test"
+      self.deploy_name="psha-test"
 
   def teardown_method(self, method):
     self.driver.quit()
@@ -39,7 +38,7 @@ class TestComputeSeisTech_Psha_Frontend():
     self.driver.find_element(By.ID, "qs-login-btn").click()
     self.driver.find_element(By.ID, "username").click()
     self.driver.find_element(By.ID, "username").send_keys("sungeunbae@live.com")
-    self.driver.find_element(By.ID, "password").send_keys("Yonsei96!")
+    self.driver.find_element(By.ID, "password").send_keys("randompassword1234@")
     self.driver.find_element(By.NAME, "action").click()
 
     #Wait until the page is loaded
