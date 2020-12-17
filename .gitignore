@@ -18,3 +18,5 @@ middleware/middleware.egg-info/
 
 # vscode setting file
 /.vscode
+
+/database/db_data
