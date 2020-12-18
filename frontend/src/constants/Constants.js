@@ -9,7 +9,6 @@ export const CORE_API_ROUTE_ENSEMBLEIDS = "coreAPI/ensembleids";
 export const CORE_API_ROUTE_IMIDS = "coreAPI/imids";
 export const CORE_API_ROUTE_CONTEXT_MAP = "coreAPI/contextmap";
 export const CORE_API_ROUTE_VS30_MAP = "coreAPI/vs30map";
-export const CORE_API_ROUTE_LOCATION = "coreAPI/location";
 export const CORE_API_ROUTE_STATION = "coreAPI/station";
 export const CORE_API_ROUTE_HAZARD_PLOT = "coreAPI/hazard";
 export const CORE_API_ROUTE_HAZARD_NZCODE = "coreAPI/hazard/nz1170p5";
