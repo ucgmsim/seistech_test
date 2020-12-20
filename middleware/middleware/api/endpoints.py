@@ -25,12 +25,6 @@ def get_im_ids():
     return proxy_to_api(flask.request, "api/gm_data/ensemble/ims/get", "GET")
 
 
-@app.route("/coreAPI/location", methods=["GET"])
-@requires_auth
-def get_location():
-    return proxy_to_api(flask.request, "api/site/station/location/get", "GET")
-
-
 @app.route("/coreAPI/contextmap", methods=["GET"])
 @requires_auth
 def get_contextmap():
@@ -46,7 +40,9 @@ def get_vs30map():
 @app.route("/coreAPI/station", methods=["GET"])
 @requires_auth
 def get_station():
-    return proxy_to_api(flask.request, "api/site/station/location/get", "GET")
+    return proxy_to_api(
+        flask.request, "api/site/station/location/get", "GET", "Set Station"
+    )
 
 
 # Seismic Hazard
@@ -54,7 +50,12 @@ def get_station():
 @requires_auth
 def get_hazard():
     if requires_permission("hazard:hazard"):
-        return proxy_to_api(flask.request, "api/hazard/ensemble_hazard/get", "GET")
+        return proxy_to_api(
+            flask.request,
+            "api/hazard/ensemble_hazard/get",
+            "GET",
+            "Hazard Curve Compute",
+        )
     raise AuthError(
         {
             "code": "Unauthorized",
@@ -68,7 +69,9 @@ def get_hazard():
 @requires_auth
 def get_hazard_nzcode():
     if requires_permission("hazard:hazard"):
-        return proxy_to_api(flask.request, "api/hazard/nz1170p5/get", "GET")
+        return proxy_to_api(
+            flask.request, "api/hazard/nz1170p5/get", "GET", "Hazard NZ Code Compute"
+        )
     raise AuthError(
         {
             "code": "Unauthorized",
@@ -110,7 +113,12 @@ def get_nzcode_default_params():
 @requires_auth
 def get_disagg():
     if requires_permission("hazard:disagg"):
-        return proxy_to_api(flask.request, "api/disagg/ensemble_disagg/get", "GET")
+        return proxy_to_api(
+            flask.request,
+            "api/disagg/ensemble_disagg/get",
+            "GET",
+            "Disaggregation Compute",
+        )
     raise AuthError(
         {
             "code": "Unauthorized",
@@ -124,7 +132,9 @@ def get_disagg():
 @requires_auth
 def get_uhs():
     if requires_permission("hazard:uhs"):
-        return proxy_to_api(flask.request, "api/uhs/ensemble_uhs/get", "GET")
+        return proxy_to_api(
+            flask.request, "api/uhs/ensemble_uhs/get", "GET", "UHS Compute"
+        )
     raise AuthError(
         {
             "code": "Unauthorized",
@@ -138,7 +148,9 @@ def get_uhs():
 @requires_auth
 def get_uhs_nzcode():
     if requires_permission("hazard:hazard"):
-        return proxy_to_api(flask.request, "api/uhs/nz1170p5/get", "GET")
+        return proxy_to_api(
+            flask.request, "api/uhs/nz1170p5/get", "GET", "UHS NZ Code Compute"
+        )
     raise AuthError(
         {
             "code": "Unauthorized",
@@ -152,7 +164,10 @@ def get_uhs_nzcode():
 @app.route("/coreAPI/gms/ensemble_gms", methods=["POST"])
 def compute_ensemble_GMS():
     return proxy_to_api(
-        flask.request.data.decode(), "api/gms/ensemble_gms/compute", "POST"
+        flask.request.data.decode(),
+        "api/gms/ensemble_gms/compute",
+        "POST",
+        "GMS Compute",
     )
 
 
@@ -197,12 +212,12 @@ def get_project_maps():
 # Seismic Hazard
 @app.route("/projectAPI/hazard/get", methods=["GET"])
 def get_project_hazard():
-    return proxy_to_api(flask.request, "api/project/hazard/get", "GET")
+    return proxy_to_api(flask.request, "api/project/hazard/get", "GET", "Project Hazard Compute")
 
 
 @app.route("/projectAPI/disagg/get", methods=["GET"])
 def get_project_disagg():
-    return proxy_to_api(flask.request, "api/project/disagg/get", "GET")
+    return proxy_to_api(flask.request, "api/project/disagg/get", "GET", "Project Disaggregation Compute")
 
 
 @app.route("/projectAPI/disagg/rps/get", methods=["GET"])
@@ -217,7 +232,7 @@ def get_project_uhs_rps():
 
 @app.route("/projectAPI/uhs/get", methods=["GET"])
 def get_project_uhs():
-    return proxy_to_api(flask.request, "api/project/uhs/get", "GET")
+    return proxy_to_api(flask.request, "api/project/uhs/get", "GET", "Project UHS Compute")
 
 
 """Because we do not have Download available for Project yet.
@@ -225,8 +240,9 @@ We send requests to Core API for now.
 """
 
 # Download
+# CORE API
 @app.route("/coreAPI/hazard_download", methods=["GET"])
-def download_hazard():
+def core_api_download_hazard():
     core_response = proxy_to_api(
         flask.request,
         "api/hazard/ensemble_hazard/download",
@@ -239,7 +255,7 @@ def download_hazard():
 
 
 @app.route("/coreAPI/disagg_download", methods=["GET"])
-def download_disagg():
+def core_api_download_disagg():
     core_response = proxy_to_api(
         flask.request,
         "api/disagg/ensemble_disagg/download",
@@ -252,7 +268,7 @@ def download_disagg():
 
 
 @app.route("/coreAPI/uhs_download", methods=["GET"])
-def download_uhs():
+def core_api_download_uhs():
     core_response = proxy_to_api(
         flask.request,
         "api/uhs/ensemble_uhs/download",
@@ -267,7 +283,7 @@ def download_uhs():
 
 
 @app.route("/coreAPI/gms_download", methods=["GET"])
-def download_gms():
+def core_api_download_gms():
     core_response = proxy_to_api(
         flask.request,
         "api/gms/ensemble_gms/download",
@@ -279,8 +295,64 @@ def download_gms():
     return core_response
 
 
+# PROJECT
+@app.route("/projectAPI/hazard_download", methods=["GET"])
+def project_api_download_hazard():
+    project_response = proxy_to_api(
+        flask.request,
+        "api/project/hazard/download",
+        "GET",
+        content_type="application/zip",
+        headers={"Content-Disposition": "attachment; filename=hazard.zip"},
+    )
+
+    return project_response
+
+
+@app.route("/projectAPI/disagg_download", methods=["GET"])
+def project_api_download_disagg():
+    project_response = proxy_to_api(
+        flask.request,
+        "api/project/disagg/download",
+        "GET",
+        content_type="application/zip",
+        headers={"Content-Disposition": "attachment; filename=disaggregation.zip"},
+    )
+
+    return project_response
+
+
+@app.route("/projectAPI/uhs_download", methods=["GET"])
+def project_api_download_uhs():
+    project_response = proxy_to_api(
+        flask.request,
+        "api/project/uhs/download",
+        "GET",
+        content_type="application/zip",
+        headers={
+            "Content-Disposition": "attachment; filename=uniform_hazard_spectrum.zip"
+        },
+    )
+
+    return project_response
+
+
+@app.route("/projectAPI/gms_download", methods=["GET"])
+def project_api_download_gms():
+    project_response = proxy_to_api(
+        flask.request,
+        "api/gms/ensemble_gms/download",
+        "GET",
+        content_type="application/zip",
+        headers={"Content-Disposition": "attachment; filename=gms.zip"},
+    )
+
+    return project_response
+
+
 @app.route("/user", methods=["GET"])
 def user_get():
     token = get_token_auth_header()
     unverified_claims = jwt.get_unverified_claims(token)
+    print(unverified_claims)
     return flask.jsonify({"permissions": unverified_claims["permissions"]})

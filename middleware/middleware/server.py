@@ -67,10 +67,46 @@ def handle_auth_error(ex):
     return response
 
 
+def recored_history(username, endpoint, query_dict):
+    try:
+        # Check whether user is in the User table
+        exists = User.query.filter_by(user_name=username).scalar() is not None
+
+        # To find a userid
+        user_id = User.query.filter_by(user_name=username).first().user_id
+
+        # Add to History table
+        new_history = History(user_id, endpoint)
+
+        db.session.add(new_history)
+        db.session.commit()
+
+        # Get a current user's history id key which would be the last row in a table
+        latest_history_id = (
+            History.query.filter_by(user_id=user_id)
+            .order_by(History.history_id.desc())
+            .first()
+            .history_id
+        )
+
+        # For History_Request with attribute and value
+
+        for attribute, value in query_dict.items():
+            new_history = History_Request(latest_history_id, attribute, value)
+            db.session.add(new_history)
+
+        db.session.commit()
+
+        print("HISTORY ADDED!")
+    except:
+        print("ERROR! USER DOES NOT EXIST!")
+
+
 def proxy_to_api(
     request,
     route,
     methods,
+    endpoint: str = None,
     content_type: str = "application/json",
     headers: Dict = None,
 ):
@@ -86,6 +122,8 @@ def proxy_to_api(
         URL path to Core API
     methods: str
         GET/POST methods
+    endpoint: str
+        To find out what user is performing
     content_type: str
         Entry-header field indicates the media type of the entity-body sent to the recipient.
         The default media type is application/json
@@ -98,6 +136,10 @@ def proxy_to_api(
     if "projectAPI" in request.full_path:
         APIBase = projectApiBase
 
+    # If endpoint is specified, its the one with uesrs' insteaction, record to DB
+    if endpoint is not None:
+        recored_history("tom.son@canterbury.ac.nz", endpoint, request.args.to_dict())
+
     if methods == "POST":
         resp = requests.post(
             APIBase + route, data=request, headers={"Authorization": coreApiToken}
@@ -108,7 +150,7 @@ def proxy_to_api(
 
         if querystring:
             querystring = "?" + querystring
-
+            
         resp = requests.get(
             APIBase + route + querystring, headers={"Authorization": coreApiToken}
         )
