@@ -212,12 +212,16 @@ def get_project_maps():
 # Seismic Hazard
 @app.route("/projectAPI/hazard/get", methods=["GET"])
 def get_project_hazard():
-    return proxy_to_api(flask.request, "api/project/hazard/get", "GET", "Project Hazard Compute")
+    return proxy_to_api(
+        flask.request, "api/project/hazard/get", "GET", "Project Hazard Compute"
+    )
 
 
 @app.route("/projectAPI/disagg/get", methods=["GET"])
 def get_project_disagg():
-    return proxy_to_api(flask.request, "api/project/disagg/get", "GET", "Project Disaggregation Compute")
+    return proxy_to_api(
+        flask.request, "api/project/disagg/get", "GET", "Project Disaggregation Compute"
+    )
 
 
 @app.route("/projectAPI/disagg/rps/get", methods=["GET"])
@@ -232,7 +236,9 @@ def get_project_uhs_rps():
 
 @app.route("/projectAPI/uhs/get", methods=["GET"])
 def get_project_uhs():
-    return proxy_to_api(flask.request, "api/project/uhs/get", "GET", "Project UHS Compute")
+    return proxy_to_api(
+        flask.request, "api/project/uhs/get", "GET", "Project UHS Compute"
+    )
 
 
 """Because we do not have Download available for Project yet.
@@ -354,5 +360,4 @@ def project_api_download_gms():
 def user_get():
     token = get_token_auth_header()
     unverified_claims = jwt.get_unverified_claims(token)
-    print(unverified_claims)
     return flask.jsonify({"permissions": unverified_claims["permissions"]})
