@@ -4,11 +4,13 @@ from typing import Dict
 from functools import wraps
 
 import requests
+import http.client
 from jose import jwt
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from six.moves.urllib.request import urlopen
 from flask import Flask, request, jsonify, _request_ctx_stack, Response
+
 
 DATABASE = "mysql+pymysql://{0}:{1}@127.0.0.1:{2}/{3}".format(
     os.environ["USERNAME"],
@@ -39,6 +41,12 @@ AUTH0_DOMAIN = os.environ["AUTH0_DOMAIN"]
 API_AUDIENCE = os.environ["API_AUDIENCE"]
 ALGORITHMS = os.environ["ALGORITHMS"]
 
+# To communicate with Management API
+AUTH0_CLIENT_ID = os.environ["AUTH0_CLIENT_ID"]
+AUTH0_CLIENT_SECRET = os.environ["AUTH0_CLIENT_SECRET"]
+AUTH0_AUDIENCE = os.environ["AUTH0_AUDIENCE"]
+AUTH0_GRANT_TYPE = os.environ["AUTH0_GRANT_TYPE"]
+
 # For DEV/EA/PROD with ENV
 coreApiBase = os.environ["CORE_API_BASE"]
 # For Project API with ENV
@@ -67,7 +75,20 @@ def handle_auth_error(ex):
     return response
 
 
-def recored_history(username, endpoint, query_dict):
+def recored_history(endpoint, query_dict):
+    """Record users' interation into the DB
+
+    Parameters
+    ----------
+    endpoint: str
+        What users chose to do
+        E.g., Hazard Curver Compute, UHS Compute, Disaggregation Compute...
+    query_dict: dictionary
+        It is basically a query dictionary that contains attribute and value
+        E.g., Attribute -> Station
+              value -> CCCC
+    """
+    username = get_username()
     try:
         # Check whether user is in the User table
         exists = User.query.filter_by(user_name=username).scalar() is not None
@@ -138,7 +159,7 @@ def proxy_to_api(
 
     # If endpoint is specified, its the one with uesrs' insteaction, record to DB
     if endpoint is not None:
-        recored_history("tom.son@canterbury.ac.nz", endpoint, request.args.to_dict())
+        recored_history(endpoint, request.args.to_dict())
 
     if methods == "POST":
         resp = requests.post(
@@ -150,7 +171,7 @@ def proxy_to_api(
 
         if querystring:
             querystring = "?" + querystring
-            
+
         resp = requests.get(
             APIBase + route + querystring, headers={"Authorization": coreApiToken}
         )
@@ -272,3 +293,43 @@ def requires_permission(required_permission):
         token_permissions = unverified_claims["permissions"]
         return required_permission in token_permissions
     return False
+
+
+def get_management_api_token():
+    """Connect to AUTH0 Management API to get access token"""
+    conn = http.client.HTTPSConnection(AUTH0_DOMAIN)
+
+    payload = json.dumps(
+        {
+            "client_id": AUTH0_CLIENT_ID,
+            "client_secret": AUTH0_CLIENT_SECRET,
+            "audience": AUTH0_AUDIENCE,
+            "grant_type": AUTH0_GRANT_TYPE,
+        }
+    )
+
+    headers = {"content-type": "application/json"}
+
+    conn.request("POST", "/oauth/token", payload, headers)
+
+    res = conn.getresponse()
+    # Convert the string dictionary to dictionray
+    data = json.loads(res.read().decode("utf-8"))
+
+    return data["access_token"]
+
+
+def get_username():
+    """By using Auth0 Management API token and current logged in users token to pull user's name"""
+
+    token = get_token_auth_header()
+    unverified_claims = jwt.get_unverified_claims(token)
+
+    user_id = unverified_claims["sub"]
+
+    resp = requests.get(
+        AUTH0_AUDIENCE + "users/" + user_id,
+        headers={"Authorization": "Bearer {}".format(get_management_api_token())},
+    )
+
+    return resp.json()["name"]
