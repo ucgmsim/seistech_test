@@ -25,7 +25,7 @@ export const CORE_API_ROUTE_GMS_DEFAULT_IM_WEIGHTS =
 export const CORE_API_ROUTE_GMS_DEFAULT_CAUSAL_PARAMS =
   "coreAPI/gms/default_causal_params";
 
-export const PROJECT_API_ROUTE_PROJECT_IDS = "projectAPI/ids/get";
+export const PROJECT_API_ROUTE_PROJECT_IDS = "projectAPI/available_ids/get";
 export const PROJECT_API_ROUTE_PROJECT_SITES = "projectAPI/sites/get";
 export const PROJECT_API_ROUTE_PROJECT_IMS = "projectAPI/ims/get";
 export const PROJECT_API_ROUTE_PROJECT_HAZARD_GET = "projectAPI/hazard/get";
