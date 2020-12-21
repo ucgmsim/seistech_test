@@ -10,9 +10,9 @@ def get_chrome_driver():
     if os.environ.get('USER') and os.environ['USER']=='jenkins':
         chrome_options = Options()
         chrome_options.add_argument("--headless")
-	return webdriver.Chrome(options=chrome_options,executable_path=chrome_driver_path)
+        return webdriver.Chrome(options=chrome_options,executable_path=chrome_driver_path)
     else:
-	return webdriver.Chrome()
+        return webdriver.Chrome()
     
     
 
