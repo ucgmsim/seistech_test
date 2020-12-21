@@ -7,6 +7,7 @@ from ..server import (
     requires_permission,
     AuthError,
     get_token_auth_header,
+    get_available_projects,
 )
 
 """CORE API
@@ -189,6 +190,10 @@ def get_default_causal_params():
 """
 
 # Site Selection
+@app.route("/projectAPI/available_ids/get", methods=["GET"])
+def get_available_project_ids():
+    return get_available_projects()
+
 @app.route("/projectAPI/ids/get", methods=["GET"])
 def get_project_ids():
     return proxy_to_api(flask.request, "api/project/ids/get", "GET")
