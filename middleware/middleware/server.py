@@ -75,6 +75,60 @@ def handle_auth_error(ex):
     return response
 
 
+def get_management_api_token():
+    """Connect to AUTH0 Management API to get access token"""
+    conn = http.client.HTTPSConnection(AUTH0_DOMAIN)
+
+    payload = json.dumps(
+        {
+            "client_id": AUTH0_CLIENT_ID,
+            "client_secret": AUTH0_CLIENT_SECRET,
+            "audience": AUTH0_AUDIENCE,
+            "grant_type": AUTH0_GRANT_TYPE,
+        }
+    )
+
+    headers = {"content-type": "application/json"}
+
+    conn.request("POST", "/oauth/token", payload, headers)
+
+    res = conn.getresponse()
+    # Convert the string dictionary to dictionray
+    data = json.loads(res.read().decode("utf-8"))
+
+    return data["access_token"]
+
+
+def get_username():
+    """By using Auth0 Management API token and current logged in users token to pull user's name"""
+
+    token = get_token_auth_header()
+    unverified_claims = jwt.get_unverified_claims(token)
+
+    user_id = unverified_claims["sub"]
+
+    resp = requests.get(
+        AUTH0_AUDIENCE + "users/" + user_id,
+        headers={"Authorization": "Bearer {}".format(get_management_api_token())},
+    )
+
+    return resp.json()["name"]
+
+
+def get_user_id():
+    """Getting the current logged in user's key from the DB"""
+    # First, getting the logged in user's username
+    username = get_username()
+
+    # Check whether user is in the User table
+    exists = User.query.filter_by(user_name=username).scalar() is not None
+
+    # To find a userid
+    user_id = User.query.filter_by(user_name=username).first().user_id
+
+    return user_id
+
+
 def recored_history(endpoint, query_dict):
     """Record users' interation into the DB
 
@@ -88,13 +142,8 @@ def recored_history(endpoint, query_dict):
         E.g., Attribute -> Station
               value -> CCCC
     """
-    username = get_username()
-
-    # Check whether user is in the User table
-    exists = User.query.filter_by(user_name=username).scalar() is not None
-
-    # To find a userid
-    user_id = User.query.filter_by(user_name=username).first().user_id
+    # Finding an user_id from the DB
+    user_id = get_user_id()
 
     # Add to History table
     new_history = History(user_id, endpoint)
@@ -121,13 +170,8 @@ def recored_history(endpoint, query_dict):
 
 def get_available_projects():
     """Getting a list of projects name that are allocated to this user"""
-    username = get_username()
-
-    # Check whether user is in the User table
-    exists = User.query.filter_by(user_name=username).scalar() is not None
-
-    # To find a userid
-    user_id = User.query.filter_by(user_name=username).first().user_id
+    # Finding an user_id from the DB
+    user_id = get_user_id()
 
     # Get all available projects that are allocated to this user.
     available_project_ids = (
@@ -318,43 +362,3 @@ def requires_permission(required_permission):
         token_permissions = unverified_claims["permissions"]
         return required_permission in token_permissions
     return False
-
-
-def get_management_api_token():
-    """Connect to AUTH0 Management API to get access token"""
-    conn = http.client.HTTPSConnection(AUTH0_DOMAIN)
-
-    payload = json.dumps(
-        {
-            "client_id": AUTH0_CLIENT_ID,
-            "client_secret": AUTH0_CLIENT_SECRET,
-            "audience": AUTH0_AUDIENCE,
-            "grant_type": AUTH0_GRANT_TYPE,
-        }
-    )
-
-    headers = {"content-type": "application/json"}
-
-    conn.request("POST", "/oauth/token", payload, headers)
-
-    res = conn.getresponse()
-    # Convert the string dictionary to dictionray
-    data = json.loads(res.read().decode("utf-8"))
-
-    return data["access_token"]
-
-
-def get_username():
-    """By using Auth0 Management API token and current logged in users token to pull user's name"""
-
-    token = get_token_auth_header()
-    unverified_claims = jwt.get_unverified_claims(token)
-
-    user_id = unverified_claims["sub"]
-
-    resp = requests.get(
-        AUTH0_AUDIENCE + "users/" + user_id,
-        headers={"Authorization": "Bearer {}".format(get_management_api_token())},
-    )
-
-    return resp.json()["name"]
