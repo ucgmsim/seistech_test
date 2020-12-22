@@ -1,3 +1,9 @@
+## December 22, 2020
+
+### Update the deprectaed pakcage - ([PR #26](https://github.com/ucgmsim/seistech_psha_frontend/pull/26))
+
+- Security issue with 9.x version so updated to 10.0, we may not keep this package, `highlight.js` but in case we keep it.
+
 ## December 14, 2020
 
 ### HOTFIX - SeisTech subdirectory name for private_requirements.txt - ([PR #20](https://github.com/ucgmsim/seistech_psha_frontend/pull/20))
