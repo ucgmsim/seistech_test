@@ -41,6 +41,11 @@ export const CORE_API_DOWNLOAD_DISAGG = "coreAPI/disagg_download";
 export const CORE_API_DOWNLOAD_UHS = "coreAPI/uhs_download";
 export const CORE_API_DOWNLOAD_GMS = "coreAPI/gms_download";
 
+export const PROJECT_API_DOWNLOAD_HAZARD = "projectAPI/hazard_download";
+export const PROJECT_API_DOWNLOAD_DISAGG = "projectAPI/disagg_download";
+export const PROJECT_API_DOWNLOAD_UHS = "projectAPI/uhs_download";
+export const PROJECT_API_DOWNLOAD_GMS = "projectAPI/gms_download";
+
 /* 
   Words 
   TODO - See whether it's worth putting as constands due to structure.

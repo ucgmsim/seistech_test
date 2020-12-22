@@ -1,8 +1,16 @@
+## December 22, 2020
+
+### Update the deprectaed pakcage - ([PR #26](https://github.com/ucgmsim/seistech_psha_frontend/pull/26))
+
+- Security issue with 9.x version so updated to 10.0, we may not keep this package, `highlight.js` but in case we keep it.
+
 ## December 14, 2020
 
 ### HOTFIX - SeisTech subdirectory name for private_requirements.txt - ([PR #20](https://github.com/ucgmsim/seistech_psha_frontend/pull/20))
 
 - SeisTech now has a subdirectory called `core_api` instead of `seistech_api` so updating it in private_requirements.txt.
+
+### Project Download - We can also download our computed data in zip format - ([PR #19](https://github.com/ucgmsim/seistech_psha_frontend/pull/19))
 
 ## December 11, 2020
 
