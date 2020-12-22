@@ -132,7 +132,7 @@ const HazadViewerDisaggregation = () => {
             .then(async (response) => {
               const responseData = await response.json();
 
-              // setDownloadToken(responseData["download_token"]);
+              setDownloadToken(responseData["download_token"]);
 
               setShowSpinnerDisaggEpsilon(false);
 
@@ -313,13 +313,14 @@ const HazadViewerDisaggregation = () => {
             )}
         </Tab>
       </Tabs>
-      {/* Not needed yet */}
-      {/* <DownloadButton
+      <DownloadButton
         disabled={!showContribTable}
-        downloadURL={CONSTANTS.CORE_API_DOWNLOAD_DISAGG}
-        downloadToken={downloadToken}
+        downloadURL={CONSTANTS.PROJECT_API_DOWNLOAD_DISAGG}
+        downloadToken={{
+          disagg_token: downloadToken,
+        }}
         fileName="disaggregation.zip"
-      /> */}
+      />
     </div>
   );
 };

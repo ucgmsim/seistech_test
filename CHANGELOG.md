@@ -4,6 +4,8 @@
 
 - SeisTech now has a subdirectory called `core_api` instead of `seistech_api` so updating it in private_requirements.txt.
 
+### Project Download - We can also download our computed data in zip format - ([PR #19](https://github.com/ucgmsim/seistech_psha_frontend/pull/19))
+
 ## December 11, 2020
 
 ### Support NZS 1170 - ([PR #14](https://github.com/ucgmsim/seistech_psha_frontend/pull/14))

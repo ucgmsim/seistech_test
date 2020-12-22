@@ -92,6 +92,7 @@ const HazardViewerHazardCurve = () => {
               const responseData = await response.json();
               setHazardData(responseData);
               setHazardNZCodeData(responseData["nz_code_hazard"].im_values);
+              setDownloadToken(responseData["download_token"]);
               setShowSpinnerHazard(false);
               setShowPlotHazard(true);
             })
@@ -201,13 +202,14 @@ const HazardViewerHazardCurve = () => {
         </Tab>
       </Tabs>
 
-      {/* Will eventually have it but not now */}
-      {/* <DownloadButton
+      <DownloadButton
         disabled={!showPlotHazard}
-        downloadURL={CONSTANTS.CORE_API_DOWNLOAD_HAZARD}
-        downloadToken={downloadToken}
+        downloadURL={CONSTANTS.PROJECT_API_DOWNLOAD_HAZARD}
+        downloadToken={{
+          hazard_token: downloadToken,
+        }}
         fileName="hazard.zip"
-      /> */}
+      />
     </div>
   );
 };
