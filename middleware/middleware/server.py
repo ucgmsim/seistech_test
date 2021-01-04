@@ -4,7 +4,6 @@ from typing import Dict
 from functools import wraps
 
 import requests
-import http.client
 from jose import jwt
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
@@ -77,56 +76,12 @@ def handle_auth_error(ex):
     return response
 
 
-def get_management_api_token():
-    """Connect to AUTH0 Management API to get access token"""
-    conn = http.client.HTTPSConnection(AUTH0_DOMAIN)
-
-    payload = json.dumps(
-        {
-            "client_id": AUTH0_CLIENT_ID,
-            "client_secret": AUTH0_CLIENT_SECRET,
-            "audience": AUTH0_AUDIENCE,
-            "grant_type": AUTH0_GRANT_TYPE,
-        }
-    )
-
-    headers = {"content-type": "application/json"}
-
-    conn.request("POST", "/oauth/token", payload, headers)
-
-    res = conn.getresponse()
-    # Convert the string dictionary to dictionray
-    data = json.loads(res.read().decode("utf-8"))
-
-    return data["access_token"]
-
-
-def get_username():
-    """By using Auth0 Management API token and current logged in users token to pull user's name"""
-
+def get_user_id():
+    """We store Auth0 id to DB so no need extra step, just pull sub's value which is the unique user_id"""
     token = get_token_auth_header()
     unverified_claims = jwt.get_unverified_claims(token)
 
     user_id = unverified_claims["sub"]
-
-    resp = requests.get(
-        AUTH0_AUDIENCE + "users/" + user_id,
-        headers={"Authorization": "Bearer {}".format(get_management_api_token())},
-    )
-
-    return resp.json()["name"]
-
-
-def get_user_id():
-    """Getting the current logged in user's key from the DB"""
-    # First, getting the logged in user's username
-    username = get_username()
-
-    # Check whether user is in the User table
-    exists = User.query.filter_by(user_name=username).scalar() is not None
-
-    # To find a userid
-    user_id = User.query.filter_by(user_name=username).first().user_id
 
     return user_id
 
