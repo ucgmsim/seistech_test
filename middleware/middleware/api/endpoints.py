@@ -194,6 +194,7 @@ def get_default_causal_params():
 def get_available_project_ids():
     return get_available_projects()
 
+
 @app.route("/projectAPI/ids/get", methods=["GET"])
 def get_project_ids():
     return proxy_to_api(flask.request, "api/project/ids/get", "GET")

@@ -12,6 +12,7 @@ from six.moves.urllib.request import urlopen
 from flask import Flask, request, jsonify, _request_ctx_stack, Response
 
 
+# DB Connection Setup
 DATABASE = "mysql+pymysql://{0}:{1}@127.0.0.1:{2}/{3}".format(
     os.environ["USERNAME"],
     os.environ["PASSWORD"],
@@ -20,6 +21,7 @@ DATABASE = "mysql+pymysql://{0}:{1}@127.0.0.1:{2}/{3}".format(
 )
 
 app = Flask("seistech_web")
+
 # Connect to DB
 app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
