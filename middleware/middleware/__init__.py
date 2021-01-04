@@ -1,2 +1,2 @@
 from .server import *
-from .api import endpoints, query
+from .api import endpoints
