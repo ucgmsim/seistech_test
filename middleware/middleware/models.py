@@ -37,7 +37,7 @@ class User(db.Model):
 class History(db.Model):
     history_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.String(50), db.ForeignKey("user.user_id"))
-    endpoint = db.Column(db.String(30))
+    endpoint = db.Column(db.String(100))
     date = db.Column(
         db.DateTime, default=datetime.now(pytz.timezone("Pacific/Auckland"))
     )
