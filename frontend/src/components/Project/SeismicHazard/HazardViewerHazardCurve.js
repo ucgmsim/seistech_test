@@ -208,6 +208,11 @@ const HazardViewerHazardCurve = () => {
         downloadToken={{
           hazard_token: downloadToken,
         }}
+        extraParams={{
+          project_id: projectId,
+          station_id: `${projectLocationCode[projectLocation]}_${projectVS30}`,
+          im: projectSelectedIM,
+        }}
         fileName="hazard.zip"
       />
     </div>

@@ -117,7 +117,6 @@ def recored_history(endpoint, query_dict):
     )
 
     # For History_Request with attribute and value
-
     for attribute, value in query_dict.items():
         new_history = History_Request(latest_history_id, attribute, value)
         db.session.add(new_history)
@@ -184,8 +183,12 @@ def proxy_to_api(
         APIBase = projectApiBase
 
     # If endpoint is specified, its the one with uesrs' insteaction, record to DB
+    # Filter the parameters with keys don't include `token`, for Download Data record
     if endpoint is not None:
-        recored_history(endpoint, request.args.to_dict())
+        recored_history(
+            endpoint,
+            {k: v for k, v in request.args.to_dict().items() if "token" not in k},
+        )
 
     if methods == "POST":
         resp = requests.post(

@@ -246,6 +246,12 @@ const HazardViewerHazardCurve = () => {
           hazard_token: downloadHazardToken,
           nz1170p5_hazard_token: hazardNZCodeToken,
         }}
+        extraParams={{
+          ensemble_id: selectedEnsemble,
+          station: station,
+          im: selectedIM,
+          vs30: vs30,
+        }}
         fileName="hazard.zip"
       />
     </div>
