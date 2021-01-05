@@ -52,11 +52,18 @@ const HazardViewerUhs = () => {
   /*
     Reset tabs if users change IM or VS30
   */
-
   useEffect(() => {
     setShowPlotUHS(false);
     setShowSpinnerUHS(false);
   }, [vs30]);
+
+  const getExceedances = () => {
+    const exceedances = uhsRateTable.map((entry, idx) => {
+      return parseFloat(entry) > 0 ? parseFloat(entry) : 1 / parseFloat(entry);
+    });
+
+    return exceedances;
+  };
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -70,13 +77,7 @@ const HazardViewerUhs = () => {
           setShowErrorMessage({ isError: false, errorCode: null });
           const token = await getTokenSilently();
 
-          const exceedances = uhsRateTable.map((entry, idx) => {
-            return parseFloat(entry) > 0
-              ? parseFloat(entry)
-              : 1 / parseFloat(entry);
-          });
-
-          let queryString = `?ensemble_id=${selectedEnsemble}&station=${station}&exceedances=${exceedances.join(
+          let queryString = `?ensemble_id=${selectedEnsemble}&station=${station}&exceedances=${getExceedances().join(
             ","
           )}`;
 
@@ -101,7 +102,7 @@ const HazardViewerUhs = () => {
               setUHSData(responseData);
               setDownloadUHSToken(responseData["download_token"]);
 
-              let nzCodeQueryString = `?ensemble_id=${selectedEnsemble}&station=${station}&exceedances=${exceedances.join(
+              let nzCodeQueryString = `?ensemble_id=${selectedEnsemble}&station=${station}&exceedances=${getExceedances().join(
                 ","
               )}&soil_class=${selectedSoilClass["value"]}&distance=${Number(
                 nzCodeDefaultParams["distance"]
@@ -189,6 +190,14 @@ const HazardViewerUhs = () => {
         downloadToken={{
           uhs_token: downloadUHSToken,
           nz1170p5_hazard_token: uhsNZCodeToken,
+        }}
+        extraParams={{
+          ensemble_id: selectedEnsemble,
+          station: station,
+          exceedances: getExceedances().join(","),
+          soil_class: `${selectedSoilClass["value"]}`,
+          distance: Number(nzCodeDefaultParams["distance"]),
+          z_factor: selectedZFactor,
         }}
         fileName="uniform_hazard_spectrum.zip"
       />
