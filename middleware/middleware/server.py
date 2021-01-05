@@ -118,8 +118,15 @@ def recored_history(endpoint, query_dict):
 
     # For History_Request with attribute and value
     for attribute, value in query_dict.items():
-        new_history = History_Request(latest_history_id, attribute, value)
-        db.session.add(new_history)
+        if attribute == "exceedances":
+            # 'exceedances' value is comma-separated
+            exceedances_list = value.split(",")
+            for exceedance in exceedances_list:
+                new_history = History_Request(latest_history_id, attribute, exceedance)
+                db.session.add(new_history)
+        else:
+            new_history = History_Request(latest_history_id, attribute, value)
+            db.session.add(new_history)
 
     db.session.commit()
 
