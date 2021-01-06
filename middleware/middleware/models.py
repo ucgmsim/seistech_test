@@ -38,9 +38,7 @@ class History(db.Model):
     history_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.String(100), db.ForeignKey("user.user_id"))
     endpoint = db.Column(db.String(100))
-    date = db.Column(
-        db.DateTime, default=datetime.now(pytz.timezone("Pacific/Auckland"))
-    )
+    date = db.Column(db.DateTime, default=datetime.now)
     history_requests = db.relationship("History_Request", backref="record")
 
     def __init__(self, user_id, endpoint):
