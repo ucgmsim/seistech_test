@@ -81,7 +81,7 @@ def get_user_id():
     token = get_token_auth_header()
     unverified_claims = jwt.get_unverified_claims(token)
 
-    user_id = unverified_claims["sub"]
+    user_id = unverified_claims["sub"].split("|")[1]
 
     return user_id
 
