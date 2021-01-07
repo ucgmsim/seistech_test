@@ -21,6 +21,9 @@ const SiteConditions = () => {
   useEffect(() => {
     if (locationSetClick !== null && vs30 === defaultVS30 && vs30 !== "") {
       setLocalVS30(Number(defaultVS30).toFixed(1));
+      // When we reset them
+    } else if (vs30 === "" && defaultVS30 === "") {
+      setLocalVS30("");
     }
   }, [vs30, defaultVS30, locationSetClick]);
 
