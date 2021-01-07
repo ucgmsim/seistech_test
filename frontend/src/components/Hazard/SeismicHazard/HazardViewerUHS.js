@@ -43,11 +43,25 @@ const HazardViewerUhs = () => {
 
   const [downloadUHSToken, setDownloadUHSToken] = useState("");
 
+  const [extraParams, setExtraParams] = useState({});
+
   const extraInfo = {
     from: "hazard",
     lat: siteSelectionLat,
     lng: siteSelectionLng,
   };
+
+  useEffect(() => {
+    // By switching the tab between Project <-> Hazarad Analysis, it goes to undefined
+    // and we only update extraParams for storing DB only if they are not undefined
+    if (selectedSoilClass !== undefined && nzCodeDefaultParams !== undefined) {
+      setExtraParams({
+        ...extraParams,
+        soil_class: `${selectedSoilClass["value"]}`,
+        distance: Number(nzCodeDefaultParams["distance"]),
+      });
+    }
+  }, [selectedSoilClass, nzCodeDefaultParams]);
 
   /*
     Reset tabs if users change IM or VS30
@@ -75,6 +89,15 @@ const HazardViewerUhs = () => {
           setShowPlotUHS(false);
           setShowSpinnerUHS(true);
           setShowErrorMessage({ isError: false, errorCode: null });
+
+          setExtraParams({
+            ...extraParams,
+            ensemble_id: selectedEnsemble,
+            station: station,
+            exceedances: getExceedances().join(","),
+            z_factor: selectedZFactor,
+          });
+
           const token = await getTokenSilently();
 
           let queryString = `?ensemble_id=${selectedEnsemble}&station=${station}&exceedances=${getExceedances().join(
@@ -191,14 +214,7 @@ const HazardViewerUhs = () => {
           uhs_token: downloadUHSToken,
           nz1170p5_hazard_token: uhsNZCodeToken,
         }}
-        extraParams={{
-          ensemble_id: selectedEnsemble,
-          station: station,
-          exceedances: getExceedances().join(","),
-          soil_class: `${selectedSoilClass["value"]}`,
-          distance: Number(nzCodeDefaultParams["distance"]),
-          z_factor: selectedZFactor,
-        }}
+        extraParams={extraParams}
         fileName="uniform_hazard_spectrum.zip"
       />
     </div>
