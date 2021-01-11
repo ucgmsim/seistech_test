@@ -18,6 +18,3 @@ middleware/middleware.egg-info/
 
 # vscode setting file
 /.vscode
-
-# DB stored externally
-/database/db_data
