@@ -180,14 +180,6 @@ export const Provider = (props) => {
     }
   }, []);
 
-  /* 
-    Might have to use it in the future when we deal with error handling with users permissions but not now
-    Depends on business logic I guess
-  */
-  // useEffect(() => {
-  //   console.log("permissions " + JSON.stringify(permissions));
-  // }, [permissions]);
-
   const hasPermission = (permission) => {
     return permissions.includes(permission);
   };
