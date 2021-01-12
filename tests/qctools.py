@@ -1,4 +1,6 @@
 import os
+from time import sleep
+from selenium.common.exceptions import ElementClickInterceptedException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
@@ -24,7 +26,7 @@ def wait_and_click_button(driver, target_by, target_keyword):
 
     while this_button().get_attribute("disabled") != None:
         print("Wait: " + target_keyword + " not ready")
-        time.sleep(5)
+        sleep(5)
 
     this_button().click()
 
@@ -34,9 +36,9 @@ def wait_and_click(driver, target_by, target_keyword):
     while True:
         try:
             driver.find_element(target_by, target_keyword).click()
-        except exceptions.ElementClickInterceptedException:
+        except ElementClickInterceptedException:
             print("Wait: " + target_keyword + " not ready")
-            time.sleep(5)
+            sleep(5)
         else:
             break
 

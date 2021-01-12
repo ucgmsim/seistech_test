@@ -1,3 +1,9 @@
+## January 12, 2021
+
+### Update the Navbar's visibility - ([PR #26](https://github.com/ucgmsim/seistech_psha_frontend/pull/27))
+
+- The app will check user's authentication status and their permissions to decide to display the navbar with **Hazard Analysis** and/or **Project** or no tabs but logout button.
+
 ## December 22, 2020
 
 ### Update the deprectaed pakcage - ([PR #26](https://github.com/ucgmsim/seistech_psha_frontend/pull/26))

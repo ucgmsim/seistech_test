@@ -10,7 +10,7 @@ const UHSSection = () => {
   const {
     uhsRateTable,
     setUHSComputeClick,
-    isTabEnabled,
+    hasPermission,
     uhsTableAddRow,
     uhsTableDeleteRow,
     showUHSNZCode,
@@ -31,7 +31,7 @@ const UHSSection = () => {
 
   useEffect(() => {
     setDisableButtonUHSCompute(
-      uhsRateTable.length === 0 || isTabEnabled("hazard:uhs") !== true
+      uhsRateTable.length === 0 || hasPermission("hazard:uhs") !== true
     );
   }, [uhsRateTable]);
 

@@ -12,7 +12,7 @@ import HazardViewerUhs from "./HazardViewerUHS";
 
 const HazardViewer = () => {
   const {
-    isTabEnabled,
+    hasPermission,
     selectedIM,
     hazardCurveComputeClick,
     disaggComputeClick,
@@ -26,7 +26,7 @@ const HazardViewer = () => {
     if (
       hazardCurveComputeClick !== null &&
       selectedIM !== null &&
-      isTabEnabled("hazard:hazard")
+      hasPermission("hazard:hazard")
     ) {
       setSelectedTab("hazardCurve");
     }
@@ -36,14 +36,14 @@ const HazardViewer = () => {
     if (
       disaggComputeClick !== null &&
       selectedIM !== null &&
-      isTabEnabled("hazard:disagg")
+      hasPermission("hazard:disagg")
     ) {
       setSelectedTab("disagg");
     }
   }, [disaggComputeClick]);
 
   useEffect(() => {
-    if (uhsComputeClick !== null && isTabEnabled("hazard:uhs")) {
+    if (uhsComputeClick !== null && hasPermission("hazard:uhs")) {
       setSelectedTab("uhs");
     }
   }, [uhsComputeClick]);
