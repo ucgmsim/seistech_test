@@ -42,11 +42,6 @@ AUTH0_DOMAIN = os.environ["AUTH0_DOMAIN"]
 API_AUDIENCE = os.environ["API_AUDIENCE"]
 ALGORITHMS = os.environ["ALGORITHMS"]
 
-# To communicate with Management API
-AUTH0_CLIENT_ID = os.environ["AUTH0_CLIENT_ID"]
-AUTH0_CLIENT_SECRET = os.environ["AUTH0_CLIENT_SECRET"]
-AUTH0_AUDIENCE = os.environ["AUTH0_AUDIENCE"]
-AUTH0_GRANT_TYPE = os.environ["AUTH0_GRANT_TYPE"]
 
 # For DEV/EA/PROD with ENV
 coreApiBase = os.environ["CORE_API_BASE"]
