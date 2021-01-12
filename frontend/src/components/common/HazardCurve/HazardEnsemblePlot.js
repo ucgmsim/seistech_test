@@ -2,7 +2,7 @@ import React from "react";
 import Plot from "react-plotly.js";
 import "assets/style/HazardPlots.css";
 import { getPlotData } from "utils/Utils";
-import { PLOT_MARGIN } from "constants/Constants";
+import { PLOT_MARGIN, PLOT_CONFIG } from "constants/Constants";
 import ErrorMessage from "components/common/ErrorMessage";
 
 const HazardEnsemblePlot = ({
@@ -88,7 +88,7 @@ const HazardEnsemblePlot = ({
         }}
         useResizeHandler={true}
         config={{
-          displayModeBar: true,
+          ...PLOT_CONFIG,
           toImageButtonOptions: {
             filename:
               extra.from === "hazard"
