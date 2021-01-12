@@ -1,4 +1,5 @@
 import os
+from selenium.common.exceptions import ElementClickInterceptedException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
@@ -34,7 +35,7 @@ def wait_and_click(driver, target_by, target_keyword):
     while True:
         try:
             driver.find_element(target_by, target_keyword).click()
-        except selenium.common.exceptions.ElementClickInterceptedException:
+        except ElementClickInterceptedException:
             print("Wait: " + target_keyword + " not ready")
             time.sleep(5)
         else:
