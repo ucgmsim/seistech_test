@@ -1,6 +1,15 @@
+## January 13, 2021
+
+### Plotly.js feedback & Minor bug fix - ([PR #28](https://github.com/ucgmsim/seistech_psha_frontend/pull/28))
+
+- Remove unnecessary plotly.js options to avoid users confusion.
+- Minor bug fix
+  - Using UHS's RPs for Project's UHS instead of Disagg's RPs
+  - If the Project API returns an empty RP lits for UHS, disable the dropdown and say not available.
+
 ## January 12, 2021
 
-### Update the Navbar's visibility - ([PR #26](https://github.com/ucgmsim/seistech_psha_frontend/pull/27))
+### Update the Navbar's visibility - ([PR #27](https://github.com/ucgmsim/seistech_psha_frontend/pull/27))
 
 - The app will check user's authentication status and their permissions to decide to display the navbar with **Hazard Analysis** and/or **Project** or no tabs but logout button.
 
