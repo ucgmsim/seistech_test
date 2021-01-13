@@ -30,13 +30,15 @@ const SiteConditions = () => {
   return (
     <Fragment>
       <div className="form-row">
-        <span>Edit VS30 to use non-default value.</span>
+        <span>
+          Edit V<sub>S30</sub> to use non-default value.
+        </span>
       </div>
       <form autoComplete="off" onSubmit={(e) => e.preventDefault()}>
         <div className="form-group">
           <div className="d-flex align-items-center">
             <label id="label-vs30" htmlFor="vs30" className="control-label">
-              VS30
+              V<sub>S30</sub>
             </label>
             <TextField
               id="vs30"
