@@ -151,7 +151,7 @@ export const Provider = (props) => {
     return tabs;
   };
 
-  const [enabledTabs, setEnabledTabs] = useState([]);
+  const [permissions, setPermissions] = useState([]);
 
   useEffect(() => {
     // To get user data, we need to check that it is authenticated first
@@ -173,23 +173,15 @@ export const Provider = (props) => {
 
             let userPermissions = ud.permissions;
 
-            setEnabledTabs(userPermissions);
+            setPermissions(userPermissions);
           });
       };
       callGetUserData();
     }
   }, []);
 
-  /* 
-    Might have to use it in the future when we deal with error handling with users permissions but not now
-    Depends on business logic I guess
-  */
-  // useEffect(() => {
-  //   console.log("enabledTabs " + JSON.stringify(enabledTabs));
-  // }, [enabledTabs]);
-
-  const isTabEnabled = (tabName) => {
-    return enabledTabs.includes(tabName);
+  const hasPermission = (permission) => {
+    return permissions.includes(permission);
   };
 
   const uhsTableAddRow = (row) => {
@@ -213,7 +205,7 @@ export const Provider = (props) => {
     /*
      User Auth
     */
-    isTabEnabled,
+    hasPermission,
 
     /*
       Hazard Analysis Tab

@@ -221,3 +221,21 @@ export const PLOT_MARGIN = {
   t: 30,
   pad: 4,
 };
+
+/*
+  Minimize the options in the modebar (plotly's menu)
+*/
+export const PLOT_CONFIG = {
+  displayModeBar: true,
+  modeBarButtonsToRemove: [
+    "select2d",
+    "lasso2d",
+    "zoomIn2d",
+    "zoomOut2d",
+    "toggleSpikelines",
+    "hoverCompareCartesian",
+    "hoverClosestCartesian",
+    "autoScale2d",
+  ],
+  doubleClick: "autosize",
+};

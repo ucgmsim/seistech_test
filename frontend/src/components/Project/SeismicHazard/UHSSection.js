@@ -10,7 +10,7 @@ import makeAnimated from "react-select/animated";
 
 const UHSSection = () => {
   const {
-    projectDisagRPs,
+    projectUHSRPs,
     projectSelectedUHSRP,
     setProjectSelectedUHSRP,
     setProjectUHSGetClick,
@@ -19,7 +19,7 @@ const UHSSection = () => {
   const animatedComponents = makeAnimated();
   const [localRPs, setLocalRPs] = useState([]);
 
-  const options = createSelectArray(projectDisagRPs);
+  const options = createSelectArray(projectUHSRPs);
 
   // Reset local variable to empty array when global changed to empty array (Reset)
   useEffect(() => {
@@ -52,7 +52,7 @@ const UHSSection = () => {
             closeMenuOnSelect={false}
             components={animatedComponents}
             isMulti
-            placeholder={options.length === 0 ? "Loading..." : "Select..."}
+            placeholder={options.length === 0 ? "Not available" : "Select..."}
             value={localRPs.length === 0 ? [] : localRPs}
             onChange={(value) => setLocalRPs(value || [])}
             options={options}
