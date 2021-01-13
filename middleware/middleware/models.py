@@ -1,6 +1,4 @@
 from datetime import datetime
-import pytz
-from flask_sqlalchemy import SQLAlchemy
 from server import db
 
 # Bridging table between Project and User table
@@ -21,7 +19,7 @@ class Project(db.Model):
 
 class User(db.Model):
     user_id = db.Column(db.String(100), primary_key=True)
-    histories = db.relationship("History", backref="owner")
+    history = db.relationship("History", backref="owner")
     # To create a connection between Project and available_projects table
     # By using lazy attribute with dynamic, instead of getting all the data to view, get a query to filter out
     projects = db.relationship(
