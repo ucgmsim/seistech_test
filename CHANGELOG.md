@@ -7,6 +7,10 @@
   - Using UHS's RPs for Project's UHS instead of Disagg's RPs
   - If the Project API returns an empty RP lits for UHS, disable the dropdown and say not available.
 
+### MariaDB implementation - ([PR #29](https://github.com/ucgmsim/seistech_psha_frontend/pull/29))
+
+- We now have a DB for User and Project which could make us eas to pull/retrieve users available projects for the Project tab later one.
+
 ## January 12, 2021
 
 ### Update the Navbar's visibility - ([PR #27](https://github.com/ucgmsim/seistech_psha_frontend/pull/27))
