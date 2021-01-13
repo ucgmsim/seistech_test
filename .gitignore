@@ -20,4 +20,4 @@ middleware/middleware.egg-info/
 /.vscode
 
 # DB stored externally
-/database/db_data
+/database/*/db_data
