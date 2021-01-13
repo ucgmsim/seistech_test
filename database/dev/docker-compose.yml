@@ -17,11 +17,12 @@ services:
     volumes:
       - ./db_data:/var/lib/mysql
 
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
+  # Adminer only uses in local DEV
+  # adminer:
+  #   image: adminer
+  #   restart: always
+  #   ports:
+  #     - 8080:8080
 
 volumes:
   db_data:
