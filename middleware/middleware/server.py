@@ -81,7 +81,7 @@ def get_user_id():
     return user_id
 
 
-def recored_history(endpoint, query_dict):
+def write_request_details(endpoint, query_dict):
     """Record users' interation into the DB
 
     Parameters
@@ -188,9 +188,13 @@ def proxy_to_api(
     # If endpoint is specified, its the one with uesrs' insteaction, record to DB
     # Filter the parameters with keys don't include `token`, for Download Data record
     if endpoint is not None:
-        recored_history(
+        write_request_details(
             endpoint,
-            {k: v for k, v in request.args.to_dict().items() if "token" not in k},
+            {
+                key: value
+                for key, value in request.args.to_dict().items()
+                if "token" not in key
+            },
         )
 
     if methods == "POST":
