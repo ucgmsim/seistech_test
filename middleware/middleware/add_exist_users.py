@@ -50,6 +50,7 @@ def get_users():
 
     user_id_list = []
 
+    # We want to store an actual id that comes after auth| or google| so split string by |
     for dic in user_list:
         for key in dic:
             if key == "user_id":
@@ -59,7 +60,7 @@ def get_users():
 
 
 def insert_all_users():
-    """Inser all users into MariaDB"""
+    """Insert all users into MariaDB. Need to run only once"""
 
     users = get_users()
 

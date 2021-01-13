@@ -32,7 +32,7 @@ CORS(app)
 # We need to import after initializing db object as it will be used in models.py
 from models import *
 
-# Create tables
+# Create tables - It only creates when tables don't exist
 db.create_all()
 db.session.commit()
 
@@ -126,6 +126,7 @@ def recored_history(endpoint, query_dict):
     db.session.commit()
 
 
+# When we set up our DB properly, we will use this function but at the moment, we use existing Project API to call Project IDs
 def get_available_projects():
     """Getting a list of projects name that are allocated to this user"""
     # Finding an user_id from the DB

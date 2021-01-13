@@ -12,6 +12,8 @@ const DownloadButton = ({
   fileName,
   disabled,
 }) => {
+  // extraParams are used to record to our DB to track the users activity.
+
   const { getTokenSilently } = useAuth0();
 
   const [downloadButtonLabel, setDownloadButtonLabel] = useState({
