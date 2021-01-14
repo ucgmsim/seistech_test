@@ -5,10 +5,32 @@ version: "3.8"
 networks:
   seistech-dev:
     driver: bridge
+  backend-dev:
+    driver: bridge
 
 services:
+  userdb:
+    image: mariadb
+    container_name: userdb
+    restart: always
+    ports:
+      - ${DEV_DB_PORT}:${DEV_DB_PORT}
+    environment:
+      - MYSQL_DATABASE=${DEV_MYSQL_DATABASE}
+      - MYSQL_USER=${DEV_MYSQL_USER}
+      - MYSQL_PASSWORD=${DEV_MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${DEV_MYSQL_ROOT_PASSWORD}
+      - TZ=${DEV_TZ}
+    volumes:
+      - ../../database/dev/db_data:/var/lib/mysql
+    expose:
+      - ${DEV_DB_PORT}
+    networks:
+      - backend-dev
   middleware:
     image: middleware:master_dev
+    container_name: middleware
+    restart: on-failure
     build:
       context: ../../middleware/middleware
       args:
@@ -31,8 +53,12 @@ services:
       - AUTH0_CLIENT_SECRET=${AUTH0_CLIENT_SECRET_DEV}
       - AUTH0_AUDIENCE=${AUTH0_AUDIENCE_DEV}
       - AUTH0_GRANT_TYPE=${AUTH0_GRANT_TYPE_DEV}
+      - DB_SERVER=userdb
     networks:
       - seistech-dev
+      - backend-dev
+    depends_on:
+      - userdb
     expose:
       - ${INTER_API_PORT_DEV}
     ports:
@@ -40,11 +66,12 @@ services:
   frontend:
     image: frontend:master_dev
     build: ../../frontend
+    restart: on-failure
     environment:
+      - REACT_APP_ENV=DEV
       - REACT_APP_DEFAULT_ANNUAL_EXCEEDANCE_RATE=${DEFAULT_ANNUAL_EXCEEDANCE_RATE}
       - REACT_APP_DEFAULT_LAT=${DEFAULT_LAT}
       - REACT_APP_DEFAULT_LNG=${DEFAULT_LNG}
-      - REACT_APP_ENV=DEV
       - REACT_APP_CONSTANT_CORE_API_BASE_URL=${BASE_URL_DEV}
       - PORT=${FRONT_END_PORT_DEV}
       - REACT_APP_BUILD_DATE=${BUILD_DATE}
@@ -61,3 +88,6 @@ services:
       - ${FRONT_END_PORT_DEV}
     ports:
       - ${FRONT_END_PORT_DEV}:${FRONT_END_PORT_DEV}
+
+volumes:
+  db_data:
