@@ -53,6 +53,14 @@ const HazardViewerUhs = () => {
     setProjectUHSGetClick(null);
   }, [projectId, projectLocation, projectVS30]);
 
+  const getSelectedRP = () => {
+    let tempArray = [];
+
+    projectSelectedUHSRP.forEach((RP) => tempArray.push(RP.value));
+
+    return tempArray;
+  };
+
   useEffect(() => {
     const abortController = new AbortController();
     const signal = abortController.signal;
@@ -66,13 +74,9 @@ const HazardViewerUhs = () => {
 
           const token = await getTokenSilently();
 
-          let tempArray = [];
-
-          projectSelectedUHSRP.forEach((RP) => tempArray.push(RP.value));
-
           let queryString = `?project_id=${projectId}&station_id=${
             projectLocationCode[projectLocation]
-          }_${projectVS30}&rp=${tempArray.join(",")}`;
+          }_${projectVS30}&rp=${getSelectedRP().join(",")}`;
 
           await fetch(
             CONSTANTS.CORE_API_BASE_URL +
@@ -154,6 +158,11 @@ const HazardViewerUhs = () => {
         downloadURL={CONSTANTS.PROJECT_API_DOWNLOAD_UHS}
         downloadToken={{
           uhs_token: downloadToken,
+        }}
+        extraParams={{
+          project_id: projectId,
+          station_id: `${projectLocationCode[projectLocation]}_${projectVS30}`,
+          rp: getSelectedRP().join(","),
         }}
         fileName="uniform_hazard_spectrum.zip"
       />

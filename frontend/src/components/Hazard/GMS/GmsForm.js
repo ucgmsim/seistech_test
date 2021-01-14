@@ -536,7 +536,9 @@ const GmsForm = () => {
                         </td>
                       </tr>
                       <tr>
-                        <th scope="row">VS30</th>
+                        <th scope="row">
+                          V<sub>S30</sub>
+                        </th>
                         <td>
                           <input
                             type="text"

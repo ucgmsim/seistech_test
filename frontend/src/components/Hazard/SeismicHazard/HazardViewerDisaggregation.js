@@ -316,6 +316,12 @@ const HazadViewerDisaggregation = () => {
         downloadToken={{
           disagg_token: downloadToken,
         }}
+        extraParams={{
+          ensemble_id: selectedEnsemble,
+          station: station,
+          im: selectedIM,
+          exceedance: disaggAnnualProb,
+        }}
         fileName="disaggregation.zip"
       />
     </div>

@@ -7,6 +7,7 @@ from ..server import (
     requires_permission,
     AuthError,
     get_token_auth_header,
+    get_available_projects,
 )
 
 """CORE API
@@ -25,12 +26,6 @@ def get_im_ids():
     return proxy_to_api(flask.request, "api/gm_data/ensemble/ims/get", "GET")
 
 
-@app.route("/coreAPI/location", methods=["GET"])
-@requires_auth
-def get_location():
-    return proxy_to_api(flask.request, "api/site/station/location/get", "GET")
-
-
 @app.route("/coreAPI/contextmap", methods=["GET"])
 @requires_auth
 def get_contextmap():
@@ -46,7 +41,12 @@ def get_vs30map():
 @app.route("/coreAPI/station", methods=["GET"])
 @requires_auth
 def get_station():
-    return proxy_to_api(flask.request, "api/site/station/location/get", "GET")
+    return proxy_to_api(
+        flask.request,
+        "api/site/station/location/get",
+        "GET",
+        "Hazard Analysis - Set Station",
+    )
 
 
 # Seismic Hazard
@@ -54,7 +54,12 @@ def get_station():
 @requires_auth
 def get_hazard():
     if requires_permission("hazard:hazard"):
-        return proxy_to_api(flask.request, "api/hazard/ensemble_hazard/get", "GET")
+        return proxy_to_api(
+            flask.request,
+            "api/hazard/ensemble_hazard/get",
+            "GET",
+            "Hazard Analysis - Hazard Curve Compute",
+        )
     raise AuthError(
         {
             "code": "Unauthorized",
@@ -68,7 +73,12 @@ def get_hazard():
 @requires_auth
 def get_hazard_nzcode():
     if requires_permission("hazard:hazard"):
-        return proxy_to_api(flask.request, "api/hazard/nz1170p5/get", "GET")
+        return proxy_to_api(
+            flask.request,
+            "api/hazard/nz1170p5/get",
+            "GET",
+            "Hazard Analysis - Hazard NZ Code Compute",
+        )
     raise AuthError(
         {
             "code": "Unauthorized",
@@ -110,7 +120,12 @@ def get_nzcode_default_params():
 @requires_auth
 def get_disagg():
     if requires_permission("hazard:disagg"):
-        return proxy_to_api(flask.request, "api/disagg/ensemble_disagg/get", "GET")
+        return proxy_to_api(
+            flask.request,
+            "api/disagg/ensemble_disagg/get",
+            "GET",
+            "Hazard Analysis - Disaggregation Compute",
+        )
     raise AuthError(
         {
             "code": "Unauthorized",
@@ -124,7 +139,12 @@ def get_disagg():
 @requires_auth
 def get_uhs():
     if requires_permission("hazard:uhs"):
-        return proxy_to_api(flask.request, "api/uhs/ensemble_uhs/get", "GET")
+        return proxy_to_api(
+            flask.request,
+            "api/uhs/ensemble_uhs/get",
+            "GET",
+            "Hazard Analysis - UHS Compute",
+        )
     raise AuthError(
         {
             "code": "Unauthorized",
@@ -138,7 +158,12 @@ def get_uhs():
 @requires_auth
 def get_uhs_nzcode():
     if requires_permission("hazard:hazard"):
-        return proxy_to_api(flask.request, "api/uhs/nz1170p5/get", "GET")
+        return proxy_to_api(
+            flask.request,
+            "api/uhs/nz1170p5/get",
+            "GET",
+            "Hazard Analysis - UHS NZ Code Compute",
+        )
     raise AuthError(
         {
             "code": "Unauthorized",
@@ -152,7 +177,10 @@ def get_uhs_nzcode():
 @app.route("/coreAPI/gms/ensemble_gms", methods=["POST"])
 def compute_ensemble_GMS():
     return proxy_to_api(
-        flask.request.data.decode(), "api/gms/ensemble_gms/compute", "POST"
+        flask.request.data.decode(),
+        "api/gms/ensemble_gms/compute",
+        "POST",
+        "GMS Compute",
     )
 
 
@@ -174,6 +202,13 @@ def get_default_causal_params():
 """
 
 # Site Selection
+# This endpoint will eventually replace get_project_ids when we implement DB properly
+# As this function reads from Available_Project table (A bridge table between User and Project)
+@app.route("/projectAPI/available_ids/get", methods=["GET"])
+def get_available_project_ids():
+    return get_available_projects()
+
+
 @app.route("/projectAPI/ids/get", methods=["GET"])
 def get_project_ids():
     return proxy_to_api(flask.request, "api/project/ids/get", "GET")
@@ -191,18 +226,27 @@ def get_project_ims():
 
 @app.route("/projectAPI/maps/get", methods=["GET"])
 def get_project_maps():
-    return proxy_to_api(flask.request, "api/project/maps/get", "GET")
+    return proxy_to_api(
+        flask.request, "api/project/maps/get", "GET", "Project - Site Selection Get"
+    )
 
 
 # Seismic Hazard
 @app.route("/projectAPI/hazard/get", methods=["GET"])
 def get_project_hazard():
-    return proxy_to_api(flask.request, "api/project/hazard/get", "GET")
+    return proxy_to_api(
+        flask.request, "api/project/hazard/get", "GET", "Project - Hazard Compute"
+    )
 
 
 @app.route("/projectAPI/disagg/get", methods=["GET"])
 def get_project_disagg():
-    return proxy_to_api(flask.request, "api/project/disagg/get", "GET")
+    return proxy_to_api(
+        flask.request,
+        "api/project/disagg/get",
+        "GET",
+        "Project - Disaggregation Compute",
+    )
 
 
 @app.route("/projectAPI/disagg/rps/get", methods=["GET"])
@@ -217,12 +261,10 @@ def get_project_uhs_rps():
 
 @app.route("/projectAPI/uhs/get", methods=["GET"])
 def get_project_uhs():
-    return proxy_to_api(flask.request, "api/project/uhs/get", "GET")
+    return proxy_to_api(
+        flask.request, "api/project/uhs/get", "GET", "Project - UHS Compute"
+    )
 
-
-"""Because we do not have Download available for Project yet.
-We send requests to Core API for now.
-"""
 
 # Download
 # CORE API
@@ -232,6 +274,7 @@ def core_api_download_hazard():
         flask.request,
         "api/hazard/ensemble_hazard/download",
         "GET",
+        "Hazard Analysis - Hazard Download",
         content_type="application/zip",
         headers={"Content-Disposition": "attachment; filename=hazard.zip"},
     )
@@ -245,6 +288,7 @@ def core_api_download_disagg():
         flask.request,
         "api/disagg/ensemble_disagg/download",
         "GET",
+        "Hazard Analysis - Disaggregation Download",
         content_type="application/zip",
         headers={"Content-Disposition": "attachment; filename=disaggregation.zip"},
     )
@@ -258,6 +302,7 @@ def core_api_download_uhs():
         flask.request,
         "api/uhs/ensemble_uhs/download",
         "GET",
+        "Hazard Analysis - UHS Download",
         content_type="application/zip",
         headers={
             "Content-Disposition": "attachment; filename=uniform_hazard_spectrum.zip"
@@ -287,6 +332,7 @@ def project_api_download_hazard():
         flask.request,
         "api/project/hazard/download",
         "GET",
+        "Project - Hazard Download",
         content_type="application/zip",
         headers={"Content-Disposition": "attachment; filename=hazard.zip"},
     )
@@ -300,6 +346,7 @@ def project_api_download_disagg():
         flask.request,
         "api/project/disagg/download",
         "GET",
+        "Project - Disaggregation Download",
         content_type="application/zip",
         headers={"Content-Disposition": "attachment; filename=disaggregation.zip"},
     )
@@ -313,6 +360,7 @@ def project_api_download_uhs():
         flask.request,
         "api/project/uhs/download",
         "GET",
+        "Project - UHS Download",
         content_type="application/zip",
         headers={
             "Content-Disposition": "attachment; filename=uniform_hazard_spectrum.zip"

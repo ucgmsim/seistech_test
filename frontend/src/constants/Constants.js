@@ -9,7 +9,6 @@ export const CORE_API_ROUTE_ENSEMBLEIDS = "coreAPI/ensembleids";
 export const CORE_API_ROUTE_IMIDS = "coreAPI/imids";
 export const CORE_API_ROUTE_CONTEXT_MAP = "coreAPI/contextmap";
 export const CORE_API_ROUTE_VS30_MAP = "coreAPI/vs30map";
-export const CORE_API_ROUTE_LOCATION = "coreAPI/location";
 export const CORE_API_ROUTE_STATION = "coreAPI/station";
 export const CORE_API_ROUTE_HAZARD_PLOT = "coreAPI/hazard";
 export const CORE_API_ROUTE_HAZARD_NZCODE = "coreAPI/hazard/nz1170p5";
@@ -26,6 +25,9 @@ export const CORE_API_ROUTE_GMS_DEFAULT_IM_WEIGHTS =
 export const CORE_API_ROUTE_GMS_DEFAULT_CAUSAL_PARAMS =
   "coreAPI/gms/default_causal_params";
 
+// This endpoint will eventually replace when we implement DB properly
+// As this function reads from Available_Project table (A bridge table between User and Project)
+// export const PROJECT_API_ROUTE_PROJECT_IDS = "projectAPI/available_ids/get";
 export const PROJECT_API_ROUTE_PROJECT_IDS = "projectAPI/ids/get";
 export const PROJECT_API_ROUTE_PROJECT_SITES = "projectAPI/sites/get";
 export const PROJECT_API_ROUTE_PROJECT_IMS = "projectAPI/ims/get";

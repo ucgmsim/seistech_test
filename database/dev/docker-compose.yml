@@ -1,0 +1,28 @@
+# docker-compose.yml
+
+version: "3.8"
+
+services:
+  db:
+    image: mariadb
+    restart: always
+    ports:
+      - ${DEV_DB_PORT}:${DEV_DB_PORT}
+    environment:
+      - MYSQL_DATABASE=${DEV_MYSQL_DATABASE}
+      - MYSQL_USER=${DEV_MYSQL_USER}
+      - MYSQL_PASSWORD=${DEV_MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${DEV_MYSQL_ROOT_PASSWORD}
+      - TZ=${DEV_TZ}
+    volumes:
+      - ./db_data:/var/lib/mysql
+
+  # Adminer only uses in local DEV
+  # adminer:
+  #   image: adminer
+  #   restart: always
+  #   ports:
+  #     - 8080:8080
+
+volumes:
+  db_data:

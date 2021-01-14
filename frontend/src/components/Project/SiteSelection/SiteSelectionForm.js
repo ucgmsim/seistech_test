@@ -8,6 +8,7 @@ import ProjectSelect from "components/common/ProjectSelect";
 import { handleErrors, sortIMs } from "utils/Utils";
 
 import "assets/style/HazardForms.css";
+import "assets/style/TitleSubScript.css";
 
 const SiteSelectionForm = () => {
   const {
@@ -229,7 +230,9 @@ const SiteSelectionForm = () => {
         />
       </div>
 
-      <div className="form-row form-section-title">VS30</div>
+      <div className="form-row form-section-title">
+        V<sub className="title-subscript">S30</sub>
+      </div>
       <div className="form-group">
         <ProjectSelect
           id="vs-30-select"

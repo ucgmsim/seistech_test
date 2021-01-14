@@ -1,0 +1,21 @@
+# docker-compose.yml
+
+version: "3.8"
+
+services:
+  db:
+    image: mariadb
+    restart: always
+    ports:
+      - ${EA_DB_PORT}:${EA_DB_PORT}
+    environment:
+      - MYSQL_DATABASE=${EA_MYSQL_DATABASE}
+      - MYSQL_USER=${EA_MYSQL_USER}
+      - MYSQL_PASSWORD=${EA_MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${EA_MYSQL_ROOT_PASSWORD}
+      - TZ=${EA_TZ}
+    volumes:
+      - ./db_data:/var/lib/mysql
+
+volumes:
+  db_data:

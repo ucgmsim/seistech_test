@@ -319,6 +319,12 @@ const HazadViewerDisaggregation = () => {
         downloadToken={{
           disagg_token: downloadToken,
         }}
+        extraParams={{
+          project_id: projectId,
+          station_id: `${projectLocationCode[projectLocation]}_${projectVS30}`,
+          im: projectSelectedIM,
+          rp: projectSelectedDisagRP,
+        }}
         fileName="disaggregation.zip"
       />
     </div>
