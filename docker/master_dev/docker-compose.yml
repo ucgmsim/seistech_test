@@ -9,9 +9,9 @@ networks:
     driver: bridge
 
 services:
-  userdb:
+  userdb-dev:
     image: mariadb
-    container_name: userdb
+    container_name: userdb-dev
     restart: always
     ports:
       - ${DEV_DB_PORT}:${DEV_DB_PORT}
@@ -53,12 +53,12 @@ services:
       - AUTH0_CLIENT_SECRET=${AUTH0_CLIENT_SECRET_DEV}
       - AUTH0_AUDIENCE=${AUTH0_AUDIENCE_DEV}
       - AUTH0_GRANT_TYPE=${AUTH0_GRANT_TYPE_DEV}
-      - DB_SERVER=userdb
+      - DB_SERVER=userdb-dev
     networks:
       - seistech-dev
       - backend-dev
     depends_on:
-      - userdb
+      - userdb-dev
     expose:
       - ${INTER_API_PORT_DEV}
     ports:
