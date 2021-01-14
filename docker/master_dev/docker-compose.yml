@@ -29,7 +29,7 @@ services:
       - backend-dev
   middleware:
     image: middleware:master_dev
-    container_name: middleware
+    container_name: middleware-dev
     restart: on-failure
     build:
       context: ../../middleware/middleware
