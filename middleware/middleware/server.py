@@ -10,29 +10,12 @@ from flask_sqlalchemy import SQLAlchemy
 from six.moves.urllib.request import urlopen
 from flask import Flask, request, jsonify, _request_ctx_stack, Response
 
-print("---------------")
-print("FIRST")
-print(
-    os.environ["DB_USERNAME"],
-    os.environ["DB_PASSWORD"],
-    os.environ["DB_PORT"],
-    os.environ["DB_NAME"],
-)
-print("SECOND")
-print(
-    os.environ["ENV"],
-    os.environ["CORE_API_SECRET"],
-    os.environ["AUTH0_DOMAIN"],
-    os.environ["API_AUDIENCE"],
-    os.environ["ALGORITHMS"],
-)
-print("---------------")
 
 # DB Connection Setup
-DATABASE = "mysql+pymysql://{0}:{1}@127.0.0.1:{2}/{3}".format(
+DATABASE = "mysql+pymysql://{0}:{1}@{2}/{3}".format(
     os.environ["DB_USERNAME"],
     os.environ["DB_PASSWORD"],
-    os.environ["DB_PORT"],
+    os.environ["DB_SERVER"],
     os.environ["DB_NAME"],
 )
 
