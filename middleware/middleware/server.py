@@ -12,10 +12,10 @@ from flask import Flask, request, jsonify, _request_ctx_stack, Response
 
 
 # DB Connection Setup
-DATABASE = "mysql+pymysql://{0}:{1}@127.0.0.1:{2}/{3}".format(
+DATABASE = "mysql+pymysql://{0}:{1}@{2}/{3}".format(
     os.environ["DB_USERNAME"],
     os.environ["DB_PASSWORD"],
-    os.environ["DB_PORT"],
+    os.environ["DB_SERVER"],
     os.environ["DB_NAME"],
 )
 

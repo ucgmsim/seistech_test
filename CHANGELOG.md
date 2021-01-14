@@ -1,3 +1,9 @@
+## January 15, 2021
+
+### EC2 Docker setup - ([PR #30](https://github.com/ucgmsim/seistech_psha_frontend/pull/30))
+
+- Modify the docker-compose to adopt all three parts, DB, Middleware and Frontend.
+
 ## January 13, 2021
 
 ### Plotly.js feedback & Minor bug fix - ([PR #28](https://github.com/ucgmsim/seistech_psha_frontend/pull/28))
