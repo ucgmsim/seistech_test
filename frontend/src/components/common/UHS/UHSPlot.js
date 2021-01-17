@@ -11,16 +11,22 @@ const UHSPlot = ({ uhsData, nzCodeData, showNZCode = true, extra }) => {
     // Create NZ code UHS scatter objs
     const scatterObjs = [];
     for (let [curExcd, curData] of Object.entries(nzCodeData)) {
-      let curPlotData = getPlotData(curData);
-      scatterObjs.push({
-        x: curPlotData.index,
-        y: curPlotData.values,
-        type: "scatter",
-        mode: "lines",
-        line: { color: "black" },
-        name: `NZ Code - ${curExcd}`,
-        visible: showNZCode,
-      });
+      // The object contains the value of NaN, so we dont plot
+      if (Object.values(curData).includes("nan")) {
+        continue;
+        // Else we plot
+      } else {
+        let curPlotData = getPlotData(curData);
+        scatterObjs.push({
+          x: curPlotData.index,
+          y: curPlotData.values,
+          type: "scatter",
+          mode: "lines",
+          line: { color: "black" },
+          name: `NZ Code - ${curExcd}`,
+          visible: showNZCode,
+        });
+      }
     }
 
     // UHS scatter objs

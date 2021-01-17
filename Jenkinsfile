@@ -29,7 +29,7 @@ pipeline {
 		whereis chromedriver
                 cd ${env.WORKSPACE}
 		echo 'Wait for the deployment to be ready'
-		sleep 30
+		sleep 60
 		echo 'Testing psha-test deployment'
                 pytest -vs
                 """

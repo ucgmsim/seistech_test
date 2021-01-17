@@ -4,6 +4,10 @@
 
 - Modify the docker-compose to adopt all three parts, DB, Middleware and Frontend.
 
+### Not plotting if it contains NaN - ([PR #31](https://github.com/ucgmsim/seistech_psha_frontend/pull/31))
+
+- If the data object contains `NaN` value, we do not plot them.
+
 ## January 13, 2021
 
 ### Plotly.js feedback & Minor bug fix - ([PR #28](https://github.com/ucgmsim/seistech_psha_frontend/pull/28))
