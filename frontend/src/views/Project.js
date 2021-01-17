@@ -45,7 +45,7 @@ const Project = () => {
         <Tab
           eventKey="gms"
           title="GMS"
-          disabled={validateTab()}
+          disabled
           tabClassName="gms-tab"
         >
           <TwoColumnView cpanel={GmsForm} viewer={GmsViewer} />
