@@ -1,3 +1,10 @@
+## January 18, 2021
+
+## Fix the Download URL & Disable GMS Tab - ([PR #32](https://github.com/ucgmsim/seistech_psha_frontend/pull/32))
+
+- Now the URL does not include extra unnecessary character in the end.
+- Disabled the GMS tab for now as it does not contain anything but saying "GMS is coming!"
+
 ## January 15, 2021
 
 ### EC2 Docker setup - ([PR #30](https://github.com/ucgmsim/seistech_psha_frontend/pull/30))
