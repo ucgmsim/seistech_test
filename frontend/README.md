@@ -162,8 +162,6 @@ MYSQL_ROOT_PASSWORD=
 
 **docker-compose.yml**
 
-TZ is not necessary.
-
 ```yml
 # docker-compose.yml
 
@@ -180,6 +178,7 @@ services:
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      # TZ is not necessary.
       - TZ=Pacific/Auckland
 
     # Assuming we don't mind store db_data directory in the current directory.
@@ -203,17 +202,27 @@ volumes:
   db_data:
 ```
 
-##### Steps
+##### Steps - MariaDB
 
 1. Change the directory to where this `docker-compose.yml` is. (Make sure to have `.env` in the same directory.)
 2. Type the following command:
    `docker-compose --env-file .env up -d`
    So it passes the environment variables to `docker-compose.yml` when it runs the docker image as we are not creating docker images like we did for Frontend and Middleware, we use the existing docker image that is created by official MariaDB.
-3. You can either accese/check data via the browser at `localhost:8080` or via command, `mysql -h 127.0.0.1 -P 3306 -u {MYSQL_USER} -p{MYSQL_PASSWORD}.
+3. You can either accese/check data via the browser at `localhost:8080` or via command, `mysql -h 127.0.0.1 -P 3306 -u {MYSQL_USER} -p{MYSQL_PASSWORD}.` (Space after -u but -p)
+
+##### Stpes - Adminer (Local development purpose)
+
+1. Open up a browser and type `localhost:8080`
+2. Put the following details:
+  - Username = `${MYSQL_USER}`
+  - Password = `${MYSQL_PASSWORD}`
+  - Database = `${MYSQL_DATABASE}`
+
+##### IMPORTANT - Make sure to run the DB first then run the Intermediate API as it needs to be connected to DB.
 
 ## Running locally
 
-Assuming we are using Core API that is on Epicentre
+Assuming we are using Core API that is on rcc
 
 **Make sure you have an access to `ucgmsim/seistech` git repo via SSH as we need to access the private repo to download**
 
