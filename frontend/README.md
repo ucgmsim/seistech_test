@@ -11,6 +11,8 @@
   - [Middleware](#middleware)
     - [Without .env](#without-env)
     - [With .env](#with-env)
+  - [Database](#database)
+    - [With docker-compose](#with-docker-compose)
 - [Running locally](#running-locally)
   - [Without Docker](#without-docker)
   - [With Docker](#with-docker)
@@ -136,6 +138,79 @@ load_dotenv()
 
 ##### To run Intermediate API: `python app.py`
 
+### Database
+
+##### With docker-compose
+
+#### Requirements
+
+1. Docker
+   Tested on Docker version 19.03.12
+2. Docker-compose
+   Tested on docker-compose version 1.26.2
+3. Environment variables for docker-compose
+   `.env` must be in the same directory with `docker-compose.yml`.
+
+**`.env`**
+
+```env
+MYSQL_DATABASE=
+MYSQL_USER=
+MYSQL_PASSWORD=
+MYSQL_ROOT_PASSWORD=
+```
+
+**docker-compose.yml**
+
+TZ is not necessary.
+
+```yml
+# docker-compose.yml
+
+version: "3.8"
+
+services:
+  db:
+    image: mariadb
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_DATABSE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - TZ=Pacific/Auckland
+
+    # Assuming we don't mind store db_data directory in the current directory.
+    # For intsance, the directory could look like this (Database is a root directory)
+    # Database
+    # |- .env
+    # |- docker-compose.yml
+    # |- db_data <- this directory will be created upon using the following volumes command
+    # Now we store data in this directory (externally), not inside the docker container.
+    volumes:
+      - ./db_data:/var/lib/mysql
+
+  # Not necessary for AWS but your local setup due to having DB Viewer via browser
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+volumes:
+  db_data:
+```
+
+##### Steps
+
+1. Change the directory to where this `docker-compose.yml` is. (Make sure to have `.env` in the same directory.)
+2. Type the following command:
+   `docker-compose --env-file .env up -d`
+   So it passes the environment variables to `docker-compose.yml` when it runs the docker image as we are not creating docker images like we did for Frontend and Middleware, we use the existing docker image that is created by official MariaDB.
+3. You can either accese/check data via the browser at `localhost:8080` or via command, `mysql -h 127.0.0.1 -P 3306 -u {MYSQL_USER} -p{MYSQL_PASSWORD}.
+
 ## Running locally
 
 Assuming we are using Core API that is on Epicentre
@@ -202,6 +277,7 @@ Please check **Requirements** above.
 
 **`.env` for DEV**
 
+```env
 AUTH0_DOMAIN_DEV=
 API_AUDIENCE_DEV=
 ALGORITHMS_DEV=
@@ -210,11 +286,13 @@ CORE_API_BASE_DEV=
 INTER_API_PORT_DEV=
 N_PROCS_DEV=
 
+
 BASE_URL_DEV=
 DEFAULT_ANNUAL_EXCEEDANCE_RATE=0.013862943619741008
 DEFAULT_LAT=-43.5381
 DEFAULT_LNG=172.6474
 FRONT_END_PORT_DEV=
+
 
 `BUILD_DATE_DEV` and `GIT_SHA_DEV` are from Dockerise.sh
 `BUILD_DATE_DEV=${BUILD_DATE_DEV}`
@@ -225,9 +303,11 @@ REACT_APP_AUTH0_CLIENTID_DEV=
 REACT_APP_AUTH0_AUDIENCE_DEV=
 
 REACT_APP_MAP_BOX_TOKEN_DEV=
+```
 
 **`.env` for EA**
 
+```env
 AUTH0_DOMAIN_EA=
 API_AUDIENCE_EA=
 ALGORITHMS_EA=
@@ -248,6 +328,7 @@ REACT_APP_AUTH0_CLIENTID_EA=
 REACT_APP_AUTH0_AUDIENCE_EA=
 
 REACT_APP_MAP_BOX_TOKEN_EA=
+```
 
 ##### Steps
 
