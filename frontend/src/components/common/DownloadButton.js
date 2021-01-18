@@ -41,7 +41,7 @@ const DownloadButton = ({
     }
 
     // remove the last character which is an extra &
-    queryString.slice(0, -1);
+    queryString = queryString.slice(0, -1);
 
     axios({
       url: CORE_API_BASE_URL + downloadURL + queryString,
