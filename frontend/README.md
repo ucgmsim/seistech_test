@@ -101,14 +101,30 @@ We do not separate middleware for DEV and EA. However, we run simultaneously (On
 
 Add the following code to `~/.bashrc`
 
+```vim
+# For Intermediate API
 export ENV=dev
 export AUTH0_DOMAIN=
-export CORE_API_SECRET=
 export API_AUDIENCE=
 export ALGORITHMS=
-export CORE_API_BASE=
-export N_PROCS=
+export CORE_API_SECRET=
 export INTER_PORT=
+export N_PROCS=
+export CORE_API_BASE=
+export PROJECT_API_BASE=
+
+# To connect MariaDB from Intermediate API DEV
+export DB_USERNAME=
+export DB_PASSWORD=
+export DB_SERVER="127.0.0.1:3306"
+export DB_NAME=
+
+# For Auth0 Management API - To pull existing users.
+export AUTH0_CLIENT_ID=
+export AUTH0_CLIENT_SECRET=
+export AUTH0_AUDIENCE=
+export AUTH0_GRANT_TYPE=
+```
 
 ##### To run Intermediate API: `python app.py`
 
@@ -116,14 +132,30 @@ export INTER_PORT=
 
 You will need a `.env` file with the following environment variables.
 
-- ENV=dev
-- AUTH0_DOMAIN=
-- CORE_API_SECRET=
-- API_AUDIENCE=
-- ALGORITHMS=
-- CORE_API_BASE=
-- N_PROCS=
-- INTER_PORT=
+```env
+# For Intermediate API
+ENV=dev
+AUTH0_DOMAIN=
+API_AUDIENCE=
+ALGORITHMS=
+CORE_API_SECRET=
+INTER_PORT=
+N_PROCS=
+CORE_API_BASE=
+PROJECT_API_BASE=
+
+# To connect MariaDB from Intermediate API DEV
+DB_USERNAME=
+DB_PASSWORD=
+DB_SERVER="127.0.0.1:3306"
+DB_NAME=
+
+# For Auth0 Management API - To pull existing users.
+AUTH0_CLIENT_ID=
+AUTH0_CLIENT_SECRET=
+AUTH0_AUDIENCE=
+AUTH0_GRANT_TYPE=
+```
 
 You also have to install a Python package called `python-dotenv` by typing the following command.
 
@@ -182,7 +214,7 @@ services:
       - TZ=Pacific/Auckland
 
     # Assuming we don't mind store db_data directory in the current directory.
-    # For intsance, the directory could look like this (Database is a root directory)
+    # For instance, the directory could look like this (Database is a root directory)
     # Database
     # |- .env
     # |- docker-compose.yml
@@ -191,7 +223,7 @@ services:
     volumes:
       - ./db_data:/var/lib/mysql
 
-  # Not necessary for AWS but your local setup due to having DB Viewer via browser
+  # Not necessary for AWS but your local setup due to having DB Viewer via a web browser
   adminer:
     image: adminer
     restart: always
@@ -207,16 +239,31 @@ volumes:
 1. Change the directory to where this `docker-compose.yml` is. (Make sure to have `.env` in the same directory.)
 2. Type the following command:
    `docker-compose --env-file .env up -d`
-   So it passes the environment variables to `docker-compose.yml` when it runs the docker image as we are not creating docker images like we did for Frontend and Middleware, we use the existing docker image that is created by official MariaDB.
+   So it passes the environment variables to `docker-compose.yml` when it runs the docker image. We are not creating docker images like we did for Frontend and Middleware, we use the existing docker image that is created by official MariaDB.
 3. You can either accese/check data via the browser at `localhost:8080` or via command, `mysql -h 127.0.0.1 -P 3306 -u {MYSQL_USER} -p{MYSQL_PASSWORD}.` (Space after -u but -p)
+
+##### DO THIS STEP IF IT'S YOUR FIRST TIME SETTING UP THE DB
+
+1. Open up a Terminal.
+2. Type `docker ps`
+3. Two ways of doing it
+   1. With Docker
+      1. Type `docker exec -it {CONTAINER_ID_INTERMEDIATE_API} bash` to access to its bash.
+      2. Type `python add_exist_users.py` will pull existing users' Auth0 unique ID then insert them into the DB
+   2. Without Docker
+      1. Run the Intermediate API after running the DB.
+      2. From a different terminal, type `python add_exist_users.py`.
+
+As our Intermediate API now tracks users' activity and to do so, we need our DB with users ID.
 
 ##### Stpes - Adminer (Local development purpose)
 
 1. Open up a browser and type `localhost:8080`
 2. Put the following details:
-  - Username = `${MYSQL_USER}`
-  - Password = `${MYSQL_PASSWORD}`
-  - Database = `${MYSQL_DATABASE}`
+
+- Username = `${MYSQL_USER}`
+- Password = `${MYSQL_PASSWORD}`
+- Database = `${MYSQL_DATABASE}`
 
 ##### IMPORTANT - Make sure to run the DB first then run the Intermediate API as it needs to be connected to DB.
 
@@ -287,62 +334,122 @@ Please check **Requirements** above.
 **`.env` for DEV**
 
 ```env
+# For Intermediate API
 AUTH0_DOMAIN_DEV=
 API_AUDIENCE_DEV=
 ALGORITHMS_DEV=
 CORE_API_SECRET_DEV=
 CORE_API_BASE_DEV=
+PROJECT_API_BASE_DEV=
 INTER_API_PORT_DEV=
 N_PROCS_DEV=
 
+# To connect MariaDB from Intermediate API DEV
+DB_USERNAME_DEV=
+DB_PASSWORD_DEV=
+DB_PORT_DEV=
+DB_NAME_DEV=
 
+# For MariaDB DEV
+DEV_DB_PORT=
+DEV_MYSQL_DATABASE=
+DEV_MYSQL_USER=
+DEV_MYSQL_PASSWORD=
+DEV_MYSQL_ROOT_PASSWORD=
+DEV_TZ=
+
+# For Auth0 Management API
+AUTH0_CLIENT_ID_DEV=
+AUTH0_CLIENT_SECRET_DEV=
+AUTH0_AUDIENCE_DEV=
+AUTH0_GRANT_TYPE_DEV=
+
+# For Frontend
 BASE_URL_DEV=
 DEFAULT_ANNUAL_EXCEEDANCE_RATE=0.013862943619741008
 DEFAULT_LAT=-43.5381
 DEFAULT_LNG=172.6474
 FRONT_END_PORT_DEV=
 
+# From Dockerise.sh
+BUILD_DATE_DEV=${BUILD_DATE_DEV}
+GIT_SHA_DEV=${GIT_SHA_DEV}
 
-`BUILD_DATE_DEV` and `GIT_SHA_DEV` are from Dockerise.sh
-`BUILD_DATE_DEV=${BUILD_DATE_DEV}`
-`GIT_SHA_DEV=${GIT_SHA_DEV}`
-
+# AUTH0
 REACT_APP_AUTH0_DOMAIN_DEV=
 REACT_APP_AUTH0_CLIENTID_DEV=
 REACT_APP_AUTH0_AUDIENCE_DEV=
 
+# MapBox
+
 REACT_APP_MAP_BOX_TOKEN_DEV=
+
+# TAG to match Dockerise.sh
+BRANCH_NAME=master_dev
+
 ```
 
 **`.env` for EA**
 
 ```env
+# For Intermediate API
 AUTH0_DOMAIN_EA=
 API_AUDIENCE_EA=
 ALGORITHMS_EA=
 CORE_API_SECRET_EA=
 CORE_API_BASE_EA=
+PROJECT_API_BASE_EA=
 INTER_API_PORT_EA=
 N_PROCS_EA=
 
+# To connect MariaDB from Intermediate API EA
+DB_USERNAME_EA=
+DB_PASSWORD_EA=
+DB_PORT_EA=
+DB_NAME_EA=
+
+# For MariaDB EA
+EA_DB_PORT=
+EA_MYSQL_DATABASE=
+EA_MYSQL_USER=
+EA_MYSQL_PASSWORD=
+EA_MYSQL_ROOT_PASSWORD=
+EA_TZ=Pacific/Auckland
+
+# For Auth0 Management API
+AUTH0_CLIENT_ID_EA=
+AUTH0_CLIENT_SECRET_EA=
+AUTH0_AUDIENCE_EA=
+AUTH0_GRANT_TYPE_EA=
+
+# For Frontend
 BASE_URL_EA=
+DEFAULT_ANNUAL_EXCEEDANCE_RATE=""
+DEFAULT_LAT=""
+DEFAULT_LNG=""
 FRONT_END_PORT_EA=
 
-`BUILD_DATE_EA` and `GIT_SHA_EA` are from Dockerise.sh
-`BUILD_DATE_EA=${BUILD_DATE_EA}`
-`GIT_SHA_EA=${GIT_SHA_EA}`
+# From Dockerise.sh
+BUILD_DATE_EA=${BUILD_DATE_EA}
+GIT_SHA_EA=${GIT_SHA_EA}
 
+# AUTH0
 REACT_APP_AUTH0_DOMAIN_EA=
 REACT_APP_AUTH0_CLIENTID_EA=
 REACT_APP_AUTH0_AUDIENCE_EA=
 
+# MapBox
+
 REACT_APP_MAP_BOX_TOKEN_EA=
+
 ```
 
 ##### Steps
 
 1. Change the directory to either `docker/dev` or `docker/ea`
-2. Run `Dockerise.sh` script.
+2. Run the following command.
+   - `../Dockerise.sh master_dev master_dev` to run DEV version
+   - `../Dockerise.sh master_ea master_dev` to run EA version
 3. Access to http://localhost:{port}/ (The port you set in `.env`)
 
 ##### What is happening by running `Dockerise.sh`
@@ -364,7 +471,7 @@ What it does is, it is building Docker images using docker-compose and passing `
 
 This is the Dockerfile for Intermediate API, what it does is
 
-- It creates one Docker image with this private key to cloning from private repo.
+- It creates one Docker image with this private key to cloning from the private repo.
 
 - It creates another Docker image and copying python packages installed in an image called `intermediate` as, within `intermediate`, python has those packages installed (From private repo), then install any extra packages we need to run Intermediate API by running `pip install -r requirements.txt`
 
@@ -446,7 +553,7 @@ The options are similar to IM (Intensity Measure) from the Hazard Curve in Seism
 
 ##### IM Level or Exceedance Rate
 
-Users can choose either **IM Level** or **Exceedance Rate**. The urrent setup is, by choosing **IM Type** first then putting **IM Level** or **Exceedance Rate**. If the focus gets outside of the input box, then it sends a request to Core API to get default parameters which are for **Pre-GM Filtering parameters** inside the advanced tab.
+Users can choose either **IM Level** or **Exceedance Rate**. The current setup is, by choosing **IM Type** first then putting **IM Level** or **Exceedance Rate**. If the focus gets outside of the input box, then it sends a request to Core API to get default parameters which are for **Pre-GM Filtering parameters** inside the advanced tab.
 
 ##### IM Vector
 
