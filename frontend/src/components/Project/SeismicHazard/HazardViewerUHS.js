@@ -78,6 +78,8 @@ const HazardViewerUhs = () => {
             projectLocationCode[projectLocation]
           }_${projectVS30}&rp=${getSelectedRP().join(",")}`;
 
+          console.log(getSelectedRP())
+
           await fetch(
             CONSTANTS.CORE_API_BASE_URL +
               CONSTANTS.PROJECT_API_ROUTE_PROJECT_UHS_GET +
@@ -92,7 +94,7 @@ const HazardViewerUhs = () => {
             .then(handleErrors)
             .then(async (response) => {
               const responseData = await response.json();
-              setUHSData(responseData);
+              setUHSData(responseData["uhs_df"]);
               setUHSNZCodeData(responseData["nz_code_uhs_df"]);
               setDownloadToken(responseData["download_token"]);
               setShowSpinnerUHS(false);

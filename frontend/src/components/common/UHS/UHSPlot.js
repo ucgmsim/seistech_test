@@ -7,6 +7,7 @@ import ErrorMessage from "components/common/ErrorMessage";
 import "assets/style/UHSPlot.css";
 
 const UHSPlot = ({ uhsData, nzCodeData, showNZCode = true, extra }) => {
+  console.log(extra)
   if (uhsData !== null && !uhsData.hasOwnProperty("error")) {
     // Create NZ code UHS scatter objs
     const scatterObjs = [];
@@ -30,7 +31,7 @@ const UHSPlot = ({ uhsData, nzCodeData, showNZCode = true, extra }) => {
     }
 
     // UHS scatter objs
-    for (let [curExcd, curData] of Object.entries(uhsData["uhs_df"])) {
+    for (let [curExcd, curData] of Object.entries(uhsData)) {
       let curPlotData = getPlotData(curData);
       scatterObjs.push({
         x: curPlotData.index,
