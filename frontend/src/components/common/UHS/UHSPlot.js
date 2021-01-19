@@ -1,7 +1,12 @@
 import React from "react";
 import Plot from "react-plotly.js";
-import { getPlotData } from "utils/Utils.js";
-import { PLOT_MARGIN, PLOT_CONFIG } from "constants/Constants";
+import { getPlotData, renderSigfigs } from "utils/Utils.js";
+import {
+  PLOT_MARGIN,
+  PLOT_CONFIG,
+  APP_UI_SIGFIGS,
+  APP_UI_UHS_RATETABLE_RATE_SIGFIGS,
+} from "constants/Constants";
 import ErrorMessage from "components/common/ErrorMessage";
 
 import "assets/style/UHSPlot.css";
@@ -17,13 +22,30 @@ const UHSPlot = ({ uhsData, nzCodeData, showNZCode = true, extra }) => {
         // Else we plot
       } else {
         let curPlotData = getPlotData(curData);
+        // Convert the Annual exdance reate to Return period in a string format
+        let displayRP = (1 / Number(curExcd)).toString();
         scatterObjs.push({
           x: curPlotData.index,
           y: curPlotData.values,
           type: "scatter",
           mode: "lines",
           line: { color: "black" },
-          name: `NZ Code - ${curExcd}`,
+          name:
+            // Then if the string contains `.` means it's in float/decimal that needs to display in 4SF for RP, 3SF for rate
+            // Else, print what it is as it is an integer.
+            // E.g., "14".indexOf(".") returns -1 as it does not have "." in it
+            displayRP.indexOf(".") == -1
+              ? `NZ Code - RP ${Number(displayRP)} - ${renderSigfigs(
+                  Number(1 / displayRP),
+                  APP_UI_UHS_RATETABLE_RATE_SIGFIGS
+                )}`
+              : `NZ Code - RP ${renderSigfigs(
+                  Number(displayRP),
+                  APP_UI_SIGFIGS
+                )} - ${renderSigfigs(
+                  Number(1 / displayRP),
+                  APP_UI_UHS_RATETABLE_RATE_SIGFIGS
+                )}`,
           visible: showNZCode,
         });
       }
@@ -32,13 +54,26 @@ const UHSPlot = ({ uhsData, nzCodeData, showNZCode = true, extra }) => {
     // UHS scatter objs
     for (let [curExcd, curData] of Object.entries(uhsData)) {
       let curPlotData = getPlotData(curData);
+      let displayRP = (1 / Number(curExcd)).toString();
       scatterObjs.push({
         x: curPlotData.index,
         y: curPlotData.values,
         type: "scatter",
         mode: "lines",
         line: { color: "blue" },
-        name: `${curExcd}`,
+        name:
+          displayRP.indexOf(".") == -1
+            ? `RP ${Number(displayRP)} - ${renderSigfigs(
+                Number(1 / displayRP),
+                APP_UI_UHS_RATETABLE_RATE_SIGFIGS
+              )} `
+            : `RP ${renderSigfigs(
+                1 / Number(curExcd),
+                APP_UI_SIGFIGS
+              )} - ${renderSigfigs(
+                Number(1 / displayRP),
+                APP_UI_UHS_RATETABLE_RATE_SIGFIGS
+              )}`,
       });
     }
 
