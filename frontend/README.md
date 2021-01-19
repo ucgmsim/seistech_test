@@ -245,11 +245,11 @@ volumes:
 ##### DO THIS STEP IF IT'S YOUR FIRST TIME SETTING UP THE DB
 
 1. Open up a Terminal.
-2. Type `docker ps`
-3. Two ways of doing it
+2. Two ways of doing it
    1. With Docker
-      1. Type `docker exec -it {CONTAINER_ID_INTERMEDIATE_API} bash` to access to its bash.
-      2. Type `python add_exist_users.py` will pull existing users' Auth0 unique ID then insert them into the DB
+      1. Type `docker ps`
+      2. Type `docker exec -it {CONTAINER_ID_INTERMEDIATE_API} bash` to access to its bash.
+      3. Type `python add_exist_users.py` will pull existing users' Auth0 unique ID then insert them into the DB
    2. Without Docker
       1. Run the Intermediate API after running the DB.
       2. From a different terminal, type `python add_exist_users.py`.
