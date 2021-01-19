@@ -22,10 +22,8 @@ const UHSPlot = ({ uhsData, nzCodeData, showNZCode = true, extra }) => {
       isNZCode = to check whether its for NZCode or not, default to false.
      */
     const createLabel = (displayRP, isNZCode = false) => {
-      let newLabel = "";
-      if (isNZCode === true) {
-        newLabel = "NZ Code - ";
-      }
+      // Depends on the isNZCode status, newLabel starts with NZ Code - or an empty string
+      let newLabel = isNZCode === true ? "" : "NZ Code - ";
 
       if (displayRP.indexOf(".") === -1) {
         newLabel += `RP ${Number(displayRP)} - ${renderSigfigs(
