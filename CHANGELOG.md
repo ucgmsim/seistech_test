@@ -1,6 +1,13 @@
+## January 19, 2021
+
+### Fix the Project's UHS plots and update Project/Hazard's UHS plotly.js label - ([PR #34](https://github.com/ucgmsim/seistech_psha_frontend/pull/34))
+
+- Fix the plots so now Project's UHS only plot with selected RPs instead of every possible rate.
+- Label now contains both RP and Rate information.
+
 ## January 18, 2021
 
-## Fix the Download URL & Disable GMS Tab - ([PR #32](https://github.com/ucgmsim/seistech_psha_frontend/pull/32))
+### Fix the Download URL & Disable GMS Tab - ([PR #32](https://github.com/ucgmsim/seistech_psha_frontend/pull/32))
 
 - Now the URL does not include extra unnecessary character in the end.
 - Disabled the GMS tab for now as it does not contain anything but saying "GMS is coming!"
