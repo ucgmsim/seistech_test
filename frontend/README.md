@@ -269,7 +269,7 @@ As our Intermediate API now tracks users' activity and to do so, we need our DB 
 
 ## Running locally
 
-Assuming we are using Core API that is on rcc
+Assuming we are using Core API and Project API that are hosted by UCQuakeCore1p.
 
 **Make sure you have an access to `ucgmsim/seistech` git repo via SSH as we need to access the private repo to download**
 
@@ -277,17 +277,19 @@ Assuming we are using Core API that is on rcc
 
 Open a terminal to do the following steps
 
-1. We need to install some packages for Intermediate API (a.k.a Proxy API).
+1. Create Python virtual environment first.
+
+2. We need to install some packages for Middleware (a.k.a Intermediate API).
 
 To run this private_requirements, make sure to have SSH Key setup done with GitHub as we are installing packages from a private repo
 
 ```shell
-cd ./seistech_inter_api/seistech_inter_api
+cd {seistech_psha_frontend_directory}/middleware/middleware
 pip install -r private_requirements.txt
 pip install -r requirements.txt
 ```
 
-2. After installation is done, run the following command
+3. After installation is done, run the following command
 
 ```shell
 python app.py
@@ -295,10 +297,10 @@ python app.py
 
 Open another terminal to do the following steps
 
-1. Change the directory to seistech_web
+1. Change the directory to frontend
 
 ```shell
-cd ./seistech_web
+cd {seistech_psha_frontend_directory}/frontend
 ```
 
 2. Install packages
@@ -313,6 +315,11 @@ npm install
 npm run start:dev or
 npm run start:ea
 ```
+
+Differences between `DEV` and `EA` are:
+
+- `DEV` has an **Ensemble** selector
+- `DEV` has some default values. (E.g., Lat, Lng, Annual exceedance rate)
 
 **To achieve this, you need the following file**
 `.env.dev` for DEV
