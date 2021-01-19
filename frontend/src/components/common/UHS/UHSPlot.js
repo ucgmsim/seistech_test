@@ -13,6 +13,37 @@ import "assets/style/UHSPlot.css";
 
 const UHSPlot = ({ uhsData, nzCodeData, showNZCode = true, extra }) => {
   if (uhsData !== null && !uhsData.hasOwnProperty("error")) {
+    /* 
+      if the string(displayRP parameter) contains `.` means it's in float/decimal that needs to display in 4SF for RP, 3SF for rate
+      Else, print what it is as it is an integer.
+      E.g., "14".indexOf(".") returns -1 as it does not have "." in it
+
+      displayRP = Selected RPs
+      isNZCode = to check whether its for NZCode or not, default to false.
+     */
+    const createLabel = (displayRP, isNZCode = false) => {
+      let newLabel = "";
+      if (isNZCode === true) {
+        newLabel = "NZ Code - ";
+      }
+
+      if (displayRP.indexOf(".") === -1) {
+        newLabel += `RP ${Number(displayRP)} - ${renderSigfigs(
+          Number(1 / displayRP),
+          APP_UI_UHS_RATETABLE_RATE_SIGFIGS
+        )} `;
+      } else {
+        newLabel += `RP ${renderSigfigs(
+          Number(displayRP),
+          APP_UI_SIGFIGS
+        )} - ${renderSigfigs(
+          Number(1 / displayRP),
+          APP_UI_UHS_RATETABLE_RATE_SIGFIGS
+        )}`;
+      }
+
+      return newLabel;
+    };
     // Create NZ code UHS scatter objs
     const scatterObjs = [];
     for (let [curExcd, curData] of Object.entries(nzCodeData)) {
@@ -30,22 +61,7 @@ const UHSPlot = ({ uhsData, nzCodeData, showNZCode = true, extra }) => {
           type: "scatter",
           mode: "lines",
           line: { color: "black" },
-          name:
-            // Then if the string contains `.` means it's in float/decimal that needs to display in 4SF for RP, 3SF for rate
-            // Else, print what it is as it is an integer.
-            // E.g., "14".indexOf(".") returns -1 as it does not have "." in it
-            displayRP.indexOf(".") == -1
-              ? `NZ Code - RP ${Number(displayRP)} - ${renderSigfigs(
-                  Number(1 / displayRP),
-                  APP_UI_UHS_RATETABLE_RATE_SIGFIGS
-                )}`
-              : `NZ Code - RP ${renderSigfigs(
-                  Number(displayRP),
-                  APP_UI_SIGFIGS
-                )} - ${renderSigfigs(
-                  Number(1 / displayRP),
-                  APP_UI_UHS_RATETABLE_RATE_SIGFIGS
-                )}`,
+          name: createLabel(displayRP, true),
           visible: showNZCode,
         });
       }
@@ -61,19 +77,7 @@ const UHSPlot = ({ uhsData, nzCodeData, showNZCode = true, extra }) => {
         type: "scatter",
         mode: "lines",
         line: { color: "blue" },
-        name:
-          displayRP.indexOf(".") == -1
-            ? `RP ${Number(displayRP)} - ${renderSigfigs(
-                Number(1 / displayRP),
-                APP_UI_UHS_RATETABLE_RATE_SIGFIGS
-              )} `
-            : `RP ${renderSigfigs(
-                1 / Number(curExcd),
-                APP_UI_SIGFIGS
-              )} - ${renderSigfigs(
-                Number(1 / displayRP),
-                APP_UI_UHS_RATETABLE_RATE_SIGFIGS
-              )}`,
+        name: createLabel(displayRP),
       });
     }
 
