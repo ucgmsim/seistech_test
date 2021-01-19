@@ -122,7 +122,7 @@ const HazardViewerUhs = () => {
             .then(handleErrors)
             .then(async (uhsResponse) => {
               const responseData = await uhsResponse.json();
-              setUHSData(responseData);
+              setUHSData(responseData["uhs_df"]);
               setDownloadUHSToken(responseData["download_token"]);
 
               let nzCodeQueryString = `?ensemble_id=${selectedEnsemble}&station=${station}&exceedances=${getExceedances().join(

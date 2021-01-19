@@ -61,6 +61,26 @@ const HazardViewerUhs = () => {
     return tempArray;
   };
 
+  /* 
+    Filtering the UHSData based on the selected RPs
+    First of all, we are going to loop through the object.
+    Then check the key of the object is in the selected RP list (E.g., 72, 475, 2475)
+    If it eixts, we create another object with the key that are in he selectedRP list and the value is from UHSData
+
+    Simply, if UHSData object is like {A: {...}, B: {...}, C: {...}} and selectedRP is [A, C] 
+    Then we create a new object that will have a key of A and C only, => {A: {...}, C: {...}} as users only chose A and C so no need to display/plot for B.
+  */
+  const filterUHSData = (UHSData, selectedRP) => {
+    const filtered = Object.keys(UHSData)
+      .filter((key) => selectedRP.includes(1 / Number(key)))
+      .reduce((obj, key) => {
+        obj[key] = UHSData[key];
+        return obj;
+      }, {});
+
+    return filtered;
+  };
+
   useEffect(() => {
     const abortController = new AbortController();
     const signal = abortController.signal;
@@ -92,8 +112,12 @@ const HazardViewerUhs = () => {
             .then(handleErrors)
             .then(async (response) => {
               const responseData = await response.json();
-              setUHSData(responseData);
-              setUHSNZCodeData(responseData["nz_code_uhs_df"]);
+              setUHSData(
+                filterUHSData(responseData["uhs_df"], getSelectedRP())
+              );
+              setUHSNZCodeData(
+                filterUHSData(responseData["nz_code_uhs_df"], getSelectedRP())
+              );
               setDownloadToken(responseData["download_token"]);
               setShowSpinnerUHS(false);
               setShowPlotUHS(true);
