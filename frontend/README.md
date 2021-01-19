@@ -492,9 +492,21 @@ It runs both Frontend & Intermediate API
 
 ## Deploying to AWS
 
-With a directory called `docker`, there are two more directories, `dev` and `ea`. Each directory has different settings with `docker-compose.yml` file.
+Under a directory called `seistech_psha_frontend`, there is ith a directory called `docker`.
 
-They also include a shell script called `Dockerise.sh`. By running this shell script inside EC2, it will automatically pull the latest version (Frontend & Intermediate API) from our repo, create Docker images then run them.
+There are three directories, `master_dev`, `master_ea` and `master_test`.
+
+Each directory has a different setting with `docker-compose.yml` file.
+
+It also includes a shell script called `Dockerise.sh` in a `docker` directory. By running this shell script inside EC2, it will automatically pull the latest version (Frontend & Intermediate API) from the repo, create Docker images then run them. To do so, change the directory to either `master_dev` or `master_ea` as `master_test` is uesd by Jenkins, then type the following cmd.
+
+```cmd
+../Dockerise.sh {master_dev or master_ea} master_dev
+```
+
+The first parameter, `master_dev` or `master_ea` will be added to the docker image to tell which images belong to `DEV` and `EA` version of SeisTech.
+
+The second parameter, `master_dev` is the target branch which tells EC2 to switch to the `master_dev` and create docker images based on the latest information. This parameter is required for Jenkins so it can switch the branch to the PR's branch.
 
 ## Application
 
