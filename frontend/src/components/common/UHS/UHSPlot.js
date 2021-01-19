@@ -60,7 +60,9 @@ const UHSPlot = ({ uhsData, nzCodeData, showNZCode = true, extra }) => {
           mode: "lines",
           line: { color: "black" },
           name: createLabel(displayRP, true),
+          text: createLabel(displayRP, true),
           visible: showNZCode,
+          hoverinfo: "text",
         });
       }
     }
@@ -76,6 +78,8 @@ const UHSPlot = ({ uhsData, nzCodeData, showNZCode = true, extra }) => {
         mode: "lines",
         line: { color: "blue" },
         name: createLabel(displayRP),
+        text: createLabel(displayRP),
+        hoverinfo: "text",
       });
     }
 
