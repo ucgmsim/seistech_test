@@ -10,8 +10,6 @@ from ..server import (
 """
 
 # Site Selection
-# This endpoint will eventually replace get_project_ids when we implement DB properly
-# As this function reads from Available_Project table (A bridge table between User and Project)
 @app.route("/projectAPI/ids/get", methods=["GET"])
 @requires_auth
 def get_available_project_ids():
