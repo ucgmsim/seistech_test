@@ -16,14 +16,9 @@ from ..server import (
 # Site Selection
 # This endpoint will eventually replace get_project_ids when we implement DB properly
 # As this function reads from Available_Project table (A bridge table between User and Project)
-@app.route("/projectAPI/available_ids/get", methods=["GET"])
+@app.route("/projectAPI/ids/get", methods=["GET"])
 def get_available_project_ids():
     return get_available_projects()
-
-
-@app.route("/projectAPI/ids/get", methods=["GET"])
-def get_project_ids():
-    return proxy_to_api(flask.request, "api/project/ids/get", "GET")
 
 
 @app.route("/projectAPI/sites/get", methods=["GET"])

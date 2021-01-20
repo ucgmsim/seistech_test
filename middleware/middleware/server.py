@@ -47,10 +47,6 @@ ALGORITHMS = os.environ["ALGORITHMS"]
 coreApiBase = os.environ["CORE_API_BASE"]
 # For Project API with ENV
 projectApiBase = os.environ["PROJECT_API_BASE"]
-# In case I need to make a change locally - for SeisTech
-# coreApiBase = "http://localhost:10022/"
-# For SeisTech - Project tab
-# coreApiBase = "http://localhost:10066/"
 
 # Generate the coreAPI token
 coreApiToken = "Bearer {}".format(
@@ -79,7 +75,7 @@ def handle_auth_error(ex):
 
 
 def get_user_id():
-    """We store Auth0 id to DB so no need extra step, just pull sub's value which is the unique user_id"""
+    """We store Auth0 id to DB so no need extra step, just pull sub value which is the unique user_id"""
     token = get_token_auth_header()
     unverified_claims = jwt.get_unverified_claims(token)
 
@@ -101,7 +97,7 @@ def write_request_details(endpoint, query_dict):
         E.g., Attribute -> Station
               value -> CCCC
     """
-    # Finding an user_id from the DB
+    # Finding an user_id from the token
     user_id = get_user_id()
 
     # Add to History table
@@ -133,29 +129,38 @@ def write_request_details(endpoint, query_dict):
     db.session.commit()
 
 
-# When we set up our DB properly, we will use this function but at the moment, we use existing Project API to call Project IDs
 def get_available_projects():
-    """Getting a list of projects name that are allocated to this user"""
-    # Finding an user_id from the DB
+    """Do cross-check for the projects.
+
+    It find available projects from the DB (Available_Project that contains user_id and project_name).
+    After we get all the existing projects from the Core API.
+    Then we compare [Available Projects] and [All the Existing Projects] to find the matching one.
+    """
+    # Finding an user_id from the token
     user_id = get_user_id()
 
     # Get all available projects that are allocated to this user.
-    available_project_ids = (
+    available_project_objs = (
         Project.query.join(available_projects_table)
-        .join(User)
-        .filter(
-            (available_projects_table.c.user_id == User.user_id)
-            & (available_projects_table.c.project_id == Project.project_id)
-        )
+        .filter((available_projects_table.c.user_id == user_id))
         .all()
     )
 
+    # Create a list that contains Project Name from DB (Allowed Projects)
     available_projects = []
 
-    for project in available_project_ids:
+    for project in available_project_objs:
         available_projects.append(project.project_name)
 
-    return jsonify({"project_ids": available_projects})
+    # Get a list of Project Name from Project API (Available Projects)
+    all_projects = proxy_to_api(request, "api/project/ids/get", "GET").get_json()[
+        "project_ids"
+    ]
+
+    # Compare Allowed Projects and Available Projects and get the one that are matching
+    cross_checked_projects = list(set(available_projects).intersection(all_projects))
+
+    return jsonify({"project_ids": cross_checked_projects})
 
 
 def proxy_to_api(
