@@ -21,3 +21,4 @@ middleware/middleware.egg-info/
 
 # DB stored externally
 /database/*/db_data
+/database/dev/docker-compose.yml
