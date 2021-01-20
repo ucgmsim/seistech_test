@@ -64,6 +64,13 @@ class AuthError(Exception):
         self.status_code = status_code
 
 
+@app.route("/user", methods=["GET"])
+def user_get():
+    token = get_token_auth_header()
+    unverified_claims = jwt.get_unverified_claims(token)
+    return jsonify({"permissions": unverified_claims["permissions"]})
+
+
 @app.errorhandler(AuthError)
 def handle_auth_error(ex):
     response = jsonify(ex.error)
