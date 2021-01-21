@@ -147,10 +147,7 @@ def get_available_projects():
     )
 
     # Create a list that contains Project IDs from DB (Allowed Projects)
-    available_projects = []
-
-    for project in available_project_objs:
-        available_projects.append(project.project_name)
+    available_projects = [project.project_name for project in available_project_objs]
 
     # Get a list of Project IDs & Project Names from Project API (Available Projects)
     # Form of {project_id: {name : project_name}}
@@ -158,12 +155,11 @@ def get_available_projects():
 
     # Create an dictionary in a form of if users have a permission for a certain project
     # {project_id: project_name}
-    all_projects = {}
-
-    for db_project_id in available_projects:
-        for api_project_id in all_projects_dicts:
-            if db_project_id == api_project_id:
-                all_projects[db_project_id] = all_projects_dicts[db_project_id]["name"]
+    all_projects = {
+        api_project_id: api_project_name["name"]
+        for api_project_id, api_project_name in all_projects_dicts.items()
+        if api_project_id in available_projects
+    }
 
     return jsonify(all_projects)
 
