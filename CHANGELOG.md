@@ -1,3 +1,16 @@
+## January 21, 2021
+
+### Cross-check Project IDs and Adopt the Project API's change - ([PR #35](https://github.com/ucgmsim/seistech_psha_frontend/pull/35))
+
+- For Project IDs in the Project tab, it is now doing cross-check in User DB's Available_Project table and Project API.
+- Instead of just a project id, API now sends more readable information for a user. E.g., Users now see Generic New Zealand Locations instead of gnzl.
+
+## January 20, 2021
+
+### Fix the Hazard's IM order issue - ([PR #35](https://github.com/ucgmsim/seistech_psha_frontend/pull/35))
+
+- Hazard's Hazard Curve IM list now shows in the right order.
+
 ## January 19, 2021
 
 ### Fix the Project's UHS plots and update Project/Hazard's UHS plotly.js label - ([PR #34](https://github.com/ucgmsim/seistech_psha_frontend/pull/34))
