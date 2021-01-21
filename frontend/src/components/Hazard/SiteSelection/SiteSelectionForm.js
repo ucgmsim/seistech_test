@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import { GlobalContext } from "context";
 import { useAuth0 } from "components/common/ReactAuth0SPA";
 import * as CONSTANTS from "constants/Constants";
-import { disableScrollOnNumInput, handleErrors } from "utils/Utils";
+import { disableScrollOnNumInput, handleErrors, sortIMs } from "utils/Utils";
 import TextField from "@material-ui/core/TextField";
 
 import "assets/style/HazardForms.css";
@@ -271,7 +271,7 @@ const SiteSelectionForm = () => {
             const IMData = await responseIM.json();
             const soilClass = await responseSoilClass.json();
 
-            setIMs(IMData["ims"]);
+            setIMs(sortIMs(IMData["ims"]));
             setSoilClass(soilClass["soil_class"]);
           })
           .catch((error) => {

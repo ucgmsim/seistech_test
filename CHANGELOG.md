@@ -1,3 +1,9 @@
+## January 20, 2021
+
+### HOTFIX - Unsorted Hazard's IM list - ([PR #35](https://github.com/ucgmsim/seistech_psha_frontend/pull/35))
+
+- Fix the unsorted Hazard's IM list. It follows a certain pattern to sort IMs.
+
 ## January 19, 2021
 
 ### Fix the Project's UHS plots and update Project/Hazard's UHS plotly.js label - ([PR #34](https://github.com/ucgmsim/seistech_psha_frontend/pull/34))
