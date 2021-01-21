@@ -132,8 +132,8 @@ def write_request_details(endpoint, query_dict):
 def get_available_projects():
     """Do cross-check for the projects.
 
-    It find available projects from the DB (Available_Project that contains user_id and project_name).
-    After we get all the existing projects from the Core API.
+    It finds available projects from the DB (Available_Project that contains user_id and project_name).
+    After we get all the existing projects from the Project API.
     Then we compare [Available Projects] and [All the Existing Projects] to find the matching one.
     """
     # Finding an user_id from the token
@@ -146,21 +146,26 @@ def get_available_projects():
         .all()
     )
 
-    # Create a list that contains Project Name from DB (Allowed Projects)
+    # Create a list that contains Project IDs from DB (Allowed Projects)
     available_projects = []
 
     for project in available_project_objs:
         available_projects.append(project.project_name)
 
     # Get a list of Project Name from Project API (Available Projects)
-    all_projects = proxy_to_api(request, "api/project/ids/get", "GET").get_json()[
-        "project_ids"
-    ]
+    # Form of {project_id: {name : project_name}}
+    all_projects_dicts = proxy_to_api(request, "api/project/ids/get", "GET").get_json()
 
-    # Compare Allowed Projects and Available Projects and get the one that are matching
-    cross_checked_projects = list(set(available_projects).intersection(all_projects))
+    # Create an object in a form of
+    # {project_id: project_name}
+    all_projects = {}
 
-    return jsonify({"project_ids": cross_checked_projects})
+    for db_project_id in available_projects:
+        for api_project_id in all_projects_dicts:
+            if db_project_id == api_project_id:
+                all_projects[db_project_id] = all_projects_dicts[db_project_id]["name"]
+
+    return jsonify(all_projects)
 
 
 def proxy_to_api(
