@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 import Select from "react-select";
 
-import { createSelectArray } from "utils/Utils";
+import { createSelectArray, createProjectIDArray } from "utils/Utils";
 
 const ProjectSelect = ({
   id,
@@ -9,12 +9,16 @@ const ProjectSelect = ({
   setSelect,
   options,
   placeholder = "Loading...",
+  isProjectID = false,
 }) => {
   const [localOptions, setLocalOptions] = useState([]);
 
   useEffect(() => {
     if (options !== undefined && options.length !== 0) {
-      let tempOptions = createSelectArray(options);
+      let tempOptions =
+        isProjectID === true
+          ? createProjectIDArray(options)
+          : createSelectArray(options);
 
       setLocalOptions(tempOptions);
     }

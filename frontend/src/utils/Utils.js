@@ -73,6 +73,19 @@ export const createSelectArray = (options) => {
 };
 
 /*
+  Create an special aray for react-select - Special case, value and label are different - Specially made for Project IDs
+*/
+export const createProjectIDArray = (options) => {
+  let selectOptions = [];
+
+  for (const [key, value] of Object.entries(options)) {
+    selectOptions.push({ value: key, label: value });
+  }
+
+  return selectOptions;
+};
+
+/*
   JS version of qcore IM Sort
 */
 

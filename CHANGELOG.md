@@ -1,3 +1,10 @@
+## January 21, 2021
+
+### Cross-check Project IDs and Adopt the Project API's change - ([PR #36](https://github.com/ucgmsim/seistech_psha_frontend/pull/36))
+
+- For Project IDs in the Project tab, it is now doing cross-check in User DB's Available_Project table and Project API.
+- Instead of just a project id, API now sends more readable information for a user. E.g., Users now see Generic New Zealand Locations instead of gnzl.
+
 ## January 20, 2021
 
 ### HOTFIX - Unsorted Hazard's IM list - ([PR #35](https://github.com/ucgmsim/seistech_psha_frontend/pull/35))

@@ -61,7 +61,7 @@ const SiteSelectionForm = () => {
           .then(handleErrors)
           .then(async (response) => {
             const responseData = await response.json();
-            setProjectIdOptions(responseData["project_ids"]);
+            setProjectIdOptions(responseData);
           })
           .catch((error) => {
             console.log(error);
@@ -216,6 +216,7 @@ const SiteSelectionForm = () => {
           value={localProjectId}
           setSelect={setLocalProjectId}
           options={projectIdOptions}
+          isProjectID={true}
         />
       </div>
 
