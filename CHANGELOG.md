@@ -7,9 +7,9 @@
 
 ## January 20, 2021
 
-### Fix the Hazard's IM order issue - ([PR #35](https://github.com/ucgmsim/seistech_psha_frontend/pull/35))
+### HOTFIX - Unsorted Hazard's IM list - ([PR #35](https://github.com/ucgmsim/seistech_psha_frontend/pull/35))
 
-- Hazard's Hazard Curve IM list now shows in the right order.
+- Fix the unsorted Hazard's IM list. It follows a certain pattern to sort IMs.
 
 ## January 19, 2021
 
