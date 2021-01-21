@@ -1,3 +1,9 @@
+## January 22, 2021
+
+### HOTFIX - Flask-SQLAlchemy isolation level config - ([PR #37](https://github.com/ucgmsim/seistech_psha_frontend/pull/37))
+
+- Isolation level was REPEATABLE-READ which can only access/read data that are there in DB before the server starts.
+
 ## January 21, 2021
 
 ### Cross-check Project IDs and Adopt the Project API's change - ([PR #36](https://github.com/ucgmsim/seistech_psha_frontend/pull/36))
