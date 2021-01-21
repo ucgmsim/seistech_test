@@ -152,11 +152,11 @@ def get_available_projects():
     for project in available_project_objs:
         available_projects.append(project.project_name)
 
-    # Get a list of Project Name from Project API (Available Projects)
+    # Get a list of Project IDs & Project Names from Project API (Available Projects)
     # Form of {project_id: {name : project_name}}
     all_projects_dicts = proxy_to_api(request, "api/project/ids/get", "GET").get_json()
 
-    # Create an object in a form of
+    # Create an dictionary in a form of if users have a permission for a certain project
     # {project_id: project_name}
     all_projects = {}
 
