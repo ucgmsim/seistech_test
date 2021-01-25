@@ -57,13 +57,13 @@ const HazardEnsemblePlot = ({
             name: "Total",
             line: { color: "blue" },
           },
-          // NZ code
+          // NZS1170.5
           {
             x: plotData.nzCode.values,
             y: plotData.nzCode.index,
             type: "scatter",
             mode: "lines+markers",
-            name: "NZ code",
+            name: "NZS1170.5",
             marker: { symbol: "triangle-up" },
             line: { color: "black", dash: "dot" },
             visible: showNZCode,

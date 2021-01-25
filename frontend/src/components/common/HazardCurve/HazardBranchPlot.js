@@ -32,9 +32,6 @@ const HazardBranchPlot = ({
       });
     }
 
-    // For NZ Code
-    const nzCode = getPlotData(nzCodeData);
-
     // Add the scatter object for the ensemble total
     const ensHazard = hazardData["ensemble_hazard"];
     const ensTotalData = getPlotData(ensHazard["total"]);
@@ -44,8 +41,11 @@ const HazardBranchPlot = ({
       type: "scatter",
       mode: "lines",
       line: { color: "black" },
-      name: "Ensemble total",
+      name: "Ensemble mean",
     });
+
+    // For NZS1170.5
+    const nzCode = getPlotData(nzCodeData);
 
     scatterObjs.push(
       // NZ Code
@@ -54,7 +54,7 @@ const HazardBranchPlot = ({
         y: nzCode.index,
         type: "scatter",
         mode: "lines+markers",
-        name: "NZ code",
+        name: "NZS1170.5",
         marker: { symbol: "triangle-up" },
         line: { color: "black", dash: "dot" },
         visible: showNZCode,
