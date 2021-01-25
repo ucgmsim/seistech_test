@@ -26,6 +26,7 @@ const IMSelect = ({ title, setIM }) => {
         onChange={(e) => setIM(e.value)}
         options={localIMs}
         isDisabled={IMs.length === 0}
+        menuPlacement="auto"
       />
     </Fragment>
   );

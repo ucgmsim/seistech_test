@@ -440,6 +440,7 @@ const GmsForm = () => {
               return e.value !== selectedIMType;
             })}
             isDisabled={IMVectors.length === 0}
+            menuPlacement="auto"
           />
         </div>
 
@@ -586,6 +587,7 @@ const GmsForm = () => {
                     onChange={setLocalDatabase}
                     defaultValue={localDatabase}
                     options={availableDatabases}
+                    menuPlacement="auto"
                   />
                 </div>
 

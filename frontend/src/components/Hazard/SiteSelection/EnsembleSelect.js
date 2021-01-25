@@ -70,6 +70,7 @@ const EnsembleSelect = () => {
         options={optionItems}
         isDisabled={ensembleIds.length === 0 || CONSTANTS.ENV === "EA"}
         isSearchable={false}
+        menuPlacement="auto"
       />
     </Fragment>
   );

@@ -33,6 +33,7 @@ const ProjectSelect = ({
         onChange={(e) => setSelect(e.value)}
         options={localOptions}
         isDisabled={localOptions.length === 0}
+        menuPlacement="auto"
       />
     </Fragment>
   );

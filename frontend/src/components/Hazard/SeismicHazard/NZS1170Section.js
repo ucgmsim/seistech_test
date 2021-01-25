@@ -375,6 +375,7 @@ const NZS1170Section = () => {
               onChange={setLocalSelectedSoilClass}
               options={localSoilClasses}
               isDisabled={localSoilClasses.length === 0}
+              menuPlacement="auto"
             />
           </div>
         </div>

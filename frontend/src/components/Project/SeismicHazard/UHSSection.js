@@ -57,6 +57,7 @@ const UHSSection = () => {
             onChange={(value) => setLocalRPs(value || [])}
             options={options}
             isDisabled={options.length === 0}
+            menuPlacement="auto"
           />
         </div>
       </form>
