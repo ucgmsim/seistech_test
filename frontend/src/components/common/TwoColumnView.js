@@ -8,7 +8,7 @@ class TwoColumnView extends React.Component {
 
     return (
       <Fragment>
-        <div className="hazard-inner">
+        {/* <div className="hazard-inner">
           <div className="row two-column-row">
             <div className="col-3 controlGroup form-panel">
               <div>
@@ -19,6 +19,17 @@ class TwoColumnView extends React.Component {
               <div className="two-column-view-right-pane">
                 <Right />
               </div>
+            </div>
+          </div>
+        </div> */}
+
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-3 control-group">
+              <Left />
+            </div>
+            <div className="col-lg-9 control-group">
+              <Right />
             </div>
           </div>
         </div>
