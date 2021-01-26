@@ -25,7 +25,7 @@ const HazardViewerUhs = () => {
 
   const [downloadToken, setDownloadToken] = useState("");
 
-  const [hoverStatus, setHoverStatus] = useState("text");
+  const [toggleText, setToggleText] = useState("Toggle off");
 
   const {
     projectId,
@@ -65,7 +65,9 @@ const HazardViewerUhs = () => {
   };
 
   const updateHoverStatus = () => {
-    hoverStatus === "text" ? setHoverStatus("none") : setHoverStatus("text");
+    toggleText === "Toggle off"
+      ? setToggleText("Toggle on")
+      : setToggleText("Toggle off");
   };
 
   /* 
@@ -179,13 +181,17 @@ const HazardViewerUhs = () => {
                 uhsData={uhsData}
                 nzCodeData={uhsNZCodeData}
                 extra={extraInfo}
-                hoverStatus={hoverStatus}
               />
             </Fragment>
           )}
       </div>
 
-      <button onClick={() => updateHoverStatus()}>Click me to update!</button>
+      <button
+        className="btn btn-info project-uhs-toggle-btn"
+        onClick={() => updateHoverStatus()}
+      >
+        {toggleText}
+      </button>
 
       <DownloadButton
         disabled={!showPlotUHS}

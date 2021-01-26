@@ -9,7 +9,8 @@ button.download-button {
   right: 0px;
 }
 
-button.hazard-disagg-contrib-button {
+button.hazard-disagg-contrib-button,
+button.project-uhs-toggle-btn {
   position: absolute;
   top: 0px;
   right: 180px;
