@@ -11,7 +11,13 @@ import ErrorMessage from "components/common/ErrorMessage";
 
 import "assets/style/UHSPlot.css";
 
-const UHSPlot = ({ uhsData, nzCodeData, showNZCode = true, extra }) => {
+const UHSPlot = ({
+  uhsData,
+  nzCodeData,
+  showNZCode = true,
+  extra,
+  hoverStatus,
+}) => {
   if (uhsData !== null && !uhsData.hasOwnProperty("error")) {
     /* 
       if the string(displayRP parameter) contains `.` means it's in float/decimal that needs to display in 4SF for RP, 3SF for rate
@@ -87,7 +93,7 @@ const UHSPlot = ({ uhsData, nzCodeData, showNZCode = true, extra }) => {
           showlegend: nzCodeDataCounter === 0 ? true : false,
           // instead of every value, we only display y value when hover
           text: curPlotData.values,
-          hoverinfo: "text",
+          hoverinfo: hoverStatus,
         });
         nzCodeDataCounter += 1;
       }
@@ -109,7 +115,7 @@ const UHSPlot = ({ uhsData, nzCodeData, showNZCode = true, extra }) => {
         showlegend: dataCounter === 0 ? true : false,
         // instead of every value, we only display y value when hover
         text: curPlotData.values,
-        hoverinfo: "text",
+        hoverinfo: hoverStatus,
       });
       dataCounter += 1;
     }

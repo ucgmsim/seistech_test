@@ -25,6 +25,8 @@ const HazardViewerUhs = () => {
 
   const [downloadToken, setDownloadToken] = useState("");
 
+  const [hoverStatus, setHoverStatus] = useState("text");
+
   const {
     projectId,
     projectLocation,
@@ -60,6 +62,10 @@ const HazardViewerUhs = () => {
     location: projectLocation,
     vs30: projectVS30,
     selectedRPs: getSelectedRP(),
+  };
+
+  const updateHoverStatus = () => {
+    hoverStatus === "text" ? setHoverStatus("none") : setHoverStatus("text");
   };
 
   /* 
@@ -173,10 +179,13 @@ const HazardViewerUhs = () => {
                 uhsData={uhsData}
                 nzCodeData={uhsNZCodeData}
                 extra={extraInfo}
+                hoverStatus={hoverStatus}
               />
             </Fragment>
           )}
       </div>
+
+      <button onClick={() => updateHoverStatus()}>Click me to update!</button>
 
       <DownloadButton
         disabled={!showPlotUHS}
