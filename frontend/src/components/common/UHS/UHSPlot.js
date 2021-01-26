@@ -68,6 +68,15 @@ const UHSPlot = ({
       return newLabel;
     };
 
+    const onClickDisplayRP = (data) => {
+      console.log(data);
+      let pts = "";
+      for (let i = 0; i < data.points.length; i++) {
+        pts = `x = ${data.points[i].x} + y = ${data.points[i].y}`;
+      }
+      alert(pts);
+    };
+
     // Create NZ code UHS scatter objs
     const scatterObjs = [];
     let nzCodeDataCounter = 0;
@@ -155,6 +164,7 @@ const UHSPlot = ({
                 : `UHS_Plot_project_id_${extra.id}_location_${extra.location}_vs30_${extra.vs30}`,
           },
         }}
+        onClick={(scatterObjs) => onClickDisplayRP(scatterObjs)}
       />
     );
   }
