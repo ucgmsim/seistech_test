@@ -85,6 +85,9 @@ const UHSPlot = ({ uhsData, nzCodeData, showNZCode = true, extra }) => {
           visible: showNZCode,
           legendgroup: "NZS1170.5",
           showlegend: nzCodeDataCounter === 0 ? true : false,
+          // instead of every value, we only display y value when hover
+          text: curPlotData.values,
+          hoverinfo: "text",
         });
         nzCodeDataCounter += 1;
       }
@@ -104,6 +107,9 @@ const UHSPlot = ({ uhsData, nzCodeData, showNZCode = true, extra }) => {
         name: NZCodeLegend(false),
         legendgroup: "sites-specific",
         showlegend: dataCounter === 0 ? true : false,
+        // instead of every value, we only display y value when hover
+        text: curPlotData.values,
+        hoverinfo: "text",
       });
       dataCounter += 1;
     }
@@ -126,6 +132,8 @@ const UHSPlot = ({ uhsData, nzCodeData, showNZCode = true, extra }) => {
             xanchor: "right",
             y: 1,
           },
+          // hovermode to decide how hover works, currently only display the value to the closest point
+          hovermode: "closest",
         }}
         useResizeHandler={true}
         config={{
