@@ -86,6 +86,19 @@ export const createProjectIDArray = (options) => {
 };
 
 /*
+  Check the IM list and decide to disable UHS input field.
+  No pSA in IM(return true), we disable the UHS
+*/
+export const checkIMwithPSA = (givenIMList) => {
+  for (let i = 0; i < givenIMList.length; i++) {
+    if (givenIMList[i].includes("pSA")) {
+      return false;
+    }
+  }
+  return true;
+};
+
+/*
   JS version of qcore IM Sort
 */
 
