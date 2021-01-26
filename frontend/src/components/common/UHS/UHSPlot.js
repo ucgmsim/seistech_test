@@ -23,7 +23,7 @@ const UHSPlot = ({ uhsData, nzCodeData, showNZCode = true, extra }) => {
      */
     const createLabel = (displayRP, isNZCode = false) => {
       // Depends on the isNZCode status, newLabel starts with NZ Code - or an empty string
-      let newLabel = isNZCode === true ? "" : "NZ Code - ";
+      let newLabel = isNZCode === true ? "NZS1170.5 -  " : "";
 
       if (displayRP.indexOf(".") === -1) {
         newLabel += `RP ${Number(displayRP)} - ${renderSigfigs(
@@ -42,8 +42,30 @@ const UHSPlot = ({ uhsData, nzCodeData, showNZCode = true, extra }) => {
 
       return newLabel;
     };
+
+    const NZCodeLegend = (isNZCode) => {
+      const selectedRPs = extra.selectedRPs;
+      // Sort the selected RP array first
+      selectedRPs.sort((a, b) => a - b);
+      // Based on a sorted array, add each RP
+      // Depends on the isNZCode status, newLabel starts with NZ Code - or an empty string
+      let newLabel =
+        isNZCode === true ? "NZS1170.5 [RP = " : "Sites-specific [RP = ";
+
+      for (let i = 0; i < selectedRPs.length; i++) {
+        newLabel += `${selectedRPs[i].toString()}, `;
+      }
+
+      // Remove last two character (, ) and add closing bracket
+      newLabel = newLabel.slice(0, -2) + "]";
+
+      return newLabel;
+    };
+
     // Create NZ code UHS scatter objs
     const scatterObjs = [];
+    let nzCodeDataCounter = 0;
+
     for (let [curExcd, curData] of Object.entries(nzCodeData)) {
       // The object contains the value of NaN, so we dont plot
       if (Object.values(curData).includes("nan")) {
@@ -59,15 +81,17 @@ const UHSPlot = ({ uhsData, nzCodeData, showNZCode = true, extra }) => {
           type: "scatter",
           mode: "lines",
           line: { color: "black" },
-          name: createLabel(displayRP, true),
-          text: createLabel(displayRP, true),
+          name: NZCodeLegend(true),
           visible: showNZCode,
-          hoverinfo: "text",
+          legendgroup: "NZS1170.5",
+          showlegend: nzCodeDataCounter === 0 ? true : false,
         });
+        nzCodeDataCounter += 1;
       }
     }
 
     // UHS scatter objs
+    let dataCounter = 0;
     for (let [curExcd, curData] of Object.entries(uhsData)) {
       let curPlotData = getPlotData(curData);
       let displayRP = (1 / Number(curExcd)).toString();
@@ -77,10 +101,11 @@ const UHSPlot = ({ uhsData, nzCodeData, showNZCode = true, extra }) => {
         type: "scatter",
         mode: "lines",
         line: { color: "blue" },
-        name: createLabel(displayRP),
-        text: createLabel(displayRP),
-        hoverinfo: "text",
+        name: NZCodeLegend(false),
+        legendgroup: "sites-specific",
+        showlegend: dataCounter === 0 ? true : false,
       });
+      dataCounter += 1;
     }
 
     return (
@@ -96,6 +121,11 @@ const UHSPlot = ({ uhsData, nzCodeData, showNZCode = true, extra }) => {
           },
           autosize: true,
           margin: PLOT_MARGIN,
+          legend: {
+            x: 1,
+            xanchor: "right",
+            y: 1,
+          },
         }}
         useResizeHandler={true}
         config={{

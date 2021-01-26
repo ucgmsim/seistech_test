@@ -36,13 +36,6 @@ const HazardViewerUhs = () => {
     setProjectUHSGetClick,
   } = useContext(GlobalContext);
 
-  const extraInfo = {
-    from: "project",
-    id: projectId,
-    location: projectLocation,
-    vs30: projectVS30,
-  };
-
   /*
     Reset tabs if users change project id, project location or project vs30
   */
@@ -59,6 +52,14 @@ const HazardViewerUhs = () => {
     projectSelectedUHSRP.forEach((RP) => tempArray.push(RP.value));
 
     return tempArray;
+  };
+
+  const extraInfo = {
+    from: "project",
+    id: projectId,
+    location: projectLocation,
+    vs30: projectVS30,
+    selectedRPs: getSelectedRP(),
   };
 
   /* 
