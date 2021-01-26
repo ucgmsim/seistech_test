@@ -86,7 +86,7 @@ export const createProjectIDArray = (options) => {
 };
 
 /*
-  Check the IM list and decide to disable UHS input field.
+  Check the IM list and decide to disable the UHS input field.
   No pSA in IM(return true), we disable the UHS
 */
 export const checkIMwithPSA = (givenIMList) => {
