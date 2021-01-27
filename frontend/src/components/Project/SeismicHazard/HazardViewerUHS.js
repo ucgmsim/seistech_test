@@ -1,4 +1,8 @@
 import React, { Fragment, useEffect, useState, useContext } from "react";
+import FormGroup from "@material-ui/core/FormGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Switch from "@material-ui/core/Switch";
+
 import { useAuth0 } from "components/common/ReactAuth0SPA";
 import * as CONSTANTS from "constants/Constants";
 import { GlobalContext } from "context";
@@ -9,9 +13,21 @@ import DownloadButton from "components/common/DownloadButton";
 import GuideMessage from "components/common/GuideMessage";
 import ErrorMessage from "components/common/ErrorMessage";
 import { handleErrors } from "utils/Utils";
+import Label from "reactstrap/lib/Label";
 
 const HazardViewerUhs = () => {
   const { getTokenSilently } = useAuth0();
+
+  const {
+    projectId,
+    projectLocation,
+    projectVS30,
+    projectLocationCode,
+    projectSelectedUHSRP,
+    setProjectSelectedUHSRP,
+    projectUHSGetClick,
+    setProjectUHSGetClick,
+  } = useContext(GlobalContext);
 
   const [uhsData, setUHSData] = useState(null);
   const [uhsNZCodeData, setUHSNZCodeData] = useState(null);
@@ -25,18 +41,7 @@ const HazardViewerUhs = () => {
 
   const [downloadToken, setDownloadToken] = useState("");
 
-  const [toggleText, setToggleText] = useState("Toggle off");
-
-  const {
-    projectId,
-    projectLocation,
-    projectVS30,
-    projectLocationCode,
-    projectSelectedUHSRP,
-    setProjectSelectedUHSRP,
-    projectUHSGetClick,
-    setProjectUHSGetClick,
-  } = useContext(GlobalContext);
+  const [toggleState, setToggleState] = useState(true);
 
   /*
     Reset tabs if users change project id, project location or project vs30
@@ -62,12 +67,6 @@ const HazardViewerUhs = () => {
     location: projectLocation,
     vs30: projectVS30,
     selectedRPs: getSelectedRP(),
-  };
-
-  const updateHoverStatus = () => {
-    toggleText === "Toggle off"
-      ? setToggleText("Toggle on")
-      : setToggleText("Toggle off");
   };
 
   /* 
@@ -181,17 +180,26 @@ const HazardViewerUhs = () => {
                 uhsData={uhsData}
                 nzCodeData={uhsNZCodeData}
                 extra={extraInfo}
+                hoverStatus={toggleState}
               />
             </Fragment>
           )}
       </div>
 
-      <button
-        className="btn btn-info project-uhs-toggle-btn"
-        onClick={() => updateHoverStatus()}
-      >
-        {toggleText}
-      </button>
+      <FormGroup className="project-uhs-toggle-btn">
+        <FormControlLabel
+          control={
+            <Switch
+              checked={toggleState}
+              onChange={(e) => setToggleState(e.target.checked)}
+              color="primary"
+              name="hoverToggle"
+            />
+          }
+          label="Hover detail"
+          labelPlacement="start"
+        />
+      </FormGroup>
 
       <DownloadButton
         disabled={!showPlotUHS}

@@ -102,7 +102,9 @@ const UHSPlot = ({
           showlegend: nzCodeDataCounter === 0 ? true : false,
           // instead of every value, we only display y value when hover
           text: curPlotData.values,
-          hoverinfo: hoverStatus,
+          hoverinfo: hoverStatus === false ? "none" : "y",
+          hovertemplate:
+            hoverStatus === true ? `RP ${displayRP}: %{y}<extra></extra>` : "",
         });
         nzCodeDataCounter += 1;
       }
@@ -124,7 +126,9 @@ const UHSPlot = ({
         showlegend: dataCounter === 0 ? true : false,
         // instead of every value, we only display y value when hover
         text: curPlotData.values,
-        hoverinfo: hoverStatus,
+        hoverinfo: hoverStatus === false ? "none" : "y",
+        hovertemplate:
+          hoverStatus === true ? `RP ${displayRP}: %{y}<extra></extra>` : "",
       });
       dataCounter += 1;
     }

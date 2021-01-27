@@ -10,7 +10,7 @@ button.download-button {
 }
 
 button.hazard-disagg-contrib-button,
-button.project-uhs-toggle-btn {
+.project-uhs-toggle-btn {
   position: absolute;
   top: 0px;
   right: 180px;
