@@ -80,8 +80,8 @@ export const UHS_TABLE_MESSAGE = "No rates added";
   For Site Selection
 */
 
-export const DEFAULT_LAT = "" || process.env.REACT_APP_DEFAULT_LAT;
-export const DEFAULT_LNG = "" || process.env.REACT_APP_DEFAULT_LNG;
+export const DEFAULT_LAT = process.env.REACT_APP_DEFAULT_LAT || "";
+export const DEFAULT_LNG = process.env.REACT_APP_DEFAULT_LNG || "";
 export const ENV = process.env.REACT_APP_ENV;
 
 export const SITE_SELECTION_VS30_TITLE = "VS30";

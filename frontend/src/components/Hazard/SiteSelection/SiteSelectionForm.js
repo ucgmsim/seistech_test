@@ -325,16 +325,12 @@ const SiteSelectionForm = () => {
               onChange={(e) => setttingLocalLat(e.target.value)}
               placeholder="[-47.4, -34.3]"
               error={
-                localLat === "" ||
-                localLat === undefined ||
-                (localLat >= -47.4 && localLat <= -34.3)
+                localLat === "" || (localLat >= -47.4 && localLat <= -34.3)
                   ? false
                   : true
               }
               helperText={
-                localLat === "" ||
-                localLat === undefined ||
-                (localLat >= -47.4 && localLat <= -34.3)
+                localLat === "" || (localLat >= -47.4 && localLat <= -34.3)
                   ? " "
                   : "Latitude must be within the range of NZ."
               }
@@ -363,16 +359,12 @@ const SiteSelectionForm = () => {
                 onChange={(e) => settingLocalLng(e.target.value)}
                 placeholder="[165, 180]"
                 error={
-                  localLng === "" ||
-                  localLng === undefined ||
-                  (localLng >= 165 && localLng <= 180)
+                  localLng === "" || (localLng >= 165 && localLng <= 180)
                     ? false
                     : true
                 }
                 helperText={
-                  localLng === "" ||
-                  localLng === undefined ||
-                  (localLng >= 165 && localLng <= 180)
+                  localLng === "" || (localLng >= 165 && localLng <= 180)
                     ? " "
                     : "Longitude must be within the range of NZ."
                 }
