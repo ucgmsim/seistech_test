@@ -10,7 +10,7 @@ import GuideMessage from "components/common/GuideMessage";
 import ErrorMessage from "components/common/ErrorMessage";
 import { handleErrors } from "utils/Utils";
 
-const HazardViewerUhs = () => {
+const HazardViewerUHS = () => {
   const { getTokenSilently } = useAuth0();
 
   const [uhsData, setUHSData] = useState(null);
@@ -194,4 +194,4 @@ const HazardViewerUhs = () => {
   );
 };
 
-export default HazardViewerUhs;
+export default HazardViewerUHS;

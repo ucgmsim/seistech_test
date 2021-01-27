@@ -5,7 +5,7 @@ import * as CONSTANTS from "constants/Constants";
 import { disableScrollOnNumInput } from "utils/Utils";
 import TextField from "@material-ui/core/TextField";
 
-const HazardCurveSection = () => {
+const DisaggregationSection = () => {
   const { setDisaggComputeClick, selectedIM, setDisaggAnnualProb } = useContext(
     GlobalContext
   );
@@ -85,4 +85,4 @@ const HazardCurveSection = () => {
   );
 };
 
-export default HazardCurveSection;
+export default DisaggregationSection;
