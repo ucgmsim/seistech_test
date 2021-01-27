@@ -3,7 +3,11 @@ import * as CONSTANTS from "constants/Constants";
 import { v4 as uuidv4 } from "uuid";
 import { GlobalContext } from "context";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { renderSigfigs, disableScrollOnNumInput } from "utils/Utils";
+import {
+  renderSigfigs,
+  disableScrollOnNumInput,
+  checkIMwithPSA,
+} from "utils/Utils";
 import TextField from "@material-ui/core/TextField";
 
 const UHSSection = () => {
@@ -15,6 +19,7 @@ const UHSSection = () => {
     uhsTableDeleteRow,
     showUHSNZCode,
     setShowUHSNZCode,
+    IMs,
   } = useContext(GlobalContext);
 
   const [disableButtonUHSCompute, setDisableButtonUHSCompute] = useState(true);
@@ -109,6 +114,7 @@ const UHSSection = () => {
                 ? " "
                 : "Annual Exceedance Rate must be between 0 and 1. (0 < X < 1)"
             }
+            disabled={checkIMwithPSA(IMs)}
           />
         </div>
         <div className="form-group">
@@ -145,7 +151,7 @@ const UHSSection = () => {
           id="uhs-update-plot"
           type="button"
           className="btn btn-primary mt-2"
-          disabled={disableButtonUHSCompute}
+          disabled={disableButtonUHSCompute || checkIMwithPSA(IMs)}
           onClick={() => {
             setUHSComputeClick(uuidv4());
           }}
