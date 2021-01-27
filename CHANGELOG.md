@@ -1,3 +1,9 @@
+## January 27, 2021
+
+### Filter UHS section based on given IM list - ([PR #38](https://github.com/ucgmsim/seistech_psha_frontend/pull/38))
+
+- If IM does not have one starts with `pSA`, the UHS section will be disabled.
+
 ## January 22, 2021
 
 ### HOTFIX - Flask-SQLAlchemy isolation level config - ([PR #37](https://github.com/ucgmsim/seistech_psha_frontend/pull/37))
