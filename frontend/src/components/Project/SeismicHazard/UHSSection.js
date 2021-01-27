@@ -3,7 +3,7 @@ import React, { useState, useContext, useEffect, Fragment } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { GlobalContext } from "context";
 
-import { createSelectArray } from "utils/Utils";
+import { createSelectArray, checkIMwithPSA } from "utils/Utils";
 
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
@@ -14,6 +14,7 @@ const UHSSection = () => {
     projectSelectedUHSRP,
     setProjectSelectedUHSRP,
     setProjectUHSGetClick,
+    projectIMs,
   } = useContext(GlobalContext);
 
   const animatedComponents = makeAnimated();
@@ -58,6 +59,7 @@ const UHSSection = () => {
             options={options}
             isDisabled={options.length === 0}
             menuPlacement="auto"
+            disabled={checkIMwithPSA(projectIMs)}
           />
         </div>
       </form>
@@ -67,7 +69,7 @@ const UHSSection = () => {
           id="uhs-update-plot"
           type="button"
           className="btn btn-primary mt-2"
-          disabled={localRPs.length === 0}
+          disabled={localRPs.length === 0 || checkIMwithPSA(projectIMs)}
           onClick={() => {
             getUHS();
           }}
