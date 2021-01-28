@@ -56,7 +56,7 @@ const UHSPlot = ({
       // Based on a sorted array, add each RP
       // Depends on the isNZCode status, newLabel starts with NZ Code - or an empty string
       let newLabel =
-        isNZCode === true ? "NZS1170.5 [RP = " : "Sites-specific [RP = ";
+        isNZCode === true ? "NZS1170.5 [RP = " : "Site-specific [RP = ";
 
       for (let i = 0; i < selectedRPs.length; i++) {
         newLabel += `${selectedRPs[i].toString()}, `;
@@ -66,15 +66,6 @@ const UHSPlot = ({
       newLabel = newLabel.slice(0, -2) + "]";
 
       return newLabel;
-    };
-
-    const onClickDisplayRP = (data) => {
-      console.log(data);
-      let pts = "";
-      for (let i = 0; i < data.points.length; i++) {
-        pts = `x = ${data.points[i].x} + y = ${data.points[i].y}`;
-      }
-      alert(pts);
     };
 
     // Create NZ code UHS scatter objs
@@ -104,7 +95,11 @@ const UHSPlot = ({
           text: curPlotData.values,
           hoverinfo: hoverStatus === false ? "none" : "y",
           hovertemplate:
-            hoverStatus === true ? `RP ${displayRP}: %{y}<extra></extra>` : "",
+            hoverStatus === true
+              ? `<b>RP ${displayRP}</b><br><br>` +
+                "%{xaxis.title.text}: %{x}<br>" +
+                "%{yaxis.title.text}: %{y}<extra></extra>"
+              : "",
         });
         nzCodeDataCounter += 1;
       }
@@ -128,7 +123,11 @@ const UHSPlot = ({
         text: curPlotData.values,
         hoverinfo: hoverStatus === false ? "none" : "y",
         hovertemplate:
-          hoverStatus === true ? `RP ${displayRP}: %{y}<extra></extra>` : "",
+          hoverStatus === true
+            ? `<b>RP ${displayRP}</b><br><br>` +
+              "%{xaxis.title.text}: %{x}<br>" +
+              "%{yaxis.title.text}: %{y}<extra></extra>"
+            : "",
       });
       dataCounter += 1;
     }
@@ -153,6 +152,7 @@ const UHSPlot = ({
           },
           // hovermode to decide how hover works, currently only display the value to the closest point
           hovermode: "closest",
+          hoverlabel: { bgcolor: "#FFF" },
         }}
         useResizeHandler={true}
         config={{
@@ -168,7 +168,6 @@ const UHSPlot = ({
                 : `UHS_Plot_project_id_${extra.id}_location_${extra.location}_vs30_${extra.vs30}`,
           },
         }}
-        onClick={(scatterObjs) => onClickDisplayRP(scatterObjs)}
       />
     );
   }
