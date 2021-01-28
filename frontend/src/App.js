@@ -44,7 +44,7 @@ const App = () => {
 
                 <PrivateRoute path="/project" exact component={Project} />
 
-                <PrivateRoute path="/profile" component={Profile} />
+                <Route path="/profile" component={Profile} />
               </Switch>
             </div>
           </div>
