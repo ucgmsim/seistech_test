@@ -20,6 +20,7 @@ const HazardBranchPlot = ({
     const branchHazard = hazardData["branches_hazard"];
     // // Create the scatter objects for the branch totals
     const scatterObjs = [];
+    let dataCounter = 0;
     for (let [curName, curData] of Object.entries(branchHazard)) {
       let curPlotData = getPlotData(curData["total"]);
       scatterObjs.push({
@@ -28,8 +29,15 @@ const HazardBranchPlot = ({
         type: "scatter",
         mode: "lines",
         line: { color: "gray", width: 0.5 },
-        name: curName,
+        name: "Branches",
+        legendgroup: "branches",
+        showlegend: dataCounter === 0 ? true : false,
+        hovertemplate:
+          `<b>${curName}</b><br><br>` +
+          "%{xaxis.title.text}: %{x}<br>" +
+          "%{yaxis.title.text}: %{y}<extra></extra>",
       });
+      dataCounter += 1;
     }
 
     // Add the scatter object for the ensemble total
@@ -42,13 +50,17 @@ const HazardBranchPlot = ({
       mode: "lines",
       line: { color: "black" },
       name: "Ensemble mean",
+      hovertemplate:
+        "<b>Ensemble mean</b><br><br>" +
+        "%{xaxis.title.text}: %{x}<br>" +
+        "%{yaxis.title.text}: %{y}<extra></extra>",
     });
 
     // For NZS1170.5
     const nzCode = getPlotData(nzCodeData);
 
     scatterObjs.push(
-      // NZ Code
+      // NZS1170.5
       {
         x: nzCode.values,
         y: nzCode.index,
@@ -58,6 +70,10 @@ const HazardBranchPlot = ({
         marker: { symbol: "triangle-up" },
         line: { color: "black", dash: "dot" },
         visible: showNZCode,
+        hovertemplate:
+          "<b>NZS1170.5</b><br><br>" +
+          "%{xaxis.title.text}: %{x}<br>" +
+          "%{yaxis.title.text}: %{y}<extra></extra>",
       }
     );
     return (
@@ -80,6 +96,13 @@ const HazardBranchPlot = ({
           },
           autosize: true,
           margin: PLOT_MARGIN,
+          legend: {
+            x: 1,
+            xanchor: "right",
+            y: 1,
+          },
+          hovermode: "closest",
+          hoverlabel: { bgcolor: "#FFF" },
         }}
         useResizeHandler={true}
         config={{
