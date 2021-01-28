@@ -11,6 +11,15 @@ export const disableScrollOnNumInput = () => {
   $("form").on("blur", "input[type=number]", (e) => {
     $(e.currentTarget).off("wheel.disableScroll");
   });
+
+  // Disable the up and down arrow button changing values
+  $("form").on("focus", "input[type=number]", (e) => {
+    $(e.currentTarget).on("keydown", (e) => {
+      if (e.which === 38 || e.which === 40) {
+        e.preventDefault();
+      }
+    });
+  });
 };
 
 export const handleErrors = (response) => {

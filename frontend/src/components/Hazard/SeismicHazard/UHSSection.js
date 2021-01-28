@@ -11,6 +11,8 @@ import {
 import TextField from "@material-ui/core/TextField";
 
 const UHSSection = () => {
+  disableScrollOnNumInput();
+
   const {
     uhsRateTable,
     setUHSComputeClick,
@@ -27,8 +29,6 @@ const UHSSection = () => {
   const [uhsAnnualProb, setUHSAnnualProb] = useState(
     CONSTANTS.DEFAULT_ANNUAL_PROB
   );
-
-  disableScrollOnNumInput();
 
   const validExdRate = () => {
     return uhsAnnualProb > 0 && uhsAnnualProb < 1;

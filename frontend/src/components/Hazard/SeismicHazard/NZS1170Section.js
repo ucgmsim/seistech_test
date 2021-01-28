@@ -6,11 +6,13 @@ import * as CONSTANTS from "constants/Constants";
 import { useAuth0 } from "components/common/ReactAuth0SPA";
 
 import "assets/style/NZS1170Section.css";
-import { handleErrors } from "utils/Utils";
+import { handleErrors, disableScrollOnNumInput } from "utils/Utils";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const NZS1170Section = () => {
+  disableScrollOnNumInput();
+
   const { getTokenSilently } = useAuth0();
 
   const {

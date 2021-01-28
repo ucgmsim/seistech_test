@@ -5,13 +5,13 @@ import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 
 const SiteConditions = () => {
+  disableScrollOnNumInput();
+
   const [localVS30, setLocalVS30] = useState("");
 
   const { vs30, setVS30, defaultVS30, locationSetClick } = useContext(
     GlobalContext
   );
-
-  disableScrollOnNumInput();
 
   const onClickDefaultVS30 = () => {
     setVS30(defaultVS30);

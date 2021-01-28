@@ -6,6 +6,8 @@ import { disableScrollOnNumInput } from "utils/Utils";
 import TextField from "@material-ui/core/TextField";
 
 const DisaggregationSection = () => {
+  disableScrollOnNumInput();
+
   const { setDisaggComputeClick, selectedIM, setDisaggAnnualProb } = useContext(
     GlobalContext
   );
@@ -15,8 +17,6 @@ const DisaggregationSection = () => {
   const [localExceedance, setLocalExceedance] = useState(
     CONSTANTS.DEFAULT_ANNUAL_PROB
   );
-
-  disableScrollOnNumInput();
 
   const validExdRate = () => {
     return selectedIM !== null && localExceedance > 0 && localExceedance < 1;

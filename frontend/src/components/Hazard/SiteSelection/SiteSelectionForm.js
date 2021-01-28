@@ -15,6 +15,8 @@ import SiteConditions from "./SiteSelectionVS30SiteConditions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const SiteSelectionForm = () => {
+  disableScrollOnNumInput();
+
   const { getTokenSilently } = useAuth0();
 
   const {
@@ -70,8 +72,6 @@ const SiteSelectionForm = () => {
     setLocalLat(mapBoxCoordinate.lat);
     setLocalLng(mapBoxCoordinate.lng);
   }, [mapBoxCoordinate]);
-
-  disableScrollOnNumInput();
 
   const validEnsembleLatLng = () => {
     return (
