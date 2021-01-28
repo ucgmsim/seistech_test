@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import { GlobalContext } from "context";
 import ProjectSelect from "components/common/ProjectSelect";
 
-const HazardCurveSection = () => {
+const DisaggregationSection = () => {
   const {
     projectDisagRPs,
     projectSelectedIM,
@@ -65,4 +65,4 @@ const HazardCurveSection = () => {
   );
 };
 
-export default HazardCurveSection;
+export default DisaggregationSection;

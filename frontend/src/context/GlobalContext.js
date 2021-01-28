@@ -29,7 +29,7 @@ export const Provider = (props) => {
   const [mapBoxCoordinate, setMapBoxCoordinate] = useState({
     lat: CONSTANTS.DEFAULT_MAPBOX_LAT,
     lng: CONSTANTS.DEFAULT_MAPBOX_LNG,
-    input: "MapBox",
+    input: "input",
   });
 
   // For IMs

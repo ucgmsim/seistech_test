@@ -4,6 +4,10 @@
 
 - If IM does not have one starts with `pSA`, the UHS section will be disabled.
 
+### Fix EA Site Selection 0.000 issue - ([PR #39](https://github.com/ucgmsim/seistech_psha_frontend/pull/39))
+
+- Fixed an input fields issue, displaying 0.000 instead of a hint even with no default values.
+
 ## January 22, 2021
 
 ### HOTFIX - Flask-SQLAlchemy isolation level config - ([PR #37](https://github.com/ucgmsim/seistech_psha_frontend/pull/37))
