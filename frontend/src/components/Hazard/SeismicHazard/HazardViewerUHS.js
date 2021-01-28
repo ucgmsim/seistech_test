@@ -1,4 +1,8 @@
 import React, { Fragment, useEffect, useState, useContext } from "react";
+import FormGroup from "@material-ui/core/FormGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Switch from "@material-ui/core/Switch";
+
 import { useAuth0 } from "components/common/ReactAuth0SPA";
 import * as CONSTANTS from "constants/Constants";
 import { GlobalContext } from "context";
@@ -8,7 +12,7 @@ import LoadingSpinner from "components/common/LoadingSpinner";
 import DownloadButton from "components/common/DownloadButton";
 import GuideMessage from "components/common/GuideMessage";
 import ErrorMessage from "components/common/ErrorMessage";
-import { handleErrors } from "utils/Utils";
+import { handleErrors, renderSigfigs } from "utils/Utils";
 
 const HazardViewerUhs = () => {
   const { getTokenSilently } = useAuth0();
@@ -43,12 +47,30 @@ const HazardViewerUhs = () => {
 
   const [downloadUHSToken, setDownloadUHSToken] = useState("");
 
+  const [toggleState, setToggleState] = useState(true);
+
   const [extraParams, setExtraParams] = useState({});
+  const getExceedances = () => {
+    const exceedances = uhsRateTable.map((rate) => {
+      return parseFloat(rate);
+    });
+
+    return exceedances;
+  };
+
+  const getSelectedRP = () => {
+    const selectedRPs = uhsRateTable.map((rate) => {
+      return renderSigfigs(1 / parseFloat(rate), CONSTANTS.APP_UI_SIGFIGS);
+    });
+
+    return selectedRPs;
+  };
 
   const extraInfo = {
     from: "hazard",
     lat: siteSelectionLat,
     lng: siteSelectionLng,
+    selectedRPs: getSelectedRP(),
   };
 
   useEffect(() => {
@@ -70,14 +92,6 @@ const HazardViewerUhs = () => {
     setShowPlotUHS(false);
     setShowSpinnerUHS(false);
   }, [vs30]);
-
-  const getExceedances = () => {
-    const exceedances = uhsRateTable.map((entry, idx) => {
-      return parseFloat(entry) > 0 ? parseFloat(entry) : 1 / parseFloat(entry);
-    });
-
-    return exceedances;
-  };
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -202,10 +216,26 @@ const HazardViewerUhs = () => {
                 nzCodeData={uhsNZCodeData}
                 showNZCode={showUHSNZCode}
                 extra={extraInfo}
+                hoverStatus={toggleState}
               />
             </Fragment>
           )}
       </div>
+
+      <FormGroup className="project-uhs-toggle-btn">
+        <FormControlLabel
+          control={
+            <Switch
+              checked={toggleState}
+              onChange={(e) => setToggleState(e.target.checked)}
+              color="primary"
+              name="hoverToggle"
+            />
+          }
+          label="Hover detail"
+          labelPlacement="start"
+        />
+      </FormGroup>
 
       <DownloadButton
         disabled={!showPlotUHS}
