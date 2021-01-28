@@ -13,7 +13,6 @@ import DownloadButton from "components/common/DownloadButton";
 import GuideMessage from "components/common/GuideMessage";
 import ErrorMessage from "components/common/ErrorMessage";
 import { handleErrors } from "utils/Utils";
-import Label from "reactstrap/lib/Label";
 
 const HazardViewerUhs = () => {
   const { getTokenSilently } = useAuth0();
