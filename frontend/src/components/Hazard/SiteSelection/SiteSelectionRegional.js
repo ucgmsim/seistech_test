@@ -4,10 +4,7 @@ import * as CONSTANTS from "constants/Constants";
 
 import { GlobalContext } from "context";
 
-import LoadingSpinner from "components/common/LoadingSpinner";
-
-import GuideMessage from "components/common/GuideMessage";
-import ErrorMessage from "components/common/ErrorMessage";
+import { LoadingSpinner, GuideMessage, ErrorMessage } from "components/common";
 
 import { handleErrors } from "utils/Utils";
 

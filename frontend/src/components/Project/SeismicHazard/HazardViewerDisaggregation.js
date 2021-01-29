@@ -5,13 +5,15 @@ import * as CONSTANTS from "constants/Constants";
 import { Tabs, Tab } from "react-bootstrap";
 import $ from "jquery";
 
-import LoadingSpinner from "components/common/LoadingSpinner";
-import DownloadButton from "components/common/DownloadButton";
-import GuideMessage from "components/common/GuideMessage";
-import ErrorMessage from "components/common/ErrorMessage";
+import {
+  LoadingSpinner,
+  DownloadButton,
+  GuideMessage,
+  ErrorMessage,
+  ContributionTable,
+} from "components/common";
 
 import { GlobalContext } from "context";
-import ContributionTable from "../../common/Disaggregation/ContributionTable";
 import { handleErrors } from "utils/Utils";
 
 const HazadViewerDisaggregation = () => {

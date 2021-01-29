@@ -2,7 +2,7 @@ import React from "react";
 import { Container, Row, Col } from "reactstrap";
 
 import Highlight from "components/Highlight";
-import Loading from "components/common/Loading";
+import { Loading } from "components/common";
 import { useAuth0 } from "../components/common/ReactAuth0SPA";
 
 const Profile = () => {

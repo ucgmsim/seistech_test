@@ -3,7 +3,7 @@ import React, { Fragment, useContext } from "react";
 import { Tabs, Tab } from "react-bootstrap";
 import { GlobalContext } from "context";
 
-import TwoColumnView from "components/common/TwoColumnView";
+import { TwoColumnView } from "components/common";
 
 import SiteSelectionForm from "components/Project/SiteSelection/SiteSelectionForm";
 import SiteSelectionViewer from "components/Project/SiteSelection/SiteSelectionViewer";
@@ -42,12 +42,7 @@ const Project = () => {
           <TwoColumnView cpanel={HazardForm} viewer={HazardViewer} />
         </Tab>
 
-        <Tab
-          eventKey="gms"
-          title="GMS"
-          disabled
-          tabClassName="gms-tab"
-        >
+        <Tab eventKey="gms" title="GMS" disabled tabClassName="gms-tab">
           <TwoColumnView cpanel={GmsForm} viewer={GmsViewer} />
         </Tab>
       </Tabs>

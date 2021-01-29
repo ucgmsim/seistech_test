@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect, Fragment } from "react";
 
 import { v4 as uuidv4 } from "uuid";
 import { GlobalContext } from "context";
-import ProjectSelect from "components/common/ProjectSelect";
+import { ProjectSelect } from "components/common";
 
 const DisaggregationSection = () => {
   const {

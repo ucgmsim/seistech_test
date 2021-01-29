@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import { GlobalContext } from "context";
 import { useAuth0 } from "components/common/ReactAuth0SPA";
 import * as CONSTANTS from "constants/Constants";
-import ProjectSelect from "components/common/ProjectSelect";
+import { ProjectSelect } from "components/common";
 import { handleErrors, sortIMs } from "utils/Utils";
 
 import "assets/style/HazardForms.css";

@@ -4,9 +4,7 @@ import { GlobalContext } from "context";
 import { useAuth0 } from "components/common/ReactAuth0SPA";
 import * as CONSTANTS from "constants/Constants";
 
-import LoadingSpinner from "components/common/LoadingSpinner";
-import GuideMessage from "components/common/GuideMessage";
-import ErrorMessage from "components/common/ErrorMessage";
+import { LoadingSpinner, GuideMessage, ErrorMessage } from "components/common";
 
 import { handleErrors } from "utils/Utils";
 

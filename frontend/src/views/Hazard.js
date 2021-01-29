@@ -4,7 +4,7 @@ import { Tabs, Tab } from "react-bootstrap";
 import { GlobalContext } from "context";
 import { ENV } from "constants/Constants";
 
-import TwoColumnView from "components/common/TwoColumnView";
+import { TwoColumnView } from "components/common";
 
 import SiteSelectionForm from "components/Hazard/SiteSelection/SiteSelectionForm";
 import SiteSelectionViewer from "components/Hazard/SiteSelection/SiteSelectionViewer";
