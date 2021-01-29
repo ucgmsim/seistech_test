@@ -1,7 +1,4 @@
 import React, { Fragment, useEffect, useState, useContext } from "react";
-import FormGroup from "@material-ui/core/FormGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Switch from "@material-ui/core/Switch";
 
 import { useAuth0 } from "components/common/ReactAuth0SPA";
 import * as CONSTANTS from "constants/Constants";
@@ -12,6 +9,8 @@ import LoadingSpinner from "components/common/LoadingSpinner";
 import DownloadButton from "components/common/DownloadButton";
 import GuideMessage from "components/common/GuideMessage";
 import ErrorMessage from "components/common/ErrorMessage";
+import HoverSwitch from "components/common/HoverSwitch";
+
 import { handleErrors, renderSigfigs } from "utils/Utils";
 
 const HazardViewerUHS = () => {
@@ -222,20 +221,11 @@ const HazardViewerUHS = () => {
           )}
       </div>
 
-      <FormGroup className="project-uhs-toggle-btn">
-        <FormControlLabel
-          control={
-            <Switch
-              checked={toggleState}
-              onChange={(e) => setToggleState(e.target.checked)}
-              color="primary"
-              name="hoverToggle"
-            />
-          }
-          label="Hover detail"
-          labelPlacement="start"
-        />
-      </FormGroup>
+      <HoverSwitch
+        toggleState={toggleState}
+        changeToggleState={setToggleState}
+        disabledStatus={!showPlotUHS}
+      />
 
       <DownloadButton
         disabled={!showPlotUHS}

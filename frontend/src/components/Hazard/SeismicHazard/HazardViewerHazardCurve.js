@@ -1,7 +1,4 @@
 import React, { useState, useEffect, useContext, Fragment } from "react";
-import FormGroup from "@material-ui/core/FormGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Switch from "@material-ui/core/Switch";
 import { Tabs, Tab } from "react-bootstrap";
 
 import { GlobalContext } from "context";
@@ -12,6 +9,7 @@ import LoadingSpinner from "components/common/LoadingSpinner";
 import DownloadButton from "components/common/DownloadButton";
 import GuideMessage from "components/common/GuideMessage";
 import ErrorMessage from "components/common/ErrorMessage";
+import HoverSwitch from "components/common/HoverSwitch";
 import { handleErrors } from "utils/Utils";
 
 import HazardEnsemblePlot from "../../common/HazardCurve/HazardEnsemblePlot";
@@ -246,20 +244,11 @@ const HazardViewerHazardCurve = () => {
         </Tab>
       </Tabs>
 
-      <FormGroup className="project-uhs-toggle-btn">
-        <FormControlLabel
-          control={
-            <Switch
-              checked={toggleState}
-              onChange={(e) => setToggleState(e.target.checked)}
-              color="primary"
-              name="hoverToggle"
-            />
-          }
-          label="Hover detail"
-          labelPlacement="start"
-        />
-      </FormGroup>
+      <HoverSwitch
+        toggleState={toggleState}
+        changeToggleState={setToggleState}
+        disabledStatus={!showPlotHazard}
+      />
 
       <DownloadButton
         disabled={!showPlotHazard}
