@@ -8,6 +8,7 @@ import {
   faTrash,
   faCaretDown,
   faCaretUp,
+  faFolderPlus,
 } from "@fortawesome/free-solid-svg-icons";
 
 const InitFontAwesome = () => {
@@ -19,6 +20,7 @@ const InitFontAwesome = () => {
   library.add(faTrash);
   library.add(faCaretDown);
   library.add(faCaretUp);
+  library.add(faFolderPlus);
 };
 
 export default InitFontAwesome;
