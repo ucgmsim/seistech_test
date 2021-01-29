@@ -11,6 +11,7 @@ const HazardEnsemblePlot = ({
   nzCodeData,
   showNZCode = true,
   extra,
+  hoverStatus,
 }) => {
   if (
     hazardData !== null &&
@@ -38,6 +39,13 @@ const HazardEnsemblePlot = ({
             mode: "lines",
             name: "Fault",
             line: { color: "red" },
+            hoverinfo: "none",
+            hovertemplate:
+              hoverStatus === true
+                ? "<b>Fault</b><br><br>" +
+                  "%{xaxis.title.text}: %{x}<br>" +
+                  "%{yaxis.title.text}: %{y}<extra></extra>"
+                : "",
           },
           // DS
           {
@@ -47,6 +55,13 @@ const HazardEnsemblePlot = ({
             mode: "lines",
             name: "Distributed",
             line: { color: "green" },
+            hoverinfo: "none",
+            hovertemplate:
+              hoverStatus === true
+                ? "<b>Distributed</b><br><br>" +
+                  "%{xaxis.title.text}: %{x}<br>" +
+                  "%{yaxis.title.text}: %{y}<extra></extra>"
+                : "",
           },
           // Total
           {
@@ -56,6 +71,13 @@ const HazardEnsemblePlot = ({
             mode: "lines",
             name: "Total",
             line: { color: "blue" },
+            hoverinfo: "none",
+            hovertemplate:
+              hoverStatus === true
+                ? "<b>Total</b><br><br>" +
+                  "%{xaxis.title.text}: %{x}<br>" +
+                  "%{yaxis.title.text}: %{y}<extra></extra>"
+                : "",
           },
           // NZS1170.5
           {
@@ -67,6 +89,13 @@ const HazardEnsemblePlot = ({
             marker: { symbol: "triangle-up" },
             line: { color: "black", dash: "dot" },
             visible: showNZCode,
+            hoverinfo: "none",
+            hovertemplate:
+              hoverStatus === true
+                ? "<b>NZS1170.5</b><br><br>" +
+                  "%{xaxis.title.text}: %{x}<br>" +
+                  "%{yaxis.title.text}: %{y}<extra></extra>"
+                : "",
           },
         ]}
         layout={{
@@ -85,6 +114,14 @@ const HazardEnsemblePlot = ({
           },
           autosize: true,
           margin: PLOT_MARGIN,
+          legend: {
+            x: 1,
+            xanchor: "right",
+            y: 1,
+          },
+          // hovermode to decide how hover works, currently only display the value to the closest point
+          hovermode: "closest",
+          hoverlabel: { bgcolor: "#FFF" },
         }}
         useResizeHandler={true}
         config={{

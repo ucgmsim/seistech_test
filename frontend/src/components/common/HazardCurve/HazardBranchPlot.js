@@ -11,6 +11,7 @@ const HazardBranchPlot = ({
   nzCodeData,
   showNZCode = true,
   extra,
+  hoverStatus,
 }) => {
   if (
     hazardData !== null &&
@@ -32,10 +33,13 @@ const HazardBranchPlot = ({
         name: "Branches",
         legendgroup: "branches",
         showlegend: dataCounter === 0 ? true : false,
+        hoverinfo: "none",
         hovertemplate:
-          `<b>${curName}</b><br><br>` +
-          "%{xaxis.title.text}: %{x}<br>" +
-          "%{yaxis.title.text}: %{y}<extra></extra>",
+          hoverStatus === true
+            ? `<b>${curName}</b><br><br>` +
+              "%{xaxis.title.text}: %{x}<br>" +
+              "%{yaxis.title.text}: %{y}<extra></extra>"
+            : "",
       });
       dataCounter += 1;
     }
@@ -50,10 +54,13 @@ const HazardBranchPlot = ({
       mode: "lines",
       line: { color: "black" },
       name: "Ensemble mean",
+      hoverinfo: "none",
       hovertemplate:
-        "<b>Ensemble mean</b><br><br>" +
-        "%{xaxis.title.text}: %{x}<br>" +
-        "%{yaxis.title.text}: %{y}<extra></extra>",
+        hoverStatus === true
+          ? "<b>Ensemble mean</b><br><br>" +
+            "%{xaxis.title.text}: %{x}<br>" +
+            "%{yaxis.title.text}: %{y}<extra></extra>"
+          : "",
     });
 
     // For NZS1170.5
@@ -70,10 +77,13 @@ const HazardBranchPlot = ({
         marker: { symbol: "triangle-up" },
         line: { color: "black", dash: "dot" },
         visible: showNZCode,
+        hoverinfo: "none",
         hovertemplate:
-          "<b>NZS1170.5</b><br><br>" +
-          "%{xaxis.title.text}: %{x}<br>" +
-          "%{yaxis.title.text}: %{y}<extra></extra>",
+          hoverStatus === true
+            ? "<b>NZS1170.5</b><br><br>" +
+              "%{xaxis.title.text}: %{x}<br>" +
+              "%{yaxis.title.text}: %{y}<extra></extra>"
+            : "",
       }
     );
     return (
@@ -104,6 +114,7 @@ const HazardBranchPlot = ({
           hovermode: "closest",
           hoverlabel: { bgcolor: "#FFF" },
         }}
+        on
         useResizeHandler={true}
         config={{
           ...PLOT_CONFIG,
