@@ -19,36 +19,6 @@ const UHSPlot = ({
   hoverStatus,
 }) => {
   if (uhsData !== null && !uhsData.hasOwnProperty("error")) {
-    /* 
-      if the string(displayRP parameter) contains `.` means it's in float/decimal that needs to display in 4SF for RP, 3SF for rate
-      Else, print what it is as it is an integer.
-      E.g., "14".indexOf(".") returns -1 as it does not have "." in it
-
-      displayRP = Selected RPs
-      isNZCode = to check whether its for NZCode or not, default to false.
-     */
-    const createLabel = (displayRP, isNZCode = false) => {
-      // Depends on the isNZCode status, newLabel starts with NZ Code - or an empty string
-      let newLabel = isNZCode === true ? "NZS1170.5 -  " : "";
-
-      if (displayRP.indexOf(".") === -1) {
-        newLabel += `RP ${Number(displayRP)} - ${renderSigfigs(
-          Number(1 / displayRP),
-          APP_UI_UHS_RATETABLE_RATE_SIGFIGS
-        )} `;
-      } else {
-        newLabel += `RP ${renderSigfigs(
-          Number(displayRP),
-          APP_UI_SIGFIGS
-        )} - ${renderSigfigs(
-          Number(1 / displayRP),
-          APP_UI_UHS_RATETABLE_RATE_SIGFIGS
-        )}`;
-      }
-
-      return newLabel;
-    };
-
     const NZCodeLegend = (isNZCode) => {
       const selectedRPs = extra.selectedRPs;
       // Sort the selected RP array first
@@ -91,9 +61,7 @@ const UHSPlot = ({
           visible: showNZCode,
           legendgroup: "NZS1170.5",
           showlegend: nzCodeDataCounter === 0 ? true : false,
-          // instead of every value, we only display y value when hover
-          text: curPlotData.values,
-          hoverinfo: hoverStatus === false ? "none" : "y",
+          hoverinfo: "none",
           hovertemplate:
             hoverStatus === true
               ? `<b>RP ${displayRP}</b><br><br>` +
@@ -119,9 +87,7 @@ const UHSPlot = ({
         name: NZCodeLegend(false),
         legendgroup: "sites-specific",
         showlegend: dataCounter === 0 ? true : false,
-        // instead of every value, we only display y value when hover
-        text: curPlotData.values,
-        hoverinfo: hoverStatus === false ? "none" : "y",
+        hoverinfo: "none",
         hovertemplate:
           hoverStatus === true
             ? `<b>RP ${displayRP}</b><br><br>` +
