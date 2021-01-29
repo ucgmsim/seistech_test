@@ -3,7 +3,7 @@ import Plot from "react-plotly.js";
 import "assets/style/HazardPlots.css";
 import { getPlotData } from "utils/Utils";
 import { PLOT_MARGIN, PLOT_CONFIG } from "constants/Constants";
-import ErrorMessage from "components/common/ErrorMessage";
+import { ErrorMessage } from "components/common";
 
 const HazardEnsemblePlot = ({
   hazardData,
