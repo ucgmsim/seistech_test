@@ -1,4 +1,7 @@
 import React, { useState, useEffect, useContext, Fragment } from "react";
+import FormGroup from "@material-ui/core/FormGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Switch from "@material-ui/core/Switch";
 import { Tabs, Tab } from "react-bootstrap";
 
 import { GlobalContext } from "context";
@@ -51,6 +54,8 @@ const HazardViewerHazardCurve = () => {
   const [hazardData, setHazardData] = useState(null);
 
   const [downloadHazardToken, setDownloadHazardToken] = useState("");
+
+  const [toggleState, setToggleState] = useState(true);
 
   const extraInfo = {
     from: "hazard",
@@ -188,6 +193,7 @@ const HazardViewerHazardCurve = () => {
                   nzCodeData={hazardNZCodeData}
                   showNZCode={showHazardNZCode}
                   extra={extraInfo}
+                  hoverStatus={toggleState}
                 />
                 <HazardCurveMetadata
                   selectedEnsemble={selectedEnsemble}
@@ -228,6 +234,7 @@ const HazardViewerHazardCurve = () => {
                   nzCodeData={hazardNZCodeData}
                   showNZCode={showHazardNZCode}
                   extra={extraInfo}
+                  hoverStatus={toggleState}
                 />
                 <HazardCurveMetadata
                   selectedEnsemble={selectedEnsemble}
@@ -238,6 +245,21 @@ const HazardViewerHazardCurve = () => {
             )}
         </Tab>
       </Tabs>
+
+      <FormGroup className="project-uhs-toggle-btn">
+        <FormControlLabel
+          control={
+            <Switch
+              checked={toggleState}
+              onChange={(e) => setToggleState(e.target.checked)}
+              color="primary"
+              name="hoverToggle"
+            />
+          }
+          label="Hover detail"
+          labelPlacement="start"
+        />
+      </FormGroup>
 
       <DownloadButton
         disabled={!showPlotHazard}
