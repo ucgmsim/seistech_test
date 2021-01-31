@@ -99,10 +99,23 @@ input[type="number"] {
 /* END */
 
 label#label-haz-lat,
-label#label-haz-lng {
+label#label-haz-lng,
+label#label-create-lat,
+label#label-create-lng,
+label#label-create-vs30,
+label#label-create-name {
   width: 7em;
   font-size: calc(12px + 0.27vw);
   margin-bottom: 1rem;
+}
+
+button.create-project-submit{
+  display: block;
+  margin: auto;
+}
+
+div.create-form-box {
+  margin-bottom: 22px;
 }
 
 label#label-vs30 {
