@@ -10,9 +10,9 @@ const GuideTooltip = ({ explanation }) => {
 
   return (
     <Fragment>
-      <div onClick={() => setShow(!show)} ref={target}>
+      <span onClick={() => setShow(!show)} ref={target}>
         <FontAwesomeIcon icon="question-circle" size="xs" className="ml-1" />
-      </div>
+      </span>
 
       <Overlay target={target.current} show={show} placement="right">
         {(props) => <Tooltip {...props}>{explanation}</Tooltip>}
