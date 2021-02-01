@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import { GlobalContext } from "context";
 
 import ProjectSelect from "components/common/ProjectSelect";
+import GuideTooltip from "components/common/GuideTooltip";
 
 const HazardCurveSection = () => {
   const {
@@ -36,7 +37,8 @@ const HazardCurveSection = () => {
   return (
     <Fragment>
       <div className="form-group form-section-title">
-        <span>Hazard Curve</span>
+        Hazard Curve
+        <GuideTooltip />
       </div>
       <div className="form-group">
         <label
