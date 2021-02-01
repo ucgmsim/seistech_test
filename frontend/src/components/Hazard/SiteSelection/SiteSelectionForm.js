@@ -3,6 +3,7 @@ import React, { Fragment, useContext, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { GlobalContext } from "context";
 import { useAuth0 } from "components/common/ReactAuth0SPA";
+import GuideTooltip from "components/common/GuideTooltip";
 import * as CONSTANTS from "constants/Constants";
 import { disableScrollOnNumInput, handleErrors, sortIMs } from "utils/Utils";
 import TextField from "@material-ui/core/TextField";
@@ -301,7 +302,10 @@ const SiteSelectionForm = () => {
         </div>
       ) : null}
 
-      <div className="form-row form-section-title">Location</div>
+      <div className="form-row form-section-title">
+        Location
+        <GuideTooltip />
+      </div>
 
       <form autoComplete="off" onSubmit={(e) => e.preventDefault()}>
         <div className="form-group">
@@ -387,7 +391,10 @@ const SiteSelectionForm = () => {
         </div>
       </form>
 
-      <div className="form-row form-section-title">Site Conditions</div>
+      <div className="form-row form-section-title">
+        Site Conditions
+        <GuideTooltip />
+      </div>
 
       <SiteConditions />
     </Fragment>

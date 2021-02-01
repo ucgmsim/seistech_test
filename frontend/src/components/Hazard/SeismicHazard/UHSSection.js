@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect, Fragment } from "react";
 import * as CONSTANTS from "constants/Constants";
 import { v4 as uuidv4 } from "uuid";
 import { GlobalContext } from "context";
+import GuideTooltip from "components/common/GuideTooltip";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   renderSigfigs,
@@ -86,7 +87,8 @@ const UHSSection = () => {
     <Fragment>
       <form autoComplete="off" onSubmit={(e) => e.preventDefault()}>
         <div className="form-group form-section-title">
-          <span>Uniform Hazard Spectrum</span>
+          Uniform Hazard Spectrum
+          <GuideTooltip />
         </div>
         <div className="form-group">
           <label
