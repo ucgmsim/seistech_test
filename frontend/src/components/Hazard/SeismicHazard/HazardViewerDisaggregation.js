@@ -13,7 +13,7 @@ import {
 } from "components/common";
 
 import { GlobalContext } from "context";
-import { handleErrors } from "utils/Utils";
+import { handleErrors, renderSigfigs } from "utils/Utils";
 
 const HazadViewerDisaggregation = () => {
   const { getTokenSilently } = useAuth0();
@@ -330,7 +330,10 @@ const HazadViewerDisaggregation = () => {
           im: selectedIM,
           exceedance: disaggAnnualProb,
         }}
-        fileName="disaggregation.zip"
+        fileName={`Disaggregation_${selectedEnsemble}_${station}_${selectedIM}_RP_${renderSigfigs(
+          1 / disaggAnnualProb,
+          CONSTANTS.APP_UI_SIGFIGS
+        )}.zip`}
       />
     </div>
   );

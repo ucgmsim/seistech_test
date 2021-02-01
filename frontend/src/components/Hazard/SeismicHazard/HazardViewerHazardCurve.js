@@ -266,7 +266,7 @@ const HazardViewerHazardCurve = () => {
           im: selectedIM,
           vs30: vs30,
         }}
-        fileName="hazard.zip"
+        fileName={`Hazard_${selectedEnsemble}_${station}_${selectedIM}.zip`}
       />
     </div>
   );
