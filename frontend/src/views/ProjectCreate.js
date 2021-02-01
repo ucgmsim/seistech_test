@@ -73,7 +73,7 @@ const ProjectCreate = () => {
       name: locationName,
       lat: lat,
       lng: lng,
-      vs30: vs30,
+      vs30: vs30List[0],
     };
     if (vs30List.length > 1) {
       let tempVS30Array = [];
@@ -101,15 +101,31 @@ const ProjectCreate = () => {
     }
   };
 
+  const onClickDeleteRow = (idx) => {
+    locationTableState.splice(idx, 1);
+    setLocationTableState([...locationTableState]);
+  };
+
+  useEffect(() => {
+    console.log("ERER");
+  }, [locationTableState]);
   // let createdLocationTable = []
   let createdLocationTable = locationTableState.map((value, idx) => {
-    console.log(value);
+    console.log(`${value.vs30} has a key of ${idx}`);
     return (
       <tr id={"locaion-row-" + idx} key={idx}>
         <td>{value.name}</td>
         <td>{value.lat}</td>
         <td>{value.lng}</td>
         <td>{value.vs30}</td>
+        <td>
+          <div
+            className="location-delete-btn"
+            onClick={() => onClickDeleteRow(idx)}
+          >
+            <FontAwesomeIcon icon="backspace" size="2x" />
+          </div>
+        </td>
       </tr>
     );
   });
@@ -281,6 +297,7 @@ const ProjectCreate = () => {
                       <th>
                         V<sub>S30</sub>
                       </th>
+                      <th>Remove</th>
                     </tr>
                   </thead>
                   <tbody>{createdLocationTable}</tbody>
