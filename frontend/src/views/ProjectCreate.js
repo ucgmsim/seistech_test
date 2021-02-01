@@ -205,6 +205,8 @@ const ProjectCreate = () => {
                     value={locationName}
                     onChange={(e) => setLocationName(e.target.value)}
                     variant="outlined"
+                    required
+                    label="Required"
                   />
                 </div>
               </div>
@@ -235,6 +237,8 @@ const ProjectCreate = () => {
                         : "Latitude must be within the range of NZ."
                     }
                     variant="outlined"
+                    required
+                    label="Required"
                   />
                 </div>
               </div>
@@ -263,6 +267,8 @@ const ProjectCreate = () => {
                         : "Longitude must be within the range of NZ."
                     }
                     variant="outlined"
+                    required
+                    label="Required"
                   />
                 </div>
               </div>
@@ -281,6 +287,8 @@ const ProjectCreate = () => {
                     value={vs30}
                     onChange={(e) => setVs30(e.target.value)}
                     variant="outlined"
+                    required
+                    label="Required"
                   />
                 </div>
               </div>
