@@ -67,6 +67,10 @@ const ProjectCreate = () => {
     }
   };
 
+  const submitToProjectAPI = () => {
+    console.log("SUBMITTING TO THE PROJECT API");
+  };
+
   const addLocation = () => {
     const vs30List = vs30.split(",");
     let tempObj = {
@@ -106,12 +110,7 @@ const ProjectCreate = () => {
     setLocationTableState([...locationTableState]);
   };
 
-  useEffect(() => {
-    console.log("ERER");
-  }, [locationTableState]);
-  // let createdLocationTable = []
   let createdLocationTable = locationTableState.map((value, idx) => {
-    console.log(`${value.vs30} has a key of ${idx}`);
     return (
       <tr id={"locaion-row-" + idx} key={idx}>
         <td>{value.name}</td>
@@ -445,7 +444,10 @@ const ProjectCreate = () => {
             </Card>
           </Accordion>
 
-          <button className="btn btn-primary create-project-submit">
+          <button
+            className="btn btn-primary create-project-submit"
+            onClick={() => submitToProjectAPI()}
+          >
             Submit
           </button>
         </div>
