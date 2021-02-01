@@ -10,20 +10,24 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 
+import "assets/style/CreateProject.css";
+
 const ProjectCreate = () => {
   const animatedComponents = makeAnimated();
 
   const [displayName, setDisplayName] = useState("");
   const [projectID, setProjectID] = useState("");
+  const [locationName, setLocationName] = useState("");
   const [lat, setLat] = useState("");
   const [lng, setLng] = useState("");
   const [vs30, setVs30] = useState("");
   const [radioValue, setRadioValue] = useState("");
-  const [locationName, setLocationName] = useState("");
   const [disaggRP, setDisaggRP] = useState("");
   const [uhsRP, setUHSRP] = useState("");
   const [IM, setIM] = useState([]);
   const [accordionKey, setAccordionKey] = useState("null");
+
+  const [locationTableState, setLocationTableState] = useState([]);
 
   // Dummy options
   const options = [
@@ -62,6 +66,53 @@ const ProjectCreate = () => {
       setArrow(!arrow);
     }
   };
+
+  const addLocation = () => {
+    const vs30List = vs30.split(",");
+    let tempObj = {
+      name: locationName,
+      lat: lat,
+      lng: lng,
+      vs30: vs30,
+    };
+    if (vs30List.length > 1) {
+      let tempVS30Array = [];
+      for (let i = 0; i < vs30List.length; i++) {
+        tempObj = {
+          name: locationName,
+          lat: lat,
+          lng: lng,
+          vs30: vs30List[i],
+        };
+        if (
+          JSON.stringify(locationTableState).includes(
+            JSON.stringify(tempObj)
+          ) === false
+        ) {
+          tempVS30Array.push(tempObj);
+        }
+      }
+      setLocationTableState([...locationTableState, ...tempVS30Array]);
+    } else if (
+      JSON.stringify(locationTableState).includes(JSON.stringify(tempObj)) ===
+      false
+    ) {
+      setLocationTableState([...locationTableState, tempObj]);
+    }
+  };
+
+  // let createdLocationTable = []
+  let createdLocationTable = locationTableState.map((value, idx) => {
+    console.log(value);
+    return (
+      <tr id={"locaion-row-" + idx} key={idx}>
+        <td>{value.name}</td>
+        <td>{value.lat}</td>
+        <td>{value.lng}</td>
+        <td>{value.vs30}</td>
+      </tr>
+    );
+  });
 
   return (
     <div className="container">
@@ -211,14 +262,30 @@ const ProjectCreate = () => {
                   <TextField
                     id="create-vs30"
                     className="flex-grow-1"
-                    type="number"
                     value={vs30}
                     onChange={(e) => setVs30(e.target.value)}
                     variant="outlined"
                   />
                 </div>
               </div>
-              <button>ADD</button>
+              <button className="btn btn-primary" onClick={() => addLocation()}>
+                Add Location
+              </button>
+              <div className="form-group">
+                <table id="location-added">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Latitude</th>
+                      <th>Longitude</th>
+                      <th>
+                        V<sub>S30</sub>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>{createdLocationTable}</tbody>
+                </table>
+              </div>
             </div>
           </div>
 
@@ -353,7 +420,9 @@ const ProjectCreate = () => {
             </Card>
           </Accordion>
 
-          <button className="btn btn-primary create-project-submit">Submit</button>
+          <button className="btn btn-primary create-project-submit">
+            Submit
+          </button>
         </div>
       </div>
     </div>
