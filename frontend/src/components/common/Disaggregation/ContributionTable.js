@@ -3,13 +3,44 @@ import * as CONSTANTS from "constants/Constants";
 import { renderSigfigs } from "utils/Utils";
 import { ErrorMessage } from "components/common";
 
-const ContributionTable = ({ disaggData }) => {
-  if (disaggData !== null && !disaggData.hasOwnProperty("error")) {
-    const rows = [];
-
+const ContributionTable = ({ firstTable, secondTable }) => {
+  if (
+    firstTable !== null &&
+    !firstTable.hasOwnProperty("error") &&
+    secondTable !== null &&
+    !secondTable.hasOwnProperty("error")
+  ) {
+    const firstTableRow = [];
+    const secondTableRows = [];
+    console.log(firstTable);
+    // First table configuration
+    firstTableRow.push(
+      <tr key="first-table">
+        <td>{firstTable["im"]}</td>
+        <td>
+          {renderSigfigs(
+            firstTable["mean_values"]["magnitude"],
+            CONSTANTS.APP_UI_SIGFIGS
+          )}
+        </td>
+        <td>
+          {renderSigfigs(
+            firstTable["mean_values"]["rrup"],
+            CONSTANTS.APP_UI_SIGFIGS
+          )}
+        </td>
+        <td>
+          {renderSigfigs(
+            firstTable["mean_values"]["epsilon"],
+            CONSTANTS.APP_UI_SIGFIGS
+          )}
+        </td>
+      </tr>
+    );
+    // Second table configuration
     let contribRowClassname = "";
 
-    disaggData.forEach((entry, rowIdx) => {
+    secondTable.forEach((entry, rowIdx) => {
       let firstCol = entry[1] === undefined ? entry[0] : entry[1];
       let secondCol =
         entry[2] === undefined
@@ -31,7 +62,7 @@ const ContributionTable = ({ disaggData }) => {
         contribRowClassname = "contrib-toggle-row contrib-row-hidden";
       }
 
-      rows.push(
+      secondTableRows.push(
         <tr key={entry[0]} className={contribRowClassname}>
           <td>{firstCol}</td>
           <td>{secondCol}</td>
@@ -43,7 +74,21 @@ const ContributionTable = ({ disaggData }) => {
     });
 
     return (
-      <div className="d-flex justify-content-center">
+      <div className="d-flex flex-column align-items-md-center">
+        {/* First table */}
+        <table className="table thead-dark table-striped table-bordered mt-2 w-auto">
+          <thead>
+            <tr>
+              <th scope="col">IM</th>
+              <th scope="col">Mean magnitude</th>
+              <th scope="col">Rrup (km)</th>
+              <th scope="col">Epsilon</th>
+            </tr>
+          </thead>
+          <tbody>{firstTableRow}</tbody>
+        </table>
+        <br />
+        {/* Second table */}
         <table className="table thead-dark table-striped table-bordered mt-2 w-auto">
           <thead>
             <tr>
@@ -55,7 +100,7 @@ const ContributionTable = ({ disaggData }) => {
             </tr>
           </thead>
           <tbody>
-            {rows}
+            {secondTableRows}
             <tr className="contrib-ellipsis">
               <td colSpan="5" className="contrib-ellipsis">
                 (more..)

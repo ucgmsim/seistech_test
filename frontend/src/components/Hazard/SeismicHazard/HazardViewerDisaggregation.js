@@ -33,7 +33,10 @@ const HazadViewerDisaggregation = () => {
   const [showPlotDisaggFault, setShowPlotDisaggFault] = useState(false);
   const [showContribTable, setShowContribTable] = useState(false);
 
-  const [disaggTotalContr, setDisaggTotalContr] = useState(null);
+  // For the first table
+  const [disaggTableData, setDisaggTableData] = useState(null);
+  // For the second table
+  const [disaggContributionTable, setDisaggContributionTable] = useState(null);
 
   const [downloadToken, setDownloadToken] = useState("");
 
@@ -180,7 +183,8 @@ const HazadViewerDisaggregation = () => {
                 return entry1[2] > entry2[2] ? -1 : 1;
               });
 
-              setDisaggTotalContr(data);
+              setDisaggTableData(responseData["disagg_data"]);
+              setDisaggContributionTable(data);
             })
             .catch((error) => {
               if (error.name !== "AbortError") {
@@ -300,7 +304,10 @@ const HazadViewerDisaggregation = () => {
             showContribTable === true &&
             showErrorMessage.isError === false && (
               <Fragment>
-                <ContributionTable disaggData={disaggTotalContr} />
+                <ContributionTable
+                  firstTable={disaggTableData}
+                  secondTable={disaggContributionTable}
+                />
                 <button
                   className="btn btn-info hazard-disagg-contrib-button"
                   onClick={rowToggle}
