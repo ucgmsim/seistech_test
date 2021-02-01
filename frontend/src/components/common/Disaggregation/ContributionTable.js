@@ -12,7 +12,7 @@ const ContributionTable = ({ firstTable, secondTable }) => {
   ) {
     const firstTableRow = [];
     const secondTableRows = [];
-    console.log(firstTable);
+
     // First table configuration
     firstTableRow.push(
       <tr key="first-table">
