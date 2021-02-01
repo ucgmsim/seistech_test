@@ -2,13 +2,14 @@ import React, { Fragment, useContext, useEffect, useState } from "react";
 
 import { v4 as uuidv4 } from "uuid";
 import { GlobalContext } from "context";
+
 import { useAuth0 } from "components/common/ReactAuth0SPA";
 import * as CONSTANTS from "constants/Constants";
 import ProjectSelect from "components/common/ProjectSelect";
+import GuideTooltip from "components/common/GuideTooltip";
 import { handleErrors, sortIMs } from "utils/Utils";
 
 import "assets/style/HazardForms.css";
-import "assets/style/TitleSubScript.css";
 
 const SiteSelectionForm = () => {
   const {
@@ -209,7 +210,10 @@ const SiteSelectionForm = () => {
 
   return (
     <Fragment>
-      <div className="form-row form-section-title">Project ID</div>
+      <div className="form-row form-section-title">
+        Project ID
+        <GuideTooltip />
+      </div>
       <div className="form-group">
         <ProjectSelect
           id="project-id-select"
@@ -220,7 +224,10 @@ const SiteSelectionForm = () => {
         />
       </div>
 
-      <div className="form-row form-section-title">Location</div>
+      <div className="form-row form-section-title">
+        Location
+        <GuideTooltip />
+      </div>
       <div className="form-group">
         <ProjectSelect
           id="location-select"
@@ -232,7 +239,10 @@ const SiteSelectionForm = () => {
       </div>
 
       <div className="form-row form-section-title">
-        V<sub className="title-subscript">S30</sub>
+        <span>
+          V<sub>S30</sub>
+        </span>
+        <GuideTooltip />
       </div>
       <div className="form-group">
         <ProjectSelect
