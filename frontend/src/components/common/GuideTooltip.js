@@ -1,24 +1,28 @@
-import React, { Fragment, useState, useRef } from "react";
+import React, { Fragment } from "react";
 
-import { Overlay, Tooltip } from "react-bootstrap";
+import { Tooltip, OverlayTrigger } from "react-bootstrap";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import "assets/style/GuideTooltip.css";
 
 const GuideTooltip = ({ explanation }) => {
-  const [show, setShow] = useState(false);
-  const target = useRef(null);
-
+  const renderTooltip = (props) => {
+    return (
+      <Tooltip id="guide-tooltip" {...props}>
+        {explanation}
+      </Tooltip>
+    );
+  };
   return (
     <Fragment>
-      <span onClick={() => setShow(!show)} ref={target}>
-        <FontAwesomeIcon icon="question-circle" size="xs" className="ml-1" />
-      </span>
-
-      <Overlay target={target.current} show={show} placement="right">
-        {(props) => <Tooltip {...props}>{explanation}</Tooltip>}
-      </Overlay>
+      <OverlayTrigger
+        placement="right"
+        delay={{ show: 250, hide: 400 }}
+        overlay={renderTooltip}
+      >
+        <FontAwesomeIcon icon="question-circle" size="sm" className="ml-2" />
+      </OverlayTrigger>
     </Fragment>
   );
 };
