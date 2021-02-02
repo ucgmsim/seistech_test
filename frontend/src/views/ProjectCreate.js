@@ -22,9 +22,9 @@ const ProjectCreate = () => {
   const [lng, setLng] = useState("");
   const [vs30, setVs30] = useState("");
   const [radioValue, setRadioValue] = useState("");
+  const [IM, setIM] = useState([]);
   const [disaggRP, setDisaggRP] = useState("");
   const [uhsRP, setUHSRP] = useState("");
-  const [IM, setIM] = useState([]);
   const [accordionKey, setAccordionKey] = useState("null");
 
   const [locationTableState, setLocationTableState] = useState([]);
@@ -67,8 +67,27 @@ const ProjectCreate = () => {
     }
   };
 
+  const checkInputs = () => {
+    return (
+      displayName !== "" &&
+      locationName !== "" &&
+      lat !== "" &&
+      lng !== "" &&
+      vs30 !== "" &&
+      locationTableState.length > 0 &&
+      (radioValue === "pga" ||
+        radioValue === "pga+psa" ||
+        (radioValue === "custom" &&
+          IM.length > 0 &&
+          disaggRP !== "" &&
+          uhsRP !== ""))
+    );
+  };
+
   const submitToProjectAPI = () => {
-    console.log("SUBMITTING TO THE PROJECT API");
+    checkInputs() === true
+      ? console.log("SUBMITTING TO THE PROJECT API")
+      : console.log("NEED TO FILL IN THIS");
   };
 
   const addLocation = () => {
