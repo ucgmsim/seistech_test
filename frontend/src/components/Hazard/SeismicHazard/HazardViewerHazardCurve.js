@@ -64,6 +64,14 @@ const HazardViewerHazardCurve = () => {
     lng: siteSelectionLng,
   };
 
+  const [filteredSelectedIM, setFilteredSelectedIM] = useState("");
+
+  useEffect(() => {
+    if (selectedIM !== null) {
+      setFilteredSelectedIM(selectedIM.replace(".", "p"));
+    }
+  }, [selectedIM]);
+
   /*
     Reset tabs if users change IM or VS30
   */
@@ -266,7 +274,7 @@ const HazardViewerHazardCurve = () => {
           im: selectedIM,
           vs30: vs30,
         }}
-        fileName={`Hazard_${selectedEnsemble}_${station}_${selectedIM}.zip`}
+        fileName={`Hazard_${filteredSelectedIM}.zip`}
       />
     </div>
   );

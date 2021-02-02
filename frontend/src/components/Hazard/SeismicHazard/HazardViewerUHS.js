@@ -237,7 +237,7 @@ const HazardViewerUHS = () => {
           nz1170p5_hazard_token: uhsNZCodeToken,
         }}
         extraParams={extraParams}
-        fileName={`UHS_${selectedEnsemble}.zip`}
+        fileName="UHS.zip"
       />
     </div>
   );

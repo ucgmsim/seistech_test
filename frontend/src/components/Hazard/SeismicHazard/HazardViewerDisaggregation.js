@@ -13,9 +13,20 @@ import {
 } from "components/common";
 
 import { GlobalContext } from "context";
-import { handleErrors, renderSigfigs } from "utils/Utils";
+import { handleErrors } from "utils/Utils";
 
 const HazadViewerDisaggregation = () => {
+  const {
+    disaggComputeClick,
+    setDisaggComputeClick,
+    vs30,
+    defaultVS30,
+    station,
+    selectedIM,
+    selectedEnsemble,
+    disaggAnnualProb,
+  } = useContext(GlobalContext);
+
   const { getTokenSilently } = useAuth0();
 
   const [showSpinnerDisaggFault, setShowSpinnerDisaggFault] = useState(false);
@@ -45,16 +56,13 @@ const HazadViewerDisaggregation = () => {
     src: null,
   });
 
-  const {
-    disaggComputeClick,
-    setDisaggComputeClick,
-    vs30,
-    defaultVS30,
-    station,
-    selectedIM,
-    selectedEnsemble,
-    disaggAnnualProb,
-  } = useContext(GlobalContext);
+  const [filteredSelectedIM, setFilteredSelectedIM] = useState("");
+
+  useEffect(() => {
+    if (selectedIM !== null) {
+      setFilteredSelectedIM(selectedIM.replace(".", "p"));
+    }
+  }, [selectedIM]);
 
   const [rowsToggled, setRowsToggled] = useState(true);
 
@@ -330,10 +338,9 @@ const HazadViewerDisaggregation = () => {
           im: selectedIM,
           exceedance: disaggAnnualProb,
         }}
-        fileName={`Disaggregation_${selectedEnsemble}_${station}_${selectedIM}_RP_${renderSigfigs(
-          1 / disaggAnnualProb,
-          CONSTANTS.APP_UI_SIGFIGS
-        )}.zip`}
+        fileName={`Disaggregation_${filteredSelectedIM}_RP_${(
+          1 / disaggAnnualProb
+        ).toFixed(0)}.zip`}
       />
     </div>
   );
