@@ -210,7 +210,7 @@ const SiteSelectionForm = () => {
 
   return (
     <Fragment>
-      <div className="form-row form-section-title">
+      <div className="form-group form-section-title">
         Project ID
         <GuideTooltip
           explanation={
@@ -228,7 +228,7 @@ const SiteSelectionForm = () => {
         />
       </div>
 
-      <div className="form-row form-section-title">
+      <div className="form-group form-section-title">
         Location
         <GuideTooltip
           explanation={
@@ -246,7 +246,7 @@ const SiteSelectionForm = () => {
         />
       </div>
 
-      <div className="form-row form-section-title">
+      <div className="form-group form-section-title">
         <span>
           V<sub>S30</sub>
         </span>

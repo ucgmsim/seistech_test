@@ -293,7 +293,7 @@ const SiteSelectionForm = () => {
     <Fragment>
       {CONSTANTS.ENV === "DEV" ? (
         <div>
-          <div className="form-row form-section-title">
+          <div className="form-group form-section-title">
             <span>Ensemble</span>
           </div>
           <div className="custom-form-group">
@@ -302,7 +302,7 @@ const SiteSelectionForm = () => {
         </div>
       ) : null}
 
-      <div className="form-row form-section-title">
+      <div className="form-group form-section-title">
         Location
         <GuideTooltip
           explanation={CONSTANTS.TOOLTIP_MESSAGES["SITE_SELECTION_LOCATION"]}
@@ -393,7 +393,7 @@ const SiteSelectionForm = () => {
         </div>
       </form>
 
-      <div className="form-row form-section-title">
+      <div className="form-group form-section-title">
         Site Conditions
         <GuideTooltip
           explanation={
