@@ -19,6 +19,18 @@ import { handleErrors } from "utils/Utils";
 const HazadViewerDisaggregation = () => {
   const { getTokenSilently } = useAuth0();
 
+  const {
+    projectDisaggGetClick,
+    setProjectDisaggGetClick,
+    projectId,
+    projectVS30,
+    projectLocation,
+    projectLocationCode,
+    projectSelectedIM,
+    projectSelectedDisagRP,
+    setProjectSelectedDisagRP,
+  } = useContext(GlobalContext);
+
   const [showSpinnerDisaggFault, setShowSpinnerDisaggFault] = useState(false);
   const [showSpinnerDisaggEpsilon, setShowSpinnerDisaggEpsilon] = useState(
     false
@@ -34,7 +46,10 @@ const HazadViewerDisaggregation = () => {
   const [showPlotDisaggFault, setShowPlotDisaggFault] = useState(false);
   const [showContribTable, setShowContribTable] = useState(false);
 
-  const [disaggTotalContr, setDisaggTotalContr] = useState(null);
+  // For the first table
+  const [disaggTableData, setDisaggTableData] = useState(null);
+  // For the second table
+  const [disaggContributionTable, setDisaggContributionTable] = useState(null);
 
   const [downloadToken, setDownloadToken] = useState("");
 
@@ -43,17 +58,13 @@ const HazadViewerDisaggregation = () => {
     src: null,
   });
 
-  const {
-    projectDisaggGetClick,
-    setProjectDisaggGetClick,
-    projectId,
-    projectVS30,
-    projectLocation,
-    projectLocationCode,
-    projectSelectedIM,
-    projectSelectedDisagRP,
-    setProjectSelectedDisagRP,
-  } = useContext(GlobalContext);
+  const [filteredSelectedIM, setFilteredSelectedIM] = useState("");
+
+  useEffect(() => {
+    if (projectSelectedIM !== null) {
+      setFilteredSelectedIM(projectSelectedIM.replace(".", "p"));
+    }
+  }, [projectSelectedIM]);
 
   const [rowsToggled, setRowsToggled] = useState(true);
 
@@ -184,7 +195,8 @@ const HazadViewerDisaggregation = () => {
                 return entry1[2] > entry2[2] ? -1 : 1;
               });
 
-              setDisaggTotalContr(data);
+              setDisaggTableData(responseData["disagg_data"]);
+              setDisaggContributionTable(data);
             })
             .catch((error) => {
               if (error.name !== "AbortError") {
@@ -304,7 +316,10 @@ const HazadViewerDisaggregation = () => {
             showContribTable === true &&
             showErrorMessage.isError === false && (
               <Fragment>
-                <ContributionTable disaggData={disaggTotalContr} />
+                <ContributionTable
+                  firstTable={disaggTableData}
+                  secondTable={disaggContributionTable}
+                />
                 <button
                   className="btn btn-info hazard-disagg-contrib-button"
                   onClick={rowToggle}
@@ -327,7 +342,7 @@ const HazadViewerDisaggregation = () => {
           im: projectSelectedIM,
           rp: projectSelectedDisagRP,
         }}
-        fileName="disaggregation.zip"
+        fileName={`Project_Disaggregation_${filteredSelectedIM}_RP_${projectSelectedDisagRP}.zip`}
       />
     </div>
   );

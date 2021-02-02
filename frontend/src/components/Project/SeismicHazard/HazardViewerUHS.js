@@ -203,7 +203,7 @@ const HazardViewerUHS = () => {
           station_id: `${projectLocationCode[projectLocation]}_${projectVS30}`,
           rp: getSelectedRP().join(","),
         }}
-        fileName="uniform_hazard_spectrum.zip"
+        fileName="Project_UHS.zip"
       />
     </div>
   );

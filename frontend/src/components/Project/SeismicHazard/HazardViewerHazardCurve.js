@@ -57,6 +57,14 @@ const HazardViewerHazardCurve = () => {
     im: projectSelectedIM,
   };
 
+  const [filteredSelectedIM, setFilteredSelectedIM] = useState("");
+
+  useEffect(() => {
+    if (projectSelectedIM !== null) {
+      setFilteredSelectedIM(projectSelectedIM.replace(".", "p"));
+    }
+  }, [projectSelectedIM]);
+
   /*
     Reset tabs if users change Project ID, VS30 or Location
   */
@@ -227,7 +235,7 @@ const HazardViewerHazardCurve = () => {
           station_id: `${projectLocationCode[projectLocation]}_${projectVS30}`,
           im: projectSelectedIM,
         }}
-        fileName="hazard.zip"
+        fileName={`Project_Hazard_${filteredSelectedIM}.zip`}
       />
     </div>
   );
