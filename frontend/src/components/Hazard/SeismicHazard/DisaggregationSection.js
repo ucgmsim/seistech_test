@@ -32,7 +32,9 @@ const DisaggregationSection = () => {
       <form autoComplete="off" onSubmit={(e) => e.preventDefault()}>
         <div className="form-group form-section-title">
           Disaggregation
-          <GuideTooltip />
+          <GuideTooltip
+            explanation={CONSTANTS.TOOLTIP_MESSAGES["HAZARD_DISAGG"]}
+          />
         </div>
         <div className="form-group">
           <label

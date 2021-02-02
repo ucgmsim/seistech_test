@@ -8,6 +8,7 @@ import { createSelectArray, checkIMwithPSA } from "utils/Utils";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 
+import * as CONSTANTS from "constants/Constants";
 import GuideTooltip from "components/common/GuideTooltip";
 
 const UHSSection = () => {
@@ -41,7 +42,9 @@ const UHSSection = () => {
       <form autoComplete="off" onSubmit={(e) => e.preventDefault()}>
         <div className="form-group form-section-title">
           Uniform Hazard Spectrum
-          <GuideTooltip />
+          <GuideTooltip
+            explanation={CONSTANTS.TOOLTIP_MESSAGES["PROJECT_UHS"]}
+          />
         </div>
         <div className="form-group">
           <label

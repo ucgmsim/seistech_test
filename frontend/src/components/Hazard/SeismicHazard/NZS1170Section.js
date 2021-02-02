@@ -358,7 +358,9 @@ const NZS1170Section = () => {
       <form autoComplete="off" onSubmit={(e) => e.preventDefault()}>
         <div className="form-group form-section-title">
           NZS1170.5
-          <GuideTooltip />
+          <GuideTooltip
+            explanation={CONSTANTS.TOOLTIP_MESSAGES["HAZARD_NZCODE"]}
+          />
         </div>
 
         <div className="form-group">

@@ -212,7 +212,11 @@ const SiteSelectionForm = () => {
     <Fragment>
       <div className="form-row form-section-title">
         Project ID
-        <GuideTooltip />
+        <GuideTooltip
+          explanation={
+            CONSTANTS.TOOLTIP_MESSAGES["PROJECT_SITE_SELECTION_PROJECT_ID"]
+          }
+        />
       </div>
       <div className="form-group">
         <ProjectSelect
@@ -226,7 +230,11 @@ const SiteSelectionForm = () => {
 
       <div className="form-row form-section-title">
         Location
-        <GuideTooltip />
+        <GuideTooltip
+          explanation={
+            CONSTANTS.TOOLTIP_MESSAGES["PROJECT_SITE_SELECTION_LOCATION"]
+          }
+        />
       </div>
       <div className="form-group">
         <ProjectSelect
@@ -242,7 +250,11 @@ const SiteSelectionForm = () => {
         <span>
           V<sub>S30</sub>
         </span>
-        <GuideTooltip />
+        <GuideTooltip
+          explanation={
+            CONSTANTS.TOOLTIP_MESSAGES["PROJECT_SITE_SELECTION_VS30"]
+          }
+        />
       </div>
       <div className="form-group">
         <ProjectSelect

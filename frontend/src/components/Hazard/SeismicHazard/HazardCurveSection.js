@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect, Fragment } from "react";
 import IMSelect from "components/common/IMSelect";
 import GuideTooltip from "components/common/GuideTooltip";
+import * as CONSTANTS from "constants/Constants";
 import { v4 as uuidv4 } from "uuid";
 import { GlobalContext } from "context";
 
@@ -26,7 +27,9 @@ const HazardCurveSection = () => {
     <Fragment>
       <div className="form-group form-section-title">
         Hazard Curve
-        <GuideTooltip />
+        <GuideTooltip
+          explanation={CONSTANTS.TOOLTIP_MESSAGES["HAZARD_HAZARD"]}
+        />
       </div>
       <div className="custom-form-group">
         <IMSelect title="Intensity Measure" setIM={setSelectedIM} />

@@ -304,7 +304,9 @@ const SiteSelectionForm = () => {
 
       <div className="form-row form-section-title">
         Location
-        <GuideTooltip />
+        <GuideTooltip
+          explanation={CONSTANTS.TOOLTIP_MESSAGES["SITE_SELECTION_LOCATION"]}
+        />
       </div>
 
       <form autoComplete="off" onSubmit={(e) => e.preventDefault()}>
@@ -393,7 +395,11 @@ const SiteSelectionForm = () => {
 
       <div className="form-row form-section-title">
         Site Conditions
-        <GuideTooltip />
+        <GuideTooltip
+          explanation={
+            CONSTANTS.TOOLTIP_MESSAGES["SITE_SELECTION_SITE_CONDITION"]
+          }
+        />
       </div>
 
       <SiteConditions />
