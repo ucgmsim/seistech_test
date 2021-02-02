@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import * as CONSTANTS from "constants/Constants";
 import { renderSigfigs } from "utils/Utils";
 import { ErrorMessage } from "components/common";
@@ -10,33 +10,10 @@ const ContributionTable = ({ firstTable, secondTable }) => {
     secondTable !== null &&
     !secondTable.hasOwnProperty("error")
   ) {
-    const firstTableRow = [];
     const secondTableRows = [];
 
-    // First table configuration
-    firstTableRow.push(
-      <tr key="first-table">
-        <td>{firstTable["im"]}</td>
-        <td>
-          {renderSigfigs(
-            firstTable["mean_values"]["magnitude"],
-            CONSTANTS.APP_UI_SIGFIGS
-          )}
-        </td>
-        <td>
-          {renderSigfigs(
-            firstTable["mean_values"]["rrup"],
-            CONSTANTS.APP_UI_SIGFIGS
-          )}
-        </td>
-        <td>
-          {renderSigfigs(
-            firstTable["mean_values"]["epsilon"],
-            CONSTANTS.APP_UI_SIGFIGS
-          )}
-        </td>
-      </tr>
-    );
+    const meanValueObj = firstTable["mean_values"];
+
     // Second table configuration
     let contribRowClassname = "";
 
@@ -76,18 +53,45 @@ const ContributionTable = ({ firstTable, secondTable }) => {
     return (
       <div className="d-flex flex-column align-items-md-center">
         {/* First table */}
-        <table className="table thead-dark table-striped table-bordered mt-2 w-auto">
-          <thead>
-            <tr>
-              <th scope="col">IM</th>
-              <th scope="col">Mean magnitude</th>
-              <th scope="col">Rrup (km)</th>
-              <th scope="col">Epsilon</th>
-            </tr>
-          </thead>
-          <tbody>{firstTableRow}</tbody>
-        </table>
-        <br />
+        {meanValueObj !== null ? (
+          <Fragment>
+            <table className="table thead-dark table-striped table-bordered mt-2 w-auto">
+              <thead>
+                <tr>
+                  <th scope="col">IM</th>
+                  <th scope="col">Mean magnitude</th>
+                  <th scope="col">Rrup (km)</th>
+                  <th scope="col">Epsilon</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr key="first-table">
+                  <td>{firstTable["im"]}</td>
+                  <td>
+                    {renderSigfigs(
+                      meanValueObj["magnitude"],
+                      CONSTANTS.APP_UI_SIGFIGS
+                    )}
+                  </td>
+                  <td>
+                    {renderSigfigs(
+                      meanValueObj["rrup"],
+                      CONSTANTS.APP_UI_SIGFIGS
+                    )}
+                  </td>
+                  <td>
+                    {renderSigfigs(
+                      meanValueObj["epsilon"],
+                      CONSTANTS.APP_UI_SIGFIGS
+                    )}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <br />
+          </Fragment>
+        ) : null}
+
         {/* Second table */}
         <table className="table thead-dark table-striped table-bordered mt-2 w-auto">
           <thead>
