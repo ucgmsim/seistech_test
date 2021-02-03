@@ -85,9 +85,7 @@ const ProjectCreate = () => {
   };
 
   const submitToProjectAPI = () => {
-    checkInputs() === true
-      ? console.log("SUBMITTING TO THE PROJECT API")
-      : console.log("NEED TO FILL IN THIS");
+    console.log("SUBMITTING TO THE PROJECT API");
   };
 
   const addLocation = () => {
@@ -310,7 +308,10 @@ const ProjectCreate = () => {
                   />
                 </div>
               </div>
-              <button className="btn btn-primary" onClick={() => addLocation()}>
+              <button
+                className="btn btn-primary create-project-add-location"
+                onClick={() => addLocation()}
+              >
                 Add Location
               </button>
               <div className="form-group">
@@ -466,6 +467,7 @@ const ProjectCreate = () => {
           <button
             className="btn btn-primary create-project-submit"
             onClick={() => submitToProjectAPI()}
+            disabled={!checkInputs()}
           >
             Submit
           </button>
