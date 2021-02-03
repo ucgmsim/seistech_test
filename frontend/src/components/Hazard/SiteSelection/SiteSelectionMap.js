@@ -20,6 +20,8 @@ const SiteSelectionMap = () => {
     latitude: Number(mapBoxCoordinate.lat),
     longitude: Number(mapBoxCoordinate.lng),
     zoom: 14,
+    width: MAP_BOX_WIDTH,
+    height: MAP_BOX_HEIGHT,
   });
 
   useEffect(() => {
@@ -27,6 +29,8 @@ const SiteSelectionMap = () => {
       latitude: Number(mapBoxCoordinate.lat),
       longitude: Number(mapBoxCoordinate.lng),
       zoom: 14,
+      width: MAP_BOX_WIDTH,
+      height: MAP_BOX_HEIGHT,
     });
   }, [mapBoxCoordinate]);
 
@@ -42,8 +46,6 @@ const SiteSelectionMap = () => {
     <div className="mapbox">
       <ReactMapGL
         {...viewport}
-        width={MAP_BOX_WIDTH}
-        height={MAP_BOX_HEIGHT}
         transitionDuration={"auto"}
         transitionInterpolator={new FlyToInterpolator({ speed: 1.2 })}
         mapboxApiAccessToken={MAP_BOX_TOKEN}

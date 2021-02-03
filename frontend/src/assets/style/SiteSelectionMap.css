@@ -1,4 +1,9 @@
-.navi-control {
+div.navi-control {
   position: absolute;
   right: 0;
+}
+
+div.mapbox {
+  width: 66vw;
+  height: 70vh;
 }
