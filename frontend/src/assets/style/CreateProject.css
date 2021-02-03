@@ -29,3 +29,9 @@ table#location-added td {
   text-align: center;
   vertical-align: middle;
 }
+
+button.create-project-submit,
+button.create-project-add-location {
+  display: block;
+  margin: auto;
+}
