@@ -70,10 +70,6 @@ const ProjectCreate = () => {
   const checkInputs = () => {
     return (
       displayName !== "" &&
-      locationName !== "" &&
-      lat !== "" &&
-      lng !== "" &&
-      vs30 !== "" &&
       locationTableState.length > 0 &&
       (radioValue === "pga" ||
         radioValue === "pga+psa" ||
@@ -88,6 +84,16 @@ const ProjectCreate = () => {
     console.log("SUBMITTING TO THE PROJECT API");
   };
 
+  const checkLocationInputs = () => {
+    return (
+      locationName !== "" &&
+      lat >= -47.4 &&
+      lat <= -34.3 &&
+      lng >= 165 &&
+      lng <= 180 &&
+      vs30 !== ""
+    );
+  };
   const addLocation = () => {
     const vs30List = vs30.split(",");
     let tempObj = {
@@ -311,6 +317,7 @@ const ProjectCreate = () => {
               <button
                 className="btn btn-primary create-project-add-location"
                 onClick={() => addLocation()}
+                disabled={!checkLocationInputs()}
               >
                 Add Location
               </button>
