@@ -360,6 +360,7 @@ const NZS1170Section = () => {
           NZS1170.5
           <GuideTooltip
             explanation={CONSTANTS.TOOLTIP_MESSAGES["HAZARD_NZCODE"]}
+            hyperlink={CONSTANTS.TOOLTIP_URL["HAZARD_NZCODE"]}
           />
         </div>
 
