@@ -269,3 +269,10 @@ export const TOOLTIP_MESSAGES = {
   PROJECT_UHS:
     "Select one or more annual exceedance rates (inverse of return period) to compute the Uniform Hazard Spectrum (UHS) for. Selected rates are displayed, which can be subsequently removed.",
 };
+
+/*
+  Hyperlinks for Tooltips
+*/
+export const TOOLTIP_URL = {
+  HAZARD_NZCODE: "https://google.com",
+};
