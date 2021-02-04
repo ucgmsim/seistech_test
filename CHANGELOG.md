@@ -3,6 +3,7 @@
 ### Tooltips - ([PR #40](https://github.com/ucgmsim/seistech_psha_frontend/pull/40))
 
 - Tooltips with a brief explanation.
+- Disable the MapBox in Hazard Analysis temporarily due to the crash.
 
 ## January 27, 2021
 
