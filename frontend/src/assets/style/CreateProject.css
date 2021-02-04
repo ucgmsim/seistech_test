@@ -35,3 +35,13 @@ button.create-project-add-location {
   display: block;
   margin: auto;
 }
+
+div.form-group.required label.control-label:after {
+  content: "*";
+  color: red;
+}
+
+h3.card-header.required:after {
+  content: "*";
+  color: red;
+}

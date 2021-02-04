@@ -166,9 +166,9 @@ const ProjectCreate = () => {
             - String 
             - Required*/}
           <div className="card  create-form-box">
-            <h3 className="card-header">Display Name</h3>
+            <h3 className="card-header required">Display Name</h3>
             <div className="card-body">
-              <div className="form-group">
+              <div className="form-group required">
                 <TextField
                   id="display-name-input"
                   value={displayName}
@@ -210,9 +210,9 @@ const ProjectCreate = () => {
             - Required
           */}
           <div className="card create-form-box">
-            <h3 className="card-header">Locations</h3>
+            <h3 className="card-header required">Locations</h3>
             <div className="card-body">
-              <div className="form-group">
+              <div className="form-group required">
                 <div className="d-flex align-items-center">
                   <label
                     id="label-create-name"
@@ -232,7 +232,7 @@ const ProjectCreate = () => {
                   />
                 </div>
               </div>
-              <div className="form-group">
+              <div className="form-group required">
                 <div className="d-flex align-items-center">
                   <label
                     id="label-create-lng"
@@ -264,7 +264,7 @@ const ProjectCreate = () => {
                   />
                 </div>
               </div>
-              <div className="form-group">
+              <div className="form-group required">
                 <div className="d-flex align-items-center">
                   <label
                     id="label-create-lng"
@@ -294,7 +294,7 @@ const ProjectCreate = () => {
                   />
                 </div>
               </div>
-              <div className="form-group">
+              <div className="form-group required">
                 <div className="d-flex align-items-center">
                   <label
                     id="label-create-vs30"
@@ -349,7 +349,7 @@ const ProjectCreate = () => {
             - Required   
           */}
           <div className="card create-form-box">
-            <h3 className="card-header">Package</h3>
+            <h3 className="card-header required">Package</h3>
             <div className="card-body">
               <FormControl component="fieldset">
                 <RadioGroup
@@ -408,7 +408,7 @@ const ProjectCreate = () => {
               <Accordion.Collapse eventKey="0">
                 <Card.Body>
                   <div className="card create-form-box">
-                    <h3 className="card-header">IMs</h3>
+                    <h3 className="card-header required">IMs</h3>
                     <div className="card-body">
                       <div className="form-group">
                         <Select
@@ -426,7 +426,9 @@ const ProjectCreate = () => {
                   </div>
 
                   <div className="card create-form-box">
-                    <h3 className="card-header">Disagg Return Periods</h3>
+                    <h3 className="card-header required">
+                      Disagg Return Periods
+                    </h3>
                     <div className="card-body">
                       <div className="form-group">
                         <TextField
@@ -447,7 +449,7 @@ const ProjectCreate = () => {
                   </div>
 
                   <div className="card create-form-box">
-                    <h3 className="card-header">UHS Return Periods</h3>
+                    <h3 className="card-header required">UHS Return Periods</h3>
                     <div className="card-body">
                       <div className="form-group">
                         <TextField
