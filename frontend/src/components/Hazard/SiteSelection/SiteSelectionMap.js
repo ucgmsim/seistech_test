@@ -42,8 +42,8 @@ const SiteSelectionMap = () => {
     <div className="mapbox">
       <ReactMapGL
         {...viewport}
-        width={MAP_BOX_WIDTH}
-        height={MAP_BOX_HEIGHT}
+        width="100%"
+        height="100%"
         transitionDuration={"auto"}
         transitionInterpolator={new FlyToInterpolator({ speed: 1.2 })}
         mapboxApiAccessToken={MAP_BOX_TOKEN}
