@@ -2,7 +2,9 @@ import React, { useState, useContext, useEffect, Fragment } from "react";
 
 import { v4 as uuidv4 } from "uuid";
 import { GlobalContext } from "context";
+import * as CONSTANTS from "constants/Constants";
 import ProjectSelect from "components/common/ProjectSelect";
+import GuideTooltip from "components/common/GuideTooltip";
 
 const DisaggregationSection = () => {
   const {
@@ -30,7 +32,10 @@ const DisaggregationSection = () => {
   return (
     <Fragment>
       <div className="form-group form-section-title">
-        <span>Disaggregation</span>
+        Disaggregation
+        <GuideTooltip
+          explanation={CONSTANTS.TOOLTIP_MESSAGES["PROJECT_DISAGG"]}
+        />
       </div>
       <div className="form-group">
         <label

@@ -4,6 +4,7 @@ import TextField from "@material-ui/core/TextField";
 import Select from "react-select";
 import * as CONSTANTS from "constants/Constants";
 import { useAuth0 } from "components/common/ReactAuth0SPA";
+import GuideTooltip from "components/common/GuideTooltip";
 
 import "assets/style/NZS1170Section.css";
 import { handleErrors } from "utils/Utils";
@@ -356,7 +357,11 @@ const NZS1170Section = () => {
     <Fragment>
       <form autoComplete="off" onSubmit={(e) => e.preventDefault()}>
         <div className="form-group form-section-title">
-          <span>NZS1170.5</span>
+          NZS1170.5
+          <GuideTooltip
+            explanation={CONSTANTS.TOOLTIP_MESSAGES["HAZARD_NZCODE"]}
+            hyperlink={CONSTANTS.TOOLTIP_URL["HAZARD_NZCODE"]}
+          />
         </div>
 
         <div className="form-group">

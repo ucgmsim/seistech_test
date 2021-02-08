@@ -239,3 +239,40 @@ export const PLOT_CONFIG = {
   ],
   doubleClick: "autosize",
 };
+
+/*
+  Constant Tooltips Message
+*/
+export const TOOLTIP_MESSAGES = {
+  SITE_SELECTION_LOCATION:
+    "Enter the location (Lat, Lon) of the site of interest",
+  SITE_SELECTION_SITE_CONDITION:
+    "Enter the site parameters, such as the 30m-averaged shear-wave velocity. Default values of these parameters are estimated based on the selected location. You can either use this or manually override it with a specified value.",
+  HAZARD_HAZARD:
+    "Select the intensity measure of interest to compute the seismic hazard curve.",
+  HAZARD_DISAGG:
+    "Specify the annual exceedance rate (inverse of return period) to compute the disaggregation distribution. The adopted intensity measure is that specified in the Intensity Measure tab.",
+  HAZARD_UHS:
+    "Specify one or more annual exceedance rates (inverse of return period) to compute the Uniform Hazard Spectrum (UHS) for. Specified rates are displayed, which can be subsequently removed.",
+  HAZARD_NZCODE:
+    "Select the parameters of NZS1170.5:2004 to compare with the site-specific hazard results. Based on the location and Vs30 values assigned, these parameters have been estimated, but can be manually over-ridden.",
+  PROJECT_SITE_SELECTION_PROJECT_ID:
+    "Select the Project title from the list of available alternatives.",
+  PROJECT_SITE_SELECTION_LOCATION:
+    "Select the site/location of interest for this Project.",
+  PROJECT_SITE_SELECTION_VS30:
+    "Select the site parameters of interest for this site of interest, such as the 30m-averaged shear-wave velocity.",
+  PROJECT_HAZARD:
+    "Select the intensity measure of interest to compute the seismic hazard curve.",
+  PROJECT_DISAGG:
+    "Select the annual exceedance rate (inverse of return period) to compute the disaggregation distribution. The adopted intensity measure is that specified in the Intensity Measure tab.",
+  PROJECT_UHS:
+    "Select one or more annual exceedance rates (inverse of return period) to compute the Uniform Hazard Spectrum (UHS) for. Selected rates are displayed, which can be subsequently removed.",
+};
+
+/*
+  Hyperlinks for Tooltips
+*/
+export const TOOLTIP_URL = {
+  HAZARD_NZCODE: "https://google.com",
+};
