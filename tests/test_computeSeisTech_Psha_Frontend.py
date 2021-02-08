@@ -121,7 +121,7 @@ class TestComputeSeisTech_Psha_Frontend():
     self.driver.find_element(By.ID, "uhs-update-plot").click()
     self.driver.find_element(By.LINK_TEXT, "Uniform Hazard Spectrum").click()
     check_error_display(self.driver)
-    WebDriverWait(self.driver, 150000).until(expected_conditions.presence_of_element_located((By.CSS_SELECTOR, ".uhs-plot .user-select-none")))
+    WebDriverWait(self.driver, 300000).until(expected_conditions.presence_of_element_located((By.CSS_SELECTOR, ".uhs-plot .user-select-none")))
     self.driver.find_element(By.CSS_SELECTOR, ".uhs-viewer > .download-button").click()
  
     time.sleep(10) #wait for the download to complete
