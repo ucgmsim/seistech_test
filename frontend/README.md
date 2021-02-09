@@ -602,8 +602,8 @@ After users have done the following steps:
 
 ##### Ensemble
 
-If it is in DEV version, you see two options, **v20p5emp** and **v20p45sim**.
-But in EA and PROD.
+For DEV, you see two options, **v20p5emp** and **v20p11sim**.
+For EA and PROD, you will not see an `Ensemble` selector.
 
 ##### Location
 
