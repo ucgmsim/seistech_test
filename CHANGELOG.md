@@ -1,3 +1,9 @@
+## February 9, 2021
+
+### GMS Viewer - ([PR #42](https://github.com/ucgmsim/seistech_psha_frontend/pull/42))
+
+- Implement the GMS section for Hazard Analysis.
+
 ## February 3, 2021
 
 ### Tooltips - ([PR #40](https://github.com/ucgmsim/seistech_psha_frontend/pull/40))
