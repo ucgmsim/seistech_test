@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 import Select from "react-select";
 
@@ -13,7 +13,7 @@ import * as CONSTANTS from "constants/Constants";
 const EditUser = () => {
   const { getTokenSilently } = useAuth0();
 
-  const [userData, setUserData] = useState([]);
+  const [userData, setUserData] = useState({});
   const [projectData, setProjectData] = useState([]);
 
   /*
@@ -38,13 +38,13 @@ const EditUser = () => {
   const [selectedProject, setSelectedProject] = useState([]);
 
   useEffect(() => {
-    if (userData.length > 0) {
-      setUserOption(createSelectArray(userData));
+    if (Object.entries(userData).length > 0) {
+      setUserOption(createProjectIDArray(userData));
     }
   }, [userData]);
 
   useEffect(() => {
-    if (Object.entries(projectObj).length !== 0) {
+    if (Object.entries(projectObj).length > 0) {
       setProjectOption(createProjectIDArray(projectObj));
     }
   }, [projectObj]);
@@ -87,7 +87,7 @@ const EditUser = () => {
             const responseUserData = await users.json();
             const responseProjectData = await projects.json();
 
-            setUserData(responseUserData["all_users"]);
+            setUserData(responseUserData);
             setProjectData(responseProjectData);
           })
           .catch((error) => {
@@ -109,7 +109,6 @@ const EditUser = () => {
     if (projectData.length !== 0) {
       let tempObj = {};
       for (const [key, value] of Object.entries(projectData)) {
-        console.log(`This is a key ${key} and value's name ${value.name}`);
         tempObj[key] = value.name;
       }
       setProjectObj(tempObj);
