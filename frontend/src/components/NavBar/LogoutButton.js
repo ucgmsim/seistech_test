@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { NavLink as RouterNavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { useAuth0 } from "components/common/ReactAuth0SPA";
 
 import { ENV } from "constants/Constants";
+
+import { GlobalContext } from "context";
 
 import {
   UncontrolledDropdown,
@@ -15,6 +17,9 @@ import {
 
 const LogoutButton = () => {
   const { user, logout } = useAuth0();
+
+  const { hasPermission } = useContext(GlobalContext);
+
   return (
     <UncontrolledDropdown nav inNavbar direction="down">
       <DropdownToggle nav caret id="profile-drop-down">
@@ -36,6 +41,18 @@ const LogoutButton = () => {
         >
           <FontAwesomeIcon icon="user" className="mr-3" /> Profile
         </DropdownItem>
+
+        {hasPermission("edit-user") ? (
+          <DropdownItem
+            tag={RouterNavLink}
+            to="/eidt-user"
+            className="dropdown-profile"
+            activeClassName="router-link-exact-active"
+          >
+            <FontAwesomeIcon icon="tools" className="mr-3" /> Edit User
+          </DropdownItem>
+        ) : null}
+
         <DropdownItem
           id="qs-logout-btn"
           onClick={() =>
