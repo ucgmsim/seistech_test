@@ -49,6 +49,10 @@ export const PROJECT_API_DOWNLOAD_DISAGG = "projectAPI/disagg_download";
 export const PROJECT_API_DOWNLOAD_UHS = "projectAPI/uhs_download";
 export const PROJECT_API_DOWNLOAD_GMS = "projectAPI/gms_download";
 
+/* Middleware API call - That doesn't need to communicate to neither Core API nor Project API */
+export const MIDDLEWARE_API_ROUTE_GET_USER = "api/auth0/user/get";
+export const MIDDLEWARE_API_ROUTE_GET_PROJECT = "api/projectAPI/get";
+
 /* 
   Words 
   TODO - See whether it's worth putting as constands due to structure.
