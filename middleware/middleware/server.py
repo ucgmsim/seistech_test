@@ -191,7 +191,7 @@ def proxy_to_api(
     ----------
     request: object
     route: str
-        URL path to Core API
+        URL path to Core/Project API
     methods: str
         GET/POST methods
     endpoint: str
