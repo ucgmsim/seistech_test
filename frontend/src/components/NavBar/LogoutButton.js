@@ -45,7 +45,7 @@ const LogoutButton = () => {
         {hasPermission("edit-user") ? (
           <DropdownItem
             tag={RouterNavLink}
-            to="/eidt-user"
+            to="/edit-user"
             className="dropdown-profile"
             activeClassName="router-link-exact-active"
           >
