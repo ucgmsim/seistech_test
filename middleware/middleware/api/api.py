@@ -53,16 +53,17 @@ def get_users():
     # List of dictionaries
     user_list = resp.json()
 
-    user_id_list = []
+    user_dict = {}
 
     # We want to store an actual id that comes after auth| or google| so split string by |
+
     for user_dic in user_list:
         if "user_id" in user_dic.keys():
-            user_id_list.append(user_dic["user_id"].split("|")[1])
+            user_dict[user_dic["user_id"].split("|")[1]] = user_dic["email"]
         else:
             print(f"WARNING: No user_id found for user_dict {user_dict}")
 
-    return user_id_list
+    return user_dict
 
 
 def add_user_to_db(user_id):
@@ -95,7 +96,7 @@ def add_project_to_db(project_name):
 @app.route("/api/auth0/user/get", methods=["GET"])
 @requires_auth
 def get_all_user_from_auth0():
-    return jsonify({"all_users": get_users()})
+    return jsonify(get_users())
 
 
 # Will be used for Project dropdown
