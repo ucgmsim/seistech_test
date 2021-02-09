@@ -66,13 +66,26 @@ def get_users():
 
 
 def add_user_to_db(user_id):
-    """Add an user to MariaDB if not exist"""
+    """Add an user to the MariaDB if not exist"""
     try:
         new_user = User(user_id)
         db.session.add(new_user)
         db.session.commit()
     except:
         print(f"User {user_id} already exists")
+
+
+def add_project_to_db(project_name):
+    """Add a new project to the MariaDB if not exist
+
+    The following if statement's condition will return True if row exists
+    """
+    if bool(Project.query.filter_by(project_name=project_name).first()) == False:
+        new_project = Project(project_name)
+        db.session.add(new_project)
+        db.session.commit()
+    else:
+        print(f"Project {project_name} already exists")
 
 
 """MIDDLEWARE API
@@ -90,3 +103,9 @@ def get_all_user_from_auth0():
 @requires_auth
 def get_all_projects_from_project_api():
     return proxy_to_api(request, "api/project/ids/get", "GET")
+
+
+@app.route("/api/test", methods=["GET"])
+def test():
+    add_project_to_db("gnzl")
+    return jsonify({"test": "DONE"})
