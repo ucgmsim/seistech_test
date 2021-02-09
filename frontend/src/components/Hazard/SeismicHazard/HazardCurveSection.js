@@ -1,5 +1,7 @@
 import React, { useState, useContext, useEffect, Fragment } from "react";
 import IMSelect from "components/common/IMSelect";
+import GuideTooltip from "components/common/GuideTooltip";
+import * as CONSTANTS from "constants/Constants";
 import { v4 as uuidv4 } from "uuid";
 import { GlobalContext } from "context";
 
@@ -8,7 +10,8 @@ const HazardCurveSection = () => {
     selectedIM,
     setSelectedIM,
     setHazardCurveComputeClick,
-    IMs,
+    showHazardNZCode,
+    setShowHazardNZCode,
   } = useContext(GlobalContext);
 
   const [
@@ -23,14 +26,13 @@ const HazardCurveSection = () => {
   return (
     <Fragment>
       <div className="form-group form-section-title">
-        <span>Hazard Curve</span>
+        Hazard Curve
+        <GuideTooltip
+          explanation={CONSTANTS.TOOLTIP_MESSAGES["HAZARD_HAZARD"]}
+        />
       </div>
       <div className="custom-form-group">
-        <IMSelect
-          title="Intensity Measure"
-          setIM={setSelectedIM}
-          options={IMs}
-        />
+        <IMSelect title="Intensity Measure" setIM={setSelectedIM} />
       </div>
 
       <div className="form-group">
@@ -45,6 +47,14 @@ const HazardCurveSection = () => {
         >
           Compute
         </button>
+      </div>
+      <div className="form-group">
+        <input
+          type="checkbox"
+          checked={showHazardNZCode}
+          onChange={() => setShowHazardNZCode(!showHazardNZCode)}
+        />
+        <span className="show-nzs">&nbsp;Show NZS1170.5</span>
       </div>
     </Fragment>
   );

@@ -5,7 +5,9 @@ import PrivateRoute from "components/PrivateRoute";
 import Loading from "components/common/Loading";
 import NavBar from "components/NavBar/NavBar";
 
+import Home from "views/Home";
 import Hazard from "views/Hazard";
+import Project from "views/Project";
 import Profile from "views/Profile";
 import Footer from "views/Footer";
 
@@ -18,7 +20,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 // fontawesome
 import InitFontAwesome from "utils/InitFontAwesome";
-import Home from "views/Home";
 
 InitFontAwesome();
 
@@ -40,6 +41,8 @@ const App = () => {
                 <Route path="/" exact component={Home} />
 
                 <PrivateRoute path="/hazard" exact component={Hazard} />
+
+                <PrivateRoute path="/project" exact component={Project} />
 
                 <PrivateRoute path="/profile" component={Profile} />
               </Switch>

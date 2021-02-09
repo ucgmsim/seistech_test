@@ -15,3 +15,10 @@ middleware/middleware.egg-info/
 
 # Pthon virtual environment
 /venv
+
+# vscode setting file
+/.vscode
+
+# DB stored externally
+/database/*/db_data
+/database/dev/docker-compose.yml

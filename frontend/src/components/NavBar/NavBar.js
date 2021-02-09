@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Navbar, Nav, NavLink, NavbarBrand } from "reactstrap";
 import { NavLink as RouterNavLink, Link } from "react-router-dom";
 
@@ -6,12 +6,16 @@ import "assets/style/NavBar.css";
 
 import { useAuth0 } from "components/common/ReactAuth0SPA";
 
+import { GlobalContext } from "context";
+
 import SeisTechLogo from "assets/seistech_long_logo_simple.png";
 
 import LogoutButton from "./LogoutButton";
 import LoginButton from "./LoginButton";
 
 const MainNav = () => {
+  const { hasPermission } = useContext(GlobalContext);
+
   return (
     <Nav className="mr-auto" navbar>
       <NavLink
@@ -22,14 +26,27 @@ const MainNav = () => {
       >
         Home
       </NavLink>
-      <NavLink
-        tag={RouterNavLink}
-        to="/hazard"
-        exact
-        activeClassName="router-link-exact-active"
-      >
-        Hazard Analysis
-      </NavLink>
+      {hasPermission("hazard") ? (
+        <NavLink
+          tag={RouterNavLink}
+          to="/hazard"
+          exact
+          activeClassName="router-link-exact-active"
+        >
+          Hazard Analysis
+        </NavLink>
+      ) : null}
+
+      {hasPermission("project") ? (
+        <NavLink
+          tag={RouterNavLink}
+          to="/project"
+          exact
+          activeClassName="router-link-exact-active"
+        >
+          Projects
+        </NavLink>
+      ) : null}
     </Nav>
   );
 };

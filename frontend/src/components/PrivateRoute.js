@@ -1,9 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import PropTypes from "prop-types";
 import { Route, withRouter } from "react-router-dom";
+
 import { useAuth0 } from "components/common/ReactAuth0SPA";
+import { GlobalContext } from "context";
 
 const PrivateRoute = ({ component: Component, path, location, ...rest }) => {
+  const { hasPermission } = useContext(GlobalContext);
   const { isAuthenticated, loginWithRedirect } = useAuth0();
 
   useEffect(() => {
@@ -17,8 +20,20 @@ const PrivateRoute = ({ component: Component, path, location, ...rest }) => {
     fn();
   }, [isAuthenticated, loginWithRedirect, path, location]);
 
+  // Replace error part to a proper component, e.g., 403 forbidden template
   const render = (props) =>
-    isAuthenticated === true ? <Component {...props} /> : null;
+    /* 
+      if user is authenticated (logged in) and has permission to access, they can access to the page
+      if user is authenticated (logged in) but has no permission to access, they will see the error message
+    */
+    isAuthenticated === true && hasPermission(path.split("/")[1]) === true ? (
+      <Component {...props} />
+    ) : isAuthenticated === true &&
+      hasPermission(path.split("/")[1]) === false ? (
+      <div>
+        <strong>You do not have permission to view this page.</strong>
+      </div>
+    ) : null;
 
   return <Route path={path} render={render} {...rest} />;
 };

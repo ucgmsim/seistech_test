@@ -1,26 +1,30 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState, useContext } from "react";
 import Select from "react-select";
 
-const IMSelect = ({ title, setIM, options }) => {
+import { GlobalContext } from "context";
+
+import { createSelectArray } from "utils/Utils";
+
+const IMSelect = ({ title, setIM }) => {
+  const { IMs } = useContext(GlobalContext);
+
   const [localIMs, setLocalIMs] = useState([]);
 
   useEffect(() => {
-    let localIMs = options.map((IM) => ({
-      value: IM,
-      label: IM,
-    }));
+    let localIMs = createSelectArray(IMs);
+
     setLocalIMs(localIMs);
-  }, [options]);
+  }, [IMs]);
 
   return (
     <Fragment>
       <pre>{title}</pre>
       <Select
         id="IMs"
-        placeholder={options.length === 0 ? "Loading..." : "Select..."}
+        placeholder={IMs.length === 0 ? "Loading..." : "Select..."}
         onChange={(e) => setIM(e.value)}
         options={localIMs}
-        isDisabled={options.length === 0}
+        isDisabled={IMs.length === 0}
       />
     </Fragment>
   );

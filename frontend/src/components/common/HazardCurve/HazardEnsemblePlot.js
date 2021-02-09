@@ -5,15 +5,26 @@ import { getPlotData } from "utils/Utils";
 import { PLOT_MARGIN, PLOT_CONFIG } from "constants/Constants";
 import ErrorMessage from "components/common/ErrorMessage";
 
-const HazardEnsemblePlot = ({ hazardData, im }) => {
-  if (hazardData !== null && !hazardData.hasOwnProperty("error")) {
+const HazardEnsemblePlot = ({
+  hazardData,
+  im,
+  nzCodeData,
+  showNZCode = true,
+  extra,
+}) => {
+  if (
+    hazardData !== null &&
+    !hazardData.hasOwnProperty("error") &&
+    nzCodeData !== null
+  ) {
     const ensHazard = hazardData["ensemble_hazard"];
-
     const plotData = {};
+
     for (let typeKey of ["fault", "ds", "total"]) {
       plotData[typeKey] = getPlotData(ensHazard[typeKey]);
     }
-    plotData["nzCode"] = getPlotData(hazardData["nz_code_hazard"].im_values);
+
+    plotData["nzCode"] = getPlotData(nzCodeData);
 
     return (
       <Plot
@@ -55,6 +66,7 @@ const HazardEnsemblePlot = ({ hazardData, im }) => {
             name: "NZ code",
             marker: { symbol: "triangle-up" },
             line: { color: "black", dash: "dot" },
+            visible: showNZCode,
           },
         ]}
         layout={{
@@ -75,7 +87,19 @@ const HazardEnsemblePlot = ({ hazardData, im }) => {
           margin: PLOT_MARGIN,
         }}
         useResizeHandler={true}
-        config={PLOT_CONFIG}
+        config={{
+          ...PLOT_CONFIG,
+          toImageButtonOptions: {
+            filename:
+              extra.from === "hazard"
+                ? `Hazard_Plot_${im}_Lat_${String(
+                    parseFloat(extra.lat).toFixed(4)
+                  ).replace(".", "p")}_Lng_${String(
+                    parseFloat(extra.lng).toFixed(4)
+                  ).replace(".", "p")}`
+                : `Hazard_Plot_${extra.im}_project_id_${extra.id}_location_${extra.location}_vs30_${extra.vs30}`,
+          },
+        }}
       />
     );
   }

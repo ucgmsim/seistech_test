@@ -15,13 +15,15 @@ import GMSViewer from "components/Hazard/GMS/GMSViewer";
 import HazardForm from "components/Hazard/SeismicHazard/HazardForm";
 import HazardViewer from "components/Hazard/SeismicHazard/HazardViewer";
 
-const Home = () => {
-  const { vs30, locationSetClick } = useContext(GlobalContext);
+const Hazard = () => {
+  const { vs30, locationSetClick, nzCodeDefaultParams } = useContext(
+    GlobalContext
+  );
 
   return (
     <Fragment>
       <Tabs defaultActiveKey="siteselection" className="hazard-tabs">
-        <Tab eventKey="siteselection" title="Site Selection" tabClassName="site-selection-tab">
+        <Tab eventKey="siteselection" title="Site Selection">
           <TwoColumnView
             cpanel={SiteSelectionForm}
             viewer={SiteSelectionViewer}
@@ -31,7 +33,11 @@ const Home = () => {
         <Tab
           eventKey="hazard"
           title="Seismic Hazard"
-          disabled={locationSetClick === null || vs30 === ""}
+          disabled={
+            locationSetClick === null ||
+            vs30 === "" ||
+            nzCodeDefaultParams.length === 0
+          }
           tabClassName="seismic-hazard-tab"
         >
           <TwoColumnView cpanel={HazardForm} viewer={HazardViewer} />
@@ -50,4 +56,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Hazard;

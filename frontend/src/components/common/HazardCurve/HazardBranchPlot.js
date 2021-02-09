@@ -5,8 +5,18 @@ import { getPlotData } from "utils/Utils";
 import { PLOT_MARGIN, PLOT_CONFIG } from "constants/Constants";
 import ErrorMessage from "components/common/ErrorMessage";
 
-const HazardBranchPlot = ({ hazardData, im }) => {
-  if (hazardData !== null && !hazardData.hasOwnProperty("error")) {
+const HazardBranchPlot = ({
+  hazardData,
+  im,
+  nzCodeData,
+  showNZCode = true,
+  extra,
+}) => {
+  if (
+    hazardData !== null &&
+    !hazardData.hasOwnProperty("error") &&
+    nzCodeData !== null
+  ) {
     const branchHazard = hazardData["branches_hazard"];
     // // Create the scatter objects for the branch totals
     const scatterObjs = [];
@@ -22,8 +32,8 @@ const HazardBranchPlot = ({ hazardData, im }) => {
       });
     }
 
-    // // For NZ Code
-    const nzCode = getPlotData(hazardData["nz_code_hazard"].im_values);
+    // For NZ Code
+    const nzCode = getPlotData(nzCodeData);
 
     // Add the scatter object for the ensemble total
     const ensHazard = hazardData["ensemble_hazard"];
@@ -47,6 +57,7 @@ const HazardBranchPlot = ({ hazardData, im }) => {
         name: "NZ code",
         marker: { symbol: "triangle-up" },
         line: { color: "black", dash: "dot" },
+        visible: showNZCode,
       }
     );
     return (
@@ -71,7 +82,19 @@ const HazardBranchPlot = ({ hazardData, im }) => {
           margin: PLOT_MARGIN,
         }}
         useResizeHandler={true}
-        config={PLOT_CONFIG}
+        config={{
+          ...PLOT_CONFIG,
+          toImageButtonOptions: {
+            filename:
+              extra.from === "hazard"
+                ? `Branches_Hazard_Plot_${im}_Lat_${String(
+                    parseFloat(extra.lat).toFixed(4)
+                  ).replace(".", "p")}_Lng_${String(
+                    parseFloat(extra.lng).toFixed(4)
+                  ).replace(".", "p")}`
+                : `Branches_Hazard_Plot_${extra.im}_project_id_${extra.id}_location_${extra.location}_vs30_${extra.vs30}`,
+          },
+        }}
       />
     );
   }

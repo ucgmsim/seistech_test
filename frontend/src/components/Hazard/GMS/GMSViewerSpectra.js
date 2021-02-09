@@ -3,7 +3,7 @@ import React from "react";
 import Plot from "react-plotly.js";
 import { PLOT_MARGIN, PLOT_CONFIG } from "constants/Constants";
 import ErrorMessage from "components/common/ErrorMessage";
-import { orderIMs } from "utils/Utils";
+import { sortIMs } from "utils/Utils";
 
 import "assets/style/GMSPlot.css";
 
@@ -21,7 +21,7 @@ const GMSViewerSpectra = ({ gmsData, periods, im_type, im_j }) => {
 
     // Create an object key = IM, value = Period
     const localPeriods = {};
-    orderIMs(periods).forEach((IM) => {
+    sortIMs(periods).forEach((IM) => {
       // With out current format, IM starts with pSA, they have period.
       // So we can find whether its the one with period or not
       if (IM.startsWith("pSA")) {

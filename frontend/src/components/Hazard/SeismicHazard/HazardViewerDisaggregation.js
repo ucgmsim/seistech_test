@@ -11,7 +11,7 @@ import GuideMessage from "components/common/GuideMessage";
 import ErrorMessage from "components/common/ErrorMessage";
 
 import { GlobalContext } from "context";
-import ContributionTable from "./ContributionTable";
+import ContributionTable from "../../common/Disaggregation/ContributionTable";
 import { handleErrors } from "utils/Utils";
 
 const HazadViewerDisaggregation = () => {
@@ -312,8 +312,16 @@ const HazadViewerDisaggregation = () => {
       </Tabs>
       <DownloadButton
         disabled={!showContribTable}
-        downloadURL={CONSTANTS.INTE_API_DOWNLOAD_DISAGG}
-        downloadToken={downloadToken}
+        downloadURL={CONSTANTS.CORE_API_DOWNLOAD_DISAGG}
+        downloadToken={{
+          disagg_token: downloadToken,
+        }}
+        extraParams={{
+          ensemble_id: selectedEnsemble,
+          station: station,
+          im: selectedIM,
+          exceedance: disaggAnnualProb,
+        }}
         fileName="disaggregation.zip"
       />
     </div>

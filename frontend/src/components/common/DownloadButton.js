@@ -1,23 +1,53 @@
 import React, { useState } from "react";
+import { useAuth0 } from "components/common/ReactAuth0SPA";
 import { CORE_API_BASE_URL } from "constants/Constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { handleErrors } from "utils/Utils";
 import axios from "axios";
 
-const DownloadButton = ({ downloadURL, downloadToken, fileName, disabled }) => {
+const DownloadButton = ({
+  downloadURL,
+  downloadToken,
+  extraParams,
+  fileName,
+  disabled,
+}) => {
+  // extraParams are used to record to our DB to track the users activity.
+
+  const { getTokenSilently } = useAuth0();
+
   const [downloadButtonLabel, setDownloadButtonLabel] = useState({
     icon: <FontAwesomeIcon icon="download" className="mr-3" />,
     isFetching: false,
   });
 
-  const downloadData = () => {
+  const downloadData = async () => {
+    const token = await getTokenSilently();
     setDownloadButtonLabel({
       icon: <FontAwesomeIcon icon="spinner" className="mr-3" spin />,
       isFetching: true,
     });
 
+    let queryString = "?";
+
+    // downloadToken is now an object form
+    for (const [param, value] of Object.entries(downloadToken)) {
+      queryString += `${param}=${value}&`;
+    }
+
+    // These will be used to record download data activity
+    for (const [param, value] of Object.entries(extraParams)) {
+      queryString += `${param}=${value}&`;
+    }
+
+    // remove the last character which is an extra &
+    queryString = queryString.slice(0, -1);
+
     axios({
-      url: CORE_API_BASE_URL + downloadURL + downloadToken,
+      url: CORE_API_BASE_URL + downloadURL + queryString,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
       method: "GET",
       responseType: "blob",
     })

@@ -9,7 +9,7 @@ import makeAnimated from "react-select/animated";
 import IMSelect from "components/common/IMSelect";
 import * as CONSTANTS from "constants/Constants";
 import $ from "jquery";
-import { renderSigfigs, orderIMs, handleErrors } from "utils/Utils";
+import { renderSigfigs, sortIMs, handleErrors } from "utils/Utils";
 import "assets/style/GMSForm.css";
 
 const GMSForm = () => {
@@ -79,7 +79,7 @@ const GMSForm = () => {
               .then(handleErrors)
               .then(async (response) => {
                 const responseData = await response.json();
-                setAvailableIMs(orderIMs(responseData["ims"]));
+                setAvailableIMs(sortIMs(responseData["ims"]));
               })
               // Catch error for the second fetch, IMs
               .catch((error) => {
@@ -338,7 +338,7 @@ const GMSForm = () => {
         const newIMVector = Array.from(localIMVector, (x) => x.value);
 
         // To make a string from a sorted array and separate with comma
-        orderIMs(newIMVector).forEach((IM) => (queryString += IM + ","));
+        sortIMs(newIMVector).forEach((IM) => (queryString += IM + ","));
         // Remove the last comma
         queryString = queryString.slice(0, -1);
 
@@ -632,7 +632,9 @@ const GMSForm = () => {
                         </td>
                       </tr>
                       <tr>
-                        <th scope="row">VS30</th>
+                        <th scope="row">
+                          V<sub>S30</sub>
+                        </th>
                         <td>
                           <input
                             type="text"

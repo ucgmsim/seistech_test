@@ -4,27 +4,54 @@ export const CORE_API_BASE_URL =
   process.env.REACT_APP_CONSTANT_CORE_API_BASE_URL;
 
 export const APP_API_ROUTE_USERDATA = "user";
-export const CORE_API_ROUTE_ENSEMBLEIDS = "ensembleids";
-export const CORE_API_ROUTE_IMIDS = "imids";
-export const CORE_API_ROUTE_CONTEXT_MAP = "contextmap";
-export const CORE_API_ROUTE_VS30_MAP = "vs30map";
-export const CORE_API_ROUTE_LOCATION = "location";
-export const CORE_API_ROUTE_STATION = "station";
-export const CORE_API_ROUTE_HAZARD_PLOT = "hazard";
-export const CORE_API_ROUTE_DISAGG = "disagg";
-export const CORE_API_ROUTE_UHS = "uhs";
-export const CORE_API_ROUTE_GMS_COMPUTE = "gms/ensemble_gms";
-export const CORE_API_ROUTE_GMS_DEFAULT_IM_WEIGHTS = "gms/default_im_weights";
+
+export const CORE_API_ROUTE_ENSEMBLEIDS = "coreAPI/ensembleids";
+export const CORE_API_ROUTE_IMIDS = "coreAPI/imids";
+export const CORE_API_ROUTE_CONTEXT_MAP = "coreAPI/contextmap";
+export const CORE_API_ROUTE_VS30_MAP = "coreAPI/vs30map";
+export const CORE_API_ROUTE_STATION = "coreAPI/station";
+export const CORE_API_ROUTE_HAZARD_PLOT = "coreAPI/hazard";
+export const CORE_API_ROUTE_HAZARD_NZCODE = "coreAPI/hazard/nz1170p5";
+export const CORE_API_ROUTE_DISAGG = "coreAPI/disagg";
+export const CORE_API_ROUTE_UHS = "coreAPI/uhs";
+export const CORE_API_ROUTE_UHS_NZCODE = "coreAPI/uhs/nz1170p5";
+export const CORE_API_ROUTE_HAZARD_NZCODE_SOIL_CLASS =
+  "coreAPI/hazard/nz1170p5/soil_class";
+export const CORE_API_ROUTE_HAZARD_NZCODE_DEFAULT_PARAMS =
+  "coreAPI/hazard/nz1170p5/default";
+export const CORE_API_ROUTE_GMS_COMPUTE = "coreAPI/gms/ensemble_gms";
+export const CORE_API_ROUTE_GMS_DEFAULT_IM_WEIGHTS =
+  "coreAPI/gms/default_im_weights";
 export const CORE_API_ROUTE_GMS_DEFAULT_CAUSAL_PARAMS =
-  "gms/default_causal_params";
-export const CORE_API_ROUTE_GMS_GET_AVAILABLE_GMS = "gms/ensemble_gms/ims";
-export const CORE_API_ROUTE_GMS_GET_GM_DATASETS = "gms/ensemble_gms/datasets";
+  "coreAPI/gms/default_causal_params";
+export const CORE_API_ROUTE_GMS_GET_AVAILABLE_GMS =
+  "coreAPI/gms/ensemble_gms/ims";
+export const CORE_API_ROUTE_GMS_GET_GM_DATASETS =
+  "coreAPI/gms/ensemble_gms/datasets";
+
+// This endpoint will eventually replace when we implement DB properly
+// As this function reads from Available_Project table (A bridge table between User and Project)
+// export const PROJECT_API_ROUTE_PROJECT_IDS = "projectAPI/available_ids/get";
+export const PROJECT_API_ROUTE_PROJECT_IDS = "projectAPI/ids/get";
+export const PROJECT_API_ROUTE_PROJECT_SITES = "projectAPI/sites/get";
+export const PROJECT_API_ROUTE_PROJECT_IMS = "projectAPI/ims/get";
+export const PROJECT_API_ROUTE_PROJECT_HAZARD_GET = "projectAPI/hazard/get";
+export const PROJECT_API_ROUTE_PROJECT_DISAGG_GET = "projectAPI/disagg/get";
+export const PROJECT_API_ROUTE_PROJECT_DISAGG_RPS = "projectAPI/disagg/rps/get";
+export const PROJECT_API_ROUTE_PROJECT_UHS_RPS = "projectAPI/uhs/rps/get";
+export const PROJECT_API_ROUTE_PROJECT_UHS_GET = "projectAPI/uhs/get";
+export const PROJECT_API_ROUTE_PROJECT_MAPS = "projectAPI/maps/get";
 
 /* Download URL */
-export const INTE_API_DOWNLOAD_HAZARD = "hazard_download/";
-export const INTE_API_DOWNLOAD_DISAGG = "disagg_download/";
-export const INTE_API_DOWNLOAD_UHS = "uhs_download/";
-export const INTE_API_DOWNLOAD_GMS = "gms_download/";
+export const CORE_API_DOWNLOAD_HAZARD = "coreAPI/hazard_download";
+export const CORE_API_DOWNLOAD_DISAGG = "coreAPI/disagg_download";
+export const CORE_API_DOWNLOAD_UHS = "coreAPI/uhs_download";
+export const CORE_API_DOWNLOAD_GMS = "coreAPI/gms_download";
+
+export const PROJECT_API_DOWNLOAD_HAZARD = "projectAPI/hazard_download";
+export const PROJECT_API_DOWNLOAD_DISAGG = "projectAPI/disagg_download";
+export const PROJECT_API_DOWNLOAD_UHS = "projectAPI/uhs_download";
+export const PROJECT_API_DOWNLOAD_GMS = "projectAPI/gms_download";
 
 /* 
   Words 
@@ -152,6 +179,35 @@ export const GMS_VIEWER_GUIDE_INSTRUCTION = [
 ];
 
 /*
+  Project Tabs
+*/
+export const PROJECT_SITE_SELECTION_GUIDE_MSG =
+  "Please do the following steps to see images.";
+export const PROJECT_SITE_SELECTION_INSTRUCTION = [
+  "Choose the Project ID.",
+  "Choose the Location.",
+  "Choose the VS30.",
+  "Click the Get button to see an image",
+];
+
+export const PROJECT_HAZARD_CURVE_INSTRUCTION = [
+  "Choose the Intensity Measure.",
+  "Click the Get buton in the 'Hazard Curve' section to see plots.",
+];
+
+export const PROJECT_DISAGG_INSTRUCTION_PLOT = [
+  "Choose the Intensity Measure.",
+  "Choose the Return Period",
+  "Click the Get buton in the 'Disaggregation' section to see plots.",
+];
+
+export const PROJECT_DISAGG_INSTRUCTION_TABLE = [
+  "Choose the Intensity Measure.",
+  "Choose the Return Period",
+  "Click the Get buton in the 'Disaggregation' section to see contribution table.",
+];
+
+/*
   Error Messages
 */
 
@@ -185,6 +241,9 @@ export const PLOT_MARGIN = {
   pad: 4,
 };
 
+/*
+  Minimize the options in the modebar (plotly's menu)
+*/
 export const PLOT_CONFIG = {
   displayModeBar: true,
   modeBarButtonsToRemove: [
@@ -198,4 +257,41 @@ export const PLOT_CONFIG = {
     "autoScale2d",
   ],
   doubleClick: "autosize",
+};
+
+/*
+  Constant Tooltips Message
+*/
+export const TOOLTIP_MESSAGES = {
+  SITE_SELECTION_LOCATION:
+    "Enter the location (Lat, Lon) of the site of interest",
+  SITE_SELECTION_SITE_CONDITION:
+    "Enter the site parameters, such as the 30m-averaged shear-wave velocity. Default values of these parameters are estimated based on the selected location. You can either use this or manually override it with a specified value.",
+  HAZARD_HAZARD:
+    "Select the intensity measure of interest to compute the seismic hazard curve.",
+  HAZARD_DISAGG:
+    "Specify the annual exceedance rate (inverse of return period) to compute the disaggregation distribution. The adopted intensity measure is that specified in the Intensity Measure tab.",
+  HAZARD_UHS:
+    "Specify one or more annual exceedance rates (inverse of return period) to compute the Uniform Hazard Spectrum (UHS) for. Specified rates are displayed, which can be subsequently removed.",
+  HAZARD_NZCODE:
+    "Select the parameters of NZS1170.5:2004 to compare with the site-specific hazard results. Based on the location and Vs30 values assigned, these parameters have been estimated, but can be manually over-ridden.",
+  PROJECT_SITE_SELECTION_PROJECT_ID:
+    "Select the Project title from the list of available alternatives.",
+  PROJECT_SITE_SELECTION_LOCATION:
+    "Select the site/location of interest for this Project.",
+  PROJECT_SITE_SELECTION_VS30:
+    "Select the site parameters of interest for this site of interest, such as the 30m-averaged shear-wave velocity.",
+  PROJECT_HAZARD:
+    "Select the intensity measure of interest to compute the seismic hazard curve.",
+  PROJECT_DISAGG:
+    "Select the annual exceedance rate (inverse of return period) to compute the disaggregation distribution. The adopted intensity measure is that specified in the Intensity Measure tab.",
+  PROJECT_UHS:
+    "Select one or more annual exceedance rates (inverse of return period) to compute the Uniform Hazard Spectrum (UHS) for. Selected rates are displayed, which can be subsequently removed.",
+};
+
+/*
+  Hyperlinks for Tooltips
+*/
+export const TOOLTIP_URL = {
+  HAZARD_NZCODE: "https://google.com",
 };

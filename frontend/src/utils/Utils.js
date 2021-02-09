@@ -14,15 +14,27 @@ export const disableScrollOnNumInput = () => {
 };
 
 export const handleErrors = (response) => {
-  if (response.status !== 200) {
-    /* 
-      Debug purpose
-      This can be replaced if we implement front-end logging just like we did on Core API (Saving logs in a file somehow)
-      Until then, console.log to invest while developing
-    */
-    console.log(Error(response.statusText));
-    throw response.status;
+  // For Promise.all which is sending multiple requests simultaneously
+  if (response.length > 1) {
+    for (const eachResponse of response) {
+      if (eachResponse.status !== 200) {
+        console.log(Error(response.statusText));
+        throw response.status;
+      }
+    }
+    // For a single request.
+  } else {
+    if (response.status !== 200) {
+      /* 
+        Debug purpose
+        This can be replaced if we implement front-end logging just like we did on Core API (Saving logs in a file somehow)
+        Until then, console.log to invest while developing
+      */
+      console.log(Error(response.statusText));
+      throw response.status;
+    }
   }
+
   return response;
 };
 
@@ -58,6 +70,44 @@ export const range = (start, stop, step = 1) =>
     .map((x, y) => x + y * step);
 
 /*
+  Create an special aray for react-select
+*/
+export const createSelectArray = (options) => {
+  let selectOptions = options.map((option) => ({
+    value: option,
+    label: option,
+  }));
+
+  return selectOptions;
+};
+
+/*
+  Create an special aray for react-select - Special case, value and label are different - Specially made for Project IDs
+*/
+export const createProjectIDArray = (options) => {
+  let selectOptions = [];
+
+  for (const [key, value] of Object.entries(options)) {
+    selectOptions.push({ value: key, label: value });
+  }
+
+  return selectOptions;
+};
+
+/*
+  Check the IM list and decide to disable the UHS input field.
+  No pSA in IM(return true), we disable the UHS
+*/
+export const checkIMwithPSA = (givenIMList) => {
+  for (let i = 0; i < givenIMList.length; i++) {
+    if (givenIMList[i].includes("pSA")) {
+      return false;
+    }
+  }
+  return true;
+};
+
+/*
   JS version of qcore IM Sort
 */
 
@@ -77,7 +127,7 @@ const DEFAULT_PATTERN_ORDER = [
   "IESDR",
 ];
 
-export const orderIMs = (unsortedIMs) => {
+export const sortIMs = (unsortedIMs) => {
   const adjIMs = [];
 
   if (unsortedIMs.length !== 0) {

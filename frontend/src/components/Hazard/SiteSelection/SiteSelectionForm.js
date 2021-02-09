@@ -3,8 +3,9 @@ import React, { Fragment, useContext, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { GlobalContext } from "context";
 import { useAuth0 } from "components/common/ReactAuth0SPA";
+import GuideTooltip from "components/common/GuideTooltip";
 import * as CONSTANTS from "constants/Constants";
-import { disableScrollOnNumInput, handleErrors } from "utils/Utils";
+import { disableScrollOnNumInput, handleErrors, sortIMs } from "utils/Utils";
 import TextField from "@material-ui/core/TextField";
 
 import "assets/style/HazardForms.css";
@@ -17,17 +18,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const SiteSelectionForm = () => {
   const { getTokenSilently } = useAuth0();
 
-  const [locationSetButton, setLocationSetButton] = useState({
-    text: "Set",
-    isFetching: false,
-  });
-  const [localLat, setLocalLat] = useState(CONSTANTS.DEFAULT_LAT);
-  const [localLng, setLocalLng] = useState(CONSTANTS.DEFAULT_LNG);
-  const [localSetClick, setLocalSetClick] = useState(null);
-
   const {
     setLocationSetClick,
     setIMs,
+    setSoilClass,
     setVS30,
     setDefaultVS30,
     setStation,
@@ -41,9 +35,39 @@ const SiteSelectionForm = () => {
     setDisaggComputeClick,
     setUHSComputeClick,
     setUHSRateTable,
+    setNzCodeDefaultParams,
   } = useContext(GlobalContext);
 
+  const [locationSetButton, setLocationSetButton] = useState({
+    text: "Set",
+    isFetching: false,
+  });
+  const [localLat, setLocalLat] = useState(CONSTANTS.DEFAULT_LAT);
+  const [localLng, setLocalLng] = useState(CONSTANTS.DEFAULT_LNG);
+  /* 
+    InputSource is either `input` or `mapbox`
+    `input` for input fields
+    `mapbox` for MapBox click
+  */
+  const [inputSource, setInputSource] = useState({
+    lat: "input",
+    lng: "input",
+  });
+  const [localSetClick, setLocalSetClick] = useState(null);
+
+  /*
+    Two scenarios
+    1. User click on the MapBox
+    2. User clicks Set after they put Lat and/or Lng
+    By setting inputSource differently, app knows whether they display in 4dp or full
+  */
   useEffect(() => {
+    if (mapBoxCoordinate.input === "MapBox") {
+      setInputSource({ lat: "MapBox", lng: "MapBox" });
+    } else if (mapBoxCoordinate.input === "input") {
+      setInputSource({ lat: "input", lng: "input" });
+    }
+
     setLocalLat(mapBoxCoordinate.lat);
     setLocalLng(mapBoxCoordinate.lng);
   }, [mapBoxCoordinate]);
@@ -61,15 +85,45 @@ const SiteSelectionForm = () => {
     );
   };
 
+  /*
+    When Set button is clicked, chech whether the last action is from input fields or MapBox
+  */
   const onClickLocationSet = () => {
-    setMapBoxCoordinate({
-      lat: localLat,
-      lng: localLng,
-    });
+    setLocalSetClick(uuidv4());
     setSiteSelectionLat(localLat);
     setSiteSelectionLng(localLng);
+
+    if (inputSource.lat === "input" || inputSource.lng === "input") {
+      setMapBoxCoordinate({
+        lat: localLat,
+        lng: localLng,
+        input: "input",
+      });
+    } else {
+      setMapBoxCoordinate({
+        lat: localLat,
+        lng: localLng,
+        input: "MapBox",
+      });
+    }
+
     setLocationSetClick(uuidv4());
-    setLocalSetClick(uuidv4());
+  };
+
+  const setttingLocalLat = (e) => {
+    setInputSource((prevState) => ({
+      ...prevState,
+      lat: "input",
+    }));
+    setLocalLat(e);
+  };
+
+  const settingLocalLng = (e) => {
+    setInputSource((prevState) => ({
+      ...prevState,
+      lng: "input",
+    }));
+    setLocalLng(e);
   };
 
   /*
@@ -132,6 +186,25 @@ const SiteSelectionForm = () => {
               setStation(responseData.station);
               setVS30(responseData.vs30);
               setDefaultVS30(responseData.vs30);
+
+              let nzCodeDefaultQueryString = `?ensemble_id=${selectedEnsemble}&station=${responseData.station}`;
+
+              return fetch(
+                CONSTANTS.CORE_API_BASE_URL +
+                  CONSTANTS.CORE_API_ROUTE_HAZARD_NZCODE_DEFAULT_PARAMS +
+                  nzCodeDefaultQueryString,
+                {
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
+                  signal: signal,
+                }
+              );
+            })
+            .then(handleErrors)
+            .then(async (response) => {
+              const nzCodeDefaultParams = await response.json();
+              setNzCodeDefaultParams(nzCodeDefaultParams);
               setLocationSetButton({
                 text: "Set",
                 isFetching: false,
@@ -160,32 +233,47 @@ const SiteSelectionForm = () => {
   }, [localSetClick]);
 
   /*
-    Getting IMs
+    Getting IMs for Seismic Hazard and Soil Class
   */
   useEffect(() => {
     const abortController = new AbortController();
     const signal = abortController.signal;
 
-    const getIM = async () => {
+    const getIMandSoilClass = async () => {
       try {
         const token = await getTokenSilently();
 
-        await fetch(
-          CONSTANTS.CORE_API_BASE_URL +
-            CONSTANTS.CORE_API_ROUTE_IMIDS +
-            "?ensemble_id=" +
-            selectedEnsemble,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-            signal: signal,
-          }
-        )
+        await Promise.all([
+          fetch(
+            CONSTANTS.CORE_API_BASE_URL +
+              CONSTANTS.CORE_API_ROUTE_IMIDS +
+              "?ensemble_id=" +
+              selectedEnsemble,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+              signal: signal,
+            }
+          ),
+          fetch(
+            CONSTANTS.CORE_API_BASE_URL +
+              CONSTANTS.CORE_API_ROUTE_HAZARD_NZCODE_SOIL_CLASS,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+              signal: signal,
+            }
+          ),
+        ])
           .then(handleErrors)
-          .then(async (response) => {
-            const responseData = await response.json();
-            setIMs(responseData["ims"]);
+          .then(async ([responseIM, responseSoilClass]) => {
+            const IMData = await responseIM.json();
+            const soilClass = await responseSoilClass.json();
+
+            setIMs(sortIMs(IMData["ims"]));
+            setSoilClass(soilClass["soil_class"]);
           })
           .catch((error) => {
             console.log(error);
@@ -194,7 +282,7 @@ const SiteSelectionForm = () => {
         console.log(error);
       }
     };
-    getIM();
+    getIMandSoilClass();
 
     return () => {
       abortController.abort();
@@ -205,7 +293,7 @@ const SiteSelectionForm = () => {
     <Fragment>
       {CONSTANTS.ENV === "DEV" ? (
         <div>
-          <div className="form-row form-section-title">
+          <div className="form-group form-section-title">
             <span>Ensemble</span>
           </div>
           <div className="custom-form-group">
@@ -214,7 +302,12 @@ const SiteSelectionForm = () => {
         </div>
       ) : null}
 
-      <div className="form-row form-section-title">Location</div>
+      <div className="form-group form-section-title">
+        Location
+        <GuideTooltip
+          explanation={CONSTANTS.TOOLTIP_MESSAGES["SITE_SELECTION_LOCATION"]}
+        />
+      </div>
 
       <form autoComplete="off" onSubmit={(e) => e.preventDefault()}>
         <div className="form-group">
@@ -230,8 +323,12 @@ const SiteSelectionForm = () => {
               id="haz-lat"
               className="flex-grow-1"
               type="number"
-              value={localLat}
-              onChange={(e) => setLocalLat(e.target.value)}
+              value={
+                inputSource.lat === "input"
+                  ? localLat
+                  : Number(localLat).toFixed(4)
+              }
+              onChange={(e) => setttingLocalLat(e.target.value)}
               placeholder="[-47.4, -34.3]"
               error={
                 (localLat >= -47.4 && localLat <= -34.3) || localLat === ""
@@ -260,8 +357,12 @@ const SiteSelectionForm = () => {
                 id="haz-lng"
                 className="flex-grow-1"
                 type="number"
-                value={localLng}
-                onChange={(e) => setLocalLng(e.target.value)}
+                value={
+                  inputSource.lng === "input"
+                    ? localLng
+                    : Number(localLng).toFixed(4)
+                }
+                onChange={(e) => settingLocalLng(e.target.value)}
                 placeholder="[165, 180]"
                 error={
                   (localLng >= 165 && localLng <= 180) || localLng === ""
@@ -292,7 +393,14 @@ const SiteSelectionForm = () => {
         </div>
       </form>
 
-      <div className="form-row form-section-title">Site Conditions</div>
+      <div className="form-group form-section-title">
+        Site Conditions
+        <GuideTooltip
+          explanation={
+            CONSTANTS.TOOLTIP_MESSAGES["SITE_SELECTION_SITE_CONDITION"]
+          }
+        />
+      </div>
 
       <SiteConditions />
     </Fragment>
