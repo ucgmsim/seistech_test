@@ -137,7 +137,10 @@ def get_disagg():
 def get_uhs():
     if requires_permission("hazard:uhs"):
         return proxy_to_api(
-            request, "api/uhs/ensemble_uhs/get", "GET", "Hazard Analysis - UHS Compute",
+            request,
+            "api/uhs/ensemble_uhs/get",
+            "GET",
+            "Hazard Analysis - UHS Compute",
         )
     raise AuthError(
         {
@@ -172,7 +175,10 @@ def get_uhs_nzcode():
 @requires_auth
 def compute_ensemble_GMS():
     return proxy_to_api(
-        request.data.decode(), "api/gms/ensemble_gms/compute", "POST", "GMS Compute",
+        request,
+        "api/gms/ensemble_gms/compute",
+        "POST",
+        "GMS Compute",
     )
 
 
@@ -188,6 +194,17 @@ def get_default_causal_params():
     return proxy_to_api(
         request, "api/gms/ensemble_gms/get_default_causal_params", "GET"
     )
+
+
+# GMS
+@app.route("/coreAPI/gms/ensemble_gms/datasets", methods=["GET"])
+def get_gm_datasets():
+    return proxy_to_api(request, "api/gms/ensemble_gms/datasets", "GET")
+
+
+@app.route("/coreAPI/gms/ensemble_gms/ims", methods=["GET"])
+def get_GMS_available_IMs():
+    return proxy_to_api(request, "api/gms/ensemble_gms/ims", "GET")
 
 
 # Download

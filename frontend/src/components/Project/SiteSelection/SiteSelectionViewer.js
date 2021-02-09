@@ -107,7 +107,7 @@ const SiteSelectionViewer = () => {
           {projectSiteSelectionGetClick === null && (
             <GuideMessage
               header={CONSTANTS.SITE_SELECTION_REGIONAL_TITLE}
-              body={CONSTANTS.PROJECT_SITE_SELECTION_WARNING_MSG}
+              body={CONSTANTS.PROJECT_SITE_SELECTION_GUIDE_MSG}
               instruction={CONSTANTS.PROJECT_SITE_SELECTION_INSTRUCTION}
             />
           )}
@@ -137,7 +137,7 @@ const SiteSelectionViewer = () => {
           {projectSiteSelectionGetClick === null && (
             <GuideMessage
               header={CONSTANTS.SITE_SELECTION_VS30_TITLE}
-              body={CONSTANTS.PROJECT_SITE_SELECTION_WARNING_MSG}
+              body={CONSTANTS.PROJECT_SITE_SELECTION_GUIDE_MSG}
               instruction={CONSTANTS.PROJECT_SITE_SELECTION_INSTRUCTION}
             />
           )}

@@ -219,7 +219,7 @@ const HazadViewerDisaggregation = () => {
           {projectDisaggGetClick === null && (
             <GuideMessage
               header={CONSTANTS.DISAGGREGATION}
-              body={CONSTANTS.DISAGGREGATION_WARNING_MSG_PLOT}
+              body={CONSTANTS.DISAGGREGATION_GUIDE_MSG_PLOT}
               instruction={CONSTANTS.PROJECT_DISAGG_INSTRUCTION_PLOT}
             />
           )}
@@ -251,7 +251,7 @@ const HazadViewerDisaggregation = () => {
           {projectDisaggGetClick === null && (
             <GuideMessage
               header={CONSTANTS.DISAGGREGATION}
-              body={CONSTANTS.DISAGGREGATION_WARNING_MSG_PLOT}
+              body={CONSTANTS.DISAGGREGATION_GUIDE_MSG_PLOT}
               instruction={CONSTANTS.PROJECT_DISAGG_INSTRUCTION_PLOT}
             />
           )}
@@ -283,7 +283,7 @@ const HazadViewerDisaggregation = () => {
           {projectDisaggGetClick === null && (
             <GuideMessage
               header={CONSTANTS.DISAGGREGATION}
-              body={CONSTANTS.DISAGGREGATION_WARNING_MSG_TABLE}
+              body={CONSTANTS.DISAGGREGATION_GUIDE_MSG_TABLE}
               instruction={CONSTANTS.PROJECT_DISAGG_INSTRUCTION_TABLE}
             />
           )}
