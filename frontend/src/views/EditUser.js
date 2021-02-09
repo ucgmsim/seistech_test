@@ -2,7 +2,11 @@ import React, { Fragment, useState, useEffect } from "react";
 
 import Select from "react-select";
 
-import { createSelectArray, handleErrors } from "utils/Utils";
+import {
+  createSelectArray,
+  handleErrors,
+  createProjectIDArray,
+} from "utils/Utils";
 import { useAuth0 } from "components/common/ReactAuth0SPA";
 import * as CONSTANTS from "constants/Constants";
 
@@ -11,6 +15,21 @@ const EditUser = () => {
 
   const [userData, setUserData] = useState([]);
   const [projectData, setProjectData] = useState([]);
+
+  /*
+    projectData would look like this
+    {
+      gnzl: {
+        name: Generic New Zealand Location
+      }
+    }
+    So using projectData to make a new projectObj that looks like
+    {
+      gnzl: Generic New Zealand Location
+    }
+    For a dropdown
+  */
+  const [projectObj, setProjectObj] = useState({});
 
   const [userOption, setUserOption] = useState([]);
   const [projectOption, setProjectOption] = useState([]);
@@ -24,6 +43,15 @@ const EditUser = () => {
     }
   }, [userData]);
 
+  useEffect(() => {
+    if (Object.entries(projectObj).length !== 0) {
+      setProjectOption(createProjectIDArray(projectObj));
+    }
+  }, [projectObj]);
+
+  /*
+    Fetching data from the API
+  */
   useEffect(() => {
     const abortController = new AbortController();
     const signal = abortController.signal;
@@ -61,9 +89,6 @@ const EditUser = () => {
 
             setUserData(responseUserData["all_users"]);
             setProjectData(responseProjectData);
-
-            console.log(`THIS IS THE USER DATA ${responseUserData}`);
-            console.log(`THIS IS THE PROJECT DATA ${responseProjectData}`);
           })
           .catch((error) => {
             console.log(error);
@@ -79,6 +104,17 @@ const EditUser = () => {
       abortController.abort();
     };
   }, []);
+
+  useEffect(() => {
+    if (projectData.length !== 0) {
+      let tempObj = {};
+      for (const [key, value] of Object.entries(projectData)) {
+        console.log(`This is a key ${key} and value's name ${value.name}`);
+        tempObj[key] = value.name;
+      }
+      setProjectObj(tempObj);
+    }
+  }, [projectData]);
 
   return (
     <div className="container">
@@ -99,7 +135,8 @@ const EditUser = () => {
           <Select
             id="available-projects"
             onChange={(value) => setSelectedProject(value || [])}
-            // options={localIMs}
+            value={selectedProject}
+            options={projectOption}
             isMulti
             closeMenuOnSelect={false}
           />
