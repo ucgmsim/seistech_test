@@ -92,7 +92,7 @@ def get_all_user_from_auth0():
 
 
 # Will be used for Project dropdown
-@app.route("/middlewareAPI/projectAPI/get", methods=["GET"])
+@app.route("/middlewareAPI/projectAPI/addable_projects/get", methods=["GET"])
 @requires_auth
 def get_all_projects_from_project_api():
     query_id = request.query_string.decode("utf-8").split("=")[1]

@@ -55,7 +55,8 @@ export const PROJECT_API_DOWNLOAD_GMS = "projectAPI/gms_download";
 
 /* Middleware API call - That doesn't need to communicate to neither Core API nor Project API */
 export const MIDDLEWARE_API_ROUTE_GET_USER = "middlewareAPI/auth0/user/get";
-export const MIDDLEWARE_API_ROUTE_GET_PROJECT = "middlewareAPI/projectAPI/get";
+export const MIDDLEWARE_API_ROUTE_GET_PROJECT =
+  "middlewareAPI/projectAPI/addable_projects/get";
 export const MIDDLEWARE_API_ROUTE_ALLOCATE_PROJECTS_TO_USER =
   "middlewareAPI/allocate_projects";
 
