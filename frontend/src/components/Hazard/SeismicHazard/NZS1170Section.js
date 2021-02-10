@@ -59,15 +59,18 @@ const NZS1170Section = () => {
     Based on them, create an array to be used in react-select.
   */
   useEffect(() => {
-    const tempArr = [];
+    if (Object.entries(soilClass).length > 0) {
+      // Due to value.replaceAll can't be applied on null, check the object is not empty
+      const tempArr = [];
 
-    for (const [key, value] of Object.entries(soilClass)) {
-      tempArr.push({
-        value: key,
-        label: `${key} - ${value.replaceAll("_", " ")}`,
-      });
+      for (const [key, value] of Object.entries(soilClass)) {
+        tempArr.push({
+          value: key,
+          label: `${key} - ${value.replaceAll("_", " ")}`,
+        });
+      }
+      setLocalSoilClasses(tempArr);
     }
-    setLocalSoilClasses(tempArr);
   }, [soilClass]);
 
   /*
