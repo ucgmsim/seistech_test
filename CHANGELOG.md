@@ -1,3 +1,9 @@
+## February 11, 2021
+
+### Allocate projects to users - ([PR #44](https://github.com/ucgmsim/seistech_psha_frontend/pull/44))
+
+- We now have a simple UI to allocate addable projects to a certain user under Edit User section.
+
 ## February 10, 2021
 
 ### HOTFIX - ([PR #43](https://github.com/ucgmsim/seistech_psha_frontend/pull/43))
