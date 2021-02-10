@@ -1,3 +1,22 @@
+## February 10, 2021
+
+### HOTFIX - ([PR #43](https://github.com/ucgmsim/seistech_psha_frontend/pull/43))
+
+- `useEffect` hook only works when an object is not empty due to using `replaceAll` function.
+
+## February 9, 2021
+
+### GMS Viewer - ([PR #42](https://github.com/ucgmsim/seistech_psha_frontend/pull/42))
+
+- Implement the GMS section for Hazard Analysis.
+
+## February 3, 2021
+
+### Tooltips - ([PR #40](https://github.com/ucgmsim/seistech_psha_frontend/pull/40))
+
+- Tooltips with a brief explanation.
+- Disable the MapBox in Hazard Analysis temporarily due to the crash.
+
 ## January 27, 2021
 
 ### Filter UHS section based on given IM list - ([PR #38](https://github.com/ucgmsim/seistech_psha_frontend/pull/38))

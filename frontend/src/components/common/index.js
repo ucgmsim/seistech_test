@@ -1,6 +1,7 @@
 import DownloadButton from "./DownloadButton";
 import ErrorMessage from "./ErrorMessage";
 import GuideMessage from "./GuideMessage";
+import GuideTooltip from "./GuideTooltip";
 import HoverSwitch from "./HoverSwitch";
 import IMSelect from "./IMSelect";
 import Loading from "./Loading";
@@ -17,6 +18,7 @@ export {
   DownloadButton,
   ErrorMessage,
   GuideMessage,
+  GuideTooltip,
   HoverSwitch,
   IMSelect,
   Loading,

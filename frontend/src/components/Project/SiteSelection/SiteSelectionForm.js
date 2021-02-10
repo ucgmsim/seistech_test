@@ -2,13 +2,13 @@ import React, { Fragment, useContext, useEffect, useState } from "react";
 
 import { v4 as uuidv4 } from "uuid";
 import { GlobalContext } from "context";
+
 import { useAuth0 } from "components/common/ReactAuth0SPA";
 import * as CONSTANTS from "constants/Constants";
-import { ProjectSelect } from "components/common";
+import { ProjectSelect, GuideTooltip } from "components/common";
 import { handleErrors, sortIMs } from "utils/Utils";
 
 import "assets/style/HazardForms.css";
-import "assets/style/TitleSubScript.css";
 
 const SiteSelectionForm = () => {
   const {
@@ -209,7 +209,14 @@ const SiteSelectionForm = () => {
 
   return (
     <Fragment>
-      <div className="form-row form-section-title">Project ID</div>
+      <div className="form-group form-section-title">
+        Project ID
+        <GuideTooltip
+          explanation={
+            CONSTANTS.TOOLTIP_MESSAGES["PROJECT_SITE_SELECTION_PROJECT_ID"]
+          }
+        />
+      </div>
       <div className="form-group">
         <ProjectSelect
           id="project-id-select"
@@ -220,7 +227,14 @@ const SiteSelectionForm = () => {
         />
       </div>
 
-      <div className="form-row form-section-title">Location</div>
+      <div className="form-group form-section-title">
+        Location
+        <GuideTooltip
+          explanation={
+            CONSTANTS.TOOLTIP_MESSAGES["PROJECT_SITE_SELECTION_LOCATION"]
+          }
+        />
+      </div>
       <div className="form-group">
         <ProjectSelect
           id="location-select"
@@ -231,8 +245,15 @@ const SiteSelectionForm = () => {
         />
       </div>
 
-      <div className="form-row form-section-title">
-        V<sub className="title-subscript">S30</sub>
+      <div className="form-group form-section-title">
+        <span>
+          V<sub>S30</sub>
+        </span>
+        <GuideTooltip
+          explanation={
+            CONSTANTS.TOOLTIP_MESSAGES["PROJECT_SITE_SELECTION_VS30"]
+          }
+        />
       </div>
       <div className="form-group">
         <ProjectSelect

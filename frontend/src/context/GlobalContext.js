@@ -53,7 +53,7 @@ export const Provider = (props) => {
 
   const [nzCodeDefaultParams, setNzCodeDefaultParams] = useState([]);
 
-  const [soilClass, setSoilClass] = useState([]);
+  const [soilClass, setSoilClass] = useState({});
 
   // Check box stats for Hazard Curve and UHS for NZCode, default is true
   const [showHazardNZCode, setShowHazardNZCode] = useState(true);
@@ -89,6 +89,22 @@ export const Provider = (props) => {
   /*
     Project Tab
   */
+  const [GMSComputeClick, setGMSComputeClick] = useState(null);
+  const [GMSIMLevel, setGMSIMLevel] = useState("");
+  const [GMSExcdRate, setGMSExcdRate] = useState("");
+  const [GMSIMVector, setGMSIMVector] = useState([]);
+  const [GMSRadio, setGMSRadio] = useState("im-level");
+  const [GMSIMType, setGMSIMType] = useState("");
+  const [GMSNum, setGMSNum] = useState("");
+  const [GMSReplicates, setGMSReplicates] = useState(1);
+  const [GMSWeights, setGMSWeights] = useState("");
+  const [GMSMwMin, setGMSMwMin] = useState("");
+  const [GMSMwMax, setGMSMwMax] = useState("");
+  const [GMSRrupMin, setGMSRrupMin] = useState("");
+  const [GMSRrupMax, setGMSRrupMax] = useState("");
+  const [GMSVS30Min, setGMSVS30Min] = useState("");
+  const [GMSVS30Max, setGMSVS30Max] = useState("");
+
   // Site Selection
   // Response for Location is an object and we need an array for dropdowns
   const [projectId, setProjectId] = useState(null);
@@ -282,6 +298,36 @@ export const Provider = (props) => {
     /*
       GMS
     */
+    GMSComputeClick,
+    setGMSComputeClick,
+    GMSIMLevel,
+    setGMSIMLevel,
+    GMSExcdRate,
+    setGMSExcdRate,
+    GMSIMVector,
+    setGMSIMVector,
+    GMSRadio,
+    setGMSRadio,
+    GMSIMType,
+    setGMSIMType,
+    GMSNum,
+    setGMSNum,
+    GMSReplicates,
+    setGMSReplicates,
+    GMSWeights,
+    setGMSWeights,
+    GMSMwMin,
+    setGMSMwMin,
+    GMSMwMax,
+    setGMSMwMax,
+    GMSRrupMin,
+    setGMSRrupMin,
+    GMSRrupMax,
+    setGMSRrupMax,
+    GMSVS30Min,
+    setGMSVS30Min,
+    GMSVS30Max,
+    setGMSVS30Max,
     IMVectors,
     setIMVectors,
 

@@ -3,7 +3,8 @@ import React, { useState, useContext, useEffect, Fragment } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { GlobalContext } from "context";
 
-import { ProjectSelect } from "components/common";
+import { ProjectSelect, GuideTooltip } from "components/common";
+import * as CONSTANTS from "constants/Constants";
 
 const HazardCurveSection = () => {
   const {
@@ -36,7 +37,10 @@ const HazardCurveSection = () => {
   return (
     <Fragment>
       <div className="form-group form-section-title">
-        <span>Hazard Curve</span>
+        Hazard Curve
+        <GuideTooltip
+          explanation={CONSTANTS.TOOLTIP_MESSAGES["PROJECT_HAZARD"]}
+        />
       </div>
       <div className="form-group">
         <label

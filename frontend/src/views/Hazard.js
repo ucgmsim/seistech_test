@@ -9,8 +9,8 @@ import { TwoColumnView } from "components/common";
 import SiteSelectionForm from "components/Hazard/SiteSelection/SiteSelectionForm";
 import SiteSelectionViewer from "components/Hazard/SiteSelection/SiteSelectionViewer";
 
-import GmsForm from "components/Hazard/GMS/GmsForm";
-import GmsViewer from "components/Hazard/GMS/GmsViewer";
+import GMSForm from "components/Hazard/GMS/GMSForm";
+import GMSViewer from "components/Hazard/GMS/GMSViewer";
 
 import HazardForm from "components/Hazard/SeismicHazard/HazardForm";
 import HazardViewer from "components/Hazard/SeismicHazard/HazardViewer";
@@ -49,7 +49,7 @@ const Hazard = () => {
           disabled={ENV !== "DEV" || locationSetClick === null || vs30 === ""}
           tabClassName="gms-tab"
         >
-          <TwoColumnView cpanel={GmsForm} viewer={GmsViewer} />
+          <TwoColumnView cpanel={GMSForm} viewer={GMSViewer} />
         </Tab>
       </Tabs>
     </Fragment>

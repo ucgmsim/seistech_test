@@ -1,4 +1,4 @@
-import React, { useContext, Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState, useContext } from "react";
 import Select from "react-select";
 
 import { GlobalContext } from "context";
@@ -6,7 +6,7 @@ import { GlobalContext } from "context";
 import { createSelectArray } from "utils/Utils";
 
 const IMSelect = ({ title, setIM }) => {
-  const { IMs, setIMVectors } = useContext(GlobalContext);
+  const { IMs } = useContext(GlobalContext);
 
   const [localIMs, setLocalIMs] = useState([]);
 
@@ -14,7 +14,6 @@ const IMSelect = ({ title, setIM }) => {
     let localIMs = createSelectArray(IMs);
 
     setLocalIMs(localIMs);
-    setIMVectors(localIMs);
   }, [IMs]);
 
   return (

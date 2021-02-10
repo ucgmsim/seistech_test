@@ -594,6 +594,120 @@ After users have done the following steps:
 - Choose IM Vector(s)
 - Put Num Ground Motions
 
+## Application
+
+### Hazard Analysis
+
+#### Site Selection
+
+##### Ensemble
+
+For DEV, you see two options, **v20p5emp** and **v20p11sim**.
+For EA and PROD, you will not see an `Ensemble` selector.
+
+##### Location
+
+Users can put Lat and Lng within NZ coordinates. Then click **Set** button to get a station, regional map and vs30 map.
+
+##### Site Conditions
+
+By setting the location, users get a default VS30. They can also update VS30 if they want by updating the input field and click **Set VS30**. By clicking the **Use Default**, it goes back to what it was. (The value from API when users set the location)
+
+#### Seismic Hazard
+
+Users need to set the location first in **Site Selection** tab to get into this tab.
+
+##### Hazard Curve
+
+Users can choose one IM from the dropdown, then click **Compute** button to get the following plots.
+
+- Ensemble branches
+- Fault/distributed seismicity contribution
+
+##### Disaggregation
+
+Users must choose IM first to do this job.
+
+Users can put **Annual Exceedance Rate** anywhere between 0 and 1. Click **Compute** to get following things.
+
+- Epsilon (image)
+- Fault/distributed seismicity (image)
+- Source contributions (table)
+
+##### Uniform Hazard Spectrum
+
+Similar to **Disaggregation**. Users can put **Annual Exceedance Rate** but they can put more than one. Click **Compute** to get a plot.
+
+##### NZ Code
+
+Will add this from NZ Code branch.
+
+#### GMS
+
+Users need to set the location first in **Site Selection** tab to get into this tab.
+
+##### IM Type
+
+The options are similar to IM (Intensity Measure) from the Hazard Curve in Seismic Hazard but slightly different. Those options are specialised for GMS. Users need to choose one of them.
+
+##### IM Level or Exceedance Rate
+
+Users can choose either **IM Level** or **Exceedance Rate**. The urrent setup is, by choosing **IM Type** first then putting **IM Level** or **Exceedance Rate**. If the focus gets outside of the input box, then it sends a request to Core API to get default parameters which are for **Pre-GM Filtering parameters** inside the advanced tab.
+
+##### IM Vector
+
+Identical list to IM Type. Except, the chosen **IM Type** will be filtered out. For instance, if you choose PGA from **IM Type**, there is now PGA in **IM Vector**. Also, users can choose multiple IMs.
+
+Also, just like above, when the focus gets out of this select box, it sends a request to the Core API to get default weights which are for **Weights** inside the advanced tab.
+
+##### Num Ground Motions
+
+Just a number.
+
+##### Compute button
+
+After users have done the following steps:
+
+- Choose IM Type
+- Choose IM Level or Exceedance Rate
+- Put its value
+- Choose IM Vector(s)
+- Put Num Ground Motions
+
+Compute button will be waiting for the following responses from Core API:
+
+- Pre-GM Filtering Parameters
+- Weights
+
+Once it gets all the responses from the Core API, the compute button gets enabled and users can click it to send a request to Core API to get the following plots:
+
+- IM Distributions
+  - Pseudo acceleration response spectra
+  - IM Vectors
+- Causal Parameters - Using **Pre-GM Filtering Parameters**'s Min/Max for the red dashed-dot lines
+  - Magnitude and Rrup plot
+  - Magnitude
+  - Rrup
+  - Scale Factor
+  - VS30 - Red solid line is from Site Selection, VS30 value.
+
+##### Advanced
+
+###### Pre-GM Filtering Parameters
+
+A table with inputs, afters user choose **IM Type** and either **IM Level** or **Exceedance Rate**, we get the default values. But users can also change to their values.
+
+###### Weights
+
+A table with multiple columns (number of chosen IM Vectors). Weights are allocated by the Core API.
+
+###### Database
+
+Currently, we don't have any database but will be there as a dropdown option.
+
+###### Replicates
+
+Currently, it defaults to 1.
 Compute button will be waiting for the following responses from Core API:
 
 - Pre-GM Filtering Parameters
