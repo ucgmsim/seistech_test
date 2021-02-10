@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import { GlobalContext } from "context";
 import * as CONSTANTS from "constants/Constants";
 import { disableScrollOnNumInput } from "utils/Utils";
-import GuideTooltip from "components/common/GuideTooltip";
+import { GuideTooltip } from "components/common";
 import TextField from "@material-ui/core/TextField";
 
 const DisaggregationSection = () => {

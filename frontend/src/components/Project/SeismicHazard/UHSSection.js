@@ -9,7 +9,7 @@ import Select from "react-select";
 import makeAnimated from "react-select/animated";
 
 import * as CONSTANTS from "constants/Constants";
-import GuideTooltip from "components/common/GuideTooltip";
+import { GuideTooltip } from "components/common";
 
 const UHSSection = () => {
   const {

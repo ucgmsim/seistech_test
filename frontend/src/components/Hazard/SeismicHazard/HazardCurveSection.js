@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect, Fragment } from "react";
 import IMSelect from "components/common/IMSelect";
-import GuideTooltip from "components/common/GuideTooltip";
+import { GuideTooltip } from "components/common";
 import * as CONSTANTS from "constants/Constants";
 import { v4 as uuidv4 } from "uuid";
 import { GlobalContext } from "context";

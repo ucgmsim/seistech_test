@@ -521,7 +521,7 @@ const GMSForm = () => {
             options={localIMs.filter((e) => {
               return e.value !== selectedIMType;
             })}
-            isDisabled={IMVectors.length === 0}
+            isDisabled={localIMs.length === 0}
             menuPlacement="auto"
           />
         </div>

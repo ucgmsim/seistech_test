@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect, Fragment } from "react";
 import * as CONSTANTS from "constants/Constants";
 import { v4 as uuidv4 } from "uuid";
 import { GlobalContext } from "context";
-import GuideTooltip from "components/common/GuideTooltip";
+import { GuideTooltip } from "components/common";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   renderSigfigs,

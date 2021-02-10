@@ -4,7 +4,7 @@ import TextField from "@material-ui/core/TextField";
 import Select from "react-select";
 import * as CONSTANTS from "constants/Constants";
 import { useAuth0 } from "components/common/ReactAuth0SPA";
-import GuideTooltip from "components/common/GuideTooltip";
+import { GuideTooltip } from "components/common";
 
 import "assets/style/NZS1170Section.css";
 import { handleErrors, disableScrollOnNumInput } from "utils/Utils";

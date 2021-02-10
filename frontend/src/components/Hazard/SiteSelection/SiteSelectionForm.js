@@ -3,7 +3,7 @@ import React, { Fragment, useContext, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { GlobalContext } from "context";
 import { useAuth0 } from "components/common/ReactAuth0SPA";
-import GuideTooltip from "components/common/GuideTooltip";
+import { GuideTooltip } from "components/common";
 import * as CONSTANTS from "constants/Constants";
 import { disableScrollOnNumInput, handleErrors, sortIMs } from "utils/Utils";
 import TextField from "@material-ui/core/TextField";
