@@ -59,7 +59,10 @@ def get_users():
 
     for user_dic in user_list:
         if "user_id" in user_dic.keys():
-            user_dict[user_dic["user_id"].split("|")[1]] = user_dic["email"]
+            temp_value = "{} | {}".format(
+                user_dic["email"], user_dic["identities"][0]["provider"]
+            )
+            user_dict[user_dic["user_id"].split("|")[1]] = temp_value
         else:
             print(f"WARNING: No user_id found for user_dict {user_dict}")
 
@@ -71,8 +74,6 @@ def allocate_users_to_projects():
 
     requested_user_id = data["user_info"]["value"]
     requested_project_list = data["project_info"]
-
-    print(requested_project_list)
 
     for project in requested_project_list:
         add_available_project_to_db(requested_user_id, project["value"])
