@@ -85,7 +85,9 @@ def handle_auth_error(ex):
 
 
 def get_user_id():
-    """We store Auth0 id to DB so no need extra step, just pull sub value which is the unique user_id"""
+    """We are storing Auth0 id to the DB so no need any extra steps.
+    Just pull sub's value in a return dictionary which is the unique user_id from Auth0
+    """
     token = get_token_auth_header()
     unverified_claims = jwt.get_unverified_claims(token)
 
@@ -112,7 +114,6 @@ def write_request_details(endpoint, query_dict):
 
     # Add to History table
     new_history = History(user_id, endpoint)
-
     db.session.add(new_history)
     db.session.commit()
 
@@ -155,8 +156,11 @@ def get_projects_from_db(user_id):
 
 
 def get_projects_from_project_api():
-    # Get a list of Project IDs & Project Names from Project API (Available Projects)
-    # Form of {project_id: {name : project_name}}
+    """Get a list of Project IDs & Project Names from Project API.
+    (Available Projects that we currently have, not from the DB.)
+    Form of
+    {project_id: {name : project_name}}
+    """
     all_projects_dicts = proxy_to_api(request, "api/project/ids/get", "GET").get_json()
 
     return all_projects_dicts
@@ -219,7 +223,6 @@ def get_addable_projects(query_id):
     return all_addable_projects
 
 
-# For api.py which communicates to DB or Auth0
 def check_user_in_db(user_id):
     """To check whether the given user_id is in the DB"""
     return bool(User.query.filter_by(user_id=user_id).first())
@@ -254,7 +257,7 @@ def add_project_to_db(project_name):
 
 def add_available_project_to_db(user_id, project_name):
     """This is where we insert data to the bridging table, available_projects
-    Unlike any other query, to a bridging table, we need to the following steps:
+    Unlike any other query, to a bridging table, we need to do the following steps:
     1. Find an User object by using user_id
     2. Find a Project object by using project_name
     3. Append(Allocate, they use Append for a bridging table) the User object to the Project object
@@ -262,14 +265,17 @@ def add_available_project_to_db(user_id, project_name):
 
     print(f"Check whether the user is in the DB, if not, add the person to the DB")
     if check_user_in_db(user_id) == False:
+        print(f"{user_id} is not in the DB so updating it.")
         add_user_to_db(user_id)
         db.session.flush()
 
     print(f"Check whether the project is in the DB, if not, add the project to the DB")
     if check_project_in_db(project_name) == False:
+        print(f"{project_name} is not in the DB so updating it.")
         add_project_to_db(project_name)
         db.session.flush()
 
+    # Find objects to user SQLAlchemy way of inserting to a bridging table.
     project_obj = Project.query.filter_by(project_name=project_name).first()
     user_obj = User.query.filter_by(user_id=user_id).first()
 
