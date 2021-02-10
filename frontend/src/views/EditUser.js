@@ -32,6 +32,10 @@ const EditUser = () => {
   }, [userData]);
 
   useEffect(() => {
+    /*
+      If fetched addable projects are more than 0, then display them as options.
+      If it is 0, then it is either API is not working or there are no more projects which can be added to this user.
+    */
     if (Object.entries(projectData).length > 0) {
       setProjectOption(createProjectIDArray(projectData));
     } else {
@@ -82,12 +86,13 @@ const EditUser = () => {
 
   /*
     Fetching projects that are not allocated to user.
+    Addable projects
   */
   useEffect(() => {
     const abortController = new AbortController();
     const signal = abortController.signal;
 
-    const getProjectData = async () => {
+    const getAddableProjectData = async () => {
       if (selectedUser.length != 0) {
         // Reset the selected option
         setSelectedProject([]);
@@ -120,7 +125,7 @@ const EditUser = () => {
       }
     };
 
-    getProjectData();
+    getAddableProjectData();
 
     return () => {
       abortController.abort();
@@ -211,7 +216,7 @@ const EditUser = () => {
     <div className="container">
       <div className="row justify-content-lg-center">
         <div className="col-lg-6">
-          <pre>User</pre>
+          <h4>User</h4>
           <Select
             id="available-users"
             onChange={(value) => setSelectedUser(value || [])}
@@ -220,7 +225,7 @@ const EditUser = () => {
           />
         </div>
         <div className="col-lg-6">
-          <pre>Project</pre>
+          <h4>Project</h4>
           <Select
             id="available-projects"
             onChange={(value) => setSelectedProject(value || [])}
