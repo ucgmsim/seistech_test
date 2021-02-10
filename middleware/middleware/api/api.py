@@ -2,14 +2,14 @@ from flask import jsonify, request
 from ..server import (
     app,
     requires_auth,
-    proxy_to_api,
+    add_available_project_to_db,
+    get_addable_projects,
 )
 
 import os
 import json
 import http.client
 import requests
-from models import *
 
 # To communicate with Management API
 AUTH0_CLIENT_ID = os.environ["AUTH0_CLIENT_ID"]
@@ -66,27 +66,18 @@ def get_users():
     return user_dict
 
 
-def add_user_to_db(user_id):
-    """Add an user to the MariaDB if not exist"""
-    try:
-        new_user = User(user_id)
-        db.session.add(new_user)
-        db.session.commit()
-    except:
-        print(f"User {user_id} already exists")
+def allocate_users_to_projects():
+    data = json.loads(request.data.decode())
 
+    requested_user_id = data["user_info"]["value"]
+    requested_project_list = data["project_info"]
 
-def add_project_to_db(project_name):
-    """Add a new project to the MariaDB if not exist
+    print(requested_project_list)
 
-    The following if statement's condition will return True if row exists
-    """
-    if bool(Project.query.filter_by(project_name=project_name).first()) == False:
-        new_project = Project(project_name)
-        db.session.add(new_project)
-        db.session.commit()
-    else:
-        print(f"Project {project_name} already exists")
+    for project in requested_project_list:
+        add_available_project_to_db(requested_user_id, project["value"])
+
+    return "DONE"
 
 
 """MIDDLEWARE API
@@ -103,10 +94,11 @@ def get_all_user_from_auth0():
 @app.route("/api/projectAPI/get", methods=["GET"])
 @requires_auth
 def get_all_projects_from_project_api():
-    return proxy_to_api(request, "api/project/ids/get", "GET")
+    query_id = request.query_string.decode("utf-8").split("=")[1]
+    return jsonify(get_addable_projects(query_id))
 
 
-@app.route("/api/test", methods=["GET"])
-def test():
-    add_project_to_db("gnzl")
-    return jsonify({"test": "DONE"})
+@app.route("/api/allocate_projects", methods=["POST"])
+@requires_auth
+def allocate_users_to_projects_api():
+    return jsonify(allocate_users_to_projects())
