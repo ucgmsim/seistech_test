@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { handleErrors, createProjectIDArray } from "utils/Utils";
 import { useAuth0 } from "components/common/ReactAuth0SPA";
+import ModalComponent from "components/common/ModalComponent";
 import * as CONSTANTS from "constants/Constants";
 
 const EditUser = () => {
@@ -19,8 +20,10 @@ const EditUser = () => {
   const [selectedUser, setSelectedUser] = useState([]);
   const [selectedProject, setSelectedProject] = useState([]);
 
-  const [statusText, setStatusText] = useState("Allocate Project");
   const [alocateClick, setAllocateClick] = useState(null);
+  const [statusText, setStatusText] = useState("Allocate Project");
+
+  const [modal, setModal] = useState(false);
 
   useEffect(() => {
     if (Object.entries(userData).length > 0) {
@@ -131,8 +134,8 @@ const EditUser = () => {
     const allocateUser = async () => {
       if (alocateClick !== null) {
         try {
-          const token = await getTokenSilently();
           setStatusText("Allocating...");
+          const token = await getTokenSilently();
 
           let requestOptions = {
             method: "POST",
@@ -152,9 +155,7 @@ const EditUser = () => {
             requestOptions
           )
             .then(handleErrors)
-            .then(async (response) => {
-              const responseData = await response.json();
-              console.log(responseData);
+            .then(async () => {
               setStatusText("Allocate Project");
             })
             .catch((error) => {
@@ -179,6 +180,31 @@ const EditUser = () => {
     return (
       Object.entries(selectedUser).length > 0 && selectedProject.length > 0
     );
+  };
+
+  const submitJob = () => {
+    setAllocateClick(uuidv4());
+    setModal(true);
+  };
+
+  useEffect(() => {
+    // Reset the select field after the modal is closed.
+    if (modal === false && setAllocateClick !== null) {
+      setSelectedProject([]);
+      setSelectedUser([]);
+    }
+  }, [modal]);
+
+  const bodyText = () => {
+    let bodyString = `Successfully added the following projects:\n\n`;
+
+    for (let i = 0; i < selectedProject.length; i++) {
+      bodyString += `${i + 1}: ${selectedProject[i].label}\n`;
+    }
+
+    bodyString += `\nto ${selectedUser.label}`;
+
+    return bodyString;
   };
 
   return (
@@ -209,11 +235,17 @@ const EditUser = () => {
           id="allocate-user-submit-btn"
           type="button"
           className="btn btn-primary mt-4"
-          onClick={() => setAllocateClick(uuidv4())}
+          onClick={() => submitJob()}
           disabled={!validSubmitBtn()}
         >
           {statusText}
         </button>
+        <ModalComponent
+          modal={modal}
+          setModal={setModal}
+          title="Successfully added"
+          body={bodyText()}
+        />
       </div>
     </div>
   );
