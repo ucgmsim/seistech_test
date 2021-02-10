@@ -141,16 +141,8 @@ def write_request_details(endpoint, query_dict):
     db.session.commit()
 
 
-def get_available_projects():
-    """Do cross-check for the projects.
-
-    It finds available projects from the DB (Available_Project that contains user_id and project_name).
-    After we get all the existing projects from the Project API.
-    Then we compare [Available Projects] and [All the Existing Projects] to find the matching one.
-    """
-    # Finding an user_id from the token
-    user_id = get_user_id()
-
+def get_projects_from_db(user_id):
+    """Create an array form of available projects that are in the DB"""
     # Get all available projects that are allocated to this user.
     available_project_objs = (
         Project.query.join(available_projects_table)
@@ -161,9 +153,30 @@ def get_available_projects():
     # Create a list that contains Project IDs from DB (Allowed Projects)
     available_projects = [project.project_name for project in available_project_objs]
 
+    return available_projects
+
+
+def get_projects_from_project_api():
     # Get a list of Project IDs & Project Names from Project API (Available Projects)
     # Form of {project_id: {name : project_name}}
     all_projects_dicts = proxy_to_api(request, "api/project/ids/get", "GET").get_json()
+
+    return all_projects_dicts
+
+
+def get_available_projects():
+    """Do cross-check for the projects.
+
+    It finds available projects from the DB (Available_Project that contains user_id and project_name).
+    After we get all the existing projects from the Project API.
+    Then we compare [Available Projects] and [All the Existing Projects] to find the matching one.
+    """
+    # Finding the available projects that are already allocated to the DB with a given user id.
+    available_projects = get_projects_from_db(get_user_id())
+
+    # Get a list of Project IDs & Project Names from Project API (Available Projects)
+    # Form of {project_id: {name : project_name}}
+    all_projects_dicts = get_projects_from_project_api()
 
     # Create an dictionary in a form of if users have a permission for a certain project
     # {project_id: project_name}
@@ -174,6 +187,97 @@ def get_available_projects():
     }
 
     return jsonify(all_projects)
+
+
+def get_addable_projects(query_id):
+    """Similar to the get_available_projects above.
+
+    get_available_projects is there to do the cross-check for the Project tab,
+    compare DB and Project API to see whether users actually have permission to access.
+
+    This function, get_addable_projects is for Edit User feature in the frontend.
+    It compares the projects between the DB and Project API and return the options that are not in the intersction.
+    E.g. DB says A,B,C Projects
+    Project API says A,B,C,D,E
+
+    Then this function will return D,E for the Frontend.
+    """
+
+    # Finding the available projects that are already allocated to the DB with a given user id.
+    available_projects = get_projects_from_db(query_id)
+
+    # Get a list of Project IDs & Project Names from Project API (Available Projects)
+    # Form of {project_id: {name : project_name}}
+    all_projects_dicts = get_projects_from_project_api()
+
+    # Create an dictionary in a form of if users have a permission for a certain project
+    # {project_id: project_name}
+    all_addable_projects = {
+        api_project_id: api_project_name["name"]
+        for api_project_id, api_project_name in all_projects_dicts.items()
+        if api_project_id not in available_projects
+    }
+
+    return all_addable_projects
+
+
+# For api.py which communicates to DB or Auth0
+def check_user_in_db(user_id):
+    """To check whether the given user_id is in the DB"""
+    return bool(User.query.filter_by(user_id=user_id).first())
+
+
+def add_user_to_db(user_id):
+    """Add an user to the MariaDB if not exist"""
+    if check_user_in_db(user_id) == False:
+        new_user = User(user_id)
+        db.session.add(new_user)
+        db.session.commit()
+        db.session.flush()
+    else:
+        print(f"User {user_id} already exists")
+
+
+def check_project_in_db(project_name):
+    """To check whether the given project is in the DB"""
+    return bool(Project.query.filter_by(project_name=project_name).first())
+
+
+def add_project_to_db(project_name):
+    """Add a new project to the MariaDB if not exist"""
+    if check_project_in_db(project_name) == False:
+        new_project = Project(project_name)
+        db.session.add(new_project)
+        db.session.commit()
+        db.session.flush()
+    else:
+        print(f"Project {project_name} already exists")
+
+
+def add_available_project_to_db(user_id, project_name):
+    """This is where we insert data to the bridging table, available_projects
+    Unlike any other query, to a bridging table, we need to the following steps:
+    1. Find an User object by using user_id
+    2. Find a Project object by using project_name
+    3. Append(Allocate, they use Append for a bridging table) the User object to the Project object
+    """
+
+    print(f"Check whether the user is in the DB, if not, add the person to the DB")
+    if check_user_in_db(user_id) == False:
+        add_user_to_db(user_id)
+        db.session.flush()
+
+    print(f"Check whether the project is in the DB, if not, add the project to the DB")
+    if check_project_in_db(project_name) == False:
+        add_project_to_db(project_name)
+        db.session.flush()
+
+    project_obj = Project.query.filter_by(project_name=project_name).first()
+    user_obj = User.query.filter_by(user_id=user_id).first()
+
+    project_obj.allocate.append(user_obj)
+    db.session.commit()
+    db.session.flush()
 
 
 def proxy_to_api(
