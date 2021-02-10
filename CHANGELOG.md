@@ -1,3 +1,9 @@
+## February 10, 2021
+
+### HOTFIX - ([PR #43](https://github.com/ucgmsim/seistech_psha_frontend/pull/43))
+
+- `useEffect` hook only works when an object is not empty due to using `replaceAll` function.
+
 ## February 9, 2021
 
 ### GMS Viewer - ([PR #42](https://github.com/ucgmsim/seistech_psha_frontend/pull/42))
