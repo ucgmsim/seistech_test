@@ -84,21 +84,21 @@ def allocate_users_to_projects():
 """
 
 # Will be uesd for User dropdown
-@app.route("/api/auth0/user/get", methods=["GET"])
+@app.route("/middlewareAPI/auth0/user/get", methods=["GET"])
 @requires_auth
 def get_all_user_from_auth0():
     return jsonify(get_users())
 
 
 # Will be used for Project dropdown
-@app.route("/api/projectAPI/get", methods=["GET"])
+@app.route("/middlewareAPI/projectAPI/get", methods=["GET"])
 @requires_auth
 def get_all_projects_from_project_api():
     query_id = request.query_string.decode("utf-8").split("=")[1]
     return jsonify(get_addable_projects(query_id))
 
 
-@app.route("/api/allocate_projects", methods=["POST"])
+@app.route("/middlewareAPI/allocate_projects", methods=["POST"])
 @requires_auth
 def allocate_users_to_projects_api():
     return jsonify(allocate_users_to_projects())
