@@ -53,7 +53,7 @@ export const Provider = (props) => {
 
   const [nzCodeDefaultParams, setNzCodeDefaultParams] = useState([]);
 
-  const [soilClass, setSoilClass] = useState([]);
+  const [soilClass, setSoilClass] = useState({});
 
   // Check box stats for Hazard Curve and UHS for NZCode, default is true
   const [showHazardNZCode, setShowHazardNZCode] = useState(true);
