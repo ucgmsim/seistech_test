@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 
 import Select from "react-select";
+import { v4 as uuidv4 } from "uuid";
 
 import { handleErrors, createProjectIDArray } from "utils/Utils";
 import { useAuth0 } from "components/common/ReactAuth0SPA";
@@ -12,26 +13,14 @@ const EditUser = () => {
   const [userData, setUserData] = useState({});
   const [projectData, setProjectData] = useState([]);
 
-  /*
-    projectData would look like this
-    {
-      gnzl: {
-        name: Generic New Zealand Location
-      }
-    }
-    So using projectData to make a new projectObj that looks like
-    {
-      gnzl: Generic New Zealand Location
-    }
-    For a dropdown
-  */
-  const [projectObj, setProjectObj] = useState({});
-
   const [userOption, setUserOption] = useState([]);
   const [projectOption, setProjectOption] = useState([]);
 
   const [selectedUser, setSelectedUser] = useState([]);
   const [selectedProject, setSelectedProject] = useState([]);
+
+  const [statusText, setStatusText] = useState("Allocate Project");
+  const [alocateClick, setAllocateClick] = useState(null);
 
   useEffect(() => {
     if (Object.entries(userData).length > 0) {
@@ -40,51 +29,38 @@ const EditUser = () => {
   }, [userData]);
 
   useEffect(() => {
-    if (Object.entries(projectObj).length > 0) {
-      setProjectOption(createProjectIDArray(projectObj));
+    if (Object.entries(projectData).length > 0) {
+      setProjectOption(createProjectIDArray(projectData));
+    } else {
+      setProjectOption([]);
     }
-  }, [projectObj]);
+  }, [projectData]);
 
   /*
-    Fetching data from the API
+    Fetching user information from the API(Auth0)
   */
   useEffect(() => {
     const abortController = new AbortController();
     const signal = abortController.signal;
 
-    const getDropdowns = async () => {
+    const getUserInfo = async () => {
       try {
         const token = await getTokenSilently();
 
-        await Promise.all([
-          fetch(
-            CONSTANTS.CORE_API_BASE_URL +
-              CONSTANTS.MIDDLEWARE_API_ROUTE_GET_USER,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-              signal: signal,
-            }
-          ),
-          fetch(
-            CONSTANTS.CORE_API_BASE_URL +
-              CONSTANTS.MIDDLEWARE_API_ROUTE_GET_PROJECT,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-              signal: signal,
-            }
-          ),
-        ])
+        await fetch(
+          CONSTANTS.CORE_API_BASE_URL + CONSTANTS.MIDDLEWARE_API_ROUTE_GET_USER,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            signal: signal,
+          }
+        )
           .then(handleErrors)
-          .then(async ([users, projects]) => {
+          .then(async (users) => {
             const responseUserData = await users.json();
-            const responseProjectData = await projects.json();
 
             setUserData(responseUserData);
-            setProjectData(responseProjectData);
           })
           .catch((error) => {
             console.log(error);
@@ -94,65 +70,115 @@ const EditUser = () => {
       }
     };
 
-    getDropdowns();
+    getUserInfo();
 
     return () => {
       abortController.abort();
     };
   }, []);
 
+  /*
+    Fetching projects that are not allocated to user.
+  */
   useEffect(() => {
-    if (projectData.length !== 0) {
-      let tempObj = {};
-      for (const [key, value] of Object.entries(projectData)) {
-        tempObj[key] = value.name;
-      }
-      setProjectObj(tempObj);
-    }
-  }, [projectData]);
+    const abortController = new AbortController();
+    const signal = abortController.signal;
 
-  const [isSending, setIsSending] = useState(false);
+    const getProjectData = async () => {
+      if (selectedUser.length != 0) {
+        // Reset the selected option
+        setSelectedProject([]);
+        try {
+          const token = await getTokenSilently();
 
-  const allocateUser = useCallback(async () => {
-    if (isSending) return;
-    try {
-      const token = await getTokenSilently();
-      setIsSending(true);
+          await fetch(
+            CONSTANTS.CORE_API_BASE_URL +
+              CONSTANTS.MIDDLEWARE_API_ROUTE_GET_PROJECT +
+              `?user_id=${selectedUser.value}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+              signal: signal,
+            }
+          )
+            .then(handleErrors)
+            .then(async (projects) => {
+              const responseProjectData = await projects.json();
 
-      let requestOptions = {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          user_info: selectedUser,
-          project_info: selectedProject,
-        }),
-      };
-
-      await fetch(
-        CONSTANTS.CORE_API_BASE_URL +
-          CONSTANTS.MIDDLEWARE_API_ROUTE_ALLOCATE_PROJECTS_TO_USER,
-        requestOptions
-      )
-        .then(handleErrors)
-        .then(async (response) => {
-          const responseData = await response.json();
-          console.log(responseData);
-          setIsSending(false);
-        })
-        .catch((error) => {
+              setProjectData(responseProjectData);
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        } catch (error) {
           console.log(error);
-          setIsSending(false);
-        });
-    } catch (error) {
-      console.log(error);
-      setIsSending(false);
-    }
-  }, [isSending]);
+        }
+      }
+    };
+
+    getProjectData();
+
+    return () => {
+      abortController.abort();
+    };
+  }, [selectedUser]);
+
+  useEffect(() => {
+    const abortController = new AbortController();
+    const signal = abortController.signal;
+
+    const allocateUser = async () => {
+      if (alocateClick !== null) {
+        try {
+          const token = await getTokenSilently();
+          setStatusText("Allocating...");
+
+          let requestOptions = {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              user_info: selectedUser,
+              project_info: selectedProject,
+            }),
+            signal: signal,
+          };
+
+          await fetch(
+            CONSTANTS.CORE_API_BASE_URL +
+              CONSTANTS.MIDDLEWARE_API_ROUTE_ALLOCATE_PROJECTS_TO_USER,
+            requestOptions
+          )
+            .then(handleErrors)
+            .then(async (response) => {
+              const responseData = await response.json();
+              console.log(responseData);
+              setStatusText("Allocate Project");
+            })
+            .catch((error) => {
+              console.log(error);
+              setStatusText("Error occurred");
+            });
+        } catch (error) {
+          console.log(error);
+          setStatusText("Error occurred");
+        }
+      }
+    };
+
+    allocateUser();
+
+    return () => {
+      abortController.abort();
+    };
+  }, [alocateClick]);
 
   const validSubmitBtn = () => {
-    return selectedUser.length > 0 && selectedProject.length > 0;
+    return (
+      Object.entries(selectedUser).length > 0 && selectedProject.length > 0
+    );
   };
 
   return (
@@ -183,10 +209,10 @@ const EditUser = () => {
           id="allocate-user-submit-btn"
           type="button"
           className="btn btn-primary mt-4"
-          onClick={() => allocateUser()}
+          onClick={() => setAllocateClick(uuidv4())}
           disabled={!validSubmitBtn()}
         >
-          Submit
+          {statusText}
         </button>
       </div>
     </div>
