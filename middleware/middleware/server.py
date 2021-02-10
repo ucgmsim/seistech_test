@@ -29,9 +29,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 class CustomSQLALchemy(SQLAlchemy):
     def apply_driver_hacks(self, app, info, options):
         options.update(
-            {
-                "isolation_level": "READ COMMITTED",
-            }
+            {"isolation_level": "READ COMMITTED",}
         )
         super(CustomSQLALchemy, self).apply_driver_hacks(app, info, options)
 
