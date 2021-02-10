@@ -1,7 +1,6 @@
 import os
 
 from middleware import app
-from pyasn1 import debug
 
 if __name__ == "__main__":
     app.run(
