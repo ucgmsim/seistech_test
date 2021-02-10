@@ -1,12 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import Select from "react-select";
 
-import {
-  createSelectArray,
-  handleErrors,
-  createProjectIDArray,
-} from "utils/Utils";
+import { handleErrors, createProjectIDArray } from "utils/Utils";
 import { useAuth0 } from "components/common/ReactAuth0SPA";
 import * as CONSTANTS from "constants/Constants";
 
@@ -115,9 +111,53 @@ const EditUser = () => {
     }
   }, [projectData]);
 
+  const [isSending, setIsSending] = useState(false);
+
+  const allocateUser = useCallback(async () => {
+    if (isSending) return;
+    try {
+      const token = await getTokenSilently();
+      setIsSending(true);
+
+      let requestOptions = {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          user_info: selectedUser,
+          project_info: selectedProject,
+        }),
+      };
+
+      await fetch(
+        CONSTANTS.CORE_API_BASE_URL +
+          CONSTANTS.MIDDLEWARE_API_ROUTE_ALLOCATE_PROJECTS_TO_USER,
+        requestOptions
+      )
+        .then(handleErrors)
+        .then(async (response) => {
+          const responseData = await response.json();
+          console.log(responseData);
+          setIsSending(false);
+        })
+        .catch((error) => {
+          console.log(error);
+          setIsSending(false);
+        });
+    } catch (error) {
+      console.log(error);
+      setIsSending(false);
+    }
+  }, [isSending]);
+
+  const validSubmitBtn = () => {
+    return selectedUser.length > 0 && selectedProject.length > 0;
+  };
+
   return (
     <div className="container">
-      <div className="row">
+      <div className="row justify-content-lg-center">
         <div className="col-lg-6">
           <pre>User</pre>
           <Select
@@ -125,8 +165,6 @@ const EditUser = () => {
             onChange={(value) => setSelectedUser(value || [])}
             value={selectedUser}
             options={userOption}
-            isMulti
-            closeMenuOnSelect={false}
           />
         </div>
         <div className="col-lg-6">
@@ -140,6 +178,16 @@ const EditUser = () => {
             closeMenuOnSelect={false}
           />
         </div>
+
+        <button
+          id="allocate-user-submit-btn"
+          type="button"
+          className="btn btn-primary mt-4"
+          onClick={() => allocateUser()}
+          disabled={!validSubmitBtn()}
+        >
+          Submit
+        </button>
       </div>
     </div>
   );
