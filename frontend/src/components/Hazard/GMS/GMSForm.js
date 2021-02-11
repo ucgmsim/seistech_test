@@ -159,7 +159,7 @@ const GMSForm = () => {
 
   const [getPreGMParamsClick, setGetPreGMParamsClick] = useState(null);
   const [getPreGMButton, setGetPreGMButton] = useState({
-    text: "Get Pre-GM Parameters",
+    text: "Get causal parameters bounds",
     isFetching: false,
   });
 
@@ -226,14 +226,14 @@ const GMSForm = () => {
               );
 
               setGetPreGMButton({
-                text: "Get Pre-GM Parameters",
+                text: "Get causal parameters bounds",
                 isFetching: false,
               });
             })
             .catch(function (error) {
               if (error.name !== "AbortError") {
                 setGetPreGMButton({
-                  text: "Get Pre-GM Parameters",
+                  text: "Get causal parameters bounds",
                   isFetching: false,
                 });
               }
