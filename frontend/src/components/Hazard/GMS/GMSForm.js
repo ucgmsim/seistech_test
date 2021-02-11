@@ -131,9 +131,6 @@ const GMSForm = () => {
   const [localDatabase, setLocalDatabase] = useState(null);
   const [localReplicates, setLocalReplicates] = useState(1);
 
-  // IM Level / Exceedance Rate
-  const [localIMExdRateRadio, setLocalImExdRateRadio] = useState("im-level");
-
   /*
     Pre-GM Filtering Parameters Table
   */
@@ -190,29 +187,42 @@ const GMSForm = () => {
     }
   }, [localVS30Max, setIsLocalVS30MaxChosen]);
 
-
   /*
     IM Level/Exceedance Rate Section
   */
+
+  // IM Level / Exceedance Rate
+  const [localIMExdRateRadio, setLocalImExdRateRadio] = useState("im-level");
+
   const [localIMLevel, setLocalIMLevel] = useState("");
-  const [isLocalIMLevelChosen, setIsLocalIMLevelChosen] = useState(false);
 
   const [localExcdRate, setLocalExcdRate] = useState("");
-  const [isLocalExcdRateChosen, setIsLocalExcdRateChosen] = useState(false);
 
+  const [getPreGMParamsClick, setGetPreGMParamsClick] = useState(null);
+  const [getPreGMButton, setGetPreGMButton] = useState({
+    text: "Get Pre-GM Parameters",
+    isFetching: false,
+  });
+
+  const validGetPreGMParams = () => {
+    if (localIMExdRateRadio === "im-level") {
+      if (selectedIMType !== null && localIMLevel !== "") {
+        return false;
+      }
+    } else if (localIMExdRateRadio === "exceedance-rate") {
+      if (selectedIMType !== null && localExcdRate !== "") {
+        return false;
+      }
+    }
+
+    return true;
+  };
   useEffect(() => {
     const abortController = new AbortController();
     const signal = abortController.signal;
 
     const defaultCausalParams = async () => {
-      if (
-        (selectedIMType !== null &&
-          isLocalIMLevelChosen === true &&
-          localIMLevel !== "") ||
-        (selectedIMType !== null &&
-          isLocalExcdRateChosen === true &&
-          localExcdRate !== "")
-      ) {
+      if (getPreGMParamsClick !== null) {
         let queryString = `?ensemble_id=${selectedEnsemble}&station=${station}&IM_j=${selectedIMType}&user_vs30=${vs30}`;
         if (localIMExdRateRadio === "im-level") {
           queryString += `&im_level=${localIMLevel}`;
@@ -221,6 +231,12 @@ const GMSForm = () => {
         }
         try {
           const token = await getTokenSilently();
+
+          setGetPreGMButton({
+            text: <FontAwesomeIcon icon="spinner" spin />,
+            isFetching: true,
+          });
+
           await fetch(
             CONSTANTS.CORE_API_BASE_URL +
               CONSTANTS.CORE_API_ROUTE_GMS_DEFAULT_CAUSAL_PARAMS +
@@ -250,9 +266,6 @@ const GMSForm = () => {
                 renderSigfigs(responseData.vs30_high, CONSTANTS.APP_UI_SIGFIGS)
               );
 
-              setIsLocalIMLevelChosen(false);
-              setIsLocalExcdRateChosen(false);
-
               // For GMS Viewer, Third Plot
               setGMSMwMin(responseData.mw_low);
               setGMSMwMax(responseData.mw_high);
@@ -269,8 +282,19 @@ const GMSForm = () => {
               setGMSVS30Max(
                 renderSigfigs(responseData.vs30_high, CONSTANTS.APP_UI_SIGFIGS)
               );
+
+              setGetPreGMButton({
+                text: "Get Pre-GM Parameters",
+                isFetching: false,
+              });
             })
             .catch(function (error) {
+              if (error.name !== "AbortError") {
+                setGetPreGMButton({
+                  text: "Get Pre-GM Parameters",
+                  isFetching: false,
+                });
+              }
               console.log(error);
             });
         } catch (error) {
@@ -284,7 +308,7 @@ const GMSForm = () => {
     return () => {
       abortController.abort();
     };
-  }, [selectedIMType, isLocalIMLevelChosen, isLocalExcdRateChosen]);
+  }, [getPreGMParamsClick]);
 
   /*
     IM Vector Section
@@ -427,6 +451,9 @@ const GMSForm = () => {
     setGMSComputeClick(uuidv4());
   };
 
+  //
+  const onClickGetPreGMParams = () => {};
+
   const preventEnterKey = (e) => {
     e.key === "Enter" && e.preventDefault();
   };
@@ -488,8 +515,6 @@ const GMSForm = () => {
             <input
               id="im-level"
               type="number"
-              onFocus={() => setIsLocalIMLevelChosen(false)}
-              onBlur={() => setIsLocalIMLevelChosen(true)}
               onChange={(e) => setLocalIMLevel(e.target.value)}
               className="form-control"
               value={localIMLevel}
@@ -499,14 +524,27 @@ const GMSForm = () => {
             <input
               id="exceedance-rate"
               type="number"
-              onFocus={() => setIsLocalExcdRateChosen(false)}
-              onBlur={() => setIsLocalExcdRateChosen(true)}
               onChange={(e) => setLocalExcdRate(e.target.value)}
               className="form-control"
               value={localExcdRate}
               onKeyPress={(e) => preventEnterKey(e)}
             />
           )}
+        </div>
+
+        <div className="form-row div-with-status">
+          <button
+            id="get-pre-gm-params-btn"
+            type="button"
+            className="btn btn-primary"
+            onClick={() => setGetPreGMParamsClick(uuidv4())}
+            disabled={validGetPreGMParams()}
+          >
+            {getPreGMButton.text}
+          </button>
+          <span className="status-text">
+            {getPreGMButton.isFetching ? "It takes about 1 minute..." : null}
+          </span>
         </div>
 
         <div className="custom-form-group">
