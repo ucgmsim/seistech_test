@@ -425,7 +425,7 @@ const GMSForm = () => {
     <Fragment>
       <form autoComplete="off" onSubmit={(e) => e.preventDefault()}>
         <div className="form-group form-section-title">
-          <span>GMS</span>
+          Ground Motion Selection
         </div>
 
         <div className="custom-form-group">
