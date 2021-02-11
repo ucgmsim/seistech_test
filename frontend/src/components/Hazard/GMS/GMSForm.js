@@ -451,9 +451,6 @@ const GMSForm = () => {
     setGMSComputeClick(uuidv4());
   };
 
-  //
-  const onClickGetPreGMParams = () => {};
-
   const preventEnterKey = (e) => {
     e.key === "Enter" && e.preventDefault();
   };
@@ -538,7 +535,9 @@ const GMSForm = () => {
             type="button"
             className="btn btn-primary"
             onClick={() => setGetPreGMParamsClick(uuidv4())}
-            disabled={validGetPreGMParams()}
+            disabled={
+              validGetPreGMParams() || getPreGMButton.isFetching === true
+            }
           >
             {getPreGMButton.text}
           </button>
