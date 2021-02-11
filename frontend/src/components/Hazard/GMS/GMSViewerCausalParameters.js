@@ -1,7 +1,7 @@
 import React from "react";
 
 import Plot from "react-plotly.js";
-import { PLOT_MARGIN, PLOT_CONFIG } from "constants/Constants";
+import { PLOT_MARGIN, PLOT_CONFIG, GMS_LABELS } from "constants/Constants";
 import ErrorMessage from "components/common/ErrorMessage";
 import { range } from "utils/Utils";
 
@@ -108,7 +108,7 @@ const GMSViewerCausalParameters = ({
         data={scattersArray}
         layout={{
           xaxis: {
-            title: { text: `Metadata: ${metadata}` },
+            title: { text: `${GMS_LABELS[metadata]} distribution` },
             range: xAxisRange,
           },
           yaxis: {

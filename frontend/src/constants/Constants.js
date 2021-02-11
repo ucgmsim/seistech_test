@@ -320,3 +320,14 @@ export const TOOLTIP_MESSAGES = {
 export const TOOLTIP_URL = {
   HAZARD_NZCODE: "https://google.com",
 };
+
+/*
+  GMS Labels
+*/
+
+export const GMS_LABELS = {
+  mag: "Magnitude",
+  rrup: "Rupture distance, Rrup (km)",
+  sf: "Scale Factor",
+  vs30: "Vs30",
+};

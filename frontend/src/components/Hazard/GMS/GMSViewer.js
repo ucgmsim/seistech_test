@@ -198,7 +198,7 @@ const GMSViewer = () => {
       let tempMetadatas = Object.getOwnPropertyNames(metadatas).map(
         (metadata) => ({
           value: metadata,
-          label: metadata,
+          label: CONSTANTS.GMS_LABELS[metadata],
         })
       );
       tempMetadatas.splice(0, 0, {
