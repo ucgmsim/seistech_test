@@ -4,6 +4,15 @@ div.advanced-toggle-header {
   align-items: center;
 }
 
+div.div-with-status {
+  display: flex;
+  align-items: center;
+}
+
+span.status-text {
+  margin-left: 1rem;
+}
+
 div.custom-form-group {
   margin-bottom: calc(1rem + 22px);
 }
