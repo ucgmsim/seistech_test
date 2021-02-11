@@ -141,52 +141,6 @@ const GMSForm = () => {
   const [localVS30Min, setLocalVS30Min] = useState("");
   const [localVS30Max, setLocalVS30Max] = useState("");
 
-  const [isLocalMwMinChosen, setIsLocalMwMinChosen] = useState(false);
-  const [isLocalMwMaxChosen, setIsLocalMwMaxChosen] = useState(false);
-  const [isLocalRrupMinChosen, setIsLocalRrupMinChosen] = useState(false);
-  const [isLocalRrupMaxChosen, setIsLocalRrupMaxChosen] = useState(false);
-  const [isLocalVS30MinChosen, setIsLocalVS30MinChosen] = useState(false);
-  const [isLocalVS30MaxChosen, setIsLocalVS30MaxChosen] = useState(false);
-
-  /*
-    Setting those as global variable to be used in GMS Viewer to draw a box
-  */
-  useEffect(() => {
-    if (isLocalMwMinChosen === true) {
-      setGMSMwMin(localMwMin);
-    }
-  }, [localMwMin, isLocalMwMinChosen]);
-
-  useEffect(() => {
-    if (isLocalMwMaxChosen === true) {
-      setGMSMwMax(localMwMax);
-    }
-  }, [localMwMax, isLocalMwMaxChosen]);
-
-  useEffect(() => {
-    if (isLocalRrupMinChosen === true) {
-      setGMSRrupMin(localRrupMin);
-    }
-  }, [localRrupMin, isLocalRrupMinChosen]);
-
-  useEffect(() => {
-    if (isLocalRrupMaxChosen === true) {
-      setGMSRrupMax(localRrupMax);
-    }
-  }, [localRrupMax, isLocalRrupMaxChosen]);
-
-  useEffect(() => {
-    if (isLocalVS30MinChosen === true) {
-      setGMSVS30Min(localVS30Min);
-    }
-  }, [localVS30Min, setIsLocalVS30MinChosen]);
-
-  useEffect(() => {
-    if (isLocalVS30MaxChosen === true) {
-      setGMSVS30Max(localVS30Max);
-    }
-  }, [localVS30Max, setIsLocalVS30MaxChosen]);
-
   /*
     IM Level/Exceedance Rate Section
   */
@@ -628,8 +582,6 @@ const GMSForm = () => {
                           <input
                             type="text"
                             value={localMwMin}
-                            onFocus={() => setIsLocalMwMinChosen(false)}
-                            onBlur={() => setIsLocalMwMinChosen(true)}
                             onChange={(e) => setLocalMwMin(e.target.value)}
                             onKeyPress={(e) => preventEnterKey(e)}
                           />
@@ -638,8 +590,6 @@ const GMSForm = () => {
                           <input
                             type="text"
                             value={localMwMax}
-                            onFocus={() => setIsLocalMwMaxChosen(false)}
-                            onBlur={() => setIsLocalMwMaxChosen(true)}
                             onChange={(e) => setLocalMwMax(e.target.value)}
                             onKeyPress={(e) => preventEnterKey(e)}
                           />
@@ -651,8 +601,6 @@ const GMSForm = () => {
                           <input
                             type="text"
                             value={localRrupMin}
-                            onFocus={() => setIsLocalRrupMinChosen(false)}
-                            onBlur={() => setIsLocalRrupMinChosen(true)}
                             onChange={(e) => setLocalRrupMin(e.target.value)}
                             onKeyPress={(e) => preventEnterKey(e)}
                           />
@@ -661,8 +609,6 @@ const GMSForm = () => {
                           <input
                             type="text"
                             value={localRrupMax}
-                            onFocus={() => setIsLocalRrupMaxChosen(false)}
-                            onBlur={() => setIsLocalRrupMaxChosen(true)}
                             onChange={(e) => setLocalRrupMax(e.target.value)}
                             onKeyPress={(e) => preventEnterKey(e)}
                           />
@@ -676,8 +622,6 @@ const GMSForm = () => {
                           <input
                             type="text"
                             value={localVS30Min}
-                            onFocus={() => setIsLocalVS30MinChosen(false)}
-                            onBlur={() => setIsLocalVS30MinChosen(true)}
                             onChange={(e) => setLocalVS30Min(e.target.value)}
                             onKeyPress={(e) => preventEnterKey(e)}
                           />
@@ -686,8 +630,6 @@ const GMSForm = () => {
                           <input
                             type="text"
                             value={localVS30Max}
-                            onFocus={() => setIsLocalVS30MaxChosen(false)}
-                            onBlur={() => setIsLocalVS30MaxChosen(true)}
                             onChange={(e) => setLocalVS30Max(e.target.value)}
                             onKeyPress={(e) => preventEnterKey(e)}
                           />
