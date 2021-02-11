@@ -45,6 +45,10 @@ const GMSForm = () => {
     const abortController = new AbortController();
     const signal = abortController.signal;
 
+    // To prevent recomputing by itself
+    // This occurs when you comes to GMS tab from Home or Projects tab
+    setGMSComputeClick(null);
+
     const getGMSIMs = async () => {
       try {
         const token = await getTokenSilently();
@@ -268,7 +272,86 @@ const GMSForm = () => {
     IM Vector Section
   */
   const [localIMVector, setLocalIMVector] = useState([]);
-  const [isIMVectorChosen, setIsIMVectorChosen] = useState(false);
+  const [getIMWeightsClick, setGetIMWeightsClick] = useState(null);
+
+  const [getIMWeightMButton, setGetIMWeightMButton] = useState({
+    text: "Get IM Vectors Weight",
+    isFetching: false,
+  });
+
+  const validIMVectors = () => {
+    return localIMVector.length == 0;
+  };
+
+  /*
+    Fetch data from Core API -> To get a default weight for each IM Vector.
+  */
+  useEffect(() => {
+    const abortController = new AbortController();
+    const signal = abortController.signal;
+
+    const defaultIMWeights = async () => {
+      if (localIMVector.length !== 0 && getIMWeightsClick !== null) {
+        let queryString = `?IM_j=${selectedIMType}&IMs=`;
+
+        // Create a new array from an object.
+        // As localIMVector is an object with properties of label and value
+        const newIMVector = Array.from(localIMVector, (x) => x.value);
+
+        // To make a string from a sorted array and separate with comma
+        sortIMs(newIMVector).forEach((IM) => (queryString += IM + ","));
+        // Remove the last comma
+        queryString = queryString.slice(0, -1);
+
+        try {
+          const token = await getTokenSilently();
+
+          setGetIMWeightMButton({
+            text: <FontAwesomeIcon icon="spinner" spin />,
+            isFetching: true,
+          });
+
+          await fetch(
+            CONSTANTS.CORE_API_BASE_URL +
+              CONSTANTS.CORE_API_ROUTE_GMS_DEFAULT_IM_WEIGHTS +
+              queryString,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+              signal: signal,
+            }
+          )
+            .then(async function (response) {
+              const responseData = await response.json();
+              setLocalWeights(responseData);
+
+              setGetIMWeightMButton({
+                text: "Get IM Vectors Weight",
+                isFetching: false,
+              });
+            })
+            .catch(function (error) {
+              if (error.name !== "AbortError") {
+                setGetIMWeightMButton({
+                  text: "Get IM Vectors Weight",
+                  isFetching: false,
+                });
+              }
+              console.log(error);
+            });
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    };
+
+    defaultIMWeights();
+
+    return () => {
+      abortController.abort();
+    };
+  }, [getIMWeightsClick]);
 
   /*
     IM Vector -> Create Weights Table inside Advanced tab
@@ -299,60 +382,6 @@ const GMSForm = () => {
       setLocalWeightsTable([]);
     }
   }, [localIMVector, localWeights]);
-
-  /*
-    Fetch data from Core API -> To get a default weight for each IM Vector.
-  */
-  useEffect(() => {
-    const abortController = new AbortController();
-    const signal = abortController.signal;
-
-    const defaultIMWeights = async () => {
-      if (localIMVector.length !== 0 && isIMVectorChosen === true) {
-        let queryString = `?IM_j=${selectedIMType}&IMs=`;
-
-        // Create a new array from an object.
-        // As localIMVector is an object with properties of label and value
-        const newIMVector = Array.from(localIMVector, (x) => x.value);
-
-        // To make a string from a sorted array and separate with comma
-        sortIMs(newIMVector).forEach((IM) => (queryString += IM + ","));
-        // Remove the last comma
-        queryString = queryString.slice(0, -1);
-
-        try {
-          const token = await getTokenSilently();
-          await fetch(
-            CONSTANTS.CORE_API_BASE_URL +
-              CONSTANTS.CORE_API_ROUTE_GMS_DEFAULT_IM_WEIGHTS +
-              queryString,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-              signal: signal,
-            }
-          )
-            .then(async function (response) {
-              const responseData = await response.json();
-              setLocalWeights(responseData);
-              setIsIMVectorChosen(false);
-            })
-            .catch(function (error) {
-              console.log(error);
-            });
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    };
-
-    defaultIMWeights();
-
-    return () => {
-      abortController.abort();
-    };
-  }, [isIMVectorChosen]);
 
   // Disable table's input
   useEffect(() => {
@@ -505,8 +534,6 @@ const GMSForm = () => {
           <Select
             id="im-vector"
             closeMenuOnSelect={false}
-            onMenuOpen={() => setIsIMVectorChosen(false)}
-            onMenuClose={() => setIsIMVectorChosen(true)}
             components={animatedComponents}
             isMulti
             onChange={(value) => setLocalIMVector(value || [])}
@@ -515,6 +542,19 @@ const GMSForm = () => {
             })}
             isDisabled={localIMs.length === 0}
           />
+        </div>
+
+        <div className="form-row">
+          <button
+            id="get-im-vector-weights-btn"
+            className="btn btn-primary"
+            onClick={() => setGetIMWeightsClick(uuidv4())}
+            disabled={
+              validIMVectors() || getIMWeightMButton.isFetching === true
+            }
+          >
+            {getIMWeightMButton.text}
+          </button>
         </div>
 
         <div className="form-group">
