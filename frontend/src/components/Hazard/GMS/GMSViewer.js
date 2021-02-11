@@ -240,9 +240,9 @@ const GMSViewer = () => {
               instruction={CONSTANTS.GMS_VIEWER_GUIDE_INSTRUCTION}
             />
           )}
-          {isLoading === true && showErrorMessage.isError === false && (
-            <LoadingSpinner />
-          )}
+          {GMSComputeClick !== null &&
+            isLoading === true &&
+            showErrorMessage.isError === false && <LoadingSpinner />}
           {isLoading === false && showErrorMessage.isError === true && (
             <ErrorMessage errorCode={showErrorMessage.errorCode} />
           )}
