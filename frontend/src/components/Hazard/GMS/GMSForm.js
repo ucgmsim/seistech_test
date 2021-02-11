@@ -259,7 +259,7 @@ const GMSForm = () => {
   const [getIMWeightsClick, setGetIMWeightsClick] = useState(null);
 
   const [getIMWeightMButton, setGetIMWeightMButton] = useState({
-    text: "Get IM Vectors Weight",
+    text: "Get IM vectors Weight",
     isFetching: false,
   });
 
@@ -311,14 +311,14 @@ const GMSForm = () => {
               setLocalWeights(responseData);
 
               setGetIMWeightMButton({
-                text: "Get IM Vectors Weight",
+                text: "Get IM vectors weight",
                 isFetching: false,
               });
             })
             .catch(function (error) {
               if (error.name !== "AbortError") {
                 setGetIMWeightMButton({
-                  text: "Get IM Vectors Weight",
+                  text: "Get IM vectors weight",
                   isFetching: false,
                 });
               }
