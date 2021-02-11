@@ -203,7 +203,7 @@ const GMSViewer = () => {
       );
       tempMetadatas.splice(0, 0, {
         value: "mwrrupplot",
-        label: "Magnitue and Rrup plot",
+        label: "Magnitude and Rrup plot",
       });
 
       // Set the first Metadata as a default metadata for plot
