@@ -109,44 +109,38 @@ const GMSViewer = () => {
             return vector.value;
           });
 
-          let requestOptions = {};
+          let requestOptions = {
+            method: "POST",
+            headers: { Authorization: `Bearer ${token}` },
+            signal: signal,
+          };
 
           if (GMSRadio === "im-level") {
-            requestOptions = {
-              method: "POST",
-              headers: { Authorization: `Bearer ${token}` },
-              body: JSON.stringify({
-                ensemble_id: selectedEnsemble,
-                station: station,
-                IM_j: GMSIMType,
-                IMs: newIMVector,
-                n_gms: Number(GMSNum),
-                gm_source_ids: ["nga_west_2"],
-                im_level: Number(GMSIMLevel),
-                n_replica: Number(GMSReplicates),
-                IM_weights: GMSWeights,
-                filter_params: filterParamsObj,
-              }),
-              signal: signal,
-            };
+            requestOptions["body"] = JSON.stringify({
+              ensemble_id: selectedEnsemble,
+              station: station,
+              IM_j: GMSIMType,
+              IMs: newIMVector,
+              n_gms: Number(GMSNum),
+              gm_source_ids: ["nga_west_2"],
+              im_level: Number(GMSIMLevel),
+              n_replica: Number(GMSReplicates),
+              IM_weights: GMSWeights,
+              filter_params: filterParamsObj,
+            });
           } else if (GMSRadio === "exceedance-rate") {
-            requestOptions = {
-              method: "POST",
-              headers: { Authorization: `Bearer ${token}` },
-              body: JSON.stringify({
-                ensemble_id: selectedEnsemble,
-                station: station,
-                IM_j: GMSIMType,
-                IMs: newIMVector,
-                n_gms: Number(GMSNum),
-                gm_source_ids: ["nga_west_2"],
-                exceedance: Number(GMSExcdRate),
-                n_replica: Number(GMSReplicates),
-                IM_weights: GMSWeights,
-                filter_params: filterParamsObj,
-              }),
-              signal: signal,
-            };
+            requestOptions["body"] = JSON.stringify({
+              ensemble_id: selectedEnsemble,
+              station: station,
+              IM_j: GMSIMType,
+              IMs: newIMVector,
+              n_gms: Number(GMSNum),
+              gm_source_ids: ["nga_west_2"],
+              exceedance: Number(GMSExcdRate),
+              n_replica: Number(GMSReplicates),
+              IM_weights: GMSWeights,
+              filter_params: filterParamsObj,
+            });
           }
 
           await fetch(
@@ -342,10 +336,10 @@ const GMSViewer = () => {
         disabled
         downloadURL={CONSTANTS.CORE_API_DOWNLOAD_GMS}
         downloadToken={{
-          gms_token: downloadToken
+          gms_token: downloadToken,
         }}
         extraParams={{
-          gms_token: "Download part will be fixed after a chat to Claudio."
+          gms_token: "Download part will be fixed after a chat to Claudio.",
         }}
         fileName="gms.zip"
       />
