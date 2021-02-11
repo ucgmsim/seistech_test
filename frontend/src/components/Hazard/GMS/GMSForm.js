@@ -224,23 +224,6 @@ const GMSForm = () => {
                 renderSigfigs(responseData.vs30_high, CONSTANTS.APP_UI_SIGFIGS)
               );
 
-              // For GMS Viewer, Third Plot
-              setGMSMwMin(responseData.mw_low);
-              setGMSMwMax(responseData.mw_high);
-              setGMSRrupMin(
-                renderSigfigs(responseData.rrup_low, CONSTANTS.APP_UI_SIGFIGS)
-              );
-              setGMSRrupMax(
-                renderSigfigs(responseData.rrup_high, CONSTANTS.APP_UI_SIGFIGS)
-              );
-              // For GMS Viewer, Fourth Plot
-              setGMSVS30Min(
-                renderSigfigs(responseData.vs30_low, CONSTANTS.APP_UI_SIGFIGS)
-              );
-              setGMSVS30Max(
-                renderSigfigs(responseData.vs30_high, CONSTANTS.APP_UI_SIGFIGS)
-              );
-
               setGetPreGMButton({
                 text: "Get Pre-GM Parameters",
                 isFetching: false,
