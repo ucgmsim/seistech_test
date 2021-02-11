@@ -7,6 +7,7 @@ import { GlobalContext } from "context";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import IMSelect from "components/common/IMSelect";
+import GuideTooltip from "components/common/GuideTooltip";
 import * as CONSTANTS from "constants/Constants";
 import $ from "jquery";
 import { renderSigfigs, sortIMs, handleErrors } from "utils/Utils";
@@ -430,7 +431,7 @@ const GMSForm = () => {
 
         <div className="custom-form-group">
           <IMSelect
-            title="IM Type"
+            title="Conditioning IM Name"
             setIM={setSelectedIMType}
             options={availableIMs}
           />
@@ -444,6 +445,11 @@ const GMSForm = () => {
           >
             IM Level/Exceedance Rate
           </label>
+          <GuideTooltip
+            explanation={
+              CONSTANTS.TOOLTIP_MESSAGES["HAZARD_GMS_IM_LEVEL_EXCEEDANCE_RATE"]
+            }
+          />
           <div>
             <div className="form-check form-check-inline">
               <input
@@ -513,7 +519,17 @@ const GMSForm = () => {
         </div>
 
         <div className="custom-form-group">
-          <pre>IM Vector</pre>
+          <label
+            id="label-im-vectors"
+            htmlFor="im-vector"
+            className="control-label"
+          >
+            IM Vector
+          </label>
+          {/* <pre>IM Vector</pre> */}
+          <GuideTooltip
+            explanation={CONSTANTS.TOOLTIP_MESSAGES["HAZARD_GMS_IM_VECTOR"]}
+          />
           <Select
             id="im-vector"
             closeMenuOnSelect={false}
@@ -544,6 +560,9 @@ const GMSForm = () => {
           <label id="label-num-gms" htmlFor="num-gms" className="control-label">
             Num Ground Motions
           </label>
+          <GuideTooltip
+            explanation={CONSTANTS.TOOLTIP_MESSAGES["HAZARD_GMS_NUM_GMS"]}
+          />
           <input
             id="num-gms"
             type="number"
@@ -572,7 +591,14 @@ const GMSForm = () => {
               onClick={() => setArrow(!arrow)}
             >
               <div className="advanced-toggle-header">
-                <span>Advanced</span>
+                <span>
+                  Advanced
+                  <GuideTooltip
+                    explanation={
+                      CONSTANTS.TOOLTIP_MESSAGES["HAZARD_GMS_ADVANCED"]
+                    }
+                  />
+                </span>
                 {arrowSets[arrow]}
               </div>
             </Accordion.Toggle>
@@ -584,8 +610,15 @@ const GMSForm = () => {
                     htmlFor="causal-parameters"
                     className="control-label"
                   >
-                    Pre-GM Filtering Parameters
+                    Causal parameters bounds
                   </label>
+                  <GuideTooltip
+                    explanation={
+                      CONSTANTS.TOOLTIP_MESSAGES[
+                        "HAZARD_GMS_CAUSAL_PARAMS_BOUNDS"
+                      ]
+                    }
+                  />
                   <table className="table table-bordered">
                     <thead>
                       <tr>
@@ -669,6 +702,11 @@ const GMSForm = () => {
                   >
                     Weights
                   </label>
+                  <GuideTooltip
+                    explanation={
+                      CONSTANTS.TOOLTIP_MESSAGES["HAZARD_GMS_WEIGHTS"]
+                    }
+                  />
                   <table className="table table-bordered">
                     <thead>
                       <tr>
@@ -684,7 +722,16 @@ const GMSForm = () => {
 
                 {/* Options need to be changed but we do not have any yet */}
                 <div className="custom-form-group">
-                  <pre>Database</pre>
+                  <label
+                    id="label-gms-db"
+                    htmlFor="database"
+                    className="control-label"
+                  >
+                    Database
+                  </label>
+                  <GuideTooltip
+                    explanation={CONSTANTS.TOOLTIP_MESSAGES["HAZARD_GMS_DB"]}
+                  />
                   <Select
                     id="database"
                     onChange={setLocalDatabase}
@@ -701,6 +748,11 @@ const GMSForm = () => {
                   >
                     Replicates
                   </label>
+                  <GuideTooltip
+                    explanation={
+                      CONSTANTS.TOOLTIP_MESSAGES["HAZARD_GMS_REPLICATES"]
+                    }
+                  />
                   <input
                     id="replicates"
                     type="number"
