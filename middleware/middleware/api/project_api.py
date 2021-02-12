@@ -1,4 +1,5 @@
 from flask import request
+
 from ..server import (
     app,
     proxy_to_api,
@@ -6,8 +7,6 @@ from ..server import (
     get_available_projects,
 )
 
-"""PROJECT API
-"""
 
 # Site Selection
 @app.route("/projectAPI/ids/get", methods=["GET"])
