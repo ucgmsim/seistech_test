@@ -43,7 +43,10 @@ const GMSViewerCausalParameters = ({
         x: xRange,
         y: newRangeY,
         mode: "lines+markers",
-        name: metadata,
+        name:
+          GMS_LABELS[metadata] === "Vs30"
+            ? "Selected GMs"
+            : `${GMS_LABELS[metadata]}`,
         line: { shape: "hv", color: "black" },
         type: "scatter",
         showlegend: true,
@@ -89,7 +92,7 @@ const GMSViewerCausalParameters = ({
           ],
           y: boundsRangeY,
           legendgroup: metadata,
-          name: "VS30",
+          name: "Site-Specific Vs30",
           mode: "lines",
           line: { color: "red" },
           type: "scatter",
