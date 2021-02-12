@@ -135,38 +135,6 @@ export const Provider = (props) => {
 
   const { isAuthenticated, getTokenSilently } = useAuth0();
 
-  const [getUserData, setGetUserData] = useState(true);
-
-  // TODO - need to investigate on this hook's usage, seems useless but not sure.
-  const [userGroups, setUserGroups] = useState([]);
-  // console.log(userGroups)
-  const getEnabledTabsFromUserGroups = (userGroups) => {
-    let tabs = [];
-
-    userGroups.forEach((ug) => {
-      switch (ug) {
-        case "1":
-          tabs.push("hazard:hazard");
-          break;
-
-        case "2":
-          tabs.push("hazard:disagg");
-          break;
-
-        case "3":
-          tabs.push("hazard:uhs");
-          break;
-
-        default:
-          break;
-      }
-    });
-
-    // console.log("tabs=" + JSON.stringify(tabs));
-
-    return tabs;
-  };
-
   const [permissions, setPermissions] = useState([]);
 
   useEffect(() => {
