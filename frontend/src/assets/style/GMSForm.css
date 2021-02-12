@@ -23,11 +23,11 @@ table {
 }
 
 th.var-name {
-  width: 40%;
+  width: 44%;
 }
 
 th.min-value, th.max-value {
-  width: 30%;
+  width: 28%;
   text-align: center;
 }
 
