@@ -1,12 +1,22 @@
 from flask import jsonify, request
+from jose import jwt
 
 from ..server import (
     app,
     get_users,
     requires_auth,
+    get_token_auth_header,
     get_addable_projects,
     allocate_users_to_projects,
 )
+
+
+@app.route("/user", methods=["GET"])
+def get_user_permission():
+    """Getting users permission on their first launch"""
+    token = get_token_auth_header()
+    unverified_claims = jwt.get_unverified_claims(token)
+    return jsonify({"permissions": unverified_claims["permissions"]})
 
 
 # Edit User

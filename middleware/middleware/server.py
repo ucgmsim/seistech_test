@@ -79,13 +79,6 @@ class AuthError(Exception):
         self.status_code = status_code
 
 
-@app.route("/user", methods=["GET"])
-def user_get():
-    token = get_token_auth_header()
-    unverified_claims = jwt.get_unverified_claims(token)
-    return jsonify({"permissions": unverified_claims["permissions"]})
-
-
 @app.errorhandler(AuthError)
 def handle_auth_error(ex):
     response = jsonify(ex.error)
@@ -93,7 +86,7 @@ def handle_auth_error(ex):
     return response
 
 
-def get_management_api_token():
+def _get_management_api_token():
     """Connect to AUTH0 Management API to get access token"""
     conn = http.client.HTTPSConnection(AUTH0_DOMAIN)
 
@@ -121,7 +114,7 @@ def get_users():
     """Get all users"""
     resp = requests.get(
         AUTH0_AUDIENCE + "users",
-        headers={"Authorization": "Bearer {}".format(get_management_api_token())},
+        headers={"Authorization": "Bearer {}".format(_get_management_api_token())},
     )
 
     # List of dictionaries
@@ -144,20 +137,7 @@ def get_users():
     return user_dict
 
 
-def allocate_users_to_projects():
-    """Allocate projects to the chosen user"""
-    data = json.loads(request.data.decode())
-
-    requested_user_id = data["user_info"]["value"]
-    requested_project_list = data["project_info"]
-
-    for project in requested_project_list:
-        add_available_project_to_db(requested_user_id, project["value"])
-
-    return "DONE"
-
-
-def get_user_id():
+def _get_user_id():
     """We are storing Auth0 id to the DB so no need any extra steps.
     Just pull sub's value in a return dictionary which is the unique user_id from Auth0
     """
@@ -169,7 +149,7 @@ def get_user_id():
     return user_id
 
 
-def write_request_details(endpoint, query_dict):
+def _write_request_details(endpoint, query_dict):
     """Record users' interation into the DB
 
     Parameters
@@ -183,7 +163,7 @@ def write_request_details(endpoint, query_dict):
               value -> CCCC
     """
     # Finding an user_id from the token
-    user_id = get_user_id()
+    user_id = _get_user_id()
 
     # Add to History table
     new_history = History(user_id, endpoint)
@@ -213,7 +193,7 @@ def write_request_details(endpoint, query_dict):
     db.session.commit()
 
 
-def get_projects_from_db(user_id):
+def _get_projects_from_db(user_id):
     """Create an array form of available projects that are in the DB"""
     # Get all available projects that are allocated to this user.
     available_project_objs = (
@@ -228,7 +208,7 @@ def get_projects_from_db(user_id):
     return available_projects
 
 
-def get_projects_from_project_api():
+def _get_projects_from_project_api():
     """Get a list of Project IDs & Project Names from Project API.
     (Available Projects that we currently have, not from the DB.)
     Form of
@@ -247,11 +227,11 @@ def get_available_projects():
     to find the matching one.
     """
     # Finding the available projects that are already allocated to the DB with a given user id.
-    available_projects = get_projects_from_db(get_user_id())
+    available_projects = _get_projects_from_db(_get_user_id())
 
     # Get a list of Project IDs & Project Names from Project API (Available Projects)
     # Form of {project_id: {name : project_name}}
-    all_projects_dicts = get_projects_from_project_api()
+    all_projects_dicts = _get_projects_from_project_api()
 
     # Create an dictionary in a form of if users have a permission for a certain project
     # {project_id: project_name}
@@ -279,11 +259,11 @@ def get_addable_projects(query_id):
     Then this function will return D,E for the Frontend.
     """
     # Finding the available projects that are already allocated to the DB with a given user id.
-    available_projects = get_projects_from_db(query_id)
+    available_projects = _get_projects_from_db(query_id)
 
     # Get a list of Project IDs & Project Names from Project API (Available Projects)
     # Form of {project_id: {name : project_name}}
-    all_projects_dicts = get_projects_from_project_api()
+    all_projects_dicts = _get_projects_from_project_api()
 
     # Create an dictionary in a form of if users have a permission for a certain project
     # {project_id: project_name}
@@ -296,14 +276,14 @@ def get_addable_projects(query_id):
     return all_addable_projects
 
 
-def is_user_in_db(user_id):
+def _is_user_in_db(user_id):
     """To check whether the given user_id is in the DB"""
     return bool(User.query.filter_by(user_id=user_id).first())
 
 
-def add_user_to_db(user_id):
+def _add_user_to_db(user_id):
     """Add an user to the MariaDB if not exist"""
-    if not is_user_in_db(user_id):
+    if not _is_user_in_db(user_id):
         db.session.add(User(user_id))
         db.session.commit()
         db.session.flush()
@@ -311,23 +291,22 @@ def add_user_to_db(user_id):
         print(f"User {user_id} already exists")
 
 
-def check_project_in_db(project_name):
+def _is_project_in_db(project_name):
     """To check whether the given project is in the DB"""
     return bool(Project.query.filter_by(project_name=project_name).first())
 
 
-def add_project_to_db(project_name):
+def _add_project_to_db(project_name):
     """Add a new project to the MariaDB if not exist"""
-    if not check_project_in_db(project_name):
-        new_project = Project(project_name)
-        db.session.add(new_project)
+    if not _is_project_in_db(project_name):
+        db.session.add(Project(project_name))
         db.session.commit()
         db.session.flush()
     else:
         print(f"Project {project_name} already exists")
 
 
-def add_available_project_to_db(user_id, project_name):
+def _add_available_project_to_db(user_id, project_name):
     """This is where we insert data to the bridging table, available_projects
     Unlike any other query, to a bridging table, we need to do the following steps:
     1. Find an User object by using user_id
@@ -335,15 +314,15 @@ def add_available_project_to_db(user_id, project_name):
     3. Append(Allocate, they use Append for a bridging table) the User object to the Project object
     """
     print(f"Check whether the user is in the DB, if not, add the person to the DB")
-    if not is_user_in_db(user_id):
+    if not _is_user_in_db(user_id):
         print(f"{user_id} is not in the DB so updating it.")
-        add_user_to_db(user_id)
+        _add_user_to_db(user_id)
         db.session.flush()
 
     print(f"Check whether the project is in the DB, if not, add the project to the DB")
-    if not check_project_in_db(project_name):
+    if not _is_project_in_db(project_name):
         print(f"{project_name} is not in the DB so updating it.")
-        add_project_to_db(project_name)
+        _add_project_to_db(project_name)
         db.session.flush()
 
     # Find objects to user SQLAlchemy way of inserting to a bridging table.
@@ -353,6 +332,19 @@ def add_available_project_to_db(user_id, project_name):
     project_obj.allocate.append(user_obj)
     db.session.commit()
     db.session.flush()
+
+
+def allocate_users_to_projects():
+    """Allocate projects to the chosen user"""
+    data = json.loads(request.data.decode())
+
+    requested_user_id = data["user_info"]["value"]
+    requested_project_list = data["project_info"]
+
+    for project in requested_project_list:
+        _add_available_project_to_db(requested_user_id, project["value"])
+
+    return "DONE"
 
 
 def proxy_to_api(
@@ -391,7 +383,7 @@ def proxy_to_api(
     # If endpoint is specified, its the one with uesrs' insteaction, record to DB
     # Filter the parameters with keys don't include `token`, for Download Data record
     if endpoint is not None:
-        write_request_details(
+        _write_request_details(
             endpoint,
             {
                 key: value
