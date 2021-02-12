@@ -434,6 +434,9 @@ const GMSForm = () => {
             title="Conditioning IM Name"
             setIM={setSelectedIMType}
             options={availableIMs}
+            guideMSG={
+              CONSTANTS.TOOLTIP_MESSAGES["HAZARD_GMS_CONDITIONING_IM_NAME"]
+            }
           />
         </div>
 

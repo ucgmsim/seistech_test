@@ -7,6 +7,7 @@ import { GlobalContext } from "context";
 
 const HazardCurveSection = () => {
   const {
+    IMs,
     selectedIM,
     setSelectedIM,
     setHazardCurveComputeClick,
@@ -32,7 +33,11 @@ const HazardCurveSection = () => {
         />
       </div>
       <div className="custom-form-group">
-        <IMSelect title="Intensity Measure" setIM={setSelectedIM} />
+        <IMSelect
+          title="Intensity Measure"
+          setIM={setSelectedIM}
+          options={IMs}
+        />
       </div>
 
       <div className="form-group">
