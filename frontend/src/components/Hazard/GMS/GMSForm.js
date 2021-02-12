@@ -521,7 +521,7 @@ const GMSForm = () => {
           </span>
         </div>
 
-        <div className="custom-form-group">
+        <div className="im-custom-form-group">
           <label
             id="label-im-vectors"
             htmlFor="im-vector"
