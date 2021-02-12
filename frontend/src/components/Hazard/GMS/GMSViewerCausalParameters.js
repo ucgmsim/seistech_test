@@ -83,7 +83,7 @@ const GMSViewerCausalParameters = ({
         }
       );
 
-      // If selected metadata is vs30, not only the min and max bounds, we also add solid line with vs30 value from site selection
+      // If selected metadata is Vs30, not only the min and max bounds, we also add solid line with vs30 value from site selection
       if (metadata === "vs30") {
         scattersArray.push({
           x: [
@@ -103,6 +103,16 @@ const GMSViewerCausalParameters = ({
         Math.min(...xRange, causalParamBounds[metadata]["min"]) * 0.9,
         Math.max(...xRange, causalParamBounds[metadata]["max"]) * 1.1,
       ];
+    } else if (metadata === "sf") {
+      // Selected metadata is sf, add a solid red line at x=1 as a reference point
+      scattersArray.push({
+        x: [1, 1],
+        y: boundsRangeY,
+        name: "Reference Point",
+        mode: "lines",
+        line: { color: "red" },
+        type: "scatter",
+      });
     }
 
     return (
