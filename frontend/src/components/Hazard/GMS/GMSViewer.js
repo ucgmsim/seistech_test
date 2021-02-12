@@ -15,7 +15,7 @@ import DownloadButton from "components/common/DownloadButton";
 import GuideMessage from "components/common/GuideMessage";
 import ErrorMessage from "components/common/ErrorMessage";
 
-import { handleErrors } from "utils/Utils";
+import { handleErrors, GMSIMLabelConverter } from "utils/Utils";
 
 import "assets/style/GMSViewer.css";
 
@@ -180,7 +180,7 @@ const GMSViewer = () => {
     // Create proper IM array for Select package
     let localIMs = selectedIMVectors.map((IM) => ({
       value: IM,
-      label: IM,
+      label: GMSIMLabelConverter(IM),
     }));
     localIMs.splice(0, 0, {
       value: "spectra",

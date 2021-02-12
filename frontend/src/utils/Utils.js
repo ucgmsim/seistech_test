@@ -108,6 +108,26 @@ export const checkIMwithPSA = (givenIMList) => {
 };
 
 /*
+  For GMS - IM Contribution to convert IM to a proper readable format
+  May need more than pSA for pSA for now
+*/
+const DEFAULT_READABLE_IM_PATTERN = {
+  pSA: "SA",
+  PGA: "PGA",
+};
+export const GMSIMLabelConverter = (givenIM) => {
+  const splittedValue = givenIM.split("_");
+
+  let convertedLabel = `${DEFAULT_READABLE_IM_PATTERN[splittedValue[0]]}`;
+
+  if (splittedValue.length > 1) {
+    convertedLabel += ` (${splittedValue[1]})s`;
+  }
+
+  return convertedLabel;
+};
+
+/*
   JS version of qcore IM Sort
 */
 
