@@ -588,23 +588,23 @@ const GMSForm = () => {
 
         <Accordion>
           <Card>
-            <Accordion.Toggle
-              as={Card.Header}
-              eventKey="0"
-              onClick={() => setArrow(!arrow)}
-            >
-              <div className="advanced-toggle-header">
-                <span>
-                  Advanced
-                  <GuideTooltip
-                    explanation={
-                      CONSTANTS.TOOLTIP_MESSAGES["HAZARD_GMS_ADVANCED"]
-                    }
-                  />
-                </span>
+            <Card.Header className="advanced-toggle-header">
+              <span>
+                Advanced
+                <GuideTooltip
+                  explanation={
+                    CONSTANTS.TOOLTIP_MESSAGES["HAZARD_GMS_ADVANCED"]
+                  }
+                />
+              </span>
+              <Accordion.Toggle
+                as="span"
+                eventKey="0"
+                onClick={() => setArrow(!arrow)}
+              >
                 {arrowSets[arrow]}
-              </div>
-            </Accordion.Toggle>
+              </Accordion.Toggle>
+            </Card.Header>
             <Accordion.Collapse eventKey="0">
               <Card.Body>
                 <div className="form-group">
