@@ -1,9 +1,10 @@
 import os
 import json
+import requests
+import http.client
 from typing import Dict
 from functools import wraps
 
-import requests
 from jose import jwt
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
@@ -27,6 +28,8 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 
 class CustomSQLALchemy(SQLAlchemy):
+    """Customize the SQLAlchemy class to override isolation level"""
+
     def apply_driver_hacks(self, app, info, options):
         options.update(
             {"isolation_level": "READ COMMITTED",}
@@ -52,6 +55,12 @@ AUTH0_DOMAIN = os.environ["AUTH0_DOMAIN"]
 API_AUDIENCE = os.environ["API_AUDIENCE"]
 ALGORITHMS = os.environ["ALGORITHMS"]
 
+# To communicate with Management API
+AUTH0_CLIENT_ID = os.environ["AUTH0_CLIENT_ID"]
+AUTH0_CLIENT_SECRET = os.environ["AUTH0_CLIENT_SECRET"]
+AUTH0_AUDIENCE = os.environ["AUTH0_AUDIENCE"]
+AUTH0_GRANT_TYPE = os.environ["AUTH0_GRANT_TYPE"]
+AUTH0_DOMAIN = os.environ["AUTH0_DOMAIN"]
 
 # For DEV/EA/PROD with ENV
 coreApiBase = os.environ["CORE_API_BASE"]
@@ -82,6 +91,70 @@ def handle_auth_error(ex):
     response = jsonify(ex.error)
     response.status_code = ex.status_code
     return response
+
+
+def get_management_api_token():
+    """Connect to AUTH0 Management API to get access token"""
+    conn = http.client.HTTPSConnection(AUTH0_DOMAIN)
+
+    payload = json.dumps(
+        {
+            "client_id": AUTH0_CLIENT_ID,
+            "client_secret": AUTH0_CLIENT_SECRET,
+            "audience": AUTH0_AUDIENCE,
+            "grant_type": AUTH0_GRANT_TYPE,
+        }
+    )
+
+    headers = {"content-type": "application/json"}
+
+    conn.request("POST", "/oauth/token", payload, headers)
+
+    res = conn.getresponse()
+    # Convert the string dictionary to dictionray
+    data = json.loads(res.read().decode("utf-8"))
+
+    return data["access_token"]
+
+
+def get_users():
+    """Get all users"""
+    resp = requests.get(
+        AUTH0_AUDIENCE + "users",
+        headers={"Authorization": "Bearer {}".format(get_management_api_token())},
+    )
+
+    # List of dictionaries
+    user_list, user_dict = resp.json(), {}
+
+    # We want to store in a dictionary in form of
+    # { user_id : email | provider}
+    # The reason we keep both email and provider is due to preventing confusion
+    # Based on having the same emails but different provider
+    # For instance, email A with Google and email A with Auth0
+    for user_dic in user_list:
+        if "user_id" in user_dic.keys():
+            temp_value = "{} | {}".format(
+                user_dic["email"], user_dic["identities"][0]["provider"]
+            )
+            user_dict[user_dic["user_id"].split("|")[1]] = temp_value
+        else:
+            print(f"WARNING: No user_id found for user_dict {user_dict}")
+
+    return user_dict
+
+
+def allocate_users_to_projects():
+    """Allocate projects to the chosen user"""
+    data = json.loads(request.data.decode())
+
+    requested_user_id = data["user_info"]["value"]
+    requested_project_list = data["project_info"]
+
+    for project in requested_project_list:
+        add_available_project_to_db(requested_user_id, project["value"])
+
+    return "DONE"
 
 
 def get_user_id():
@@ -161,17 +234,17 @@ def get_projects_from_project_api():
     Form of
     {project_id: {name : project_name}}
     """
-    all_projects_dicts = proxy_to_api(request, "api/project/ids/get", "GET").get_json()
-
-    return all_projects_dicts
+    return proxy_to_api(request, "api/project/ids/get", "GET").get_json()
 
 
 def get_available_projects():
     """Do cross-check for the projects.
 
-    It finds available projects from the DB (Available_Project that contains user_id and project_name).
+    It finds available projects from the DB.
+    (Available_Project that contains user_id and project_name.)
     After we get all the existing projects from the Project API.
-    Then we compare [Available Projects] and [All the Existing Projects] to find the matching one.
+    Then we compare [Available Projects] and [All the Existing Projects]
+    to find the matching one.
     """
     # Finding the available projects that are already allocated to the DB with a given user id.
     available_projects = get_projects_from_db(get_user_id())
@@ -198,13 +271,13 @@ def get_addable_projects(query_id):
     compare DB and Project API to see whether users actually have permission to access.
 
     This function, get_addable_projects is for Edit User feature in the frontend.
-    It compares the projects between the DB and Project API and return the options that are not in the intersction.
+    It compares the projects between the DB and Project API.
+    Then it returns the options that are not intersecting.
     E.g. DB says A,B,C Projects
     Project API says A,B,C,D,E
 
     Then this function will return D,E for the Frontend.
     """
-
     # Finding the available projects that are already allocated to the DB with a given user id.
     available_projects = get_projects_from_db(query_id)
 
@@ -223,16 +296,15 @@ def get_addable_projects(query_id):
     return all_addable_projects
 
 
-def check_user_in_db(user_id):
+def is_user_in_db(user_id):
     """To check whether the given user_id is in the DB"""
     return bool(User.query.filter_by(user_id=user_id).first())
 
 
 def add_user_to_db(user_id):
     """Add an user to the MariaDB if not exist"""
-    if check_user_in_db(user_id) == False:
-        new_user = User(user_id)
-        db.session.add(new_user)
+    if not is_user_in_db(user_id):
+        db.session.add(User(user_id))
         db.session.commit()
         db.session.flush()
     else:
@@ -246,7 +318,7 @@ def check_project_in_db(project_name):
 
 def add_project_to_db(project_name):
     """Add a new project to the MariaDB if not exist"""
-    if check_project_in_db(project_name) == False:
+    if not check_project_in_db(project_name):
         new_project = Project(project_name)
         db.session.add(new_project)
         db.session.commit()
@@ -262,15 +334,14 @@ def add_available_project_to_db(user_id, project_name):
     2. Find a Project object by using project_name
     3. Append(Allocate, they use Append for a bridging table) the User object to the Project object
     """
-
     print(f"Check whether the user is in the DB, if not, add the person to the DB")
-    if check_user_in_db(user_id) == False:
+    if not is_user_in_db(user_id):
         print(f"{user_id} is not in the DB so updating it.")
         add_user_to_db(user_id)
         db.session.flush()
 
     print(f"Check whether the project is in the DB, if not, add the project to the DB")
-    if check_project_in_db(project_name) == False:
+    if not check_project_in_db(project_name):
         print(f"{project_name} is not in the DB so updating it.")
         add_project_to_db(project_name)
         db.session.flush()
@@ -312,7 +383,6 @@ def proxy_to_api(
     headers: object
         An object that stores some headers.
     """
-
     APIBase = coreApiBase
 
     if "projectAPI" in request.full_path:
