@@ -328,8 +328,8 @@ export const TOOLTIP_URL = {
 */
 
 export const GMS_LABELS = {
-  mag: "Magnitude",
+  mag: "Magnitude (Mw)",
   rrup: "Rupture distance, Rrup (km)",
   sf: "Scale Factor",
-  vs30: "Vs30",
+  vs30: "Vs30 (m/s)",
 };
