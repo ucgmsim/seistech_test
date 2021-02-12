@@ -105,7 +105,6 @@ const GMSViewerIMDistributions = ({ gmsData, IM }) => {
         layout={{
           xaxis: {
             title: { text: "Peak ground velocity, PGV (cm/s)" },
-            rangemode: "tozero",
             autorange: true,
           },
           yaxis: {
