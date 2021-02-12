@@ -625,18 +625,18 @@ const GMSForm = () => {
                   <table className="table table-bordered">
                     <thead>
                       <tr>
-                        <th scope="col"></th>
-                        <th className="text-center" scope="col">
+                        <th className="var-name" scope="col"></th>
+                        <th className="min-value" scope="col">
                           Min
                         </th>
-                        <th className="text-center" scope="col">
+                        <th className="min-value" scope="col">
                           Max
                         </th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
-                        <th scope="row">Mw</th>
+                        <th scope="row">Magnitude (Mw)</th>
                         <td>
                           <input
                             type="text"
@@ -655,7 +655,7 @@ const GMSForm = () => {
                         </td>
                       </tr>
                       <tr>
-                        <th scope="row">Rrup</th>
+                        <th scope="row">Rrup (km)</th>
                         <td>
                           <input
                             type="text"
@@ -675,7 +675,7 @@ const GMSForm = () => {
                       </tr>
                       <tr>
                         <th scope="row">
-                          V<sub>S30</sub>
+                          V<sub>S30</sub> (m/s)
                         </th>
                         <td>
                           <input

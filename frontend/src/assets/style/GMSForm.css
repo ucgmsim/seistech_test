@@ -17,6 +17,20 @@ div.custom-form-group {
   margin-bottom: calc(1rem + 22px);
 }
 
+table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+th.var-name {
+  width: 40%;
+}
+
+th.min-value, th.max-value {
+  width: 30%;
+  text-align: center;
+}
+
 table td {
   position: relative;
 }
