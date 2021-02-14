@@ -3,6 +3,7 @@
 ### Allocate projects to users - ([PR #44](https://github.com/ucgmsim/seistech_psha_frontend/pull/44))
 
 - We now have a simple UI to allocate addable projects to a certain user under Edit User section.
+- Refactored Middlewar's structure.
 
 ## February 10, 2021
 

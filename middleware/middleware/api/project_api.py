@@ -5,7 +5,6 @@ from ..service import (
     proxy_to_api,
     get_available_projects,
 )
-
 from ..decorator import requires_auth
 
 

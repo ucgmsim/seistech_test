@@ -18,7 +18,6 @@ from server import (
     projectApiBase,
     coreApiToken,
 )
-
 from models import *
 
 # Create tables - It only creates when tables don't exist
