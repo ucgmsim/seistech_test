@@ -1,9 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import ReactMapGL, {
-  Marker,
-  NavigationControl,
-  FlyToInterpolator,
-} from "react-map-gl";
+import ReactMapGL, { Marker, NavigationControl } from "react-map-gl";
 import { GlobalContext } from "context";
 import SiteSelectionMapPin from "./SiteSelectionMapPin";
 import "assets/style/SiteSelectionMap.css";
@@ -44,8 +40,6 @@ const SiteSelectionMap = () => {
         {...viewport}
         width={MAP_BOX_WIDTH}
         height={MAP_BOX_HEIGHT}
-        transitionDuration={"auto"}
-        transitionInterpolator={new FlyToInterpolator({ speed: 1.2 })}
         mapboxApiAccessToken={MAP_BOX_TOKEN}
         onViewportChange={(nextViewport) => {
           setViewport(nextViewport);
