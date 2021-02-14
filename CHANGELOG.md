@@ -1,3 +1,9 @@
+## Februray 15, 2021
+
+### GMS Feedback Update Part 1 - ([PR #45](https://github.com/ucgmsim/seistech_psha_frontend/pull/45))
+
+- A few updates for the Frontend based on the feedback we got from a quick meeting. These are mainly for the Frontend, more to come once the API is updated.
+
 ## February 10, 2021
 
 ### HOTFIX - ([PR #43](https://github.com/ucgmsim/seistech_psha_frontend/pull/43))
