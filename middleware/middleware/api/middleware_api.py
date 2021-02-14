@@ -1,14 +1,16 @@
 from flask import jsonify, request
 from jose import jwt
 
-from ..server import (
-    app,
+from ..server import app
+
+from ..service import (
     get_users,
-    requires_auth,
     get_token_auth_header,
     get_addable_projects,
     allocate_users_to_projects,
 )
+
+from ..decorator import requires_auth
 
 
 @app.route("/user", methods=["GET"])

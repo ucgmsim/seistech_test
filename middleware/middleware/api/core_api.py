@@ -1,12 +1,14 @@
 from flask import request
 
-from ..server import (
-    app,
+from ..server import app
+
+from ..service import (
     proxy_to_api,
-    requires_auth,
     requires_permission,
     AuthError,
 )
+
+from ..decorator import requires_auth
 
 # Site Selection
 @app.route("/coreAPI/ensembleids", methods=["GET"])
