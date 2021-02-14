@@ -259,7 +259,7 @@ const GMSForm = () => {
   const [getIMWeightsClick, setGetIMWeightsClick] = useState(null);
 
   const [getIMWeightMButton, setGetIMWeightMButton] = useState({
-    text: "Get IM vectors Weight",
+    text: "Get IM vector Weights",
     isFetching: false,
   });
 
@@ -311,14 +311,14 @@ const GMSForm = () => {
               setLocalWeights(responseData);
 
               setGetIMWeightMButton({
-                text: "Get IM vectors weight",
+                text: "Get IM vector weights",
                 isFetching: false,
               });
             })
             .catch(function (error) {
               if (error.name !== "AbortError") {
                 setGetIMWeightMButton({
-                  text: "Get IM vectors weight",
+                  text: "Get IM vector weights",
                   isFetching: false,
                 });
               }
@@ -446,7 +446,7 @@ const GMSForm = () => {
             htmlFor="im-level"
             className="control-label"
           >
-            IM Level/Exceedance Rate
+            IM / Exceedance rate level
           </label>
           <GuideTooltip
             explanation={
@@ -465,7 +465,7 @@ const GMSForm = () => {
                 onChange={(e) => setLocalImExdRateRadio(e.target.value)}
               />
               <label className="form-check-label" htmlFor="im-level">
-                IM Level
+                IM
               </label>
             </div>
             <div className="form-check form-check-inline">
@@ -561,7 +561,7 @@ const GMSForm = () => {
 
         <div className="form-group">
           <label id="label-num-gms" htmlFor="num-gms" className="control-label">
-            Num Ground Motions
+            Number of Ground Motions
           </label>
           <GuideTooltip
             explanation={CONSTANTS.TOOLTIP_MESSAGES["HAZARD_GMS_NUM_GMS"]}
@@ -636,7 +636,7 @@ const GMSForm = () => {
                     </thead>
                     <tbody>
                       <tr>
-                        <th scope="row">Magnitude (Mw)</th>
+                        <th scope="row">Mw</th>
                         <td>
                           <input
                             type="text"

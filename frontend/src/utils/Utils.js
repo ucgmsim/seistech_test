@@ -121,7 +121,7 @@ export const GMSIMLabelConverter = (givenIM) => {
   let convertedLabel = `${DEFAULT_READABLE_IM_PATTERN[splittedValue[0]]}`;
 
   if (splittedValue.length > 1) {
-    convertedLabel += ` (${splittedValue[1]})s`;
+    convertedLabel += ` (${splittedValue[1]}s)`;
   }
 
   return convertedLabel;

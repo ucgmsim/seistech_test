@@ -172,10 +172,10 @@ export const GMS_VIEWER_GUIDE_MSG =
   "Please do the following steps to see plots.";
 export const GMS_VIEWER_GUIDE_INSTRUCTION = [
   "Select IM from Conditioning IM Name.",
-  "Choose IM Level or Exceedance Rate then put a value.",
+  "Choose one option from IM / Exceedance rate level then put a value.",
   "Click Get causal parameters bounds",
   "Select IM Vector(s).",
-  "Click Get IM vectors weight",
+  "Click Get IM vector weights",
   "Put Number of Ground Motions.",
   "Click the Compute button.",
 ];
@@ -329,7 +329,7 @@ export const TOOLTIP_URL = {
 
 export const GMS_LABELS = {
   mag: "Magnitude (Mw)",
-  rrup: "Rupture distance, Rrup (km)",
+  rrup: "Rupture distance (Rrup)",
   sf: "Scale factor (SF)",
-  vs30: "Vs30 (m/s)",
+  vs30: "30m-averaged shear-wave velocity (Vs30)",
 };

@@ -198,12 +198,12 @@ const GMSViewer = () => {
       let tempMetadatas = Object.getOwnPropertyNames(metadatas).map(
         (metadata) => ({
           value: metadata,
-          label: CONSTANTS.GMS_LABELS[metadata],
+          label: `${CONSTANTS.GMS_LABELS[metadata]} distribution`,
         })
       );
       tempMetadatas.splice(0, 0, {
         value: "mwrrupplot",
-        label: "Magnitude and Rupture distance, Rrup plot",
+        label: "Magnitude and rupture distance (Mw-Rrup) distribution",
       });
 
       // Set the first Metadata as a default metadata for plot
