@@ -10,7 +10,6 @@ import Hazard from "views/Hazard";
 import Project from "views/Project";
 import Profile from "views/Profile";
 import Footer from "views/Footer";
-import FrameworkDocEdit from "views/FrameworkDocEdit";
 import FrameworkDocView from "views/FrameworkDocView";
 import EditUser from "views/EditUser";
 
@@ -55,12 +54,6 @@ const App = () => {
                   path="/frameworks-doc"
                   exact
                   component={FrameworkDocView}
-                />
-
-                <PrivateRoute
-                  path="/frameworks-doc-edit/:id"
-                  exact
-                  component={FrameworkDocEdit}
                 />
               </Switch>
             </div>
