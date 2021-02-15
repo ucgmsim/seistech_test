@@ -2,12 +2,12 @@ from flask import jsonify, request
 from jose import jwt
 
 from ..server import app
-from ..service import (
+from ..db import (
     get_users,
-    get_token_auth_header,
     get_addable_projects,
     allocate_users_to_projects,
 )
+from ..utils import get_token_auth_header
 from ..decorator import requires_auth
 
 

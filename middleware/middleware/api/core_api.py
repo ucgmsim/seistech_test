@@ -1,11 +1,7 @@
 from flask import request
 
 from ..server import app
-from ..service import (
-    proxy_to_api,
-    requires_permission,
-    AuthError,
-)
+from ..utils import AuthError, requires_permission, proxy_to_api
 from ..decorator import requires_auth
 
 # Site Selection
