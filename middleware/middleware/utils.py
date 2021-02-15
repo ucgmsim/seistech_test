@@ -10,7 +10,6 @@ from server import (
     projectApiBase,
     coreApiToken,
 )
-from db import write_request_details
 
 
 class AuthError(Exception):
@@ -61,15 +60,15 @@ def proxy_to_api(
 
     # If endpoint is specified, its the one with users interaction, record to DB
     # Filter the parameters with keys don't include `token`, for Download Data record
-    if endpoint is not None:
-        write_request_details(
-            endpoint,
-            {
-                key: value
-                for key, value in request.args.to_dict().items()
-                if "token" not in key
-            },
-        )
+    # if endpoint is not None:
+    #     write_request_details(
+    #         endpoint,
+    #         {
+    #             key: value
+    #             for key, value in request.args.to_dict().items()
+    #             if "token" not in key
+    #         },
+    #     )
 
     if methods == "POST":
         resp = requests.post(
