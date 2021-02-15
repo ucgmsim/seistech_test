@@ -31,7 +31,7 @@ const SiteSelectionForm = () => {
   const [localProjectId, setLocalProjectId] = useState(null);
   const [localLocation, setLocalLocation] = useState(null);
   const [localVS30, setLocalVS30] = useState(null);
-  const [localProjectLocations, setLocalProjectLocations] = useState([]);
+  const [localProjectLocations, setLocalProjectLocations] = useState({});
   // Using localProjectLocations which is an object to create two different arrays for dropdowns
   const [locationOptions, setLocationOptions] = useState([]);
   const [vs30Options, setVs30Options] = useState([]);
@@ -143,7 +143,7 @@ const SiteSelectionForm = () => {
               const responseUHSRPData = await uhsRPs.json();
               // Need to create another object based on the response (Object)
               // To be able to use in Dropdown, react-select
-              setLocalProjectLocations(responseLocationData["locations"]);
+              setLocalProjectLocations(responseLocationData);
               // Setting IMs
               setProjectIMs(sortIMs(responseIMData["ims"]));
               // Setting RPs
@@ -174,10 +174,11 @@ const SiteSelectionForm = () => {
   useEffect(() => {
     // We originally set localProjectLocations as an array but after update with the response
     // It changes to object and object.length is undefined which is not 0
-    if (localProjectLocations.length !== 0) {
+    if (Object.values(localProjectLocations).length > 0) {
       let tempOptionArray = [];
       let tempLocationCodeObj = {};
       for (const key of Object.keys(localProjectLocations)) {
+        console.log(localProjectLocations[key]["name"])
         // Only pushing names into an array, ex: Christchurch and Dunedin
         tempOptionArray.push(localProjectLocations[key]["name"]);
         // Looks like { Christchurch: chch, Dunedin: dud}, to get station code easy
