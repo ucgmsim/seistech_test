@@ -10,7 +10,6 @@ import GuideTooltip from "components/common/GuideTooltip";
 import { handleErrors, sortIMs, renderSigfigs } from "utils/Utils";
 
 import "assets/style/HazardForms.css";
-import "assets/style/ProjectSiteSelection.css";
 
 const SiteSelectionForm = () => {
   const {
