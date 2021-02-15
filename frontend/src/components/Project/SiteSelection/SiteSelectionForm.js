@@ -266,8 +266,8 @@ const SiteSelectionForm = () => {
         />
         {localLocation === null ? null : (
           <p className="project-location-coords">
-            Latitude: {lat} <br />
-            Longitude: {lng}
+            <b>Latitude:</b> {lat} <br />
+            <b>Longitude</b>: {lng}
           </p>
         )}
       </div>
