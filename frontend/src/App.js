@@ -10,6 +10,8 @@ import Hazard from "views/Hazard";
 import Project from "views/Project";
 import Profile from "views/Profile";
 import Footer from "views/Footer";
+import FrameworkDocEdit from "views/FrameworkDocEdit";
+import FrameworkDocView from "views/FrameworkDocView";
 
 import History from "utils/History";
 import { GlobalContextProvider } from "context";
@@ -44,7 +46,19 @@ const App = () => {
 
                 <PrivateRoute path="/project" exact component={Project} />
 
-                <PrivateRoute path="/profile" component={Profile} />
+                <PrivateRoute path="/profile" exact component={Profile} />
+
+                <Route
+                  path="/frameworks-doc"
+                  exact
+                  component={FrameworkDocView}
+                />
+
+                <PrivateRoute
+                  path="/frameworks-doc-edit/:id"
+                  exact
+                  component={FrameworkDocEdit}
+                />
               </Switch>
             </div>
           </div>
