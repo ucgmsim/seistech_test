@@ -10,6 +10,7 @@ import GuideTooltip from "components/common/GuideTooltip";
 import { handleErrors, sortIMs } from "utils/Utils";
 
 import "assets/style/HazardForms.css";
+import "assets/style/ProjectSiteSelection.css";
 
 const SiteSelectionForm = () => {
   const {
@@ -35,6 +36,8 @@ const SiteSelectionForm = () => {
   // Using localProjectLocations which is an object to create two different arrays for dropdowns
   const [locationOptions, setLocationOptions] = useState([]);
   const [vs30Options, setVs30Options] = useState([]);
+  const [lat, setLat] = useState("");
+  const [lng, setLng] = useState("");
 
   // Getting Project IDs
   useEffect(() => {
@@ -195,6 +198,8 @@ const SiteSelectionForm = () => {
       for (const key of Object.keys(localProjectLocations)) {
         if (localLocation === localProjectLocations[key]["name"]) {
           setVs30Options(localProjectLocations[key]["vs30"]);
+          setLat(localProjectLocations[key]["lat"]);
+          setLng(localProjectLocations[key]["lon"]);
           // Reset the VS30 value
           setLocalVS30(null);
         }
@@ -259,6 +264,12 @@ const SiteSelectionForm = () => {
               : "Loading..."
           }
         />
+        {localLocation === null ? null : (
+          <p className="project-location-coords">
+            Latitude: {lat} <br />
+            Longitude: {lng}
+          </p>
+        )}
       </div>
 
       <div className="form-group form-section-title">
