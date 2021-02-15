@@ -51,7 +51,7 @@ const App = () => {
                 <PrivateRoute path="/profile" exact component={Profile} />
 
                 <Route
-                  path="/frameworks-doc"
+                  path="/framework-docs"
                   exact
                   component={FrameworkDocView}
                 />

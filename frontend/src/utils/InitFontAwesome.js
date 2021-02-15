@@ -9,7 +9,7 @@ import {
   faCaretDown,
   faCaretUp,
   faQuestionCircle,
-  faFileMedical,
+  faFileWord,
   faTools,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -23,7 +23,7 @@ const InitFontAwesome = () => {
   library.add(faCaretDown);
   library.add(faCaretUp);
   library.add(faQuestionCircle);
-  library.add(faFileMedical);
+  library.add(faFileWord);
   library.add(faTools);
 };
 
