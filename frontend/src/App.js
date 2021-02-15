@@ -12,6 +12,7 @@ import Profile from "views/Profile";
 import Footer from "views/Footer";
 import FrameworkDocEdit from "views/FrameworkDocEdit";
 import FrameworkDocView from "views/FrameworkDocView";
+import EditUser from "views/EditUser";
 
 import History from "utils/History";
 import { GlobalContextProvider } from "context";
@@ -45,6 +46,8 @@ const App = () => {
                 <PrivateRoute path="/hazard" exact component={Hazard} />
 
                 <PrivateRoute path="/project" exact component={Project} />
+
+                <PrivateRoute path="/edit-user" exact component={EditUser} />
 
                 <PrivateRoute path="/profile" exact component={Profile} />
 

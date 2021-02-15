@@ -1,14 +1,12 @@
 from flask import request
-from ..server import (
-    app,
+
+from ..server import app
+from ..service import (
     proxy_to_api,
-    requires_auth,
     requires_permission,
     AuthError,
 )
-
-"""CORE API
-"""
+from ..decorator import requires_auth
 
 # Site Selection
 @app.route("/coreAPI/ensembleids", methods=["GET"])
@@ -137,10 +135,7 @@ def get_disagg():
 def get_uhs():
     if requires_permission("hazard:uhs"):
         return proxy_to_api(
-            request,
-            "api/uhs/ensemble_uhs/get",
-            "GET",
-            "Hazard Analysis - UHS Compute",
+            request, "api/uhs/ensemble_uhs/get", "GET", "Hazard Analysis - UHS Compute",
         )
     raise AuthError(
         {
@@ -174,12 +169,7 @@ def get_uhs_nzcode():
 @app.route("/coreAPI/gms/ensemble_gms", methods=["POST"])
 @requires_auth
 def compute_ensemble_GMS():
-    return proxy_to_api(
-        request,
-        "api/gms/ensemble_gms/compute",
-        "POST",
-        "GMS Compute",
-    )
+    return proxy_to_api(request, "api/gms/ensemble_gms/compute", "POST", "GMS Compute",)
 
 
 @app.route("/coreAPI/gms/default_im_weights", methods=["GET"])
