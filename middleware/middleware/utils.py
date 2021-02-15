@@ -10,6 +10,7 @@ from server import (
     projectApiBase,
     coreApiToken,
 )
+from db import write_request_details
 
 
 class AuthError(Exception):
@@ -58,7 +59,7 @@ def proxy_to_api(
     if "projectAPI" in request.full_path:
         APIBase = projectApiBase
 
-    # If endpoint is specified, its the one with uesrs' insteaction, record to DB
+    # If endpoint is specified, its the one with users interaction, record to DB
     # Filter the parameters with keys don't include `token`, for Download Data record
     if endpoint is not None:
         write_request_details(

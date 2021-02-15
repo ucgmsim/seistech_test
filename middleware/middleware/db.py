@@ -35,7 +35,7 @@ def _get_management_api_token():
     conn.request("POST", "/oauth/token", payload, headers)
 
     res = conn.getresponse()
-    # Convert the string dictionary to dictionray
+    # Convert the string dictionary to dictionary
     data = json.loads(res.read().decode("utf-8"))
 
     return data["access_token"]
