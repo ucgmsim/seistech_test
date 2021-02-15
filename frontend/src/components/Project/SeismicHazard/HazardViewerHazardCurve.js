@@ -25,6 +25,8 @@ const HazardViewerHazardCurve = () => {
     projectLocation,
     projectVS30,
     projectLocationCode,
+    projectLat,
+    projectLng,
     projectSelectedIM,
     setProjectSelectedIM,
   } = useContext(GlobalContext);
@@ -43,6 +45,8 @@ const HazardViewerHazardCurve = () => {
 
   const [downloadToken, setDownloadToken] = useState("");
 
+  console.log(projectLat);
+  console.log(projectLng);
   const extraInfo = {
     from: "project",
     id: projectId,
@@ -156,6 +160,8 @@ const HazardViewerHazardCurve = () => {
                   projectLocation={projectLocation}
                   projectVS30={projectVS30}
                   projectSelectedIM={projectSelectedIM}
+                  projectLat={projectLat}
+                  projectLng={projectLng}
                 />
               </Fragment>
             )}
@@ -196,6 +202,8 @@ const HazardViewerHazardCurve = () => {
                   projectLocation={projectLocation}
                   projectVS30={projectVS30}
                   projectSelectedIM={projectSelectedIM}
+                  projectLat={projectLat}
+                  projectLng={projectLng}
                 />
               </Fragment>
             )}

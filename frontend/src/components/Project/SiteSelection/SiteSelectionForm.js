@@ -7,7 +7,7 @@ import { useAuth0 } from "components/common/ReactAuth0SPA";
 import * as CONSTANTS from "constants/Constants";
 import ProjectSelect from "components/common/ProjectSelect";
 import GuideTooltip from "components/common/GuideTooltip";
-import { handleErrors, sortIMs } from "utils/Utils";
+import { handleErrors, sortIMs, renderSigfigs } from "utils/Utils";
 
 import "assets/style/HazardForms.css";
 import "assets/style/ProjectSiteSelection.css";
@@ -21,6 +21,8 @@ const SiteSelectionForm = () => {
     setProjectVS30,
     setProjectLocation,
     setProjectLocationCode,
+    setProjectLat,
+    setProjectLng,
     setProjectSiteSelectionGetClick,
   } = useContext(GlobalContext);
 
@@ -222,6 +224,8 @@ const SiteSelectionForm = () => {
     setProjectLocation(localLocation);
     setProjectVS30(localVS30);
     setProjectSiteSelectionGetClick(uuidv4());
+    setProjectLat(renderSigfigs(lat, CONSTANTS.APP_UI_SIGFIGS));
+    setProjectLng(renderSigfigs(lng, CONSTANTS.APP_UI_SIGFIGS));
   };
 
   return (
@@ -264,12 +268,6 @@ const SiteSelectionForm = () => {
               : "Loading..."
           }
         />
-        {localLocation === null ? null : (
-          <p className="project-location-coords">
-            <b>Latitude:</b> {lat} <br />
-            <b>Longitude</b>: {lng}
-          </p>
-        )}
       </div>
 
       <div className="form-group form-section-title">
