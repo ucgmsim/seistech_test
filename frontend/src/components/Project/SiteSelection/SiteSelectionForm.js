@@ -178,7 +178,6 @@ const SiteSelectionForm = () => {
       let tempOptionArray = [];
       let tempLocationCodeObj = {};
       for (const key of Object.keys(localProjectLocations)) {
-        console.log(localProjectLocations[key]["name"])
         // Only pushing names into an array, ex: Christchurch and Dunedin
         tempOptionArray.push(localProjectLocations[key]["name"]);
         // Looks like { Christchurch: chch, Dunedin: dud}, to get station code easy
@@ -192,6 +191,7 @@ const SiteSelectionForm = () => {
   // Based on the chosen Location, we create an array for VS30 dropdown
   useEffect(() => {
     if (localLocation !== null) {
+      setVs30Options([]);
       for (const key of Object.keys(localProjectLocations)) {
         if (localLocation === localProjectLocations[key]["name"]) {
           setVs30Options(localProjectLocations[key]["vs30"]);
@@ -201,6 +201,16 @@ const SiteSelectionForm = () => {
       }
     }
   }, [localLocation]);
+
+  // Reset dropdowns when Project ID gets changed
+  useEffect(() => {
+    if (localProjectId !== null) {
+      setLocalLocation(null);
+      setLocalVS30(null);
+      setLocationOptions([]);
+      setVs30Options([]);
+    }
+  }, [localProjectId]);
 
   const setGlobalVariables = () => {
     setProjectId(localProjectId);
@@ -243,7 +253,11 @@ const SiteSelectionForm = () => {
           value={localLocation}
           setSelect={setLocalLocation}
           options={locationOptions}
-          placeholder="Please select the Project ID first..."
+          placeholder={
+            localProjectId === null
+              ? "Please select the Project ID first..."
+              : "Loading..."
+          }
         />
       </div>
 
@@ -263,7 +277,11 @@ const SiteSelectionForm = () => {
           value={localVS30}
           setSelect={setLocalVS30}
           options={vs30Options}
-          placeholder="Please select the Location first..."
+          placeholder={
+            localLocation === null
+              ? "Please select the Location first..."
+              : "Loading..."
+          }
         />
       </div>
 
