@@ -1,13 +1,10 @@
 from flask import request
-from ..server import (
-    app,
-    proxy_to_api,
-    requires_auth,
-    get_available_projects,
-)
 
-"""PROJECT API
-"""
+from ..server import app
+from ..db import get_available_projects
+from ..utils import proxy_to_api
+from ..decorator import requires_auth
+
 
 # Site Selection
 @app.route("/projectAPI/ids/get", methods=["GET"])
