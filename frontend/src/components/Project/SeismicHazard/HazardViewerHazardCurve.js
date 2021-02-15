@@ -45,8 +45,6 @@ const HazardViewerHazardCurve = () => {
 
   const [downloadToken, setDownloadToken] = useState("");
 
-  console.log(projectLat);
-  console.log(projectLng);
   const extraInfo = {
     from: "project",
     id: projectId,
