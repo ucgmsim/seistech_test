@@ -6,22 +6,52 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 
-import testFile from "../assets/documents/test.md";
-
 import "assets/style/FrameworkDocView.css";
 
+const importAll = (r) => r.keys().map(r);
+const markdownFiles = importAll(
+  require.context("assets/documents", false, /\.md$/)
+).sort((a, b) => {
+  const newA = a.substring(a.indexOf("a/") + 2, a.lastIndexOf("_"));
+
+  const newB = b.substring(b.indexOf("a/") + 2, b.lastIndexOf("_"));
+
+  return newA - newB;
+});
+
 const FrameworkDocView = () => {
-  // Could be a const array instead of Hook.
-  // But by not using Hook, app will create this variable multiple times
-  // Due to the re-rendering
-  const [docEntries, setDocEntries] = useState(["test", "test2"]);
+  const [titleList, setTitleList] = useState([]);
 
-  const [markdown, setMarkdown] = useState("");
+  const [markdownList, setMarkdownList] = useState([]);
 
+  const [selectedDoc, setSelectedDoc] = useState("");
+
+  // Loading Markdowns
   useEffect(() => {
-    fetch(testFile)
-      .then((res) => res.text())
-      .then((text) => setMarkdown(text));
+    const loadMarkdowns = async () => {
+      const markdowns = await Promise.all(
+        markdownFiles.map((file) =>
+          fetch(file).then((response) => response.text())
+        )
+      );
+      console.log(markdownFiles);
+      setMarkdownList(markdowns);
+    };
+
+    loadMarkdowns();
+  }, []);
+
+  // Create an array of filenames
+  // This will be used to load certain file to display based on the users choice
+  useEffect(() => {
+    const filesArray = markdownFiles.map((file) => {
+      const file_name = file
+        .substring(file.indexOf("a/") + 2, file.lastIndexOf("."))
+        .split(".")[0];
+      return file_name.split("_")[1];
+    });
+
+    setTitleList(filesArray);
   }, []);
 
   return (
@@ -40,15 +70,25 @@ const FrameworkDocView = () => {
             }}
           >
             <List>
-              <ListItem button>
-                <ListItemText>TEST</ListItemText>
-              </ListItem>
+              {titleList.map((title) => {
+                return (
+                  <ListItem
+                    button
+                    key={title}
+                    onClick={() => setSelectedDoc(title)}
+                  >
+                    <ListItemText>{title}</ListItemText>
+                  </ListItem>
+                );
+              })}
             </List>
           </Drawer>
         </div>
         <div className="col-9 controlGroup form-viewer">
           <div className="two-column-view-right-pane">
-            <ReactMarkdown source={markdown} />
+            <ReactMarkdown
+              source={markdownList[titleList.indexOf(selectedDoc)]}
+            />
           </div>
         </div>
       </div>
