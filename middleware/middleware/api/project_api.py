@@ -1,10 +1,8 @@
 from flask import request
 
 from ..server import app
-from ..service import (
-    proxy_to_api,
-    get_available_projects,
-)
+from ..db import get_available_projects
+from ..utils import proxy_to_api
 from ..decorator import requires_auth
 
 

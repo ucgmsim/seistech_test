@@ -1,41 +1,20 @@
 import json
 import requests
 import http.client
-from typing import Dict
 
 from jose import jwt
 from flask import request, jsonify, Response
 
 from server import (
-    app,
     AUTH0_CLIENT_ID,
     AUTH0_CLIENT_SECRET,
     AUTH0_AUDIENCE,
     AUTH0_GRANT_TYPE,
     AUTH0_DOMAIN,
     db,
-    coreApiBase,
-    projectApiBase,
-    coreApiToken,
 )
+from utils import get_token_auth_header, proxy_to_api
 from models import *
-
-# Create tables - It only creates when tables don't exist
-db.create_all()
-db.session.commit()
-
-
-class AuthError(Exception):
-    def __init__(self, error, status_code):
-        self.error = error
-        self.status_code = status_code
-
-
-@app.errorhandler(AuthError)
-def handle_auth_error(ex):
-    response = jsonify(ex.error)
-    response.status_code = ex.status_code
-    return response
 
 
 def _get_management_api_token():
@@ -56,7 +35,7 @@ def _get_management_api_token():
     conn.request("POST", "/oauth/token", payload, headers)
 
     res = conn.getresponse()
-    # Convert the string dictionary to dictionray
+    # Convert the string dictionary to dictionary
     data = json.loads(res.read().decode("utf-8"))
 
     return data["access_token"]
@@ -101,7 +80,7 @@ def _get_user_id():
     return user_id
 
 
-def _write_request_details(endpoint, query_dict):
+def write_request_details(endpoint, query_dict):
     """Record users' interation into the DB
 
     Parameters
@@ -297,124 +276,3 @@ def allocate_users_to_projects():
         _add_available_project_to_db(requested_user_id, project["value"])
 
     return "DONE"
-
-
-def proxy_to_api(
-    request,
-    route,
-    methods,
-    endpoint: str = None,
-    content_type: str = "application/json",
-    headers: Dict = None,
-):
-    """Middleware - Handling the communication between Frontend and Core API.
-    We check the request.full_path (e.g., projectAPI/ids/get)
-    If it contains projectAPI, we siwtch APIBase to Project API path.
-    Default is Core API path.
-
-    Parameters
-    ----------
-    request: object
-    route: str
-        URL path to Core/Project API
-    methods: str
-        GET/POST methods
-    endpoint: str
-        To find out what user is performing
-    content_type: str
-        Entry-header field indicates the media type of the entity-body sent to the recipient.
-        The default media type is application/json
-    headers: object
-        An object that stores some headers.
-    """
-    APIBase = coreApiBase
-
-    if "projectAPI" in request.full_path:
-        APIBase = projectApiBase
-
-    # If endpoint is specified, its the one with uesrs' insteaction, record to DB
-    # Filter the parameters with keys don't include `token`, for Download Data record
-    if endpoint is not None:
-        _write_request_details(
-            endpoint,
-            {
-                key: value
-                for key, value in request.args.to_dict().items()
-                if "token" not in key
-            },
-        )
-
-    if methods == "POST":
-        resp = requests.post(
-            APIBase + route,
-            data=request.data.decode(),
-            headers={"Authorization": coreApiToken},
-        )
-
-    elif methods == "GET":
-        querystring = request.query_string.decode("utf-8")
-
-        if querystring:
-            querystring = "?" + querystring
-
-        resp = requests.get(
-            APIBase + route + querystring, headers={"Authorization": coreApiToken}
-        )
-
-    response = Response(
-        resp.content, resp.status_code, mimetype=content_type, headers=headers
-    )
-
-    return response
-
-
-def get_token_auth_header():
-    """Obtains the Access Token from the Authorization Header"""
-    auth = request.headers.get("Authorization", None)
-    if not auth:
-        raise AuthError(
-            {
-                "code": "authorization_header_missing",
-                "description": "Authorization header is expected",
-            },
-            401,
-        )
-
-    parts = auth.split()
-
-    if parts[0].lower() != "bearer":
-        raise AuthError(
-            {
-                "code": "invalid_header",
-                "description": "Authorization header must start with" " Bearer",
-            },
-            401,
-        )
-    elif len(parts) == 1:
-        raise AuthError(
-            {"code": "invalid_header", "description": "Token not found"}, 401
-        )
-    elif len(parts) > 2:
-        raise AuthError(
-            {
-                "code": "invalid_header",
-                "description": "Authorization header must be" " Bearer token",
-            },
-            401,
-        )
-
-    token = parts[1]
-    return token
-
-
-def requires_permission(required_permission):
-    """Determines if the required scope is present in the Access Token
-    Args:
-        required_permission (str): The scope required to access the resource
-    """
-    token = get_token_auth_header()
-    unverified_claims = jwt.get_unverified_claims(token)
-    if unverified_claims.get("permissions"):
-        token_permissions = unverified_claims["permissions"]
-        return required_permission in token_permissions
-    return False

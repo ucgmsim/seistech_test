@@ -7,7 +7,7 @@ import { useAuth0 } from "components/common/ReactAuth0SPA";
 import * as CONSTANTS from "constants/Constants";
 import ProjectSelect from "components/common/ProjectSelect";
 import GuideTooltip from "components/common/GuideTooltip";
-import { handleErrors, sortIMs } from "utils/Utils";
+import { handleErrors, sortIMs, renderSigfigs } from "utils/Utils";
 
 import "assets/style/HazardForms.css";
 
@@ -20,6 +20,8 @@ const SiteSelectionForm = () => {
     setProjectVS30,
     setProjectLocation,
     setProjectLocationCode,
+    setProjectLat,
+    setProjectLng,
     setProjectSiteSelectionGetClick,
   } = useContext(GlobalContext);
 
@@ -31,10 +33,12 @@ const SiteSelectionForm = () => {
   const [localProjectId, setLocalProjectId] = useState(null);
   const [localLocation, setLocalLocation] = useState(null);
   const [localVS30, setLocalVS30] = useState(null);
-  const [localProjectLocations, setLocalProjectLocations] = useState([]);
+  const [localProjectLocations, setLocalProjectLocations] = useState({});
   // Using localProjectLocations which is an object to create two different arrays for dropdowns
   const [locationOptions, setLocationOptions] = useState([]);
   const [vs30Options, setVs30Options] = useState([]);
+  const [lat, setLat] = useState("");
+  const [lng, setLng] = useState("");
 
   // Getting Project IDs
   useEffect(() => {
@@ -143,7 +147,7 @@ const SiteSelectionForm = () => {
               const responseUHSRPData = await uhsRPs.json();
               // Need to create another object based on the response (Object)
               // To be able to use in Dropdown, react-select
-              setLocalProjectLocations(responseLocationData["locations"]);
+              setLocalProjectLocations(responseLocationData);
               // Setting IMs
               setProjectIMs(sortIMs(responseIMData["ims"]));
               // Setting RPs
@@ -174,7 +178,7 @@ const SiteSelectionForm = () => {
   useEffect(() => {
     // We originally set localProjectLocations as an array but after update with the response
     // It changes to object and object.length is undefined which is not 0
-    if (localProjectLocations.length !== 0) {
+    if (Object.values(localProjectLocations).length > 0) {
       let tempOptionArray = [];
       let tempLocationCodeObj = {};
       for (const key of Object.keys(localProjectLocations)) {
@@ -191,9 +195,12 @@ const SiteSelectionForm = () => {
   // Based on the chosen Location, we create an array for VS30 dropdown
   useEffect(() => {
     if (localLocation !== null) {
+      setVs30Options([]);
       for (const key of Object.keys(localProjectLocations)) {
         if (localLocation === localProjectLocations[key]["name"]) {
           setVs30Options(localProjectLocations[key]["vs30"]);
+          setLat(localProjectLocations[key]["lat"]);
+          setLng(localProjectLocations[key]["lon"]);
           // Reset the VS30 value
           setLocalVS30(null);
         }
@@ -201,11 +208,23 @@ const SiteSelectionForm = () => {
     }
   }, [localLocation]);
 
+  // Reset dropdowns when Project ID gets changed
+  useEffect(() => {
+    if (localProjectId !== null) {
+      setLocalLocation(null);
+      setLocalVS30(null);
+      setLocationOptions([]);
+      setVs30Options([]);
+    }
+  }, [localProjectId]);
+
   const setGlobalVariables = () => {
     setProjectId(localProjectId);
     setProjectLocation(localLocation);
     setProjectVS30(localVS30);
     setProjectSiteSelectionGetClick(uuidv4());
+    setProjectLat(renderSigfigs(lat, CONSTANTS.APP_UI_SIGFIGS));
+    setProjectLng(renderSigfigs(lng, CONSTANTS.APP_UI_SIGFIGS));
   };
 
   return (
@@ -242,7 +261,11 @@ const SiteSelectionForm = () => {
           value={localLocation}
           setSelect={setLocalLocation}
           options={locationOptions}
-          placeholder="Please select the Project ID first..."
+          placeholder={
+            localProjectId === null
+              ? "Please select the Project ID first..."
+              : "Loading..."
+          }
         />
       </div>
 
@@ -262,7 +285,11 @@ const SiteSelectionForm = () => {
           value={localVS30}
           setSelect={setLocalVS30}
           options={vs30Options}
-          placeholder="Please select the Location first..."
+          placeholder={
+            localLocation === null
+              ? "Please select the Location first..."
+              : "Loading..."
+          }
         />
       </div>
 

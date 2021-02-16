@@ -10,7 +10,7 @@ from server import (
     AUTH0_DOMAIN,
     API_AUDIENCE,
 )
-from service import AuthError, get_token_auth_header
+from utils import AuthError, get_token_auth_header
 
 
 def requires_auth(f):

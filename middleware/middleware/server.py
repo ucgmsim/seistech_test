@@ -33,6 +33,12 @@ class CustomSQLALchemy(SQLAlchemy):
 
 db = CustomSQLALchemy(app)
 
+from models import *
+
+# Create tables - It only creates when tables don't exist
+db.create_all()
+db.session.commit()
+
 CORS(app)
 
 ENV = os.environ["ENV"]
