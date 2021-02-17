@@ -2,6 +2,7 @@ import React, { Fragment, useContext, useState, useEffect } from "react";
 import Tabs from "react-bootstrap/Tabs";
 import { Tab } from "react-bootstrap";
 import Select from "react-select";
+import dompurify from "dompurify";
 import { GlobalContext } from "context";
 import * as CONSTANTS from "constants/Constants";
 import { useAuth0 } from "components/common/ReactAuth0SPA";
@@ -21,6 +22,8 @@ import "assets/style/GMSViewer.css";
 
 const GMSViewer = () => {
   const { getTokenSilently } = useAuth0();
+
+  const sanitizer = dompurify.sanitize;
 
   const {
     selectedEnsemble,
@@ -203,7 +206,7 @@ const GMSViewer = () => {
       );
       tempMetadatas.splice(0, 0, {
         value: "mwrrupplot",
-        label: "Magnitude and rupture distance (Mw-Rrup) distribution",
+        label: `Magnitude and rupture distance (Mw-R${"rup".sub()}) distribution`,
       });
 
       // Set the first Metadata as a default metadata for plot
@@ -312,6 +315,15 @@ const GMSViewer = () => {
                       defaultValue={specifiedMetadata}
                       options={localMetadatas}
                       isSearchable={false}
+                      formatOptionLabel={(data) => {
+                        return (
+                          <span
+                            dangerouslySetInnerHTML={{
+                              __html: sanitizer(data.label),
+                            }}
+                          />
+                        );
+                      }}
                     />
                     {specifiedMetadata.value === "mwrrupplot" ? (
                       <GMSViewerMwRrupPlot
