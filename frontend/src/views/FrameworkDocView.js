@@ -23,8 +23,11 @@ const getPrefixNum = (filePath) => {
   );
 };
 /* Read all the .md files in a given directory and sort them
-  With one restriction, file must start with number to sort properly
-  each variable would look something like this
+  With three restrictions,
+  1. The file must start with a number to sort properly
+  2. Then followed by the subdirectory's title with an underscore
+  3. Then the title of the document, if it needs a spacing between word, use a hyphen.
+  Then it would look something like this.
   "/static/media/1_Hazard-test.bb7746c9.md"
 */
 const markdownFiles = importAll(
@@ -45,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // Similar to getPrefisNum, instead we get something after number underscore
-// Currently, will be either Hazard or Projects
+// Currently will be either Hazard or Projects
 const getHeaderTitle = (filePath) => {
   return filePath.substring(filePath.indexOf("_") + 1, filePath.indexOf("-"));
 };
@@ -81,7 +84,7 @@ const FrameworkDocView = () => {
     }));
   };
 
-  /* This is the object that contains the information of directory with files
+  /* This is the object that contains the information of the directory with files and its content.
     E.g. {
       Hazard : {
         site-selection: contents,
@@ -95,9 +98,10 @@ const FrameworkDocView = () => {
       }
     }
     1_Hazard-Site-Selection.md
-    Outer object's properties are coming from Prefix title part, after number
-    It's property is the title, what will be displayed in list
-    and contents to be displayed in the right column, viewer
+    Outer object's property is the subdirectory's title.
+    Inner object's property is the title of the document which will be displayed
+    in the list as a clickable item.
+    and its value, contents, are the one to be displayed in the right column, the viewer.
   */
   useEffect(() => {
     let tempObj = {};
