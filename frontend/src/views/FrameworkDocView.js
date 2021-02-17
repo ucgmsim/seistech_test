@@ -69,8 +69,8 @@ const FrameworkDocView = () => {
   // Unfortunatley, we cannot create state hook dynamically, so must be hardcoded to control
   // each dropdown
   const [open, setOpen] = useState({
-    Hazard: true,
-    Projects: true,
+    Hazard: false,
+    Projects: false,
   });
 
   // Used an object to the state, to change the certain property's value
