@@ -12,8 +12,16 @@ import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 
 // Reference
-// https://webpack.js.org/guides/dependency-management/#context-module-api
-const importAll = (r) => r.keys().map(r);
+// https://webpack.js.org/guides/dependency-management/#requirecontext
+const importAll = (r) => {
+  return r.keys().map(r);
+};
+const getPrefixNum = (filePath) => {
+  return filePath.substring(
+    filePath.indexOf("a/") + 2,
+    filePath.lastIndexOf("_")
+  );
+};
 /* Read all the .md files in a given directory and sort them
   With one restriction, file must start with number to sort properly
   each variable would look something like this
@@ -22,11 +30,7 @@ const importAll = (r) => r.keys().map(r);
 const markdownFiles = importAll(
   require.context("assets/documents", false, /\.md$/)
 ).sort((a, b) => {
-  const newA = a.substring(a.indexOf("a/") + 2, a.lastIndexOf("_"));
-
-  const newB = b.substring(b.indexOf("a/") + 2, b.lastIndexOf("_"));
-
-  return newA - newB;
+  return getPrefixNum(a) - getPrefixNum(b);
 });
 
 // One of ways adding styles, this is specialized for Material-UI
@@ -39,6 +43,12 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: theme.spacing(4),
   },
 }));
+
+const getFilename = (filePath) => {
+  return filePath
+    .substring(filePath.indexOf("-") + 1, filePath.lastIndexOf("."))
+    .split(".")[0];
+};
 
 const FrameworkDocView = () => {
   const classes = useStyles();
@@ -86,9 +96,7 @@ const FrameworkDocView = () => {
       for (let i = 0; i < markdownFiles.length; i++) {
         const file = markdownFiles[i];
 
-        const fileName = file
-          .substring(file.indexOf("-") + 1, file.lastIndexOf("."))
-          .split(".")[0];
+        const fileName = getFilename(file);
 
         await fetch(file).then(async (response) => {
           const responseData = await response.text();
@@ -120,9 +128,7 @@ const FrameworkDocView = () => {
         file.lastIndexOf("-")
       );
 
-      const fileName = file
-        .substring(file.indexOf("-") + 1, file.lastIndexOf("."))
-        .split(".")[0];
+      const fileName = getFilename(file);
 
       // Declare an object's property with Subheader's title
       if (tempObj.hasOwnProperty(subHeaderTitle) === false) {
@@ -161,7 +167,6 @@ const FrameworkDocView = () => {
                       {markdownTextObj[title].map((fileName) => (
                         <ListItem
                           button
-                          key={fileName}
                           className={classes.nested}
                           onClick={() => setSelectedDoc(fileName)}
                         >
