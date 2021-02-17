@@ -64,24 +64,6 @@ const FrameworkDocView = () => {
     body: "",
   });
 
-  /* This is the object that contains the information of directory with files
-    E.g. {
-      Hazard : {
-        site-selection: contents,
-        seismic-hazard: contents,
-        gms: contents,
-      },
-      projects : {
-        site-selection: contents,
-        seismic-hazard: contents,
-        gms: contents,
-      }
-    }
-    1_Hazard-Site-Selection.md
-    Outer object's properties are coming from Prefix title part, after number
-    It's property is the title, what will be displayed in list
-    and contents to be displayed in the right column, viewer
-  */
   const [markdownFilesObj, setMarkdownFilesObj] = useState({});
 
   // Unfortunatley, we cannot create state hook dynamically, so must be hardcoded to control
@@ -99,13 +81,23 @@ const FrameworkDocView = () => {
     }));
   };
 
-  /*
-    Create an object of filename with its contents
-    For intsance. {fileName: contents}
-    {
-      1: "HELO IM HERE! FROM 1.md!",
-      2: "HELLO ME HERE FROM 2.md!"
+  /* This is the object that contains the information of directory with files
+    E.g. {
+      Hazard : {
+        site-selection: contents,
+        seismic-hazard: contents,
+        gms: contents,
+      },
+      projects : {
+        site-selection: contents,
+        seismic-hazard: contents,
+        gms: contents,
+      }
     }
+    1_Hazard-Site-Selection.md
+    Outer object's properties are coming from Prefix title part, after number
+    It's property is the title, what will be displayed in list
+    and contents to be displayed in the right column, viewer
   */
   useEffect(() => {
     let tempObj = {};
