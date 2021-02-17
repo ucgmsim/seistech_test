@@ -5,6 +5,8 @@ const HazardCurveMetadata = ({
   projectLocation,
   projectVS30,
   projectSelectedIM,
+  projectLat,
+  projectLng,
 }) => {
   return (
     <div className="form-group">
@@ -12,8 +14,8 @@ const HazardCurveMetadata = ({
         style={{ color: "red", resize: "none" }}
         className="form-control"
         disabled
-        rows="5"
-        value={`Project ID: ${projectId}\nLocation: ${projectLocation}\nVS30: ${projectVS30}\nIntensity Measure: ${projectSelectedIM}`}
+        rows="7"
+        value={`Project ID: ${projectId}\nLocation: ${projectLocation}\nLatitude: ${projectLat}\nLongitude: ${projectLng}\nVs30: ${projectVS30}\nIntensity Measure: ${projectSelectedIM}`}
       ></textarea>
     </div>
   );

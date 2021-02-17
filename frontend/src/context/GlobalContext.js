@@ -111,6 +111,8 @@ export const Provider = (props) => {
   const [projectLocationCode, setProjectLocationCode] = useState({});
   const [projectVS30, setProjectVS30] = useState(null);
   const [projectLocation, setProjectLocation] = useState(null);
+  const [projectLat, setProjectLat] = useState(null);
+  const [projectLng, setProjectLng] = useState(null);
   const [
     projectSiteSelectionGetClick,
     setProjectSiteSelectionGetClick,
@@ -311,6 +313,10 @@ export const Provider = (props) => {
     setProjectVS30,
     projectLocation,
     setProjectLocation,
+    projectLat,
+    setProjectLat,
+    projectLng,
+    setProjectLng,
     projectSiteSelectionGetClick,
     setProjectSiteSelectionGetClick,
 

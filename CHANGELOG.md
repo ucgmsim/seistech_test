@@ -1,8 +1,22 @@
+## February 16, 2021
+
+### Adding Latitude and Longitude to the Metadata box - ([PR #46](https://github.com/ucgmsim/seistech_psha_frontend/pull/46)
+
+- Metadata now includes the Latitude and Longitude information for Hazard Curves in the Project tab.
+- Disabled the record activities to the DB feature for now due to circular import.
+
 ## Februray 15, 2021
 
 ### GMS Feedback Update Part 1 - ([PR #45](https://github.com/ucgmsim/seistech_psha_frontend/pull/45))
 
 - A few updates for the Frontend based on the feedback we got from a quick meeting. These are mainly for the Frontend, more to come once the API is updated.
+
+## February 11, 2021
+
+### Allocate projects to users - ([PR #44](https://github.com/ucgmsim/seistech_psha_frontend/pull/44))
+
+- We now have a simple UI to allocate addable projects to a certain user under Edit User section.
+- Refactored Middleware's structure.
 
 ## February 10, 2021
 
