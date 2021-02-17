@@ -44,6 +44,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// Similar to getPrefisNum, instead we get something after number underscore
+// Currently, will be either Hazard or Projects
+const getHeaderTitle = (filePath) => {
+  return filePath.substring(filePath.indexOf("_") + 1, filePath.indexOf("-"));
+};
+
 const getFilename = (filePath) => {
   return filePath
     .substring(filePath.indexOf("-") + 1, filePath.lastIndexOf("."))
@@ -53,16 +59,28 @@ const getFilename = (filePath) => {
 const FrameworkDocView = () => {
   const classes = useStyles();
 
-  const [selectedDoc, setSelectedDoc] = useState("");
-
-  // This is the object that contains the markdown contents with filename as a property
-  const [markdownTextObj, setMarkdownTextObj] = useState({});
+  const [selectedDoc, setSelectedDoc] = useState({
+    header: "",
+    body: "",
+  });
 
   /* This is the object that contains the information of directory with files
-   E.g. {
-    projects: [1.md, 2.md, 3.md],
-    hazard: [4.md, 5.md, 6.md]
-  }
+    E.g. {
+      Hazard : {
+        site-selection: contents,
+        seismic-hazard: contents,
+        gms: contents,
+      },
+      projects : {
+        site-selection: contents,
+        seismic-hazard: contents,
+        gms: contents,
+      }
+    }
+    1_Hazard-Site-Selection.md
+    Outer object's properties are coming from Prefix title part, after number
+    It's property is the title, what will be displayed in list
+    and contents to be displayed in the right column, viewer
   */
   const [markdownFilesObj, setMarkdownFilesObj] = useState({});
 
@@ -90,55 +108,30 @@ const FrameworkDocView = () => {
     }
   */
   useEffect(() => {
-    let tempFilesObj = {};
+    let tempObj = {};
 
     const loadMarkdowns = async () => {
       for (let i = 0; i < markdownFiles.length; i++) {
         const file = markdownFiles[i];
 
+        const subHeaderTitle = getHeaderTitle(file);
+
         const fileName = getFilename(file);
+
+        if (tempObj.hasOwnProperty(subHeaderTitle) === false) {
+          tempObj[subHeaderTitle] = {};
+        }
 
         await fetch(file).then(async (response) => {
           const responseData = await response.text();
-          tempFilesObj[fileName] = responseData;
+          tempObj[subHeaderTitle][fileName] = responseData;
         });
       }
 
-      setMarkdownFilesObj(tempFilesObj);
+      setMarkdownFilesObj(tempObj);
     };
 
     loadMarkdowns();
-  }, []);
-
-  /* Create an object of filenames with directory name
-    For instance, {directory: [files]}
-    {
-      projects: [1.md, 2.md, 3.md],
-      hazard: [4.md, 5.md, 6.md]
-    }
-    
-  */
-  useEffect(() => {
-    let tempObj = {};
-
-    for (let i = 0; i < markdownFiles.length; i++) {
-      const file = markdownFiles[i];
-      const subHeaderTitle = file.substring(
-        file.indexOf("_") + 1,
-        file.lastIndexOf("-")
-      );
-
-      const fileName = getFilename(file);
-
-      // Declare an object's property with Subheader's title
-      if (tempObj.hasOwnProperty(subHeaderTitle) === false) {
-        tempObj[subHeaderTitle] = [];
-      }
-
-      tempObj[subHeaderTitle].push(fileName);
-    }
-
-    setMarkdownTextObj(tempObj);
   }, []);
 
   return (
@@ -155,7 +148,7 @@ const FrameworkDocView = () => {
             }
             className={classes.root}
           >
-            {Object.keys(markdownTextObj).map((title) => {
+            {Object.keys(markdownFilesObj).map((title) => {
               return (
                 <Fragment>
                   <ListItem button onClick={() => handleClick(title)}>
@@ -164,13 +157,22 @@ const FrameworkDocView = () => {
                   </ListItem>
                   <Collapse in={open[title]} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
-                      {markdownTextObj[title].map((fileName) => (
+                      {Object.keys(markdownFilesObj[title]).map((fileName) => (
                         <ListItem
                           button
                           className={classes.nested}
-                          onClick={() => setSelectedDoc(fileName)}
+                          onClick={() =>
+                            setSelectedDoc({
+                              header: title,
+                              body: fileName,
+                            })
+                          }
                         >
-                          <ListItemText>{fileName}</ListItemText>
+                          <ListItemText>
+                            {fileName.includes("-")
+                              ? fileName.replaceAll("-", " ")
+                              : fileName}
+                          </ListItemText>
                         </ListItem>
                       ))}
                     </List>
@@ -182,7 +184,13 @@ const FrameworkDocView = () => {
         </div>
         <div className="col-9 controlGroup form-viewer">
           <div className="two-column-view-right-pane">
-            <ReactMarkdown source={markdownFilesObj[selectedDoc]} />
+            {selectedDoc["header"] !== "" && selectedDoc["body"] !== "" ? (
+              <ReactMarkdown
+                source={
+                  markdownFilesObj[selectedDoc["header"]][selectedDoc["body"]]
+                }
+              />
+            ) : null}
           </div>
         </div>
       </div>
