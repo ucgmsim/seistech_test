@@ -60,7 +60,7 @@ const UHSPlot = ({
           hoverinfo: "none",
           hovertemplate:
             hoverStatus === true
-              ? `<b>RP ${displayRP}</b><br><br>` +
+              ? `<b>NZS11750.5 [RP ${displayRP}]</b><br><br>` +
                 "%{xaxis.title.text}: %{x}<br>" +
                 "%{yaxis.title.text}: %{y}<extra></extra>"
               : "",
@@ -86,7 +86,7 @@ const UHSPlot = ({
         hoverinfo: "none",
         hovertemplate:
           hoverStatus === true
-            ? `<b>RP ${displayRP}</b><br><br>` +
+            ? `<b>Site-specific [RP ${displayRP}]</b><br><br>` +
               "%{xaxis.title.text}: %{x}<br>" +
               "%{yaxis.title.text}: %{y}<extra></extra>"
             : "",
