@@ -10,6 +10,7 @@ import Hazard from "views/Hazard";
 import Project from "views/Project";
 import Profile from "views/Profile";
 import Footer from "views/Footer";
+import EditUser from "views/EditUser";
 
 import History from "utils/History";
 import { GlobalContextProvider } from "context";
@@ -45,6 +46,8 @@ const App = () => {
                 <PrivateRoute path="/project" exact component={Project} />
 
                 <Route path="/profile" component={Profile} />
+
+                <PrivateRoute path="/edit-user" exact component={EditUser} />
               </Switch>
             </div>
           </div>

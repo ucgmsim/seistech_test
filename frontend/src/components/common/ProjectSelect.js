@@ -21,6 +21,8 @@ const ProjectSelect = ({
           : createSelectArray(options);
 
       setLocalOptions(tempOptions);
+    } else {
+      setLocalOptions([]);
     }
   }, [options]);
 

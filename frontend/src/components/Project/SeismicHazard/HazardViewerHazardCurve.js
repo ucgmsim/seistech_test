@@ -29,6 +29,8 @@ const HazardViewerHazardCurve = () => {
     projectLocation,
     projectVS30,
     projectLocationCode,
+    projectLat,
+    projectLng,
     projectSelectedIM,
     setProjectSelectedIM,
   } = useContext(GlobalContext);
@@ -171,6 +173,8 @@ const HazardViewerHazardCurve = () => {
                   projectLocation={projectLocation}
                   projectVS30={projectVS30}
                   projectSelectedIM={projectSelectedIM}
+                  projectLat={projectLat}
+                  projectLng={projectLng}
                 />
               </Fragment>
             )}
@@ -212,6 +216,8 @@ const HazardViewerHazardCurve = () => {
                   projectLocation={projectLocation}
                   projectVS30={projectVS30}
                   projectSelectedIM={projectSelectedIM}
+                  projectLat={projectLat}
+                  projectLng={projectLng}
                 />
               </Fragment>
             )}
