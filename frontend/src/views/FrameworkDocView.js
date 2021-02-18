@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// Similar to getPrefisNum, instead we get something after number underscore
+// Similar to getPrefixNum, instead we get something after number underscore
 // Currently will be either Hazard or Projects
 const getHeaderTitle = (filePath) => {
   return filePath.substring(filePath.indexOf("_") + 1, filePath.indexOf("-"));
@@ -69,7 +69,7 @@ const FrameworkDocView = () => {
 
   const [markdownFilesObj, setMarkdownFilesObj] = useState({});
 
-  // Unfortunatley, we cannot create state hook dynamically, so must be hardcoded to control
+  // Unfortunately, we cannot create state hook dynamically, so must be hardcoded to control
   // each dropdown
   const [open, setOpen] = useState({
     Hazard: false,
