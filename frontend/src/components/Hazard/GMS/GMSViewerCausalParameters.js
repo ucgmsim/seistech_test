@@ -7,6 +7,11 @@ import { range } from "utils/Utils";
 
 import "assets/style/GMSPlot.css";
 
+/*
+  TODO: Refactor this part, split into each plot
+  Too much confusion
+*/
+
 const GMSViewerCausalParameters = ({
   gmsData,
   metadata,
