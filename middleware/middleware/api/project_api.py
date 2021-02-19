@@ -10,19 +10,22 @@ from ..decorator import requires_auth
 @app.route("/projectAPI/ids/get", methods=["GET"])
 @requires_auth
 def get_available_project_ids():
-    return get_available_projects()
+    all_projects_from_project_api = proxy_to_api(
+        request, "api/project/ids/get", "GET",
+    ).get_json()
+    return get_available_projects(all_projects_from_project_api)
 
 
 @app.route("/projectAPI/sites/get", methods=["GET"])
 @requires_auth
 def get_project_sites():
-    return proxy_to_api(request, "api/project/sites/get", "GET")
+    return proxy_to_api(request, "api/project/sites/get", "GET",)
 
 
 @app.route("/projectAPI/ims/get", methods=["GET"])
 @requires_auth
 def get_project_ims():
-    return proxy_to_api(request, "api/project/ims/get", "GET")
+    return proxy_to_api(request, "api/project/ims/get", "GET",)
 
 
 @app.route("/projectAPI/maps/get", methods=["GET"])
@@ -53,13 +56,13 @@ def get_project_disagg():
 @app.route("/projectAPI/disagg/rps/get", methods=["GET"])
 @requires_auth
 def get_project_disagg_rps():
-    return proxy_to_api(request, "api/project/disagg/rps/get", "GET")
+    return proxy_to_api(request, "api/project/disagg/rps/get", "GET",)
 
 
 @app.route("/projectAPI/uhs/rps/get", methods=["GET"])
 @requires_auth
 def get_project_uhs_rps():
-    return proxy_to_api(request, "api/project/uhs/rps/get", "GET")
+    return proxy_to_api(request, "api/project/uhs/rps/get", "GET",)
 
 
 @app.route("/projectAPI/uhs/get", methods=["GET"])

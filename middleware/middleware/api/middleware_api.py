@@ -7,7 +7,8 @@ from ..db import (
     get_addable_projects,
     allocate_users_to_projects,
 )
-from ..utils import get_token_auth_header
+from ..utils import proxy_to_api
+from ..auth0 import get_token_auth_header
 from ..decorator import requires_auth
 
 
@@ -42,7 +43,10 @@ def get_all_projects_from_project_api():
     to forward to Project API this request.
     """
     query_id = request.query_string.decode("utf-8").split("=")[1]
-    return jsonify(get_addable_projects(query_id))
+    all_projects_from_project_api = proxy_to_api(
+        request, "api/project/ids/get", "GET"
+    ).get_json()
+    return jsonify(get_addable_projects(query_id, all_projects_from_project_api))
 
 
 @app.route("/middlewareAPI/allocate_projects", methods=["POST"])

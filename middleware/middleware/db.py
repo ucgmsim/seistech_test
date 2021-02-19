@@ -2,31 +2,23 @@ import json
 import requests
 import http.client
 
-from jose import jwt
 from flask import request, jsonify, Response
 
-from server import (
-    AUTH0_CLIENT_ID,
-    AUTH0_CLIENT_SECRET,
-    AUTH0_AUDIENCE,
-    AUTH0_GRANT_TYPE,
-    AUTH0_DOMAIN,
-    db,
-)
-from utils import get_token_auth_header, proxy_to_api
-from models import *
+import server
+import models
+from auth0 import get_user_id
 
 
 def _get_management_api_token():
     """Connect to AUTH0 Management API to get access token"""
-    conn = http.client.HTTPSConnection(AUTH0_DOMAIN)
+    conn = http.client.HTTPSConnection(server.AUTH0_DOMAIN)
 
     payload = json.dumps(
         {
-            "client_id": AUTH0_CLIENT_ID,
-            "client_secret": AUTH0_CLIENT_SECRET,
-            "audience": AUTH0_AUDIENCE,
-            "grant_type": AUTH0_GRANT_TYPE,
+            "client_id": server.AUTH0_CLIENT_ID,
+            "client_secret": server.AUTH0_CLIENT_SECRET,
+            "audience": server.AUTH0_AUDIENCE,
+            "grant_type": server.AUTH0_GRANT_TYPE,
         }
     )
 
@@ -44,7 +36,7 @@ def _get_management_api_token():
 def get_users():
     """Get all users"""
     resp = requests.get(
-        AUTH0_AUDIENCE + "users",
+        server.AUTH0_AUDIENCE + "users",
         headers={"Authorization": "Bearer {}".format(_get_management_api_token())},
     )
 
@@ -68,18 +60,6 @@ def get_users():
     return user_dict
 
 
-def _get_user_id():
-    """We are storing Auth0 id to the DB so no need any extra steps.
-    Just pull sub's value in a return dictionary which is the unique user_id from Auth0
-    """
-    token = get_token_auth_header()
-    unverified_claims = jwt.get_unverified_claims(token)
-
-    user_id = unverified_claims["sub"].split("|")[1]
-
-    return user_id
-
-
 def write_request_details(endpoint, query_dict):
     """Record users' interation into the DB
 
@@ -94,17 +74,17 @@ def write_request_details(endpoint, query_dict):
               value -> CCCC
     """
     # Finding an user_id from the token
-    user_id = _get_user_id()
+    user_id = get_user_id()
 
     # Add to History table
-    new_history = History(user_id, endpoint)
-    db.session.add(new_history)
-    db.session.commit()
+    new_history = models.History(user_id, endpoint)
+    server.db.session.add(new_history)
+    server.db.session.commit()
 
     # Get a current user's history id key which would be the last row in a table
     latest_history_id = (
-        History.query.filter_by(user_id=user_id)
-        .order_by(History.history_id.desc())
+        models.History.query.filter_by(user_id=user_id)
+        .order_by(models.History.history_id.desc())
         .first()
         .history_id
     )
@@ -115,21 +95,23 @@ def write_request_details(endpoint, query_dict):
             # 'exceedances' value is comma-separated
             exceedances_list = value.split(",")
             for exceedance in exceedances_list:
-                new_history = History_Request(latest_history_id, attribute, exceedance)
-                db.session.add(new_history)
+                new_history = models.History_Request(
+                    latest_history_id, attribute, exceedance
+                )
+                server.db.session.add(new_history)
         else:
-            new_history = History_Request(latest_history_id, attribute, value)
-            db.session.add(new_history)
+            new_history = models.History_Request(latest_history_id, attribute, value)
+            server.db.session.add(new_history)
 
-    db.session.commit()
+    server.db.session.commit()
 
 
 def _get_projects_from_db(user_id):
     """Create an array form of available projects that are in the DB"""
     # Get all available projects that are allocated to this user.
     available_project_objs = (
-        Project.query.join(available_projects_table)
-        .filter((available_projects_table.c.user_id == user_id))
+        models.Project.query.join(models.available_projects_table)
+        .filter((models.available_projects_table.c.user_id == user_id))
         .all()
     )
 
@@ -139,16 +121,7 @@ def _get_projects_from_db(user_id):
     return available_projects
 
 
-def _get_projects_from_project_api():
-    """Get a list of Project IDs & Project Names from Project API.
-    (Available Projects that we currently have, not from the DB.)
-    Form of
-    {project_id: {name : project_name}}
-    """
-    return proxy_to_api(request, "api/project/ids/get", "GET").get_json()
-
-
-def get_available_projects():
+def get_available_projects(available_projects_from_project_api):
     """Do cross-check for the projects.
 
     It finds available projects from the DB.
@@ -158,11 +131,11 @@ def get_available_projects():
     to find the matching one.
     """
     # Finding the available projects that are already allocated to the DB with a given user id.
-    available_projects = _get_projects_from_db(_get_user_id())
+    available_projects = _get_projects_from_db(get_user_id())
 
     # Get a list of Project IDs & Project Names from Project API (Available Projects)
     # Form of {project_id: {name : project_name}}
-    all_projects_dicts = _get_projects_from_project_api()
+    all_projects_dicts = available_projects_from_project_api
 
     # Create an dictionary in a form of if users have a permission for a certain project
     # {project_id: project_name}
@@ -175,7 +148,7 @@ def get_available_projects():
     return jsonify(all_projects)
 
 
-def get_addable_projects(query_id):
+def get_addable_projects(query_id, all_projects):
     """Similar to the get_available_projects above.
 
     get_available_projects is there to do the cross-check for the Project tab,
@@ -194,7 +167,7 @@ def get_addable_projects(query_id):
 
     # Get a list of Project IDs & Project Names from Project API (Available Projects)
     # Form of {project_id: {name : project_name}}
-    all_projects_dicts = _get_projects_from_project_api()
+    all_projects_dicts = all_projects
 
     # Create an dictionary in a form of if users have a permission for a certain project
     # {project_id: project_name}
@@ -209,30 +182,30 @@ def get_addable_projects(query_id):
 
 def _is_user_in_db(user_id):
     """To check whether the given user_id is in the DB"""
-    return bool(User.query.filter_by(user_id=user_id).first())
+    return bool(models.User.query.filter_by(user_id=user_id).first())
 
 
 def _add_user_to_db(user_id):
     """Add an user to the MariaDB if not exist"""
     if not _is_user_in_db(user_id):
-        db.session.add(User(user_id))
-        db.session.commit()
-        db.session.flush()
+        server.db.session.add(models.User(user_id))
+        server.db.session.commit()
+        server.db.session.flush()
     else:
         print(f"User {user_id} already exists")
 
 
 def _is_project_in_db(project_name):
     """To check whether the given project is in the DB"""
-    return bool(Project.query.filter_by(project_name=project_name).first())
+    return bool(models.Project.query.filter_by(project_name=project_name).first())
 
 
 def _add_project_to_db(project_name):
     """Add a new project to the MariaDB if not exist"""
     if not _is_project_in_db(project_name):
-        db.session.add(Project(project_name))
-        db.session.commit()
-        db.session.flush()
+        server.db.session.add(models.Project(project_name))
+        server.db.session.commit()
+        server.db.session.flush()
     else:
         print(f"Project {project_name} already exists")
 
@@ -248,21 +221,21 @@ def _add_available_project_to_db(user_id, project_name):
     if not _is_user_in_db(user_id):
         print(f"{user_id} is not in the DB so updating it.")
         _add_user_to_db(user_id)
-        db.session.flush()
+        server.db.session.flush()
 
     print(f"Check whether the project is in the DB, if not, add the project to the DB")
     if not _is_project_in_db(project_name):
         print(f"{project_name} is not in the DB so updating it.")
         _add_project_to_db(project_name)
-        db.session.flush()
+        server.db.session.flush()
 
     # Find objects to user SQLAlchemy way of inserting to a bridging table.
-    project_obj = Project.query.filter_by(project_name=project_name).first()
-    user_obj = User.query.filter_by(user_id=user_id).first()
+    project_obj = models.Project.query.filter_by(project_name=project_name).first()
+    user_obj = models.User.query.filter_by(user_id=user_id).first()
 
     project_obj.allocate.append(user_obj)
-    db.session.commit()
-    db.session.flush()
+    server.db.session.commit()
+    server.db.session.flush()
 
 
 def allocate_users_to_projects():
