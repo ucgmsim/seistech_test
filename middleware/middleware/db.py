@@ -2,7 +2,7 @@ import json
 import requests
 import http.client
 
-from flask import request, jsonify, Response
+from flask import request, jsonify
 
 import server
 import models

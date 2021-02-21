@@ -1,7 +1,7 @@
 import requests
 from typing import Dict
 
-from flask import request, jsonify, Response
+from flask import Response
 
 from server import (
     coreApiBase,
