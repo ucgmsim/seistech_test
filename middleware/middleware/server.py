@@ -2,8 +2,9 @@ import os
 
 from jose import jwt
 from flask_cors import CORS
-from flask_sqlalchemy import SQLAlchemy
 from flask import Flask
+
+from custom_sqlalchemy import CustomSQLALchemy
 
 
 # DB Connection Setup
@@ -21,23 +22,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 
-class CustomSQLALchemy(SQLAlchemy):
-    """Customize the SQLAlchemy class to override isolation level"""
-
-    def apply_driver_hacks(self, app, info, options):
-        options.update(
-            {"isolation_level": "READ COMMITTED",}
-        )
-        super(CustomSQLALchemy, self).apply_driver_hacks(app, info, options)
-
-
 db = CustomSQLALchemy(app)
-
-from models import *
-
-# Create tables - It only creates when tables don't exist
-db.create_all()
-db.session.commit()
 
 CORS(app)
 
