@@ -27,13 +27,13 @@ def proxy_to_api(
     Parameters
     ----------
     request: object
-    route: str
+    route: string
         URL path to Core/Project API
-    methods: str
+    methods: string
         GET/POST methods
-    endpoint: str
+    endpoint: string
         To find out what user is performing
-    content_type: str
+    content_type: string
         Entry-header field indicates the media type of the entity-body sent to the recipient.
         The default media type is application/json
     headers: object

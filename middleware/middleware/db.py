@@ -61,13 +61,13 @@ def get_users():
 
 
 def write_request_details(endpoint, query_dict):
-    """Record users' interation into the DB
+    """Record users' interaction into the DB
 
     Parameters
     ----------
-    endpoint: str
+    endpoint: string
         What users chose to do
-        E.g., Hazard Curver Compute, UHS Compute, Disaggregation Compute...
+        E.g., Hazard Curve Compute, UHS Compute, Disaggregation Compute...
     query_dict: dictionary
         It is basically a query dictionary that contains attribute and value
         E.g., Attribute -> Station
@@ -107,7 +107,13 @@ def write_request_details(endpoint, query_dict):
 
 
 def _get_projects_from_db(user_id):
-    """Create an array form of available projects that are in the DB"""
+    """Create an array form of available projects that are in the DB
+
+    Parameters
+    ----------
+    user_id: string
+        user_id from Auth0 to identify the user
+    """
     # Get all available projects that are allocated to this user.
     available_project_objs = (
         models.Project.query.join(models.available_projects_table)
@@ -129,6 +135,11 @@ def get_available_projects(available_projects_from_project_api):
     After we get all the existing projects from the Project API.
     Then we compare [Available Projects] and [All the Existing Projects]
     to find the matching one.
+
+    Parameters
+    ----------
+    available_projects_from_project_api: dictionary
+        All the projects that the Project API returns
     """
     # Finding the available projects that are already allocated to the DB with a given user id.
     available_projects = _get_projects_from_db(get_user_id())
@@ -148,7 +159,7 @@ def get_available_projects(available_projects_from_project_api):
     return jsonify(all_projects)
 
 
-def get_addable_projects(query_id, all_projects):
+def get_addable_projects(requested_user_id, all_projects):
     """Similar to the get_available_projects above.
 
     get_available_projects is there to do the cross-check for the Project tab,
@@ -161,9 +172,17 @@ def get_addable_projects(query_id, all_projects):
     Project API says A,B,C,D,E
 
     Then this function will return D,E for the Frontend.
+
+    Parameters
+    ----------
+    requested_user_id: string
+        Selected user id from Edit User's User dropdown
+
+    all_projects: dictionary
+        All the projects that the Project API returns
     """
     # Finding the available projects that are already allocated to the DB with a given user id.
-    available_projects = _get_projects_from_db(query_id)
+    available_projects = _get_projects_from_db(requested_user_id)
 
     # Get a list of Project IDs & Project Names from Project API (Available Projects)
     # Form of {project_id: {name : project_name}}
@@ -181,12 +200,24 @@ def get_addable_projects(query_id, all_projects):
 
 
 def _is_user_in_db(user_id):
-    """To check whether the given user_id is in the DB"""
+    """To check whether the given user_id is in the DB
+
+    Parameters
+    ----------
+    user_id: string
+        selected user's Auth0 id
+    """
     return bool(models.User.query.filter_by(user_id=user_id).first())
 
 
 def _add_user_to_db(user_id):
-    """Add an user to the MariaDB if not exist"""
+    """Add an user to the MariaDB if not exist
+
+    Parameters
+    ----------
+    user_id: string
+        selected user's Auth0 id
+    """
     if not _is_user_in_db(user_id):
         server.db.session.add(models.User(user_id))
         server.db.session.commit()
@@ -196,12 +227,26 @@ def _add_user_to_db(user_id):
 
 
 def _is_project_in_db(project_name):
-    """To check whether the given project is in the DB"""
+    """To check whether the given project is in the DB
+
+    Parameters
+    ----------
+    project_name: string
+        A project code we use internally.
+        E.g., gnzl, mac_raes, nzgs_pga, soffitel_qtwn...
+    """
     return bool(models.Project.query.filter_by(project_name=project_name).first())
 
 
 def _add_project_to_db(project_name):
-    """Add a new project to the MariaDB if not exist"""
+    """Add a new project to the MariaDB if not exist
+
+    Parameters
+    ----------
+    project_name: string
+        A project code we use internally.
+        E.g., gnzl, mac_raes, nzgs_pga, soffitel_qtwn...
+    """
     if not _is_project_in_db(project_name):
         server.db.session.add(models.Project(project_name))
         server.db.session.commit()
@@ -216,6 +261,14 @@ def _add_available_project_to_db(user_id, project_name):
     1. Find an User object by using user_id
     2. Find a Project object by using project_name
     3. Append(Allocate, they use Append for a bridging table) the User object to the Project object
+
+    Parameters
+    ----------
+    user_id: string
+        Selected user's Auth0 id
+    project_name: string
+        Selected project's project code.
+        E.g., gnzl, mac_raes, nzgs_pga, soffitel_qtwn...
     """
     print(f"Check whether the user is in the DB, if not, add the person to the DB")
     if not _is_user_in_db(user_id):

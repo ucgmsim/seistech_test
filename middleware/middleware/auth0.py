@@ -70,8 +70,11 @@ def get_user_id():
 
 def requires_permission(required_permission):
     """Determines if the required scope is present in the Access Token
-    Args:
-        required_permission (str): The scope required to access the resource
+
+    Parameters
+    ----------
+    required_permission: string
+        The scope required to access the resource
     """
     token = get_token_auth_header()
     unverified_claims = jwt.get_unverified_claims(token)

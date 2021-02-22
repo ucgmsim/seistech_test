@@ -42,11 +42,13 @@ def get_all_projects_from_project_api():
     and this is how proxy_to_api knows that this object contains projectAPI in a full path
     to forward to Project API this request.
     """
-    query_id = request.query_string.decode("utf-8").split("=")[1]
+    requested_user_id = request.query_string.decode("utf-8").split("=")[1]
     all_projects_from_project_api = proxy_to_api(
         request, "api/project/ids/get", "GET"
     ).get_json()
-    return jsonify(get_addable_projects(query_id, all_projects_from_project_api))
+    return jsonify(
+        get_addable_projects(requested_user_id, all_projects_from_project_api)
+    )
 
 
 @app.route("/middlewareAPI/allocate_projects", methods=["POST"])
