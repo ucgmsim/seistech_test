@@ -6,7 +6,8 @@ from ..db import (
     get_users,
     get_addable_projects,
     get_available_projects,
-    allocate_users_to_projects,
+    allocate_projects_to_user,
+    remove_projects_from_user,
 )
 from ..utils import proxy_to_api
 from ..auth0 import get_token_auth_header
@@ -69,6 +70,13 @@ def get_allocated_projects():
 
 @app.route("/middlewareAPI/allocate_projects", methods=["POST"])
 @requires_auth
-def allocate_users_to_projects_api():
-    """Allocate the given project(s) to the given user."""
-    return jsonify(allocate_users_to_projects())
+def allocate_projects_to_user_call():
+    """Allocate the chosen project(s) to the chosen user."""
+    return jsonify(allocate_projects_to_user())
+
+
+@app.route("/middlewareAPI/remove_projects", methods=["POST"])
+@requires_auth
+def remove_projects_from_user_call():
+    """Remove the chosen project(s) from the chosen user."""
+    return jsonify(remove_projects_from_user())

@@ -294,7 +294,7 @@ def _add_available_project_to_db(user_id, project_name):
     server.db.session.flush()
 
 
-def allocate_users_to_projects():
+def allocate_projects_to_user():
     """Allocate projects to the chosen user"""
     data = json.loads(request.data.decode())
 
@@ -303,5 +303,48 @@ def allocate_users_to_projects():
 
     for project in requested_project_list:
         _add_available_project_to_db(requested_user_id, project["value"])
+
+    return "DONE"
+
+
+def _remove_allocated_projects(user_id, project_name):
+    """This is where we remove data from the bridging table, available_projects
+
+    Parameters
+    ----------
+    user_id: string
+        Selected user's Auth0 id
+    project_name: string
+        Selected project's project code.
+        E.g., gnzl, mac_raes, nzgs_pga, soffitel_qtwn...
+    """
+    try:
+        # Get the project id with the given project name
+        certain_project = (
+            models.Project.query.filter_by(project_name=project_name).first().project_id
+        )
+        available_projects_row = (
+            models.Project.query.join(models.available_projects_table)
+            .filter((models.available_projects_table.c.user_id == user_id))
+            .filter((models.available_projects_table.c.project_id == certain_project))
+            .first()
+        )
+
+        server.db.session.delete(available_projects_row)
+        server.db.session.commit()
+        server.db.session.flush()
+    except:
+        print("Something went wrong.")
+
+
+def remove_projects_from_user():
+    """Remove projects from the chosen user"""
+    data = json.loads(request.data.decode())
+
+    requested_user_id = data["user_info"]["value"]
+    requested_project_list = data["project_info"]
+
+    for project in requested_project_list:
+        _remove_allocated_projects(requested_user_id, project["value"])
 
     return "DONE"

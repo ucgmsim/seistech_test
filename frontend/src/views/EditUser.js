@@ -179,7 +179,7 @@ const EditUser = () => {
     const abortController = new AbortController();
     const signal = abortController.signal;
 
-    const allocateUser = async () => {
+    const allocateProjects = async () => {
       if (alocateClick !== null) {
         try {
           setAddableStatusText("Allocating...");
@@ -217,12 +217,61 @@ const EditUser = () => {
       }
     };
 
-    allocateUser();
+    allocateProjects();
 
     return () => {
       abortController.abort();
     };
   }, [alocateClick]);
+
+  useEffect(() => {
+    const abortController = new AbortController();
+    const signal = abortController.signal;
+
+    const removeProjects = async () => {
+      if (removeClick !== null) {
+        try {
+          setAllocatedStatusText("Removing...");
+          const token = await getTokenSilently();
+
+          let requestOptions = {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              user_info: selectedUser,
+              project_info: allocatedSelectedProject,
+            }),
+            signal: signal,
+          };
+
+          await fetch(
+            CONSTANTS.CORE_API_BASE_URL +
+              CONSTANTS.MIDDLEWARE_API_ROUTE_REMOVE_PROJECTS_FROM_USER,
+            requestOptions
+          )
+            .then(handleErrors)
+            .then(async () => {
+              setAllocatedStatusText("Removing...");
+            })
+            .catch((error) => {
+              console.log(error);
+              setAllocatedStatusText("Error occurred");
+            });
+        } catch (error) {
+          console.log(error);
+          setAllocatedStatusText("Error occurred");
+        }
+      }
+    };
+
+    removeProjects();
+
+    return () => {
+      abortController.abort();
+    };
+  }, [removeClick]);
 
   const allocateProjects = () => {
     setAllocateClick(uuidv4());

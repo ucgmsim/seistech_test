@@ -61,6 +61,8 @@ export const MIDDLEWARE_API_ROUTE_GET_ALLOCATED_PROJECT =
   "middlewareAPI/projectAPI/allocated_projects/get";
 export const MIDDLEWARE_API_ROUTE_ALLOCATE_PROJECTS_TO_USER =
   "middlewareAPI/allocate_projects";
+export const MIDDLEWARE_API_ROUTE_REMOVE_PROJECTS_FROM_USER =
+  "middlewareAPI/remove_projects";
 
 /* 
   Words 
