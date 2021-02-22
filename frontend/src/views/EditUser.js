@@ -24,7 +24,14 @@ const EditUser = () => {
   const [allocatedSelectedProject, setAllocatedSelectedProject] = useState([]);
 
   const [alocateClick, setAllocateClick] = useState(null);
-  const [statusText, setStatusText] = useState("Allocate Project");
+  const [addableStatusText, setAddableStatusText] = useState(
+    "Allocate Project"
+  );
+
+  const [removeClick, setRemoveClick] = useState(null);
+  const [allocatedStatusText, setAllocatedStatusText] = useState(
+    "Remove Project"
+  );
 
   const [modal, setModal] = useState(false);
 
@@ -171,7 +178,7 @@ const EditUser = () => {
     const allocateUser = async () => {
       if (alocateClick !== null) {
         try {
-          setStatusText("Allocating...");
+          setAddableStatusText("Allocating...");
           const token = await getTokenSilently();
 
           let requestOptions = {
@@ -193,15 +200,15 @@ const EditUser = () => {
           )
             .then(handleErrors)
             .then(async () => {
-              setStatusText("Allocate Project");
+              setAddableStatusText("Allocate Project");
             })
             .catch((error) => {
               console.log(error);
-              setStatusText("Error occurred");
+              setAddableStatusText("Error occurred");
             });
         } catch (error) {
           console.log(error);
-          setStatusText("Error occurred");
+          setAddableStatusText("Error occurred");
         }
       }
     };
@@ -213,16 +220,28 @@ const EditUser = () => {
     };
   }, [alocateClick]);
 
-  const validSubmitBtn = () => {
+  const allocateProjects = () => {
+    setAllocateClick(uuidv4());
+    setModal(true);
+  };
+
+  const validAllocateSubmitBtn = () => {
     return (
       Object.entries(selectedUser).length > 0 &&
       addableSelectedProject.length > 0
     );
   };
 
-  const submitJob = () => {
-    setAllocateClick(uuidv4());
+  const removeProjects = () => {
+    setRemoveClick(uuidv4());
     setModal(true);
+  };
+
+  const validRemoveProjectsBtn = () => {
+    return (
+      Object.entries(selectedUser).length > 0 &&
+      allocatedSelectedProject.length > 0
+    );
   };
 
   useEffect(() => {
@@ -268,7 +287,28 @@ const EditUser = () => {
             options={allocatedProjectOption}
             isMulti
             closeMenuOnSelect={false}
+            isDisabled={allocatedProjectOption.length === 0}
+            placeholder={
+              selectedUser.length === 0
+                ? "Please select a user first..."
+                : selectedUser.length !== 0 &&
+                  allocatedProjectOption.length === 0
+                ? "No allocated projects"
+                : selectedUser.length !== 0 &&
+                  allocatedProjectOption.length !== 0
+                ? "Select projects to remove"
+                : "Loading..."
+            }
           />
+          <button
+            id="remove-selected-projects-btn"
+            type="button"
+            className="btn btn-primary mt-4"
+            onClick={() => removeProjects()}
+            disabled={!validRemoveProjectsBtn()}
+          >
+            {allocatedStatusText}
+          </button>
         </div>
 
         <div className="col-lg-6">
@@ -280,19 +320,29 @@ const EditUser = () => {
             options={addableProjectOption}
             isMulti
             closeMenuOnSelect={false}
+            isDisabled={addableProjectOption.length === 0}
+            placeholder={
+              selectedUser.length === 0
+                ? "Please select a user first..."
+                : selectedUser.length !== 0 && addableProjectOption.length === 0
+                ? "No addable projects"
+                : selectedUser.length !== 0 && addableProjectOption.length !== 0
+                ? "Select projects to allocate"
+                : "Loading..."
+            }
           />
+          <button
+            id="allocate-user-submit-btn"
+            type="button"
+            className="btn btn-primary mt-4"
+            onClick={() => allocateProjects()}
+            disabled={!validAllocateSubmitBtn()}
+          >
+            {addableStatusText}
+          </button>
         </div>
       </div>
 
-      <button
-        id="allocate-user-submit-btn"
-        type="button"
-        className="btn btn-primary mt-4"
-        onClick={() => submitJob()}
-        disabled={!validSubmitBtn()}
-      >
-        {statusText}
-      </button>
       <ModalComponent
         modal={modal}
         setModal={setModal}
