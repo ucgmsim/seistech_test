@@ -336,6 +336,7 @@ const EditUser = () => {
       <div className="row justify-content-lg-center">
         <div className="col-lg-6">
           <h4>Allocated Projects</h4>
+          <h5>(Use to remove projects from a user)</h5>
           <Select
             id="allocated-projects"
             onChange={(value) => setAllocatedSelectedProject(value || [])}
@@ -369,6 +370,7 @@ const EditUser = () => {
 
         <div className="col-lg-6">
           <h4>Addable Projects</h4>
+          <h5>(Use to add projects to a user)</h5>
           <Select
             id="available-projects"
             onChange={(value) => setAddableSelectedProject(value || [])}
