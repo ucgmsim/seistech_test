@@ -1,3 +1,9 @@
+## February 22, 2021
+
+### Fix Middleware's bug - Circular import - ([PR #47](https://github.com/ucgmsim/seistech_psha_frontend/pull/47)
+
+- Change the structure a little bit to fix the circular import.
+
 ## February 17, 2021
 
 ### Adding Framework Documentation page - ([PR #47](https://github.com/ucgmsim/seistech_psha_frontend/pull/47)
