@@ -252,6 +252,9 @@ const EditUser = () => {
     // Reset the select field after the modal is closed.
     if (modal === false && setAllocateClick !== null) {
       setAddableSelectedProject([]);
+      setAllocatedSelectedProject([]);
+      setAddableProjectOption([]);
+      setAllocatedProjectOption([]);
       setSelectedUser([]);
     }
   }, [modal]);
@@ -271,7 +274,7 @@ const EditUser = () => {
   return (
     <div className="container">
       <div className="row justify-content-lg-center">
-        <div className="col-lg-6">
+        <div className="col-lg-6 mb-5">
           <h4>Choose a user</h4>
           <Select
             id="available-users"
