@@ -1,14 +1,8 @@
 from flask import jsonify, request
 from jose import jwt
 
+from .. import db
 from ..server import app
-from ..db import (
-    get_users,
-    get_addable_projects,
-    get_available_projects,
-    allocate_projects_to_user,
-    remove_projects_from_user,
-)
 from ..utils import proxy_to_api
 from ..auth0 import get_token_auth_header
 from ..decorator import requires_auth
@@ -29,7 +23,7 @@ def get_all_user_from_auth0():
     """Retrieve all the existing users from the Auth0
     Will be used for User dropdown
     """
-    return jsonify(get_users())
+    return jsonify(db.get_users())
 
 
 @app.route("/middlewareAPI/projectAPI/addable_projects/get", methods=["GET"])
@@ -49,7 +43,7 @@ def get_addable_projects_with_project_api():
         request, "api/project/ids/get", "GET"
     ).get_json()
     return jsonify(
-        get_addable_projects(requested_user_id, all_projects_from_project_api)
+        db.get_addable_projects(requested_user_id, all_projects_from_project_api)
     )
 
 
@@ -64,7 +58,7 @@ def get_allocated_projects():
         request, "api/project/ids/get", "GET"
     ).get_json()
     return jsonify(
-        get_available_projects(requested_user_id, all_projects_from_project_api)
+        db.get_available_projects(requested_user_id, all_projects_from_project_api)
     )
 
 
@@ -72,11 +66,11 @@ def get_allocated_projects():
 @requires_auth
 def allocate_projects_to_user_call():
     """Allocate the chosen project(s) to the chosen user."""
-    return jsonify(allocate_projects_to_user())
+    return jsonify(db.allocate_projects_to_user())
 
 
 @app.route("/middlewareAPI/remove_projects", methods=["POST"])
 @requires_auth
 def remove_projects_from_user_call():
     """Remove the chosen project(s) from the chosen user."""
-    return jsonify(remove_projects_from_user())
+    return jsonify(db.remove_projects_from_user())
