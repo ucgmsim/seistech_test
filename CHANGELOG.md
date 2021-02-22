@@ -1,3 +1,9 @@
+## February 17, 2021
+
+### Adding Framework Documentation page - ([PR #47](https://github.com/ucgmsim/seistech_psha_frontend/pull/47)
+
+- Framework Documentation page to give the user more information if they want to know more.
+
 ## February 16, 2021
 
 ### Adding Latitude and Longitude to the Metadata box - ([PR #46](https://github.com/ucgmsim/seistech_psha_frontend/pull/46)

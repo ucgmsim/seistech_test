@@ -42,6 +42,16 @@ const LogoutButton = () => {
           <FontAwesomeIcon icon="user" className="mr-3" /> Profile
         </DropdownItem>
 
+        <DropdownItem
+          tag={RouterNavLink}
+          to="/framework-docs"
+          className="dropdown-profile"
+          activeClassName="router-link-exact-active"
+        >
+          <FontAwesomeIcon icon="file-word" className="mr-3" /> Framework
+          Documents
+        </DropdownItem>
+
         {hasPermission("edit-user") ? (
           <DropdownItem
             tag={RouterNavLink}

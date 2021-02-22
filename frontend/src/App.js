@@ -10,6 +10,7 @@ import Hazard from "views/Hazard";
 import Project from "views/Project";
 import Profile from "views/Profile";
 import Footer from "views/Footer";
+import FrameworkDocView from "views/FrameworkDocView";
 import EditUser from "views/EditUser";
 
 import History from "utils/History";
@@ -47,7 +48,13 @@ const App = () => {
 
                 <PrivateRoute path="/edit-user" exact component={EditUser} />
 
-                <PrivateRoute path="/profile" component={Profile} />
+                <PrivateRoute path="/profile" exact component={Profile} />
+
+                <Route
+                  path="/framework-docs"
+                  exact
+                  component={FrameworkDocView}
+                />
               </Switch>
             </div>
           </div>
