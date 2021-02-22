@@ -16,6 +16,9 @@ class Project(db.Model):
     def __init__(self, name):
         self.project_name = name
 
+    def __repr__(self):
+        return "<Project %r>" % self.project_name
+
 
 class User(db.Model):
     user_id = db.Column(db.String(100), primary_key=True)
@@ -30,6 +33,9 @@ class User(db.Model):
 
     def __init__(self, user_id):
         self.user_id = user_id
+
+    def __repr__(self):
+        return "<User %r>" % self.user_id
 
 
 class History(db.Model):
