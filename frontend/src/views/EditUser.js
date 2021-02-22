@@ -119,6 +119,10 @@ const EditUser = () => {
         // Reset the selected option
         setAddableSelectedProject([]);
         setAllocatedSelectedProject([]);
+
+        setAddableProjectOption([]);
+        setAllocatedProjectOption([]);
+
         try {
           const token = await getTokenSilently();
 
