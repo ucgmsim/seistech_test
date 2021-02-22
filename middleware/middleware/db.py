@@ -43,7 +43,7 @@ def get_users():
     # List of dictionaries
     user_list, user_dict = resp.json(), {}
 
-    # We want to store in a dictionary in form of
+    # We want to store in a dictionary in the form of
     # { user_id : email | provider}
     # The reason we keep both email and provider is due to preventing confusion
     # Based on having the same emails but different provider
@@ -163,13 +163,13 @@ def get_addable_projects(requested_user_id, all_projects):
     """Similar to the get_available_projects above.
 
     get_available_projects is there to do the cross-check for the Project tab,
-    compare DB and Project API to see whether users actually have permission to access.
+    compare DB and Project API to see whether users have permission to access.
 
     This function, get_addable_projects is for Edit User feature in the frontend.
     It compares the projects between the DB and Project API.
     Then it returns the options that are not intersecting.
-    E.g. DB says A,B,C Projects
-    Project API says A,B,C,D,E
+    E.g. DB says A, B, C Projects
+    Project API says A, B, C, D, E
 
     Then this function will return D,E for the Frontend.
 
@@ -258,7 +258,7 @@ def _add_project_to_db(project_name):
 def _add_available_project_to_db(user_id, project_name):
     """This is where we insert data to the bridging table, available_projects
     Unlike any other query, to a bridging table, we need to do the following steps:
-    1. Find an User object by using user_id
+    1. Find a User object by using user_id
     2. Find a Project object by using project_name
     3. Append(Allocate, they use Append for a bridging table) the User object to the Project object
 

@@ -22,7 +22,7 @@ def proxy_to_api(
     """Middleware - Handling the communication between Frontend and Core API.
     We check the request.full_path (e.g., projectAPI/ids/get)
     If it contains projectAPI, we switch APIBase to Project API path.
-    Default is Core API path.
+    Default path is the Core API.
 
     Parameters
     ----------
