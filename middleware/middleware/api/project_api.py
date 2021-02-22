@@ -4,16 +4,18 @@ from ..server import app
 from ..db import get_available_projects
 from ..utils import proxy_to_api
 from ..decorator import requires_auth
+from ..auth0 import get_user_id
 
 
 # Site Selection
 @app.route("/projectAPI/ids/get", methods=["GET"])
 @requires_auth
 def get_available_project_ids():
+    user_id = get_user_id()
     all_projects_from_project_api = proxy_to_api(
         request, "api/project/ids/get", "GET",
     ).get_json()
-    return get_available_projects(all_projects_from_project_api)
+    return get_available_projects(user_id, all_projects_from_project_api)
 
 
 @app.route("/projectAPI/sites/get", methods=["GET"])

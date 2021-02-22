@@ -127,7 +127,7 @@ def _get_projects_from_db(user_id):
     return available_projects
 
 
-def get_available_projects(available_projects_from_project_api):
+def get_available_projects(user_id, available_projects_from_project_api):
     """Do cross-check for the projects.
 
     It finds available projects from the DB.
@@ -138,11 +138,14 @@ def get_available_projects(available_projects_from_project_api):
 
     Parameters
     ----------
+    user_id: str
+        Auth0 user id
+
     available_projects_from_project_api: dictionary
         All the projects that the Project API returns
     """
     # Finding the available projects that are already allocated to the DB with a given user id.
-    available_projects = _get_projects_from_db(get_user_id())
+    available_projects = _get_projects_from_db(user_id)
 
     # Get a list of Project IDs & Project Names from Project API (Available Projects)
     # Form of {project_id: {name : project_name}}
@@ -156,7 +159,7 @@ def get_available_projects(available_projects_from_project_api):
         if api_project_id in available_projects
     }
 
-    return jsonify(all_projects)
+    return all_projects
 
 
 def get_addable_projects(requested_user_id, all_projects):

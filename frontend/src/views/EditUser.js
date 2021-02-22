@@ -12,13 +12,16 @@ const EditUser = () => {
   const { getTokenSilently } = useAuth0();
 
   const [userData, setUserData] = useState({});
-  const [projectData, setProjectData] = useState([]);
+  const [addableProjectData, setAddableProjectData] = useState([]);
+  const [allocatedProjectData, setAllocatedProjectData] = useState([]);
 
   const [userOption, setUserOption] = useState([]);
-  const [projectOption, setProjectOption] = useState([]);
+  const [addableProjectOption, setAddableProjectOption] = useState([]);
+  const [allocatedProjectOption, setAllocatedProjectOption] = useState([]);
 
   const [selectedUser, setSelectedUser] = useState([]);
-  const [selectedProject, setSelectedProject] = useState([]);
+  const [addableSelectedProject, setAddableSelectedProject] = useState([]);
+  const [allocatedSelectedProject, setAllocatedSelectedProject] = useState([]);
 
   const [alocateClick, setAllocateClick] = useState(null);
   const [statusText, setStatusText] = useState("Allocate Project");
@@ -36,12 +39,24 @@ const EditUser = () => {
       If fetched addable projects are more than 0, then display them as options.
       If it is 0, then it is either API is not working or there are no more projects which can be added to this user.
     */
-    if (Object.entries(projectData).length > 0) {
-      setProjectOption(createProjectIDArray(projectData));
+    if (Object.entries(addableProjectData).length > 0) {
+      setAddableProjectOption(createProjectIDArray(addableProjectData));
     } else {
-      setProjectOption([]);
+      setAddableProjectOption([]);
     }
-  }, [projectData]);
+  }, [addableProjectData]);
+
+  useEffect(() => {
+    /*
+      If fetched addable projects are more than 0, then display them as options.
+      If it is 0, then it is either API is not working or there are no more projects which can be added to this user.
+    */
+    if (Object.entries(allocatedProjectData).length > 0) {
+      setAllocatedProjectOption(createProjectIDArray(allocatedProjectData));
+    } else {
+      setAllocatedProjectOption([]);
+    }
+  }, [allocatedProjectData]);
 
   /*
     Fetching user information from the API(Auth0)
@@ -95,26 +110,43 @@ const EditUser = () => {
     const getAddableProjectData = async () => {
       if (selectedUser.length != 0) {
         // Reset the selected option
-        setSelectedProject([]);
+        setAddableSelectedProject([]);
+        setAllocatedSelectedProject([]);
         try {
           const token = await getTokenSilently();
 
-          await fetch(
-            CONSTANTS.CORE_API_BASE_URL +
-              CONSTANTS.MIDDLEWARE_API_ROUTE_GET_PROJECT +
-              `?user_id=${selectedUser.value}`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-              signal: signal,
-            }
-          )
-            .then(handleErrors)
-            .then(async (projects) => {
-              const responseProjectData = await projects.json();
+          await Promise.all([
+            fetch(
+              CONSTANTS.CORE_API_BASE_URL +
+                CONSTANTS.MIDDLEWARE_API_ROUTE_GET_ADDABLE_PROJECT +
+                `?user_id=${selectedUser.value}`,
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+                signal: signal,
+              }
+            ),
+            fetch(
+              CONSTANTS.CORE_API_BASE_URL +
+                CONSTANTS.MIDDLEWARE_API_ROUTE_GET_ALLOCATED_PROJECT +
+                `?user_id=${selectedUser.value}`,
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+                signal: signal,
+              }
+            ),
+          ])
 
-              setProjectData(responseProjectData);
+            .then(handleErrors)
+            .then(async ([addableProjects, allocatedProjects]) => {
+              const addableProjectData = await addableProjects.json();
+              const allocatedProjectData = await allocatedProjects.json();
+
+              setAddableProjectData(addableProjectData);
+              setAllocatedProjectData(allocatedProjectData);
             })
             .catch((error) => {
               console.log(error);
@@ -149,7 +181,7 @@ const EditUser = () => {
             },
             body: JSON.stringify({
               user_info: selectedUser,
-              project_info: selectedProject,
+              project_info: addableSelectedProject,
             }),
             signal: signal,
           };
@@ -183,7 +215,8 @@ const EditUser = () => {
 
   const validSubmitBtn = () => {
     return (
-      Object.entries(selectedUser).length > 0 && selectedProject.length > 0
+      Object.entries(selectedUser).length > 0 &&
+      addableSelectedProject.length > 0
     );
   };
 
@@ -195,7 +228,7 @@ const EditUser = () => {
   useEffect(() => {
     // Reset the select field after the modal is closed.
     if (modal === false && setAllocateClick !== null) {
-      setSelectedProject([]);
+      setAddableSelectedProject([]);
       setSelectedUser([]);
     }
   }, [modal]);
@@ -203,8 +236,8 @@ const EditUser = () => {
   const bodyText = () => {
     let bodyString = `Successfully added the following projects:\n\n`;
 
-    for (let i = 0; i < selectedProject.length; i++) {
-      bodyString += `${i + 1}: ${selectedProject[i].label}\n`;
+    for (let i = 0; i < addableSelectedProject.length; i++) {
+      bodyString += `${i + 1}: ${addableSelectedProject[i].label}\n`;
     }
 
     bodyString += `\nto ${selectedUser.label}`;
@@ -216,7 +249,7 @@ const EditUser = () => {
     <div className="container">
       <div className="row justify-content-lg-center">
         <div className="col-lg-6">
-          <h4>User</h4>
+          <h4>Choose a user</h4>
           <Select
             id="available-users"
             onChange={(value) => setSelectedUser(value || [])}
@@ -224,34 +257,48 @@ const EditUser = () => {
             options={userOption}
           />
         </div>
+      </div>
+      <div className="row justify-content-lg-center">
         <div className="col-lg-6">
-          <h4>Project</h4>
+          <h4>Allocated Projects</h4>
           <Select
-            id="available-projects"
-            onChange={(value) => setSelectedProject(value || [])}
-            value={selectedProject}
-            options={projectOption}
+            id="allocated-projects"
+            onChange={(value) => setAllocatedSelectedProject(value || [])}
+            value={allocatedSelectedProject}
+            options={allocatedProjectOption}
             isMulti
             closeMenuOnSelect={false}
           />
         </div>
 
-        <button
-          id="allocate-user-submit-btn"
-          type="button"
-          className="btn btn-primary mt-4"
-          onClick={() => submitJob()}
-          disabled={!validSubmitBtn()}
-        >
-          {statusText}
-        </button>
-        <ModalComponent
-          modal={modal}
-          setModal={setModal}
-          title="Successfully added"
-          body={bodyText()}
-        />
+        <div className="col-lg-6">
+          <h4>Addable Projects</h4>
+          <Select
+            id="available-projects"
+            onChange={(value) => setAddableSelectedProject(value || [])}
+            value={addableSelectedProject}
+            options={addableProjectOption}
+            isMulti
+            closeMenuOnSelect={false}
+          />
+        </div>
       </div>
+
+      <button
+        id="allocate-user-submit-btn"
+        type="button"
+        className="btn btn-primary mt-4"
+        onClick={() => submitJob()}
+        disabled={!validSubmitBtn()}
+      >
+        {statusText}
+      </button>
+      <ModalComponent
+        modal={modal}
+        setModal={setModal}
+        title="Successfully added"
+        body={bodyText()}
+      />
     </div>
   );
 };

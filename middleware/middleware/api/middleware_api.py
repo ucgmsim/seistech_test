@@ -5,6 +5,7 @@ from ..server import app
 from ..db import (
     get_users,
     get_addable_projects,
+    get_available_projects,
     allocate_users_to_projects,
 )
 from ..utils import proxy_to_api
@@ -32,9 +33,9 @@ def get_all_user_from_auth0():
 
 @app.route("/middlewareAPI/projectAPI/addable_projects/get", methods=["GET"])
 @requires_auth
-def get_all_projects_from_project_api():
+def get_addable_projects_with_project_api():
     """Fetching all the available projects from the "Project API" to this certain user.
-    Will be used for Project dropdown
+    Will be used for Addable Projects dropdown
 
     URL contains projectAPI due to usage of proxy_to_api function in get_projects_from_project_api
     as request object is made with the URL
@@ -48,6 +49,21 @@ def get_all_projects_from_project_api():
     ).get_json()
     return jsonify(
         get_addable_projects(requested_user_id, all_projects_from_project_api)
+    )
+
+
+@app.route("/middlewareAPI/projectAPI/allocated_projects/get", methods=["GET"])
+@requires_auth
+def get_allocated_projects():
+    """Fetching all the projects that are already allocated to this user
+    Will be used for Allocated Projects dropdown
+    """
+    requested_user_id = request.query_string.decode("utf-8").split("=")[1]
+    all_projects_from_project_api = proxy_to_api(
+        request, "api/project/ids/get", "GET"
+    ).get_json()
+    return jsonify(
+        get_available_projects(requested_user_id, all_projects_from_project_api)
     )
 
 
