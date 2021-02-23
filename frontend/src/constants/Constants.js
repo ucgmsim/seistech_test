@@ -99,7 +99,7 @@ export const SITE_SELECTION_VS30_TITLE = "VS30";
 
 /* 
   Guide Messages
-  Site Selection - Regional & VS30
+  Site Selection - Regional & Vs30
 */
 export const SITE_SELECTION_VS30_MSG =
   "Please do the following steps to see an image.";
@@ -195,7 +195,7 @@ export const PROJECT_SITE_SELECTION_GUIDE_MSG =
 export const PROJECT_SITE_SELECTION_INSTRUCTION = [
   "Choose the Project ID.",
   "Choose the Location.",
-  "Choose the VS30.",
+  "Choose the Vs30.",
   "Click the Get button to see an image",
 ];
 

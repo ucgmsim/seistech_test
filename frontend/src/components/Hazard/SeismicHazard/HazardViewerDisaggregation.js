@@ -73,7 +73,7 @@ const HazadViewerDisaggregation = () => {
   };
 
   /*
-    Reset tabs if users change IM or VS30
+    Reset tabs if users change IM or Vs30
   */
   useEffect(() => {
     setShowSpinnerDisaggEpsilon(false);
