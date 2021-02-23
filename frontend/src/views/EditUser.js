@@ -33,7 +33,8 @@ const EditUser = () => {
     "Remove Project"
   );
 
-  const [modal, setModal] = useState(false);
+  const [addModal, setAddModal] = useState(false);
+  const [removeModal, setRemoveModal] = useState(false);
 
   useEffect(() => {
     if (Object.entries(userData).length > 0) {
@@ -273,9 +274,30 @@ const EditUser = () => {
     };
   }, [removeClick]);
 
+  useEffect(() => {
+    // Reset the select field after the modal is closed.
+    if (addModal === false && setAllocateClick !== null) {
+      setAddableSelectedProject([]);
+      setAllocatedSelectedProject([]);
+      setAddableProjectOption([]);
+      setAllocatedProjectOption([]);
+      setSelectedUser([]);
+    }
+  }, [addModal, removeModal]);
+
+  useEffect(() => {
+    if (removeModal === false && setRemoveClick !== null) {
+      setAddableSelectedProject([]);
+      setAllocatedSelectedProject([]);
+      setAddableProjectOption([]);
+      setAllocatedProjectOption([]);
+      setSelectedUser([]);
+    }
+  }, [removeModal]);
+
   const allocateProjects = () => {
     setAllocateClick(uuidv4());
-    setModal(true);
+    setAddModal(true);
   };
 
   const validAllocateSubmitBtn = () => {
@@ -287,7 +309,7 @@ const EditUser = () => {
 
   const removeProjects = () => {
     setRemoveClick(uuidv4());
-    setModal(true);
+    setRemoveModal(true);
   };
 
   const validRemoveProjectsBtn = () => {
@@ -297,18 +319,7 @@ const EditUser = () => {
     );
   };
 
-  useEffect(() => {
-    // Reset the select field after the modal is closed.
-    if (modal === false && setAllocateClick !== null) {
-      setAddableSelectedProject([]);
-      setAllocatedSelectedProject([]);
-      setAddableProjectOption([]);
-      setAllocatedProjectOption([]);
-      setSelectedUser([]);
-    }
-  }, [modal]);
-
-  const bodyText = () => {
+  const addProjectsBodyText = () => {
     let bodyString = `Successfully added the following projects:\n\n`;
 
     for (let i = 0; i < addableSelectedProject.length; i++) {
@@ -316,6 +327,18 @@ const EditUser = () => {
     }
 
     bodyString += `\nto ${selectedUser.label}`;
+
+    return bodyString;
+  };
+
+  const removeProjectsBodyText = () => {
+    let bodyString = `Successfully removed the following projects:\n\n`;
+
+    for (let i = 0; i < allocatedSelectedProject.length; i++) {
+      bodyString += `${i + 1}: ${allocatedSelectedProject[i].label}\n`;
+    }
+
+    bodyString += `\nfrom ${selectedUser.label}`;
 
     return bodyString;
   };
@@ -402,10 +425,17 @@ const EditUser = () => {
       </div>
 
       <ModalComponent
-        modal={modal}
-        setModal={setModal}
+        modal={addModal}
+        setModal={setAddModal}
         title="Successfully added"
-        body={bodyText()}
+        body={addProjectsBodyText()}
+      />
+
+      <ModalComponent
+        modal={removeModal}
+        setModal={setRemoveModal}
+        title="Successfully removed"
+        body={removeProjectsBodyText()}
       />
     </div>
   );
