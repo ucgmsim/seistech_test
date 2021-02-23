@@ -8,7 +8,7 @@ import { useAuth0 } from "components/common/ReactAuth0SPA";
 import ModalComponent from "components/common/ModalComponent";
 import * as CONSTANTS from "constants/Constants";
 
-const EditUser = () => {
+const EditUserPermission = () => {
   const { getTokenSilently } = useAuth0();
 
   const [userData, setUserData] = useState({});
@@ -463,4 +463,4 @@ const EditUser = () => {
   );
 };
 
-export default EditUser;
+export default EditUserPermission;
