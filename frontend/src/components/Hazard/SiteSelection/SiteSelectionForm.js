@@ -131,7 +131,7 @@ const SiteSelectionForm = () => {
     The time it gets rendered is when users come to seistech.nz/hazard
     For instance, users were at /home and come to /hazard or /dashboard -> /hazard or even
     /hazard -> /home -> /hazard
-    So reset those global values to prevent auto-trigger to get a station, Regional image and VS30 image
+    So reset those global values to prevent auto-trigger to get a station, Regional image and Vs30 image
   */
   useEffect(() => {
     // For Site Selection

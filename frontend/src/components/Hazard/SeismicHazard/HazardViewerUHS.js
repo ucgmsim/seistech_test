@@ -64,7 +64,7 @@ const HazardViewerUHS = () => {
   }, [selectedSoilClass, nzCodeDefaultParams]);
 
   /*
-    Reset tabs if users change IM or VS30
+    Reset tabs if users change IM or Vs30
   */
   useEffect(() => {
     setShowPlotUHS(false);

@@ -1,8 +1,15 @@
 ## February 22, 2021
 
-### Fix Middleware's bug - Circular import - ([PR #47](https://github.com/ucgmsim/seistech_psha_frontend/pull/47)
+### Fix Middleware's bug - Circular import - ([PR #48](https://github.com/ucgmsim/seistech_psha_frontend/pull/48)
 
 - Change the structure a little bit to fix the circular import.
+
+## February 18, 2021
+
+### GMS Feedback Update Part 1 - ([PR #45](https://github.com/ucgmsim/seistech_psha_frontend/pull/45))
+
+- A few updates for the Frontend based on the feedback we got from a quick meeting. These are mainly for the Frontend, more to come once the API is updated.
+- Install a package called `DOMPurify` to sanitize HTML to be used for `dangerouslySetInnerHTML` prop.
 
 ## February 17, 2021
 

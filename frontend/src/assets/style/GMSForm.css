@@ -4,8 +4,36 @@ div.advanced-toggle-header {
   align-items: center;
 }
 
+div.div-with-status {
+  display: flex;
+  align-items: center;
+}
+
+span.status-text {
+  margin-left: 1rem;
+}
+
 div.custom-form-group {
   margin-bottom: calc(1rem + 22px);
+}
+
+div.im-custom-form-group {
+  margin-bottom: 1rem;
+}
+
+table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+th.var-name {
+  width: 44%;
+}
+
+th.min-value,
+th.max-value {
+  width: 28%;
+  text-align: center;
 }
 
 table td {

@@ -54,7 +54,7 @@ const HazardViewerHazardCurve = () => {
   };
 
   /*
-    Reset tabs if users change Project ID, VS30 or Location
+    Reset tabs if users change Project ID, Vs30 or Location
   */
   useEffect(() => {
     setShowSpinnerHazard(false);
