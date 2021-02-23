@@ -292,7 +292,7 @@ const EditUser = () => {
       setAllocatedProjectOption([]);
       setSelectedUser([]);
     }
-  }, [addModal, removeModal]);
+  }, [addModal]);
 
   useEffect(() => {
     if (removeModal === false && setRemoveClick !== null) {
