@@ -4,7 +4,7 @@
 
 - Change the structure a little bit to fix the circular import.
 
-## Februray 18, 2021
+## February 18, 2021
 
 ### GMS Feedback Update Part 1 - ([PR #45](https://github.com/ucgmsim/seistech_psha_frontend/pull/45))
 
