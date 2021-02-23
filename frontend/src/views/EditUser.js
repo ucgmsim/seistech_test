@@ -23,6 +23,9 @@ const EditUser = () => {
   const [addableSelectedProject, setAddableSelectedProject] = useState([]);
   const [allocatedSelectedProject, setAllocatedSelectedProject] = useState([]);
 
+  const [userDataFetching, setUserDataFetching] = useState(false);
+  const [projectDataFetching, setProjectDataFetching] = useState(false);
+
   const [alocateClick, setAllocateClick] = useState(null);
   const [addableStatusText, setAddableStatusText] = useState(
     "Allocate Project"
@@ -77,6 +80,8 @@ const EditUser = () => {
       try {
         const token = await getTokenSilently();
 
+        setUserDataFetching(true);
+
         await fetch(
           CONSTANTS.CORE_API_BASE_URL + CONSTANTS.MIDDLEWARE_API_ROUTE_GET_USER,
           {
@@ -89,8 +94,8 @@ const EditUser = () => {
           .then(handleErrors)
           .then(async (users) => {
             const responseUserData = await users.json();
-
             setUserData(responseUserData);
+            setUserDataFetching(false);
           })
           .catch((error) => {
             console.log(error);
@@ -123,6 +128,8 @@ const EditUser = () => {
 
         setAddableProjectOption([]);
         setAllocatedProjectOption([]);
+
+        setProjectDataFetching(true);
 
         try {
           const token = await getTokenSilently();
@@ -159,6 +166,8 @@ const EditUser = () => {
 
               setAddableProjectData(addableProjectData);
               setAllocatedProjectData(allocatedProjectData);
+
+              setProjectDataFetching(false);
             })
             .catch((error) => {
               console.log(error);
@@ -353,6 +362,8 @@ const EditUser = () => {
             onChange={(value) => setSelectedUser(value || [])}
             value={selectedUser}
             options={userOption}
+            isDisabled={userDataFetching === true}
+            placeholder={userDataFetching === true ? "Loading..." : "Select..."}
           />
         </div>
       </div>
@@ -372,12 +383,17 @@ const EditUser = () => {
               selectedUser.length === 0
                 ? "Please select a user first..."
                 : selectedUser.length !== 0 &&
+                  projectDataFetching === true &&
+                  allocatedProjectOption.length === 0
+                ? "Loading..."
+                : selectedUser.length !== 0 &&
+                  projectDataFetching === false &&
                   allocatedProjectOption.length === 0
                 ? "No allocated projects"
                 : selectedUser.length !== 0 &&
                   allocatedProjectOption.length !== 0
                 ? "Select projects to remove"
-                : "Loading..."
+                : "Something went wrong"
             }
           />
           <button
@@ -405,11 +421,17 @@ const EditUser = () => {
             placeholder={
               selectedUser.length === 0
                 ? "Please select a user first..."
-                : selectedUser.length !== 0 && addableProjectOption.length === 0
+                : selectedUser.length !== 0 &&
+                  projectDataFetching === true &&
+                  addableProjectOption.length === 0
+                ? "Loading..."
+                : selectedUser.length !== 0 &&
+                  projectDataFetching === false &&
+                  addableProjectOption.length === 0
                 ? "No addable projects"
                 : selectedUser.length !== 0 && addableProjectOption.length !== 0
                 ? "Select projects to allocate"
-                : "Loading..."
+                : "Something went wrong"
             }
           />
           <button
