@@ -95,12 +95,12 @@ def write_request_details(endpoint, query_dict):
             # 'exceedances' value is comma-separated
             exceedances_list = value.split(",")
             for exceedance in exceedances_list:
-                new_history = models.History_Request(
+                new_history = models.HistoryRequest(
                     latest_history_id, attribute, exceedance
                 )
                 server.db.session.add(new_history)
         else:
-            new_history = models.History_Request(latest_history_id, attribute, value)
+            new_history = models.HistoryRequest(latest_history_id, attribute, value)
             server.db.session.add(new_history)
 
     server.db.session.commit()
@@ -116,8 +116,8 @@ def _get_projects_from_db(user_id):
     """
     # Get all available projects that are allocated to this user.
     available_project_objs = (
-        models.Project.query.join(models.available_projects_table)
-        .filter((models.available_projects_table.c.user_id == user_id))
+        models.Project.query.join(models.AvailableProject)
+        .filter((models.AvailableProject.user_id == user_id))
         .all()
     )
 
@@ -287,9 +287,8 @@ def _add_available_project_to_db(user_id, project_name):
 
     # Find objects to user SQLAlchemy way of inserting to a bridging table.
     project_obj = models.Project.query.filter_by(project_name=project_name).first()
-    user_obj = models.User.query.filter_by(user_id=user_id).first()
 
-    project_obj.allocate.append(user_obj)
+    server.db.session.add(models.AvailableProject(user_id, project_obj.project_id))
     server.db.session.commit()
     server.db.session.flush()
 
@@ -320,13 +319,12 @@ def _remove_allocated_projects(user_id, project_name):
     """
     try:
         # Get the project id with the given project name
-        certain_project = (
+        certain_project_id = (
             models.Project.query.filter_by(project_name=project_name).first().project_id
         )
         available_projects_row = (
-            models.Project.query.join(models.available_projects_table)
-            .filter((models.available_projects_table.c.user_id == user_id))
-            .filter((models.available_projects_table.c.project_id == certain_project))
+            models.AvailableProject.query.filter_by(user_id=user_id)
+            .filter_by(project_id=certain_project_id)
             .first()
         )
 
