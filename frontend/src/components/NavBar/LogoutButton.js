@@ -52,14 +52,14 @@ const LogoutButton = () => {
           Documents
         </DropdownItem>
 
-        {hasPermission("edit-user") ? (
+        {hasPermission("psha-admin") ? (
           <DropdownItem
             tag={RouterNavLink}
-            to="/edit-user"
+            to="/psha-admin"
             className="dropdown-profile"
             activeClassName="router-link-exact-active"
           >
-            <FontAwesomeIcon icon="tools" className="mr-3" /> Edit User
+            <FontAwesomeIcon icon="tools" className="mr-3" /> Admin Page
           </DropdownItem>
         ) : null}
 
