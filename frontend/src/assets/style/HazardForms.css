@@ -192,12 +192,6 @@ nav.hazard-tabs {
   width: 77%;
 }
 
-div.hazard-inner {
-  margin: auto;
-  width: 90vw;
-  margin-bottom: 2%;
-}
-
 div.uhs-params span,
 div.uhs-params select {
   display: inline-block;

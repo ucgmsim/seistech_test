@@ -11,6 +11,8 @@ import Collapse from "@material-ui/core/Collapse";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 
+import "assets/style/TwoColumnView.css"
+
 // Reference
 // https://webpack.js.org/guides/dependency-management/#requirecontext
 const importAll = (r) => {
@@ -131,7 +133,7 @@ const FrameworkDocView = () => {
   }, []);
 
   return (
-    <div className="hazard-inner">
+    <div className="two-column-inner">
       <div className="row two-column-row">
         <div className="col-3 controlGroup form-panel">
           <List
