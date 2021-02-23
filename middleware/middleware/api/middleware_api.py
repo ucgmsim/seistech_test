@@ -4,7 +4,7 @@ from jose import jwt
 from .. import db
 from ..server import app
 from ..utils import proxy_to_api
-from ..auth0 import get_token_auth_header
+from ..auth0 import get_token_auth_header, get_users
 from ..decorator import requires_auth
 
 
@@ -23,7 +23,7 @@ def get_all_user_from_auth0():
     """Retrieve all the existing users from the Auth0
     Will be used for User dropdown
     """
-    return jsonify(db.get_users())
+    return jsonify(get_users())
 
 
 @app.route("/middlewareAPI/projectAPI/addable_projects/get", methods=["GET"])

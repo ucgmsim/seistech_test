@@ -3,7 +3,7 @@ import os
 from flask import Flask
 
 from custom_sqlalchemy import CustomSQLALchemy
-from db import get_users
+from auth0 import get_users
 
 
 # DB Connection Setup
