@@ -59,7 +59,7 @@ const LogoutButton = () => {
             className="dropdown-profile"
             activeClassName="router-link-exact-active"
           >
-            <FontAwesomeIcon icon="tools" className="mr-3" /> Admin Page
+            <FontAwesomeIcon icon="tools" className="mr-3" /> Permission Config
           </DropdownItem>
         ) : null}
 
