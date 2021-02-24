@@ -32,6 +32,11 @@ const PermissionDashboard = () => {
   const [allProjects, setAllProjects] = useState({});
   const [tableHeaders, setTableHeaders] = useState([]);
 
+  const [allAvailableProjects, setAllAvailableProjects] = useState({});
+  const [tableBody, setTableBody] = useState([]);
+
+  const [columnOrder, setColumnOrder] = useState({});
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -93,7 +98,12 @@ const PermissionDashboard = () => {
         Object.keys(allProjects).length === 0 &&
         allProjects.constructor === Object) === false
     ) {
-      let tempArray = [];
+      let tempArray = [
+        {
+          id: "auth0-user-id",
+          label: "Auth0 ID",
+        },
+      ];
       for (const [key, value] of Object.entries(allProjects)) {
         tempArray.push({
           id: key,
@@ -128,7 +138,7 @@ const PermissionDashboard = () => {
           .then(handleErrors)
           .then(async (response) => {
             const responseData = await response.json();
-            console.log(responseData);
+            setAllAvailableProjects(responseData);
           })
           .catch((error) => {
             console.log(error);
@@ -145,6 +155,42 @@ const PermissionDashboard = () => {
     };
   }, []);
 
+  useEffect(() => {
+    // If and only if the object is not empty, create list for table's body
+    if (
+      (allAvailableProjects &&
+        Object.keys(allAvailableProjects).length === 0 &&
+        allAvailableProjects.constructor === Object) === false &&
+      (allProjects &&
+        Object.keys(allProjects).length === 0 &&
+        allProjects.constructor === Object) === false
+    ) {
+      let tempArray = [];
+      let tempObj = {};
+      console.log("DOING SOMETIHNBG");
+      console.log(allProjects);
+      console.log(allAvailableProjects);
+      for (const [user_id, available_projects] of Object.entries(
+        allAvailableProjects
+      )) {
+        for (const [project_code, project_detail] of Object.entries(
+          allProjects
+        )) {
+          tempObj["auth0-user-id"] = user_id;
+          tempObj[project_code] = available_projects.includes(
+            project_detail.project_id
+          )
+            ? "true"
+            : "false";
+        }
+        tempArray.push(tempObj);
+        tempObj = {};
+      }
+
+      setTableBody(tempArray);
+    }
+  }, [allAvailableProjects, allProjects]);
+
   return (
     <Paper className={classes.root}>
       <TableContainer className={classes.container}>
@@ -155,6 +201,7 @@ const PermissionDashboard = () => {
                 <TableCell
                   key={column.id}
                   style={{ minWidth: column.minWidth }}
+                  align={"center"}
                 >
                   {column.label}
                 </TableCell>
@@ -162,18 +209,32 @@ const PermissionDashboard = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows
+            {tableBody
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => {
+              .map((eachRow) => {
                 return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                    {columns.map((column) => {
-                      const value = row[column.id];
+                  <TableRow
+                    hover
+                    role="checkbox"
+                    tabIndex={-1}
+                    key={eachRow["auth0-user-id"]}
+                  >
+                    {tableHeaders.map((column) => {
+                      const value = eachRow[column.id];
+                      console.log(eachRow[column.id]);
                       return (
-                        <TableCell key={column.id} align={column.align}>
-                          {column.format && typeof value === "number"
-                            ? column.format(value)
-                            : value}
+                        <TableCell
+                          key={column.id}
+                          align={"center"}
+                          style={
+                            column.id === "auth0-user-id"
+                              ? { backgroundColor: "white" }
+                              : value === "true"
+                              ? { backgroundColor: "green" }
+                              : { backgroundColor: "red" }
+                          }
+                        >
+                          {column.id === "auth0-user-id" ? value : null}
                         </TableCell>
                       );
                     })}
@@ -186,7 +247,7 @@ const PermissionDashboard = () => {
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
-        count={rows.length}
+        count={tableBody.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onChangePage={handleChangePage}
@@ -197,52 +258,3 @@ const PermissionDashboard = () => {
 };
 
 export default PermissionDashboard;
-
-const columns = [
-  { id: "name", label: "Name", minWidth: 170 },
-  { id: "code", label: "ISO\u00a0Code", minWidth: 100 },
-  {
-    id: "population",
-    label: "Population",
-    minWidth: 170,
-    align: "right",
-    format: (value) => value.toLocaleString("en-US"),
-  },
-  {
-    id: "size",
-    label: "Size\u00a0(km\u00b2)",
-    minWidth: 170,
-    align: "right",
-    format: (value) => value.toLocaleString("en-US"),
-  },
-  {
-    id: "density",
-    label: "Density",
-    minWidth: 170,
-    align: "right",
-    format: (value) => value.toFixed(2),
-  },
-];
-
-function createData(name, code, population, size) {
-  const density = population / size;
-  return { name, code, population, size, density };
-}
-
-const rows = [
-  createData("India", "IN", 1324171354, 3287263),
-  createData("China", "CN", 1403500365, 9596961),
-  createData("Italy", "IT", 60483973, 301340),
-  createData("United States", "US", 327167434, 9833520),
-  createData("Canada", "CA", 37602103, 9984670),
-  createData("Australia", "AU", 25475400, 7692024),
-  createData("Germany", "DE", 83019200, 357578),
-  createData("Ireland", "IE", 4857000, 70273),
-  createData("Mexico", "MX", 126577691, 1972550),
-  createData("Japan", "JP", 126317000, 377973),
-  createData("France", "FR", 67022000, 640679),
-  createData("United Kingdom", "GB", 67545757, 242495),
-  createData("Russia", "RU", 146793744, 17098246),
-  createData("Nigeria", "NG", 200962417, 923768),
-  createData("Brazil", "BR", 210147125, 8515767),
-];
