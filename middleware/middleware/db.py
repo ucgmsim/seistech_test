@@ -1,4 +1,5 @@
 import json
+from collections import defaultdict
 
 from flask import request
 
@@ -51,6 +52,58 @@ def write_request_details(endpoint, query_dict):
             server.db.session.add(new_history)
 
     server.db.session.commit()
+
+
+def get_all_projects_from_available_project_table():
+    """Create an array form of available projects that are in the DB
+
+    Similar to _get_projects_from_db except, this function is designed to pull
+    every rows from Available_Project table.
+    """
+    # Get all available projects from the UserDB
+    available_projects = models.AvailableProject.query.all()
+
+    # To make a dictionary looks like
+    # {
+    #   userA: [ProjectA, ProjectB, ProjectC],
+    #   userB: [ProjectA, ProjectB]
+    # }
+    available_projects_dict = defaultdict(list)
+
+    for project in available_projects:
+        available_projects_dict[project.user_id].append(project.project_id)
+
+    return available_projects_dict
+
+
+def filter_the_projects_for_dashboard(unfiltered_projects):
+    """Get all the available projects we have from Project API
+    And customize the way we want to return to the frontend for two reasons.
+    1. For Table's header(will display a name of the project)
+    2. We can use this dictionary to filter the table to tell they have permission
+
+    Parameters
+    ----------
+    unfiltered_projects: dictionary
+    """
+    # Get all projects from the UserDB.
+    all_projects = models.Project.query.all()
+
+    # Create a dictionary with the following format
+    # key = project_code (e.g., nzgl, soffitel,qtwn)
+    # value = dictionary in form of
+    # {project_id: project_full_name}
+    # id is the primary key from the UserDB
+    # full_name is the user friendly name for project, e.g. Generic New Zealand Locations
+    all_projects = {
+        project.project_name: {
+            "project_id": project.project_id,
+            "project_full_name": unfiltered_projects[project.project_name]["name"],
+        }
+        for project in all_projects
+    }
+
+    return all_projects
 
 
 def _get_projects_from_db(user_id):

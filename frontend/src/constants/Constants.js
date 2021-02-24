@@ -53,7 +53,7 @@ export const PROJECT_API_DOWNLOAD_DISAGG = "projectAPI/disagg_download";
 export const PROJECT_API_DOWNLOAD_UHS = "projectAPI/uhs_download";
 export const PROJECT_API_DOWNLOAD_GMS = "projectAPI/gms_download";
 
-/* Middleware API call - That doesn't need to communicate to neither Core API nor Project API */
+/* Middleware API call*/
 export const MIDDLEWARE_API_ROUTE_GET_USER = "middlewareAPI/auth0/user/get";
 export const MIDDLEWARE_API_ROUTE_GET_ADDABLE_PROJECT =
   "middlewareAPI/projectAPI/addable_projects/get";
@@ -63,7 +63,10 @@ export const MIDDLEWARE_API_ROUTE_ALLOCATE_PROJECTS_TO_USER =
   "middlewareAPI/allocate_projects";
 export const MIDDLEWARE_API_ROUTE_REMOVE_PROJECTS_FROM_USER =
   "middlewareAPI/remove_projects";
-
+export const MIDDLEWARE_API_ROUTE_GET_ALL_PROJECTS_FROM_PROJECT_API =
+  "middlewareAPI/projectAPI/all_projects_from_project_api/get"
+export const MIDDLEWARE_API_ROUTE_GET_ALL_ROW_FROM_AVAILABLE_PROJECT_TABLE =
+  "middlewareAPI/available_project/get"
 /* 
   Words 
   TODO - See whether it's worth putting as constands due to structure.
