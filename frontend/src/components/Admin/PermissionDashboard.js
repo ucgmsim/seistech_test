@@ -7,7 +7,6 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
-import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 
 import { handleErrors, createProjectIDArray } from "utils/Utils";
@@ -17,6 +16,7 @@ import * as CONSTANTS from "constants/Constants";
 const useStyles = makeStyles({
   root: {
     width: "100%",
+    height: "95%",
   },
   container: {
     maxHeight: "85%",
@@ -38,15 +38,6 @@ const PermissionDashboard = () => {
 
   const [allAvailableProjects, setAllAvailableProjects] = useState({});
   const [tableBody, setTableBody] = useState([]);
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
 
   /*
     Fetchig All projets we have from Project API to become a table's header
@@ -170,9 +161,7 @@ const PermissionDashboard = () => {
     ) {
       let tempArray = [];
       let tempObj = {};
-      console.log("DOING SOMETIHNBG");
-      console.log(allProjects);
-      console.log(allAvailableProjects);
+
       for (const [user_id, available_projects] of Object.entries(
         allAvailableProjects
       )) {
@@ -236,6 +225,13 @@ const PermissionDashboard = () => {
     };
   }, []);
 
+  /*
+    Create an Array of objects with the following format
+    {
+      value: auth0-id,
+      label: user_email | Auth0 or Google Auth
+    }
+  */
   useEffect(() => {
     if (Object.entries(userData).length > 0) {
       setUserOption(createProjectIDArray(userData));
@@ -248,13 +244,13 @@ const PermissionDashboard = () => {
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {tableHeaders.map((column) => (
+              {tableHeaders.map((header) => (
                 <TableCell
-                  key={column.id}
-                  style={{ minWidth: column.minWidth }}
+                  key={header.id}
+                  style={{ minWidth: header.minWidth }}
                   align={"center"}
                 >
-                  {column.label}
+                  {header.label}
                 </TableCell>
               ))}
             </TableRow>
@@ -262,30 +258,30 @@ const PermissionDashboard = () => {
           <TableBody>
             {tableBody
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((eachRow) => {
+              .map((eachUser) => {
                 return (
                   <TableRow
                     hover
                     role="checkbox"
                     tabIndex={-1}
-                    key={eachRow["auth0-user-id"]}
+                    key={eachUser["auth0-user-id"]}
                   >
-                    {tableHeaders.map((column) => {
-                      const value = eachRow[column.id];
-                      console.log(eachRow[column.id]);
+                    {tableHeaders.map((header) => {
+                      const value = eachUser[header.id];
+                      console.log(eachUser[header.id]);
                       return (
                         <TableCell
-                          key={column.id}
+                          key={header.id}
                           align={"center"}
                           style={
-                            column.id === "auth0-user-id"
+                            header.id === "auth0-user-id"
                               ? { backgroundColor: "white" }
                               : value === "true"
                               ? { backgroundColor: "green" }
                               : { backgroundColor: "red" }
                           }
                         >
-                          {column.id === "auth0-user-id" ? value : null}
+                          {header.id === "auth0-user-id" ? value : null}
                         </TableCell>
                       );
                     })}
@@ -295,15 +291,6 @@ const PermissionDashboard = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
-        component="div"
-        count={tableBody.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onChangePage={handleChangePage}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
-      />
     </Paper>
   );
 };
