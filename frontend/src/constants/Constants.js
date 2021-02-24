@@ -103,7 +103,7 @@ export const SITE_SELECTION_VS30_TITLE = "VS30";
 
 /* 
   Guide Messages
-  Site Selection - Regional & VS30
+  Site Selection - Regional & Vs30
 */
 export const SITE_SELECTION_VS30_MSG =
   "Please do the following steps to see an image.";
@@ -182,9 +182,11 @@ export const UNIFORM_HAZARD_SPECTRUM_INSTRUCTION = [
 export const GMS_VIEWER_GUIDE_MSG =
   "Please do the following steps to see plots.";
 export const GMS_VIEWER_GUIDE_INSTRUCTION = [
-  "Select IM from IM Type.",
-  "Choose IM Level or Exceedance Rate then put a value.",
+  "Select IM from Conditioning IM Name.",
+  "Choose one option from IM / Exceedance rate level then put a value.",
+  "Click Get causal parameters bounds",
   "Select IM Vector(s).",
+  "Click Get IM vector weights",
   "Put Number of Ground Motions.",
   "Click the Compute button.",
 ];
@@ -197,7 +199,7 @@ export const PROJECT_SITE_SELECTION_GUIDE_MSG =
 export const PROJECT_SITE_SELECTION_INSTRUCTION = [
   "Choose the Project ID.",
   "Choose the Location.",
-  "Choose the VS30.",
+  "Choose the Vs30.",
   "Click the Get button to see an image",
 ];
 
@@ -298,6 +300,31 @@ export const TOOLTIP_MESSAGES = {
     "Select the annual exceedance rate (inverse of return period) to compute the disaggregation distribution. The adopted intensity measure is that specified in the Intensity Measure tab.",
   PROJECT_UHS:
     "Select one or more annual exceedance rates (inverse of return period) to compute the Uniform Hazard Spectrum (UHS) for. Selected rates are displayed, which can be subsequently removed.",
+  // GMS Section
+  HAZARD_GMS_CONDITIONING_IM_NAME: "Select the conditioning intensity measure.",
+  HAZARD_GMS_IM_LEVEL_EXCEEDANCE_RATE:
+    "Set the value of the Conditioning IM. This can be done by either specifying this directly as the ‘IM level’, or indirectly by specifying the Exceedance Rate from which the hazard curve is used to obtain the IM level.",
+  HAZARD_GMS_IM_VECTOR:
+    "Select the intensity measures to include in the IM vector. Default weights for each intensity measure are assigned, which can be edited in the ‘Advanced’ fields.",
+  HAZARD_GMS_NUM_GMS: "Set the number of ground motions for selection.",
+  HAZARD_GMS_ADVANCED:
+    "These are additional parameters for which default values are likely to be suitable for many users.  The advanced user may wish to manually deviate from these defaults. See the documentation page for additional details on the models used to compute these defaults.",
+  HAZARD_GMS_CAUSAL_PARAMS_BOUNDS:
+    "Specify the minimum and maximum allowable values of Magnitude, Rupture Distance, and 30m-averaged shear-wave velocity.",
+  HAZARD_GMS_WEIGHTS:
+    "Weights for each intensity measure in the ‘IM Vector’ used in the misfit calculation for ground-motion selection. Select the ‘renormalise’ button to normalise the weights to 1.0.",
+  HAZARD_GMS_DB:
+    "Select one or more databases from which prospective ground motions can be selected.",
+  HAZARD_GMS_REPLICATES:
+    "The number of replicates performed. This attempts to overcome statistical artifacts due to the use of Monte Carlo simulation within the ground-motion selection method. A larger number will give more stable results, but compute time will increase proportionately.",
+
+  // Inside tab
+  INNER_TAB_SITE_SELECTION:
+    "This tab allows the specification of basic information about the site, including the location (Lat, Lon), and site conditions.",
+  INNER_TAB_SEISMIC_HAZARD:
+    "This tab provides access to site-specific seismic hazard results, including hazard curves and disaggregation for multiple intensity measures and exceedance rates (or return periods); and uniform hazard spectra.",
+  INNER_TAB_GMS:
+    "This tab provides access to site-specific ground-motion selection that is consistent with the site-specific seismic hazard.",
 };
 
 /*
@@ -305,4 +332,15 @@ export const TOOLTIP_MESSAGES = {
 */
 export const TOOLTIP_URL = {
   HAZARD_NZCODE: "https://google.com",
+};
+
+/*
+  GMS Labels
+*/
+
+export const GMS_LABELS = {
+  mag: "Magnitude (Mw)",
+  rrup: `Rupture distance (R${"rup".sub()})`,
+  sf: "Scale factor (SF)",
+  vs30: `30m-averaged shear-wave velocity (V${"s30".sub()})`,
 };

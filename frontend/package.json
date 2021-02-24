@@ -26,6 +26,7 @@
     "auth0": "^2.28.0",
     "axios": "^0.21.0",
     "bootstrap": "^4.5.2",
+    "dompurify": "^2.2.6",
     "dotenv": "^8.2.0",
     "env-cmd": "^10.1.0",
     "highlight.js": "^10.4.1",

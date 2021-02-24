@@ -45,7 +45,7 @@ const Hazard = () => {
 
         <Tab
           eventKey="gms"
-          title="GMS"
+          title="Ground Motion Selection"
           disabled={ENV !== "DEV" || locationSetClick === null || vs30 === ""}
           tabClassName="gms-tab"
         >

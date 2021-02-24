@@ -67,7 +67,7 @@ const SiteConditions = () => {
           disabled={locationSetClick === null || vs30 === ""}
           onClick={() => setVS30(localVS30)}
         >
-          Set VS30
+          Set Vs30
         </button>
         <button
           id="vs30useDefault"

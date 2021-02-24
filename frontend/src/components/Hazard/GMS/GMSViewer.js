@@ -2,6 +2,7 @@ import React, { Fragment, useContext, useState, useEffect } from "react";
 import Tabs from "react-bootstrap/Tabs";
 import { Tab } from "react-bootstrap";
 import Select from "react-select";
+import dompurify from "dompurify";
 import { GlobalContext } from "context";
 import * as CONSTANTS from "constants/Constants";
 import { useAuth0 } from "components/common/ReactAuth0SPA";
@@ -15,12 +16,14 @@ import DownloadButton from "components/common/DownloadButton";
 import GuideMessage from "components/common/GuideMessage";
 import ErrorMessage from "components/common/ErrorMessage";
 
-import { handleErrors } from "utils/Utils";
+import { handleErrors, GMSIMLabelConverter } from "utils/Utils";
 
 import "assets/style/GMSViewer.css";
 
 const GMSViewer = () => {
   const { getTokenSilently } = useAuth0();
+
+  const sanitizer = dompurify.sanitize;
 
   const {
     selectedEnsemble,
@@ -109,44 +112,38 @@ const GMSViewer = () => {
             return vector.value;
           });
 
-          let requestOptions = {};
+          let requestOptions = {
+            method: "POST",
+            headers: { Authorization: `Bearer ${token}` },
+            signal: signal,
+          };
 
           if (GMSRadio === "im-level") {
-            requestOptions = {
-              method: "POST",
-              headers: { Authorization: `Bearer ${token}` },
-              body: JSON.stringify({
-                ensemble_id: selectedEnsemble,
-                station: station,
-                IM_j: GMSIMType,
-                IMs: newIMVector,
-                n_gms: Number(GMSNum),
-                gm_source_ids: ["nga_west_2"],
-                im_level: Number(GMSIMLevel),
-                n_replica: Number(GMSReplicates),
-                IM_weights: GMSWeights,
-                filter_params: filterParamsObj,
-              }),
-              signal: signal,
-            };
+            requestOptions["body"] = JSON.stringify({
+              ensemble_id: selectedEnsemble,
+              station: station,
+              IM_j: GMSIMType,
+              IMs: newIMVector,
+              n_gms: Number(GMSNum),
+              gm_source_ids: ["nga_west_2"],
+              im_level: Number(GMSIMLevel),
+              n_replica: Number(GMSReplicates),
+              IM_weights: GMSWeights,
+              filter_params: filterParamsObj,
+            });
           } else if (GMSRadio === "exceedance-rate") {
-            requestOptions = {
-              method: "POST",
-              headers: { Authorization: `Bearer ${token}` },
-              body: JSON.stringify({
-                ensemble_id: selectedEnsemble,
-                station: station,
-                IM_j: GMSIMType,
-                IMs: newIMVector,
-                n_gms: Number(GMSNum),
-                gm_source_ids: ["nga_west_2"],
-                exceedance: Number(GMSExcdRate),
-                n_replica: Number(GMSReplicates),
-                IM_weights: GMSWeights,
-                filter_params: filterParamsObj,
-              }),
-              signal: signal,
-            };
+            requestOptions["body"] = JSON.stringify({
+              ensemble_id: selectedEnsemble,
+              station: station,
+              IM_j: GMSIMType,
+              IMs: newIMVector,
+              n_gms: Number(GMSNum),
+              gm_source_ids: ["nga_west_2"],
+              exceedance: Number(GMSExcdRate),
+              n_replica: Number(GMSReplicates),
+              IM_weights: GMSWeights,
+              filter_params: filterParamsObj,
+            });
           }
 
           await fetch(
@@ -186,7 +183,7 @@ const GMSViewer = () => {
     // Create proper IM array for Select package
     let localIMs = selectedIMVectors.map((IM) => ({
       value: IM,
-      label: IM,
+      label: GMSIMLabelConverter(IM),
     }));
     localIMs.splice(0, 0, {
       value: "spectra",
@@ -204,12 +201,12 @@ const GMSViewer = () => {
       let tempMetadatas = Object.getOwnPropertyNames(metadatas).map(
         (metadata) => ({
           value: metadata,
-          label: metadata,
+          label: `${CONSTANTS.GMS_LABELS[metadata]} distribution`,
         })
       );
       tempMetadatas.splice(0, 0, {
         value: "mwrrupplot",
-        label: "Magnitue and Rrup plot",
+        label: `Magnitude and rupture distance (Mw-R${"rup".sub()}) distribution`,
       });
 
       // Set the first Metadata as a default metadata for plot
@@ -246,9 +243,9 @@ const GMSViewer = () => {
               instruction={CONSTANTS.GMS_VIEWER_GUIDE_INSTRUCTION}
             />
           )}
-          {isLoading === true && showErrorMessage.isError === false && (
-            <LoadingSpinner />
-          )}
+          {GMSComputeClick !== null &&
+            isLoading === true &&
+            showErrorMessage.isError === false && <LoadingSpinner />}
           {isLoading === false && showErrorMessage.isError === true && (
             <ErrorMessage errorCode={showErrorMessage.errorCode} />
           )}
@@ -318,6 +315,15 @@ const GMSViewer = () => {
                       defaultValue={specifiedMetadata}
                       options={localMetadatas}
                       isSearchable={false}
+                      formatOptionLabel={(data) => {
+                        return (
+                          <span
+                            dangerouslySetInnerHTML={{
+                              __html: sanitizer(data.label),
+                            }}
+                          />
+                        );
+                      }}
                     />
                     {specifiedMetadata.value === "mwrrupplot" ? (
                       <GMSViewerMwRrupPlot
@@ -342,10 +348,10 @@ const GMSViewer = () => {
         disabled
         downloadURL={CONSTANTS.CORE_API_DOWNLOAD_GMS}
         downloadToken={{
-          gms_token: downloadToken
+          gms_token: downloadToken,
         }}
         extraParams={{
-          gms_token: "Download part will be fixed after a chat to Claudio."
+          gms_token: "Download part will be fixed after a chat to Claudio.",
         }}
         fileName="gms.zip"
       />

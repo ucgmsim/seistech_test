@@ -1,11 +1,16 @@
 import React from "react";
 
 import Plot from "react-plotly.js";
-import { PLOT_MARGIN, PLOT_CONFIG } from "constants/Constants";
+import { PLOT_MARGIN, PLOT_CONFIG, GMS_LABELS } from "constants/Constants";
 import ErrorMessage from "components/common/ErrorMessage";
 import { range } from "utils/Utils";
 
 import "assets/style/GMSPlot.css";
+
+/*
+  TODO: Refactor this part, split into each plot
+  Too much confusion
+*/
 
 const GMSViewerCausalParameters = ({
   gmsData,
@@ -43,7 +48,10 @@ const GMSViewerCausalParameters = ({
         x: xRange,
         y: newRangeY,
         mode: "lines+markers",
-        name: metadata,
+        name:
+          GMS_LABELS[metadata] === "Vs30"
+            ? "Selected GMs"
+            : `${GMS_LABELS[metadata]}`,
         line: { shape: "hv", color: "black" },
         type: "scatter",
         showlegend: true,
@@ -80,7 +88,7 @@ const GMSViewerCausalParameters = ({
         }
       );
 
-      // If selected metadata is vs30, not only the min and max bounds, we also add solid line with vs30 value from site selection
+      // If selected metadata is Vs30, not only the min and max bounds, we also add solid line with vs30 value from site selection
       if (metadata === "vs30") {
         scattersArray.push({
           x: [
@@ -89,7 +97,7 @@ const GMSViewerCausalParameters = ({
           ],
           y: boundsRangeY,
           legendgroup: metadata,
-          name: "VS30",
+          name: "Site-Specific Vs30",
           mode: "lines",
           line: { color: "red" },
           type: "scatter",
@@ -100,6 +108,16 @@ const GMSViewerCausalParameters = ({
         Math.min(...xRange, causalParamBounds[metadata]["min"]) * 0.9,
         Math.max(...xRange, causalParamBounds[metadata]["max"]) * 1.1,
       ];
+    } else if (metadata === "sf") {
+      // Selected metadata is sf, add a solid red line at x=1 as a reference point
+      scattersArray.push({
+        x: [1, 1],
+        y: boundsRangeY,
+        name: "Reference Point",
+        mode: "lines",
+        line: { color: "red" },
+        type: "scatter",
+      });
     }
 
     return (
@@ -108,7 +126,7 @@ const GMSViewerCausalParameters = ({
         data={scattersArray}
         layout={{
           xaxis: {
-            title: { text: `Metadata: ${metadata}` },
+            title: { text: `${GMS_LABELS[metadata]} distribution` },
             range: xAxisRange,
           },
           yaxis: {

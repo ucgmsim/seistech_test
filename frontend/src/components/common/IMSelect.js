@@ -1,32 +1,37 @@
-import React, { Fragment, useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import Select from "react-select";
 
-import { GlobalContext } from "context";
+import GuideTooltip from "./GuideTooltip";
 
 import { createSelectArray } from "utils/Utils";
 
-const IMSelect = ({ title, setIM }) => {
-  const { IMs } = useContext(GlobalContext);
-
+const IMSelect = ({ title, setIM, options, guideMSG = null }) => {
   const [localIMs, setLocalIMs] = useState([]);
 
   useEffect(() => {
-    let localIMs = createSelectArray(IMs);
+    let localIMs = createSelectArray(options);
 
     setLocalIMs(localIMs);
-  }, [IMs]);
+  }, [options]);
 
   return (
-    <Fragment>
-      <pre>{title}</pre>
+    <div className="custom-form-group">
+      <label
+        className="im-selector-label"
+        htmlFor="IMs"
+        className="control-label"
+      >
+        {title}
+      </label>
+      {guideMSG !== null ? <GuideTooltip explanation={guideMSG} /> : null}
       <Select
         id="IMs"
-        placeholder={IMs.length === 0 ? "Loading..." : "Select..."}
+        placeholder={localIMs.length === 0 ? "Loading..." : "Select..."}
         onChange={(e) => setIM(e.value)}
         options={localIMs}
-        isDisabled={IMs.length === 0}
+        isDisabled={localIMs.length === 0}
       />
-    </Fragment>
+    </div>
   );
 };
 

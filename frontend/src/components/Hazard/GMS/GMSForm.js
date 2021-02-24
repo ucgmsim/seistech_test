@@ -7,6 +7,7 @@ import { GlobalContext } from "context";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import IMSelect from "components/common/IMSelect";
+import GuideTooltip from "components/common/GuideTooltip";
 import * as CONSTANTS from "constants/Constants";
 import $ from "jquery";
 import { renderSigfigs, sortIMs, handleErrors } from "utils/Utils";
@@ -44,6 +45,10 @@ const GMSForm = () => {
   useEffect(() => {
     const abortController = new AbortController();
     const signal = abortController.signal;
+
+    // To prevent recomputing by itself
+    // This occurs when you comes to GMS tab from Home or Projects tab
+    setGMSComputeClick(null);
 
     const getGMSIMs = async () => {
       try {
@@ -131,9 +136,6 @@ const GMSForm = () => {
   const [localDatabase, setLocalDatabase] = useState(null);
   const [localReplicates, setLocalReplicates] = useState(1);
 
-  // IM Level / Exceedance Rate
-  const [localIMExdRateRadio, setLocalImExdRateRadio] = useState("im-level");
-
   /*
     Pre-GM Filtering Parameters Table
   */
@@ -144,75 +146,42 @@ const GMSForm = () => {
   const [localVS30Min, setLocalVS30Min] = useState("");
   const [localVS30Max, setLocalVS30Max] = useState("");
 
-  const [isLocalMwMinChosen, setIsLocalMwMinChosen] = useState(false);
-  const [isLocalMwMaxChosen, setIsLocalMwMaxChosen] = useState(false);
-  const [isLocalRrupMinChosen, setIsLocalRrupMinChosen] = useState(false);
-  const [isLocalRrupMaxChosen, setIsLocalRrupMaxChosen] = useState(false);
-  const [isLocalVS30MinChosen, setIsLocalVS30MinChosen] = useState(false);
-  const [isLocalVS30MaxChosen, setIsLocalVS30MaxChosen] = useState(false);
-
-  /*
-    Setting those as global variable to be used in GMS Viewer to draw a box
-  */
-  useEffect(() => {
-    if (isLocalMwMinChosen === true) {
-      setGMSMwMin(localMwMin);
-    }
-  }, [localMwMin, isLocalMwMinChosen]);
-
-  useEffect(() => {
-    if (isLocalMwMaxChosen === true) {
-      setGMSMwMax(localMwMax);
-    }
-  }, [localMwMax, isLocalMwMaxChosen]);
-
-  useEffect(() => {
-    if (isLocalRrupMinChosen === true) {
-      setGMSRrupMin(localRrupMin);
-    }
-  }, [localRrupMin, isLocalRrupMinChosen]);
-
-  useEffect(() => {
-    if (isLocalRrupMaxChosen === true) {
-      setGMSRrupMax(localRrupMax);
-    }
-  }, [localRrupMax, isLocalRrupMaxChosen]);
-
-  useEffect(() => {
-    if (isLocalVS30MinChosen === true) {
-      setGMSVS30Min(localVS30Min);
-    }
-  }, [localVS30Min, setIsLocalVS30MinChosen]);
-
-  useEffect(() => {
-    if (isLocalVS30MaxChosen === true) {
-      setGMSVS30Max(localVS30Max);
-    }
-  }, [localVS30Max, setIsLocalVS30MaxChosen]);
-
-
   /*
     IM Level/Exceedance Rate Section
   */
+
+  // IM Level / Exceedance Rate
+  const [localIMExdRateRadio, setLocalImExdRateRadio] = useState("im-level");
+
   const [localIMLevel, setLocalIMLevel] = useState("");
-  const [isLocalIMLevelChosen, setIsLocalIMLevelChosen] = useState(false);
 
   const [localExcdRate, setLocalExcdRate] = useState("");
-  const [isLocalExcdRateChosen, setIsLocalExcdRateChosen] = useState(false);
 
+  const [getPreGMParamsClick, setGetPreGMParamsClick] = useState(null);
+  const [getPreGMButton, setGetPreGMButton] = useState({
+    text: "Get causal parameters bounds",
+    isFetching: false,
+  });
+
+  const validGetPreGMParams = () => {
+    if (localIMExdRateRadio === "im-level") {
+      if (selectedIMType !== null && localIMLevel !== "") {
+        return false;
+      }
+    } else if (localIMExdRateRadio === "exceedance-rate") {
+      if (selectedIMType !== null && localExcdRate !== "") {
+        return false;
+      }
+    }
+
+    return true;
+  };
   useEffect(() => {
     const abortController = new AbortController();
     const signal = abortController.signal;
 
     const defaultCausalParams = async () => {
-      if (
-        (selectedIMType !== null &&
-          isLocalIMLevelChosen === true &&
-          localIMLevel !== "") ||
-        (selectedIMType !== null &&
-          isLocalExcdRateChosen === true &&
-          localExcdRate !== "")
-      ) {
+      if (getPreGMParamsClick !== null) {
         let queryString = `?ensemble_id=${selectedEnsemble}&station=${station}&IM_j=${selectedIMType}&user_vs30=${vs30}`;
         if (localIMExdRateRadio === "im-level") {
           queryString += `&im_level=${localIMLevel}`;
@@ -221,6 +190,12 @@ const GMSForm = () => {
         }
         try {
           const token = await getTokenSilently();
+
+          setGetPreGMButton({
+            text: <FontAwesomeIcon icon="spinner" spin />,
+            isFetching: true,
+          });
+
           await fetch(
             CONSTANTS.CORE_API_BASE_URL +
               CONSTANTS.CORE_API_ROUTE_GMS_DEFAULT_CAUSAL_PARAMS +
@@ -250,27 +225,18 @@ const GMSForm = () => {
                 renderSigfigs(responseData.vs30_high, CONSTANTS.APP_UI_SIGFIGS)
               );
 
-              setIsLocalIMLevelChosen(false);
-              setIsLocalExcdRateChosen(false);
-
-              // For GMS Viewer, Third Plot
-              setGMSMwMin(responseData.mw_low);
-              setGMSMwMax(responseData.mw_high);
-              setGMSRrupMin(
-                renderSigfigs(responseData.rrup_low, CONSTANTS.APP_UI_SIGFIGS)
-              );
-              setGMSRrupMax(
-                renderSigfigs(responseData.rrup_high, CONSTANTS.APP_UI_SIGFIGS)
-              );
-              // For GMS Viewer, Fourth Plot
-              setGMSVS30Min(
-                renderSigfigs(responseData.vs30_low, CONSTANTS.APP_UI_SIGFIGS)
-              );
-              setGMSVS30Max(
-                renderSigfigs(responseData.vs30_high, CONSTANTS.APP_UI_SIGFIGS)
-              );
+              setGetPreGMButton({
+                text: "Get causal parameters bounds",
+                isFetching: false,
+              });
             })
             .catch(function (error) {
+              if (error.name !== "AbortError") {
+                setGetPreGMButton({
+                  text: "Get causal parameters bounds",
+                  isFetching: false,
+                });
+              }
               console.log(error);
             });
         } catch (error) {
@@ -284,13 +250,92 @@ const GMSForm = () => {
     return () => {
       abortController.abort();
     };
-  }, [selectedIMType, isLocalIMLevelChosen, isLocalExcdRateChosen]);
+  }, [getPreGMParamsClick]);
 
   /*
     IM Vector Section
   */
   const [localIMVector, setLocalIMVector] = useState([]);
-  const [isIMVectorChosen, setIsIMVectorChosen] = useState(false);
+  const [getIMWeightsClick, setGetIMWeightsClick] = useState(null);
+
+  const [getIMWeightMButton, setGetIMWeightMButton] = useState({
+    text: "Get IM vector Weights",
+    isFetching: false,
+  });
+
+  const validIMVectors = () => {
+    return localIMVector.length == 0;
+  };
+
+  /*
+    Fetch data from Core API -> To get a default weight for each IM Vector.
+  */
+  useEffect(() => {
+    const abortController = new AbortController();
+    const signal = abortController.signal;
+
+    const defaultIMWeights = async () => {
+      if (localIMVector.length !== 0 && getIMWeightsClick !== null) {
+        let queryString = `?IM_j=${selectedIMType}&IMs=`;
+
+        // Create a new array from an object.
+        // As localIMVector is an object with properties of label and value
+        const newIMVector = Array.from(localIMVector, (x) => x.value);
+
+        // To make a string from a sorted array and separate with comma
+        sortIMs(newIMVector).forEach((IM) => (queryString += IM + ","));
+        // Remove the last comma
+        queryString = queryString.slice(0, -1);
+
+        try {
+          const token = await getTokenSilently();
+
+          setGetIMWeightMButton({
+            text: <FontAwesomeIcon icon="spinner" spin />,
+            isFetching: true,
+          });
+
+          await fetch(
+            CONSTANTS.CORE_API_BASE_URL +
+              CONSTANTS.CORE_API_ROUTE_GMS_DEFAULT_IM_WEIGHTS +
+              queryString,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+              signal: signal,
+            }
+          )
+            .then(async function (response) {
+              const responseData = await response.json();
+              setLocalWeights(responseData);
+
+              setGetIMWeightMButton({
+                text: "Get IM vector weights",
+                isFetching: false,
+              });
+            })
+            .catch(function (error) {
+              if (error.name !== "AbortError") {
+                setGetIMWeightMButton({
+                  text: "Get IM vector weights",
+                  isFetching: false,
+                });
+              }
+              console.log(error);
+            });
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    };
+
+    defaultIMWeights();
+
+    return () => {
+      abortController.abort();
+    };
+  }, [getIMWeightsClick]);
 
   /*
     IM Vector -> Create Weights Table inside Advanced tab
@@ -321,60 +366,6 @@ const GMSForm = () => {
       setLocalWeightsTable([]);
     }
   }, [localIMVector, localWeights]);
-
-  /*
-    Fetch data from Core API -> To get a default weight for each IM Vector.
-  */
-  useEffect(() => {
-    const abortController = new AbortController();
-    const signal = abortController.signal;
-
-    const defaultIMWeights = async () => {
-      if (localIMVector.length !== 0 && isIMVectorChosen === true) {
-        let queryString = `?IM_j=${selectedIMType}&IMs=`;
-
-        // Create a new array from an object.
-        // As localIMVector is an object with properties of label and value
-        const newIMVector = Array.from(localIMVector, (x) => x.value);
-
-        // To make a string from a sorted array and separate with comma
-        sortIMs(newIMVector).forEach((IM) => (queryString += IM + ","));
-        // Remove the last comma
-        queryString = queryString.slice(0, -1);
-
-        try {
-          const token = await getTokenSilently();
-          await fetch(
-            CONSTANTS.CORE_API_BASE_URL +
-              CONSTANTS.CORE_API_ROUTE_GMS_DEFAULT_IM_WEIGHTS +
-              queryString,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-              signal: signal,
-            }
-          )
-            .then(async function (response) {
-              const responseData = await response.json();
-              setLocalWeights(responseData);
-              setIsIMVectorChosen(false);
-            })
-            .catch(function (error) {
-              console.log(error);
-            });
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    };
-
-    defaultIMWeights();
-
-    return () => {
-      abortController.abort();
-    };
-  }, [isIMVectorChosen]);
 
   // Disable table's input
   useEffect(() => {
@@ -435,14 +426,17 @@ const GMSForm = () => {
     <Fragment>
       <form autoComplete="off" onSubmit={(e) => e.preventDefault()}>
         <div className="form-group form-section-title">
-          <span>GMS</span>
+          Ground Motion Selection
         </div>
 
         <div className="custom-form-group">
           <IMSelect
-            title="IM Type"
+            title="Conditioning IM Name"
             setIM={setSelectedIMType}
             options={availableIMs}
+            guideMSG={
+              CONSTANTS.TOOLTIP_MESSAGES["HAZARD_GMS_CONDITIONING_IM_NAME"]
+            }
           />
         </div>
 
@@ -452,8 +446,13 @@ const GMSForm = () => {
             htmlFor="im-level"
             className="control-label"
           >
-            IM Level/Exceedance Rate
+            IM / Exceedance rate level
           </label>
+          <GuideTooltip
+            explanation={
+              CONSTANTS.TOOLTIP_MESSAGES["HAZARD_GMS_IM_LEVEL_EXCEEDANCE_RATE"]
+            }
+          />
           <div>
             <div className="form-check form-check-inline">
               <input
@@ -466,7 +465,7 @@ const GMSForm = () => {
                 onChange={(e) => setLocalImExdRateRadio(e.target.value)}
               />
               <label className="form-check-label" htmlFor="im-level">
-                IM Level
+                IM
               </label>
             </div>
             <div className="form-check form-check-inline">
@@ -488,8 +487,6 @@ const GMSForm = () => {
             <input
               id="im-level"
               type="number"
-              onFocus={() => setIsLocalIMLevelChosen(false)}
-              onBlur={() => setIsLocalIMLevelChosen(true)}
               onChange={(e) => setLocalIMLevel(e.target.value)}
               className="form-control"
               value={localIMLevel}
@@ -499,8 +496,6 @@ const GMSForm = () => {
             <input
               id="exceedance-rate"
               type="number"
-              onFocus={() => setIsLocalExcdRateChosen(false)}
-              onBlur={() => setIsLocalExcdRateChosen(true)}
               onChange={(e) => setLocalExcdRate(e.target.value)}
               className="form-control"
               value={localExcdRate}
@@ -509,13 +504,38 @@ const GMSForm = () => {
           )}
         </div>
 
-        <div className="custom-form-group">
-          <pre>IM Vector</pre>
+        <div className="form-row div-with-status">
+          <button
+            id="get-pre-gm-params-btn"
+            type="button"
+            className="btn btn-primary"
+            onClick={() => setGetPreGMParamsClick(uuidv4())}
+            disabled={
+              validGetPreGMParams() || getPreGMButton.isFetching === true
+            }
+          >
+            {getPreGMButton.text}
+          </button>
+          <span className="status-text">
+            {getPreGMButton.isFetching ? "It takes about 1 minute..." : null}
+          </span>
+        </div>
+
+        <div className="im-custom-form-group">
+          <label
+            id="label-im-vectors"
+            htmlFor="im-vector"
+            className="control-label"
+          >
+            IM Vector
+          </label>
+          {/* <pre>IM Vector</pre> */}
+          <GuideTooltip
+            explanation={CONSTANTS.TOOLTIP_MESSAGES["HAZARD_GMS_IM_VECTOR"]}
+          />
           <Select
             id="im-vector"
             closeMenuOnSelect={false}
-            onMenuOpen={() => setIsIMVectorChosen(false)}
-            onMenuClose={() => setIsIMVectorChosen(true)}
             components={animatedComponents}
             isMulti
             onChange={(value) => setLocalIMVector(value || [])}
@@ -526,10 +546,26 @@ const GMSForm = () => {
           />
         </div>
 
+        <div className="form-row">
+          <button
+            id="get-im-vector-weights-btn"
+            className="btn btn-primary"
+            onClick={() => setGetIMWeightsClick(uuidv4())}
+            disabled={
+              validIMVectors() || getIMWeightMButton.isFetching === true
+            }
+          >
+            {getIMWeightMButton.text}
+          </button>
+        </div>
+
         <div className="form-group">
           <label id="label-num-gms" htmlFor="num-gms" className="control-label">
-            Num Ground Motions
+            Number of Ground Motions
           </label>
+          <GuideTooltip
+            explanation={CONSTANTS.TOOLTIP_MESSAGES["HAZARD_GMS_NUM_GMS"]}
+          />
           <input
             id="num-gms"
             type="number"
@@ -552,16 +588,23 @@ const GMSForm = () => {
 
         <Accordion>
           <Card>
-            <Accordion.Toggle
-              as={Card.Header}
-              eventKey="0"
-              onClick={() => setArrow(!arrow)}
-            >
-              <div className="advanced-toggle-header">
-                <span>Advanced</span>
+            <Card.Header className="advanced-toggle-header">
+              <span>
+                Advanced
+                <GuideTooltip
+                  explanation={
+                    CONSTANTS.TOOLTIP_MESSAGES["HAZARD_GMS_ADVANCED"]
+                  }
+                />
+              </span>
+              <Accordion.Toggle
+                as="span"
+                eventKey="0"
+                onClick={() => setArrow(!arrow)}
+              >
                 {arrowSets[arrow]}
-              </div>
-            </Accordion.Toggle>
+              </Accordion.Toggle>
+            </Card.Header>
             <Accordion.Collapse eventKey="0">
               <Card.Body>
                 <div className="form-group">
@@ -570,16 +613,23 @@ const GMSForm = () => {
                     htmlFor="causal-parameters"
                     className="control-label"
                   >
-                    Pre-GM Filtering Parameters
+                    Causal parameters bounds
                   </label>
+                  <GuideTooltip
+                    explanation={
+                      CONSTANTS.TOOLTIP_MESSAGES[
+                        "HAZARD_GMS_CAUSAL_PARAMS_BOUNDS"
+                      ]
+                    }
+                  />
                   <table className="table table-bordered">
                     <thead>
                       <tr>
-                        <th scope="col"></th>
-                        <th className="text-center" scope="col">
+                        <th className="var-name" scope="col"></th>
+                        <th className="min-value" scope="col">
                           Min
                         </th>
-                        <th className="text-center" scope="col">
+                        <th className="min-value" scope="col">
                           Max
                         </th>
                       </tr>
@@ -591,8 +641,6 @@ const GMSForm = () => {
                           <input
                             type="text"
                             value={localMwMin}
-                            onFocus={() => setIsLocalMwMinChosen(false)}
-                            onBlur={() => setIsLocalMwMinChosen(true)}
                             onChange={(e) => setLocalMwMin(e.target.value)}
                             onKeyPress={(e) => preventEnterKey(e)}
                           />
@@ -601,21 +649,17 @@ const GMSForm = () => {
                           <input
                             type="text"
                             value={localMwMax}
-                            onFocus={() => setIsLocalMwMaxChosen(false)}
-                            onBlur={() => setIsLocalMwMaxChosen(true)}
                             onChange={(e) => setLocalMwMax(e.target.value)}
                             onKeyPress={(e) => preventEnterKey(e)}
                           />
                         </td>
                       </tr>
                       <tr>
-                        <th scope="row">Rrup</th>
+                        <th scope="row">Rrup (km)</th>
                         <td>
                           <input
                             type="text"
                             value={localRrupMin}
-                            onFocus={() => setIsLocalRrupMinChosen(false)}
-                            onBlur={() => setIsLocalRrupMinChosen(true)}
                             onChange={(e) => setLocalRrupMin(e.target.value)}
                             onKeyPress={(e) => preventEnterKey(e)}
                           />
@@ -624,8 +668,6 @@ const GMSForm = () => {
                           <input
                             type="text"
                             value={localRrupMax}
-                            onFocus={() => setIsLocalRrupMaxChosen(false)}
-                            onBlur={() => setIsLocalRrupMaxChosen(true)}
                             onChange={(e) => setLocalRrupMax(e.target.value)}
                             onKeyPress={(e) => preventEnterKey(e)}
                           />
@@ -633,14 +675,12 @@ const GMSForm = () => {
                       </tr>
                       <tr>
                         <th scope="row">
-                          V<sub>S30</sub>
+                          V<sub>S30</sub> (m/s)
                         </th>
                         <td>
                           <input
                             type="text"
                             value={localVS30Min}
-                            onFocus={() => setIsLocalVS30MinChosen(false)}
-                            onBlur={() => setIsLocalVS30MinChosen(true)}
                             onChange={(e) => setLocalVS30Min(e.target.value)}
                             onKeyPress={(e) => preventEnterKey(e)}
                           />
@@ -649,8 +689,6 @@ const GMSForm = () => {
                           <input
                             type="text"
                             value={localVS30Max}
-                            onFocus={() => setIsLocalVS30MaxChosen(false)}
-                            onBlur={() => setIsLocalVS30MaxChosen(true)}
                             onChange={(e) => setLocalVS30Max(e.target.value)}
                             onKeyPress={(e) => preventEnterKey(e)}
                           />
@@ -667,6 +705,11 @@ const GMSForm = () => {
                   >
                     Weights
                   </label>
+                  <GuideTooltip
+                    explanation={
+                      CONSTANTS.TOOLTIP_MESSAGES["HAZARD_GMS_WEIGHTS"]
+                    }
+                  />
                   <table className="table table-bordered">
                     <thead>
                       <tr>
@@ -682,7 +725,16 @@ const GMSForm = () => {
 
                 {/* Options need to be changed but we do not have any yet */}
                 <div className="custom-form-group">
-                  <pre>Database</pre>
+                  <label
+                    id="label-gms-db"
+                    htmlFor="database"
+                    className="control-label"
+                  >
+                    Database
+                  </label>
+                  <GuideTooltip
+                    explanation={CONSTANTS.TOOLTIP_MESSAGES["HAZARD_GMS_DB"]}
+                  />
                   <Select
                     id="database"
                     onChange={setLocalDatabase}
@@ -699,6 +751,11 @@ const GMSForm = () => {
                   >
                     Replicates
                   </label>
+                  <GuideTooltip
+                    explanation={
+                      CONSTANTS.TOOLTIP_MESSAGES["HAZARD_GMS_REPLICATES"]
+                    }
+                  />
                   <input
                     id="replicates"
                     type="number"

@@ -192,7 +192,7 @@ const SiteSelectionForm = () => {
     }
   }, [localProjectLocations]);
 
-  // Based on the chosen Location, we create an array for VS30 dropdown
+  // Based on the chosen Location, we create an array for Vs30 dropdown
   useEffect(() => {
     if (localLocation !== null) {
       setVs30Options([]);
@@ -201,7 +201,7 @@ const SiteSelectionForm = () => {
           setVs30Options(localProjectLocations[key]["vs30"]);
           setLat(localProjectLocations[key]["lat"]);
           setLng(localProjectLocations[key]["lon"]);
-          // Reset the VS30 value
+          // Reset the Vs30 value
           setLocalVS30(null);
         }
       }
