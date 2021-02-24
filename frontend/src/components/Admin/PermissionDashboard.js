@@ -148,8 +148,14 @@ const PermissionDashboard = () => {
     };
   }, []);
 
+  /*
+    Create an array of objects for table body
+    We need to be sure that the following data aren't empty
+    1. allAvailableProjects -> Data from UserDB, Available_Project table
+    2. allProjects -> Data from Project API, All Projects we provide
+    3. userOption -> Data from Auth0, existing users
+  */
   useEffect(() => {
-    // If and only if the object is not empty, create list for table's body
     if (
       (allAvailableProjects &&
         Object.keys(allAvailableProjects).length === 0 &&
@@ -162,6 +168,20 @@ const PermissionDashboard = () => {
       let tempArray = [];
       let tempObj = {};
 
+      /*
+        Loop through the object, allAvailableProjects
+        Nested loop through another object, allprojects
+
+        The key for a temp object property with "auth0-user-id", 
+        is user-email. (using find function to find an object with auth0-id value
+        This object is in the format of
+        {value: auth0-id, label: email | auth0 or google auth}
+        Then from found object, use the label as we want email to be displayed
+
+        Then, compare if user's available_projects (projects with permission),
+        contains the project we provide, then its true else false.
+        )
+      */
       for (const [user_id, available_projects] of Object.entries(
         allAvailableProjects
       )) {
