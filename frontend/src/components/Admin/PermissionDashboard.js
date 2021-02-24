@@ -27,6 +27,10 @@ const PermissionDashboard = () => {
   const { getTokenSilently } = useAuth0();
 
   const classes = useStyles();
+
+  const [userData, setUserData] = useState({});
+  const [userOption, setUserOption] = useState([]);
+
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [allProjects, setAllProjects] = useState({});
@@ -34,8 +38,6 @@ const PermissionDashboard = () => {
 
   const [allAvailableProjects, setAllAvailableProjects] = useState({});
   const [tableBody, setTableBody] = useState([]);
-
-  const [columnOrder, setColumnOrder] = useState({});
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -163,7 +165,8 @@ const PermissionDashboard = () => {
         allAvailableProjects.constructor === Object) === false &&
       (allProjects &&
         Object.keys(allProjects).length === 0 &&
-        allProjects.constructor === Object) === false
+        allProjects.constructor === Object) === false &&
+      userOption.length !== 0
     ) {
       let tempArray = [];
       let tempObj = {};
@@ -176,7 +179,9 @@ const PermissionDashboard = () => {
         for (const [project_code, project_detail] of Object.entries(
           allProjects
         )) {
-          tempObj["auth0-user-id"] = user_id;
+          tempObj["auth0-user-id"] = userOption.find(
+            (user) => user.value === user_id
+          ).label;
           tempObj[project_code] = available_projects.includes(
             project_detail.project_id
           )
@@ -189,7 +194,53 @@ const PermissionDashboard = () => {
 
       setTableBody(tempArray);
     }
-  }, [allAvailableProjects, allProjects]);
+  }, [allAvailableProjects, allProjects, userOption]);
+
+  /*
+    Fetching user information from the API(Auth0)
+  */
+  useEffect(() => {
+    const abortController = new AbortController();
+    const signal = abortController.signal;
+
+    const getUserInfo = async () => {
+      try {
+        const token = await getTokenSilently();
+
+        await fetch(
+          CONSTANTS.CORE_API_BASE_URL + CONSTANTS.MIDDLEWARE_API_ROUTE_GET_USER,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            signal: signal,
+          }
+        )
+          .then(handleErrors)
+          .then(async (users) => {
+            const responseUserData = await users.json();
+            setUserData(responseUserData);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getUserInfo();
+
+    return () => {
+      abortController.abort();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (Object.entries(userData).length > 0) {
+      setUserOption(createProjectIDArray(userData));
+    }
+  }, [userData]);
 
   return (
     <Paper className={classes.root}>
