@@ -31,8 +31,6 @@ const PermissionDashboard = () => {
   const [userData, setUserData] = useState({});
   const [userOption, setUserOption] = useState([]);
 
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [allProjects, setAllProjects] = useState({});
   const [tableHeaders, setTableHeaders] = useState([]);
 
@@ -277,7 +275,6 @@ const PermissionDashboard = () => {
           </TableHead>
           <TableBody>
             {tableBody
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((eachUser) => {
                 return (
                   <TableRow
