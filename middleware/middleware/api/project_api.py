@@ -8,14 +8,15 @@ from ..auth0 import get_user_id
 
 
 # Site Selection
+def get_all_projects_from_project_api():
+    return proxy_to_api(request, "api/project/ids/get", "GET",).get_json()
+
+
 @app.route("/projectAPI/ids/get", methods=["GET"])
 @requires_auth
 def get_available_project_ids():
     user_id = get_user_id()
-    all_projects_from_project_api = proxy_to_api(
-        request, "api/project/ids/get", "GET",
-    ).get_json()
-    return get_available_projects(user_id, all_projects_from_project_api)
+    return get_available_projects(user_id, get_all_projects_from_project_api())
 
 
 @app.route("/projectAPI/sites/get", methods=["GET"])

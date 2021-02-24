@@ -3,9 +3,9 @@ from jose import jwt
 
 from .. import db
 from ..server import app
-from ..utils import proxy_to_api
 from ..auth0 import get_token_auth_header, get_users
 from ..decorator import requires_auth
+from . import project_api
 
 
 @app.route("/user", methods=["GET"])
@@ -39,11 +39,11 @@ def get_addable_projects_with_project_api():
     to forward to Project API this request.
     """
     requested_user_id = request.query_string.decode("utf-8").split("=")[1]
-    all_projects_from_project_api = proxy_to_api(
-        request, "api/project/ids/get", "GET"
-    ).get_json()
+
     return jsonify(
-        db.get_addable_projects(requested_user_id, all_projects_from_project_api)
+        db.get_addable_projects(
+            requested_user_id, project_api.get_all_projects_from_project_api()
+        )
     )
 
 
@@ -54,11 +54,11 @@ def get_allocated_projects():
     Will be used for Allocated Projects dropdown
     """
     requested_user_id = request.query_string.decode("utf-8").split("=")[1]
-    all_projects_from_project_api = proxy_to_api(
-        request, "api/project/ids/get", "GET"
-    ).get_json()
+
     return jsonify(
-        db.get_available_projects(requested_user_id, all_projects_from_project_api)
+        db.get_available_projects(
+            requested_user_id, project_api.get_all_projects_from_project_api()
+        )
     )
 
 
@@ -74,3 +74,20 @@ def allocate_projects_to_user_call():
 def remove_projects_from_user_call():
     """Remove the chosen project(s) from the chosen user."""
     return jsonify(db.remove_projects_from_user())
+
+
+@app.route(
+    "/middlewareAPI/projectAPI/all_projects_from_project_api/get", methods=["GET"]
+)
+@requires_auth
+def all_projects_for_permission_dashboard():
+    """Get all possible projects to draw columns in the dashboard"""
+    unfiltered_projects = project_api.get_all_projects_from_project_api()
+    return db.filter_the_projects_for_dashboard(unfiltered_projects)
+
+
+@app.route("/middlewareAPI/available_project/get")
+@requires_auth
+def all_rows_from_available_project_table():
+    """Get all available projects fomr the available_project table"""
+    return db.get_all_projects_from_available_project_table()
