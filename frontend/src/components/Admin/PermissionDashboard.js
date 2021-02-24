@@ -7,6 +7,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
+import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 
 import { handleErrors, createProjectIDArray } from "utils/Utils";
@@ -16,7 +17,6 @@ import * as CONSTANTS from "constants/Constants";
 const useStyles = makeStyles({
   root: {
     width: "100%",
-    height: "95%",
   },
   container: {
     maxHeight: "85%",
@@ -36,6 +36,19 @@ const PermissionDashboard = () => {
 
   const [allAvailableProjects, setAllAvailableProjects] = useState({});
   const [tableBody, setTableBody] = useState([]);
+
+  // Hooks for Pagination
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
 
   /*
     Fetchig All projets we have from Project API to become a table's header
@@ -263,11 +276,7 @@ const PermissionDashboard = () => {
           <TableHead>
             <TableRow>
               {tableHeaders.map((header) => (
-                <TableCell
-                  key={header.id}
-                  style={{ minWidth: header.minWidth }}
-                  align={"center"}
-                >
+                <TableCell key={header.id} align={"center"}>
                   {header.label}
                 </TableCell>
               ))}
@@ -275,6 +284,7 @@ const PermissionDashboard = () => {
           </TableHead>
           <TableBody>
             {tableBody
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((eachUser) => {
                 return (
                   <TableRow
@@ -285,7 +295,6 @@ const PermissionDashboard = () => {
                   >
                     {tableHeaders.map((header) => {
                       const value = eachUser[header.id];
-                      console.log(eachUser[header.id]);
                       return (
                         <TableCell
                           key={header.id}
@@ -308,6 +317,15 @@ const PermissionDashboard = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      <TablePagination
+        rowsPerPageOptions={[10, 25]}
+        component="div"
+        count={tableBody.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onChangePage={handleChangePage}
+        onChangeRowsPerPage={handleChangeRowsPerPage}
+      />
     </Paper>
   );
 };
