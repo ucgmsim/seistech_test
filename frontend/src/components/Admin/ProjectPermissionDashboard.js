@@ -23,7 +23,7 @@ const useStyles = makeStyles({
   },
 });
 
-const PermissionDashboard = () => {
+const ProjectPermissionDashboard = () => {
   const { getTokenSilently } = useAuth0();
 
   const classes = useStyles();
@@ -330,4 +330,4 @@ const PermissionDashboard = () => {
   );
 };
 
-export default PermissionDashboard;
+export default ProjectPermissionDashboard;
