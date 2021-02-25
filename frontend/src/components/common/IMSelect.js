@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
 
-import GuideTooltip from "./GuideTooltip";
+import { GuideTooltip } from "components/common";
 
 import { createSelectArray } from "utils/Utils";
 

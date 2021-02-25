@@ -1,17 +1,19 @@
-import React, { useState, useEffect, useContext } from "react";
-import { Fragment } from "react";
-import { useAuth0 } from "components/common/ReactAuth0SPA";
-import * as CONSTANTS from "constants/Constants";
+import React, { Fragment, useState, useEffect, useContext } from "react";
+
 import { Tabs, Tab } from "react-bootstrap";
 import $ from "jquery";
 
-import LoadingSpinner from "components/common/LoadingSpinner";
-import DownloadButton from "components/common/DownloadButton";
-import GuideMessage from "components/common/GuideMessage";
-import ErrorMessage from "components/common/ErrorMessage";
-
+import { useAuth0 } from "components/common/ReactAuth0SPA";
 import { GlobalContext } from "context";
-import ContributionTable from "../../common/Disaggregation/ContributionTable";
+import * as CONSTANTS from "constants/Constants";
+
+import {
+  LoadingSpinner,
+  DownloadButton,
+  GuideMessage,
+  ErrorMessage,
+  ContributionTable,
+} from "components/common";
 import { handleErrors } from "utils/Utils";
 
 const HazadViewerDisaggregation = () => {

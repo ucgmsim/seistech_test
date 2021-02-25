@@ -1,9 +1,10 @@
 import React, { useContext, Fragment, useEffect, useState } from "react";
+
 import Select from "react-select";
 
+import * as CONSTANTS from "constants/Constants";
 import { GlobalContext } from "context";
 import { useAuth0 } from "components/common/ReactAuth0SPA";
-import * as CONSTANTS from "constants/Constants";
 import { handleErrors } from "utils/Utils";
 
 const EnsembleSelect = () => {

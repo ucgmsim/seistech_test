@@ -1,10 +1,12 @@
 import React, { useState, useContext, useEffect, Fragment } from "react";
+
 import { v4 as uuidv4 } from "uuid";
+import TextField from "@material-ui/core/TextField";
+
 import { GlobalContext } from "context";
 import * as CONSTANTS from "constants/Constants";
 import { disableScrollOnNumInput } from "utils/Utils";
-import GuideTooltip from "components/common/GuideTooltip";
-import TextField from "@material-ui/core/TextField";
+import { GuideTooltip } from "components/common";
 
 const DisaggregationSection = () => {
   const { setDisaggComputeClick, selectedIM, setDisaggAnnualProb } = useContext(

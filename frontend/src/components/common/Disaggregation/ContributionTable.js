@@ -1,7 +1,7 @@
 import React from "react";
 import * as CONSTANTS from "constants/Constants";
 import { renderSigfigs } from "utils/Utils";
-import ErrorMessage from "components/common/ErrorMessage";
+import { ErrorMessage } from "components/common";
 
 const ContributionTable = ({ disaggData }) => {
   if (disaggData !== null && !disaggData.hasOwnProperty("error")) {
@@ -66,9 +66,7 @@ const ContributionTable = ({ disaggData }) => {
       </div>
     );
   }
-  return (
-    <ErrorMessage />
-  );
+  return <ErrorMessage />;
 };
 
 export default ContributionTable;

@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { handleErrors, createProjectIDArray } from "utils/Utils";
 import { useAuth0 } from "components/common/ReactAuth0SPA";
-import ModalComponent from "components/common/ModalComponent";
+import { ModalComponent } from "components/common";
 import * as CONSTANTS from "constants/Constants";
 
 const EditUserPermission = () => {

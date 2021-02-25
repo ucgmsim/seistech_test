@@ -1,8 +1,9 @@
 import React from "react";
 
 import Plot from "react-plotly.js";
+
 import { PLOT_MARGIN, PLOT_CONFIG } from "constants/Constants";
-import ErrorMessage from "components/common/ErrorMessage";
+import { ErrorMessage } from "components/common";
 import { sortIMs } from "utils/Utils";
 
 import "assets/style/GMSPlot.css";
@@ -53,7 +54,7 @@ const GMSViewerSpectra = ({ gmsData, periods, im_type, im_j }) => {
         sortedCDFY[IM] = cdfY[IM];
         sortedRealisations[IM] = realisations[IM];
         sortedSelectedGMs[IM] = selectedGMs[IM];
-      // If IM is equal to IM Type, we put im_j as a y value, selectedGMs is a bit different as the Core API returns with its own data for this IM (which is equal to IM Type)
+        // If IM is equal to IM Type, we put im_j as a y value, selectedGMs is a bit different as the Core API returns with its own data for this IM (which is equal to IM Type)
       } else {
         sortedCDFX[IM] = values;
         sortedCDFY[IM] = im_j;
@@ -84,7 +85,7 @@ const GMSViewerSpectra = ({ gmsData, periods, im_type, im_j }) => {
         // 0.84 (84th percentile)
         const higherPercentileFound = values.find((element) => element >= 0.84);
         higherPercenIndexObj[IM] = values.indexOf(higherPercentileFound);
-      // If IM is equal to IM Type, then we want to make one point to be met for whole lines, regardless of percentiles
+        // If IM is equal to IM Type, then we want to make one point to be met for whole lines, regardless of percentiles
       } else {
         medianIndexObj[IM] = im_j;
         lowerPercenIndexObj[IM] = im_j;
