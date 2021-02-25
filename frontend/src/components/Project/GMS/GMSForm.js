@@ -16,7 +16,7 @@ import { renderSigfigs, handleErrors } from "utils/Utils";
 
 import "assets/style/GMSForm.css";
 
-const GmsForm = () => {
+const GMSForm = () => {
   const { getTokenSilently } = useAuth0();
 
   const {
@@ -30,4 +30,4 @@ const GmsForm = () => {
   return <Fragment>Project - GMSForm</Fragment>;
 };
 
-export default GmsForm;
+export default GMSForm;
