@@ -91,10 +91,10 @@ def all_projects_for_permission_dashboard():
     return db.filter_the_projects_for_dashboard(unfiltered_projects)
 
 
-@app.route("/middlewareAPI/available_project/get")
+@app.route("/middlewareAPI/available_project/get", methods=["GET"])
 @requires_auth
 def all_rows_from_available_project_table():
-    """Get all available projects fomr the available_project table"""
+    """Get all available projects from the available_project table"""
     return db.get_all_projects_from_available_project_table()
 
 
@@ -103,3 +103,17 @@ def all_rows_from_available_project_table():
 def update_access_permission_call():
     """Update the Granted Permission with user's auth0-id and their permission list"""
     return jsonify(db.update_granted_permission_table())
+
+
+@app.route("/middlewareAPI/all_page_permission/get", methods=["GET"])
+@requires_auth
+def get_all_permission_call():
+    """Pull every permission from Page_Access_Permission table"""
+    return jsonify({"all_permission": db.get_all_permission()})
+
+
+@app.route("/middlewareAPI/all_granted_permission/get", methods=["GET"])
+@requires_auth
+def get_all_granted_permission_call():
+    """Pull every granted permission from Granted_Permission table"""
+    return db.get_all_granted_permission()

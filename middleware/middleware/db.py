@@ -431,3 +431,31 @@ def update_granted_permission_table():
         _add_permission_to_db(requested_user_id, permission)
 
     return "DONE"
+
+
+def get_all_permission():
+    """Read every row from Page_Access_Permission table"""
+    # Get all available permission from the DB.
+    all_permission_list = models.PageAccessPermission.query.all()
+
+    # Create a list juts with permission name
+
+    return [permission.permission_name for permission in all_permission_list]
+
+
+def get_all_granted_permission():
+    """Read every row from Granted_Permission table"""
+    # Get all granted permission from the DB.
+    all_granted_permission_list = models.GrantedPermission.query.all()
+
+    # return a list of a dictionary in a form of
+    # {
+    #   user_id: user_id,
+    #   permission_name: [permission_name]
+    # }
+    granted_permission_dict = defaultdict(list)
+
+    for permission in all_granted_permission_list:
+        granted_permission_dict[permission.user_id].append(permission.permission_name)
+
+    return granted_permission_dict
