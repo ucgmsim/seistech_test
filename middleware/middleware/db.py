@@ -414,12 +414,52 @@ def _add_permission_to_db(user_id, permission):
         print(f"{user_id} already has a permission with ${permission}")
 
 
+def _remove_illegal_permission(user_id, illegal_permission):
+    """granted_permission table is outdated, remove illegal permission to update the dashboard"""
+    illegal_permission_row = (
+        models.GrantedPermission.query.filter_by(user_id=user_id)
+        .filter_by(permission_name=illegal_permission)
+        .first()
+    )
+
+    server.db.session.delete(illegal_permission_row)
+    server.db.session.commit()
+    server.db.session.flush()
+
+
+def _filter_granted_permission_table(user_id, trusted_permission_list):
+    """Filtering the granted_permission table first
+
+    If the access token has permission of A, B, C but granted_permission table
+    has permission of A, B, C, D. Then remove the permission D from the
+    granted_permission table as the token is the trusted source of permission.
+
+    Parameters
+    ----------
+    user_id: string
+        It will be used to find a list of permission with the function,
+        _get_all_granted_permission_for_a_user(user_id)
+    trusted_permission_list: list
+        The list to be compared with the list of permission from granted_permission
+        table
+    """
+    # Get a list of permission that are allocated to this user
+    unfiltered_granted_permission_list = _get_all_granted_permission_for_a_user(user_id)
+
+    for permission in unfiltered_granted_permission_list:
+        if permission not in trusted_permission_list:
+            _remove_illegal_permission(user_id, permission)
+
+
 def update_granted_permission_table():
     """Insert users' granted permission to a table, Granted_Permission"""
     data = json.loads(request.data.decode())
 
     requested_user_id = data["user_id"]
     requested_permission_list = data["permission_list"]
+
+    # Filter the granted_permission table first before we check/update
+    _filter_granted_permission_table(requested_user_id, requested_permission_list)
 
     print(f"Check whether the user is in the DB, if not, add the person to the DB")
     if not _is_user_in_db(requested_user_id):
@@ -441,6 +481,18 @@ def get_all_permission():
     # Create a list juts with permission name
 
     return [permission.permission_name for permission in all_permission_list]
+
+
+def _get_all_granted_permission_for_a_user(requested_user_id):
+    """Read every row where the user_id = requested_user_id"""
+    all_granted_permission_for_a_user_list = models.GrantedPermission.query.filter_by(
+        user_id=requested_user_id
+    ).all()
+
+    return [
+        permission.permission_name
+        for permission in all_granted_permission_for_a_user_list
+    ]
 
 
 def get_all_granted_permission():
