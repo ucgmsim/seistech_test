@@ -174,7 +174,7 @@ const ProjectPermissionDashboard = () => {
       (allProjects &&
         Object.keys(allProjects).length === 0 &&
         allProjects.constructor === Object) === false &&
-      userOption.length !== 0
+      userOption.length > 0
     ) {
       let tempArray = [];
       let tempObj = {};
