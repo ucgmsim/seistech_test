@@ -161,7 +161,6 @@ export const Provider = (props) => {
           .then(handleErrors)
           .then(async (response) => {
             const decodedToken = await response.json();
-            console.log(decodedToken.permissions);
             setPermissions(decodedToken.permissions);
 
             let requestOptions = {
