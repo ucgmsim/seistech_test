@@ -302,11 +302,6 @@ def _add_available_project_to_db(user_id, project_name):
         Selected project's project code.
         E.g., gnzl, mac_raes, nzgs_pga, soffitel_qtwn...
     """
-    print(f"Check whether the user is in the DB, if not, add the person to the DB")
-    if not _is_user_in_db(user_id):
-        print(f"{user_id} is not in the DB so updating it.")
-        _add_user_to_db(user_id)
-        server.db.session.flush()
 
     print(f"Check whether the project is in the DB, if not, add the project to the DB")
     if not _is_project_in_db(project_name):
@@ -328,6 +323,12 @@ def allocate_projects_to_user():
 
     requested_user_id = data["user_info"]["value"]
     requested_project_list = data["project_info"]
+
+    print(f"Check whether the user is in the DB, if not, add the person to the DB")
+    if not _is_user_in_db(requested_user_id):
+        print(f"{requested_user_id} is not in the DB so updating it.")
+        _add_user_to_db(requested_user_id)
+        server.db.session.flush()
 
     for project in requested_project_list:
         _add_available_project_to_db(requested_user_id, project["value"])
@@ -397,13 +398,6 @@ def _add_permission_to_db(user_id, permission):
         Selected user's permission
         E.g., hazard, hazard:hazard, project...
     """
-
-    print(f"Check whether the user is in the DB, if not, add the person to the DB")
-    if not _is_user_in_db(user_id):
-        print(f"{user_id} is not in the DB so updating it.")
-        _add_user_to_db(user_id)
-        server.db.session.flush()
-
     print(
         f"Check whether the permission is in the DB, if not, add the permission to the DB"
     )
@@ -426,6 +420,12 @@ def update_granted_permission_table():
 
     requested_user_id = data["user_id"]
     requested_permission_list = data["permission_list"]
+
+    print(f"Check whether the user is in the DB, if not, add the person to the DB")
+    if not _is_user_in_db(requested_user_id):
+        print(f"{requested_user_id} is not in the DB so updating it.")
+        _add_user_to_db(requested_user_id)
+        server.db.session.flush()
 
     for permission in requested_permission_list:
         _add_permission_to_db(requested_user_id, permission)
