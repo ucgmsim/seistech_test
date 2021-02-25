@@ -258,12 +258,41 @@ def _add_project_to_db(project_name):
         print(f"Project {project_name} already exists")
 
 
+def _is_permission_in_db(permission_name):
+    """To check whether the given permission is in the DB
+
+    Parameters
+    ----------
+    permission_name: string
+        A permission name we use internally.
+        E.g., hazard, hazard:hazard, project...
+    """
+    return bool(
+        models.PageAccessPermission.query.filter_by(
+            permission_name=permission_name
+        ).first()
+    )
+
+
+def _add_permission_to_db(permission_name):
+    """Add a new permission to the MariaDB if not exist
+
+    Parameters
+    ----------
+    permission_name: string
+        A permission name we use internally.
+        E.g., hazard, hazard:hazard, project...
+    """
+    if not _is_permission_in_db(permission_name):
+        server.db.session.add(models.PageAccessPermission(permission_name))
+        server.db.session.commit()
+        server.db.session.flush()
+    else:
+        print(f"Project {permission_name} already exists")
+
+
 def _add_available_project_to_db(user_id, project_name):
     """This is where we insert data to the bridging table, available_projects
-    Unlike any other query, to a bridging table, we need to do the following steps:
-    1. Find a User object by using user_id
-    2. Find a Project object by using project_name
-    3. Append(Allocate, they use Append for a bridging table) the User object to the Project object
 
     Parameters
     ----------
@@ -285,7 +314,7 @@ def _add_available_project_to_db(user_id, project_name):
         _add_project_to_db(project_name)
         server.db.session.flush()
 
-    # Find objects to user SQLAlchemy way of inserting to a bridging table.
+    # Find Find a project object with a given project_name to get its project id
     project_obj = models.Project.query.filter_by(project_name=project_name).first()
 
     server.db.session.add(models.AvailableProject(user_id, project_obj.project_id))
@@ -344,5 +373,61 @@ def remove_projects_from_user():
 
     for project in requested_project_list:
         _remove_allocated_projects(requested_user_id, project["value"])
+
+    return "DONE"
+
+
+def _is_in_granted_permission(user_id, permission):
+    """Check whether there is a row with given user_id & permission"""
+    return bool(
+        models.GrantedPermission.query.filter_by(user_id=user_id)
+        .filter_by(permission_name=permission)
+        .first()
+    )
+
+
+def _add_permission_to_db(user_id, permission):
+    """This is where we insert data to the bridging table, granted_permission
+
+    Parameters
+    ----------
+    user_id: string
+        Selected user's Auth0 id
+    permission: string
+        Selected user's permission
+        E.g., hazard, hazard:hazard, project...
+    """
+
+    print(f"Check whether the user is in the DB, if not, add the person to the DB")
+    if not _is_user_in_db(user_id):
+        print(f"{user_id} is not in the DB so updating it.")
+        _add_user_to_db(user_id)
+        server.db.session.flush()
+
+    print(
+        f"Check whether the permission is in the DB, if not, add the permission to the DB"
+    )
+    if not _is_permission_in_db(permission):
+        print(f"{permission} is not in the DB so updating it.")
+        _add_permission_to_db(permission)
+        server.db.session.flush()
+
+    if not _is_in_granted_permission(user_id, permission):
+        server.db.session.add(models.GrantedPermission(user_id, permission))
+        server.db.session.commit()
+        server.db.session.flush()
+    else:
+        print(f"{user_id} already has a permission with ${permission}")
+
+
+def update_granted_permission_table():
+    """Insert users' granted permission to a table, Granted_Permission"""
+    data = json.loads(request.data.decode())
+
+    requested_user_id = data["user_id"]
+    requested_permission_list = data["permission_list"]
+
+    for permission in requested_permission_list:
+        _add_permission_to_db(requested_user_id, permission)
 
     return "DONE"

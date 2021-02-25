@@ -67,6 +67,8 @@ export const MIDDLEWARE_API_ROUTE_GET_ALL_PROJECTS_FROM_PROJECT_API =
   "middlewareAPI/projectAPI/all_projects_from_project_api/get"
 export const MIDDLEWARE_API_ROUTE_GET_ALL_ROW_FROM_AVAILABLE_PROJECT_TABLE =
   "middlewareAPI/available_project/get"
+export const MIDDLEWARE_API_ROUTE_UPDATE_GRANTED_PERMISSION_TABLE = 
+  "middlewareAPI/update_access_permission"
 /* 
   Words 
   TODO - See whether it's worth putting as constands due to structure.

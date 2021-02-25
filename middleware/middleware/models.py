@@ -22,6 +22,7 @@ class AvailableProject(db.Model):
 class Project(db.Model):
     project_id = db.Column(db.Integer, primary_key=True)
     project_name = db.Column(db.String(100))
+
     users = db.relationship("AvailableProject", back_populates="project")
 
     def __init__(self, name):
@@ -31,14 +32,45 @@ class Project(db.Model):
         return "<Project %r>" % self.project_name
 
 
+class GrantedPermission(db.Model):
+    __tablename__ = "granted_permission"
+    user_id = db.Column(
+        "user_id", db.String(100), db.ForeignKey("user.user_id"), primary_key=True
+    )
+    permission_name = db.Column(
+        "permission_name",
+        db.String(100),
+        db.ForeignKey("page_access_permission.permission_name"),
+        primary_key=True,
+    )
+
+    user = db.relationship("User", back_populates="permissions")
+    permission = db.relationship("PageAccessPermission", back_populates="users")
+
+    def __init__(self, user_id, permission_name):
+        self.user_id = user_id
+        self.permission_name = permission_name
+
+
+class PageAccessPermission(db.Model):
+    __tablename__ = "page_access_permission"
+    permission_name = db.Column(db.String(100), primary_key=True)
+
+    users = db.relationship("GrantedPermission", back_populates="permission")
+
+    def __init__(self, permission_name):
+        self.permission_name = permission_name
+
+    def __repr__(self):
+        return "<Permission to %r>" % self.permission_name
+
+
 class User(db.Model):
     user_id = db.Column(db.String(100), primary_key=True)
     history = db.relationship("History", backref="owner")
 
-    projects = db.relationship(
-        "AvailableProject",
-        back_populates="user",
-    )
+    projects = db.relationship("AvailableProject", back_populates="user",)
+    permissions = db.relationship("GrantedPermission", back_populates="user")
 
     def __init__(self, user_id):
         self.user_id = user_id

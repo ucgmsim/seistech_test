@@ -140,8 +140,10 @@ export const Provider = (props) => {
   const [permissions, setPermissions] = useState([]);
 
   useEffect(() => {
+    const abortController = new AbortController();
+    const signal = abortController.signal;
     // To get user data, we need to check that it is authenticated first
-    if (isAuthenticated) {
+    if (isAuthenticated && permissions.length === 0) {
       const callGetUserData = async () => {
         const token = await getTokenSilently();
 
@@ -151,20 +153,44 @@ export const Provider = (props) => {
             headers: {
               Authorization: `Bearer ${token}`,
             },
+            signal: signal,
           }
         )
           .then(handleErrors)
           .then(async (response) => {
-            const ud = await response.json();
+            const decodedToken = await response.json();
+            console.log(decodedToken.permissions);
+            setPermissions(decodedToken.permissions);
 
-            let userPermissions = ud.permissions;
+            let requestOptions = {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify({
+                user_id: decodedToken.id,
+                permission_list: decodedToken.permissions,
+              }),
+              signal: signal,
+            };
 
-            setPermissions(userPermissions);
+            return fetch(
+              CONSTANTS.CORE_API_BASE_URL +
+                CONSTANTS.MIDDLEWARE_API_ROUTE_UPDATE_GRANTED_PERMISSION_TABLE,
+              requestOptions
+            );
+          })
+          .then(handleErrors)
+          .then(async () => {
+            console.log("Granted_Permission table is updated");
+          })
+          .catch((error) => {
+            console.log(error);
           });
       };
       callGetUserData();
     }
-  }, []);
+  }, [isAuthenticated]);
 
   const hasPermission = (permission) => {
     return permissions.includes(permission);

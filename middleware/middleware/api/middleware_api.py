@@ -9,11 +9,16 @@ from . import project_api
 
 
 @app.route("/user", methods=["GET"])
-def get_user_permission():
+def get_user_key_info():
     """Getting users permission on their first launch"""
     token = get_token_auth_header()
     unverified_claims = jwt.get_unverified_claims(token)
-    return jsonify({"permissions": unverified_claims["permissions"]})
+    return jsonify(
+        {
+            "permissions": unverified_claims["permissions"],
+            "id": unverified_claims["sub"].split("|")[1],
+        }
+    )
 
 
 # Edit User
@@ -91,3 +96,10 @@ def all_projects_for_permission_dashboard():
 def all_rows_from_available_project_table():
     """Get all available projects fomr the available_project table"""
     return db.get_all_projects_from_available_project_table()
+
+
+@app.route("/middlewareAPI/update_access_permission", methods=["POST"])
+@requires_auth
+def update_access_permission_call():
+    """Update the Granted Permission with user's auth0-id and their permission list"""
+    return jsonify(db.update_granted_permission_table())
