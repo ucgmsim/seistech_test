@@ -1,9 +1,11 @@
 import React, { createContext, useState, useEffect } from "react";
-import { useAuth0 } from "components/common/ReactAuth0SPA";
-import PropTypes from "prop-types";
-import { handleErrors } from "utils/Utils";
 
+import PropTypes from "prop-types";
+
+import { useAuth0 } from "components/common/ReactAuth0SPA";
 import * as CONSTANTS from "constants/Constants";
+
+import { handleErrors } from "utils/Utils";
 
 export const Context = createContext({});
 

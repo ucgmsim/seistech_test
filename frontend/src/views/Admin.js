@@ -2,10 +2,12 @@ import React, { Fragment } from "react";
 
 import { Tabs, Tab } from "react-bootstrap";
 
-import EditUserPermission from "components/Admin/EditUserPermission";
-import ProjectPermissionDashboard from "components/Admin/ProjectPermissionDashboard";
-import PagePermissionDashboard from "components/Admin/PagePermissionDashboard";
-import SingleColumnView from "components/common/SingleColumnView";
+import {
+  EditUserPermission,
+  ProjectPermissionDashboard,
+  PagePermissionDashboard,
+} from "components/Admin";
+import { SingleColumnView } from "components/common";
 
 import "assets/style/AdminPage.css";
 

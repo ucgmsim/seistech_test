@@ -1,9 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "assets/style/index.css";
-import App from "./App";
+
 import { Auth0Provider } from "./components/common/ReactAuth0SPA";
+
+import App from "./App";
 import History from "utils/History";
+
+import "assets/style/index.css";
 
 const onRedirectCallback = (appState) => {
   History.push(

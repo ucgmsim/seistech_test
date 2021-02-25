@@ -1,17 +1,15 @@
 import React, { useContext } from "react";
+
 import { Navbar, Nav, NavLink, NavbarBrand } from "reactstrap";
 import { NavLink as RouterNavLink, Link } from "react-router-dom";
 
-import "assets/style/NavBar.css";
-
 import { useAuth0 } from "components/common/ReactAuth0SPA";
-
 import { GlobalContext } from "context";
 
-import SeisTechLogo from "assets/seistech_long_logo_simple.png";
+import { LogoutButton, LoginButton } from "components/NavBar";
 
-import LogoutButton from "./LogoutButton";
-import LoginButton from "./LoginButton";
+import "assets/style/NavBar.css";
+import SeisTechLogo from "assets/seistech_long_logo_simple.png";
 
 const MainNav = () => {
   const { hasPermission } = useContext(GlobalContext);

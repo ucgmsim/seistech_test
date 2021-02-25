@@ -5,14 +5,12 @@ import { GlobalContext } from "context";
 
 import TwoColumnView from "components/common/TwoColumnView";
 
-import SiteSelectionForm from "components/Project/SiteSelection/SiteSelectionForm";
-import SiteSelectionViewer from "components/Project/SiteSelection/SiteSelectionViewer";
-
-import GmsForm from "components/Project/GMS/GmsForm";
-import GmsViewer from "components/Project/GMS/GmsViewer";
-
-import HazardForm from "components/Project/SeismicHazard/HazardForm";
-import HazardViewer from "components/Project/SeismicHazard/HazardViewer";
+import {
+  SiteSelectionForm,
+  SiteSelectionViewer,
+} from "components/Project/SiteSelection";
+import { GMSForm, GMSViewer } from "components/Project/GMS";
+import { HazardForm, HazardViewer } from "components/Project/SeismicHazard";
 
 const Project = () => {
   const { projectId, projectLocation, projectVS30 } = useContext(GlobalContext);
@@ -42,13 +40,8 @@ const Project = () => {
           <TwoColumnView cpanel={HazardForm} viewer={HazardViewer} />
         </Tab>
 
-        <Tab
-          eventKey="gms"
-          title="GMS"
-          disabled
-          tabClassName="gms-tab"
-        >
-          <TwoColumnView cpanel={GmsForm} viewer={GmsViewer} />
+        <Tab eventKey="gms" title="GMS" disabled tabClassName="gms-tab">
+          <TwoColumnView cpanel={GMSForm} viewer={GMSViewer} />
         </Tab>
       </Tabs>
     </Fragment>

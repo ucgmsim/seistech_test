@@ -5,15 +5,16 @@ import { GlobalContext } from "context";
 import { useAuth0 } from "components/common/ReactAuth0SPA";
 import * as CONSTANTS from "constants/Constants";
 
-import LoadingSpinner from "components/common/LoadingSpinner";
-import DownloadButton from "components/common/DownloadButton";
-import GuideMessage from "components/common/GuideMessage";
-import ErrorMessage from "components/common/ErrorMessage";
+import {
+  LoadingSpinner,
+  DownloadButton,
+  GuideMessage,
+  ErrorMessage,
+  HazardEnsemblePlot,
+  HazardBranchPlot,
+} from "components/common";
 import { handleErrors } from "utils/Utils";
-
-import HazardEnsemblePlot from "../../common/HazardCurve/HazardEnsemblePlot";
-import HazardBranchPlot from "../../common/HazardCurve/HazardBranchPlot";
-import HazardCurveMetadata from "./HazardCurveMetadata";
+import { HazardCurveMetadata } from "components/Project/SeismicHazard";
 
 const HazardViewerHazardCurve = () => {
   const { getTokenSilently } = useAuth0();

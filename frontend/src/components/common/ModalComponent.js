@@ -1,4 +1,5 @@
 import React from "react";
+
 import { Modal, ModalHeader, ModalBody } from "reactstrap";
 
 import "assets/style/Modal.css";

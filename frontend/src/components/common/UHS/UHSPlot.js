@@ -1,4 +1,5 @@
 import React from "react";
+
 import Plot from "react-plotly.js";
 
 import { getPlotData, renderSigfigs } from "utils/Utils.js";

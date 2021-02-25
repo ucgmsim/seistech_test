@@ -1,14 +1,16 @@
 import React, { Fragment, useEffect, useState, useContext } from "react";
-import Tabs from "react-bootstrap/Tabs";
-import { Tab } from "react-bootstrap";
+
+import { Tabs, Tab } from "react-bootstrap";
 
 import { GlobalContext } from "context";
 
-import "assets/style/HazardForms.css";
+import {
+  HazardViewerHazardCurve,
+  HazardViewerDisaggregation,
+  HazardViewerUHS,
+} from "components/Project/SeismicHazard";
 
-import HazardViewerHazardCurve from "./HazardViewerHazardCurve";
-import HazardViewerDisaggregation from "./HazardViewerDisaggregation";
-import HazardViewerUHS from "./HazardViewerUHS";
+import "assets/style/HazardForms.css";
 
 const HazardViewer = () => {
   const {

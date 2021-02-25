@@ -7,10 +7,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 
-import { IMSelect, GuideTooltip } from "components/common";
 import * as CONSTANTS from "constants/Constants";
 import { GlobalContext } from "context";
 import { useAuth0 } from "components/common/ReactAuth0SPA";
+
+import { IMSelect, GuideTooltip } from "components/common";
 import { renderSigfigs, sortIMs, handleErrors } from "utils/Utils";
 
 import "assets/style/GMSForm.css";

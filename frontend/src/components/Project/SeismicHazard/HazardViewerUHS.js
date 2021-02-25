@@ -1,13 +1,16 @@
 import React, { Fragment, useEffect, useState, useContext } from "react";
-import { useAuth0 } from "components/common/ReactAuth0SPA";
+
 import * as CONSTANTS from "constants/Constants";
 import { GlobalContext } from "context";
 
-import UHSPlot from "../../common/UHS/UHSPlot";
-import LoadingSpinner from "components/common/LoadingSpinner";
-import DownloadButton from "components/common/DownloadButton";
-import GuideMessage from "components/common/GuideMessage";
-import ErrorMessage from "components/common/ErrorMessage";
+import { useAuth0 } from "components/common/ReactAuth0SPA";
+import {
+  UHSPlot,
+  LoadingSpinner,
+  DownloadButton,
+  GuideMessage,
+  ErrorMessage,
+} from "components/common";
 import { handleErrors } from "utils/Utils";
 
 const HazardViewerUHS = () => {

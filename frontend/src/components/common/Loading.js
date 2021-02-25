@@ -1,4 +1,5 @@
 import React from "react";
+
 import loading from "assets/loading.svg";
 
 import "assets/style/Spinner.css";

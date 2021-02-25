@@ -3,10 +3,11 @@ import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import { v4 as uuidv4 } from "uuid";
 
-import { handleErrors, createProjectIDArray } from "utils/Utils";
 import { useAuth0 } from "components/common/ReactAuth0SPA";
-import { ModalComponent } from "components/common";
 import * as CONSTANTS from "constants/Constants";
+
+import { ModalComponent } from "components/common";
+import { handleErrors, createProjectIDArray } from "utils/Utils";
 
 const EditUserPermission = () => {
   const { getTokenSilently } = useAuth0();

@@ -1,15 +1,14 @@
 import React, { useState, useContext, useEffect, Fragment } from "react";
 
+import Select from "react-select";
+import makeAnimated from "react-select/animated";
 import { v4 as uuidv4 } from "uuid";
+
+import * as CONSTANTS from "constants/Constants";
 import { GlobalContext } from "context";
 
 import { createSelectArray, checkIMwithPSA } from "utils/Utils";
-
-import Select from "react-select";
-import makeAnimated from "react-select/animated";
-
-import * as CONSTANTS from "constants/Constants";
-import GuideTooltip from "components/common/GuideTooltip";
+import { GuideTooltip } from "components/common";
 
 const UHSSection = () => {
   const {

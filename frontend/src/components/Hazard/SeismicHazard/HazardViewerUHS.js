@@ -3,6 +3,7 @@ import React, { Fragment, useEffect, useState, useContext } from "react";
 import { useAuth0 } from "components/common/ReactAuth0SPA";
 import * as CONSTANTS from "constants/Constants";
 import { GlobalContext } from "context";
+
 import {
   UHSPlot,
   LoadingSpinner,

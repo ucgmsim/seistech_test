@@ -3,6 +3,7 @@ import React, { useState, useEffect, useContext } from "react";
 import ReactMapGL, { Marker, NavigationControl } from "react-map-gl";
 
 import { GlobalContext } from "context";
+
 import { SiteSelectionMapPin } from "components/Hazard/SiteSelection";
 import {
   MAP_BOX_WIDTH,

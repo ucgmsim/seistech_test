@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 
-import { handleErrors, createProjectIDArray } from "utils/Utils";
 import { useAuth0 } from "components/common/ReactAuth0SPA";
-import { PermissionDashboard, LoadingSpinner } from "components/common";
 import * as CONSTANTS from "constants/Constants";
+
+import { handleErrors, createProjectIDArray } from "utils/Utils";
+import { PermissionDashboard, LoadingSpinner } from "components/common";
 
 import "assets/style/PermissionDashboard.css";
 

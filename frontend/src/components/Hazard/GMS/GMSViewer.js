@@ -14,14 +14,12 @@ import {
   GMSViewerMwRrupPlot,
   GMSViewerCausalParameters,
 } from "components/Hazard/GMS";
-
 import {
   LoadingSpinner,
   DownloadButton,
   GuideMessage,
   ErrorMessage,
 } from "components/common";
-
 import { handleErrors, GMSIMLabelConverter } from "utils/Utils";
 
 import "assets/style/GMSViewer.css";

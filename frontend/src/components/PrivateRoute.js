@@ -1,6 +1,7 @@
 import React, { useEffect, useContext } from "react";
-import PropTypes from "prop-types";
 import { Route, withRouter } from "react-router-dom";
+
+import PropTypes from "prop-types";
 
 import { useAuth0 } from "components/common/ReactAuth0SPA";
 import { GlobalContext } from "context";

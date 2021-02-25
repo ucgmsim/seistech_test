@@ -1,19 +1,17 @@
 import React, { Fragment, useContext } from "react";
 
 import { Tabs, Tab } from "react-bootstrap";
+
 import { GlobalContext } from "context";
 import { ENV } from "constants/Constants";
 
-import TwoColumnView from "components/common/TwoColumnView";
-
-import SiteSelectionForm from "components/Hazard/SiteSelection/SiteSelectionForm";
-import SiteSelectionViewer from "components/Hazard/SiteSelection/SiteSelectionViewer";
-
-import GMSForm from "components/Hazard/GMS/GMSForm";
-import GMSViewer from "components/Hazard/GMS/GMSViewer";
-
-import HazardForm from "components/Hazard/SeismicHazard/HazardForm";
-import HazardViewer from "components/Hazard/SeismicHazard/HazardViewer";
+import { TwoColumnView } from "components/common";
+import {
+  SiteSelectionForm,
+  SiteSelectionViewer,
+} from "components/Hazard/SiteSelection";
+import { GMSForm, GMSViewer } from "components/Hazard/GMS";
+import { HazardForm, HazardViewer } from "components/Hazard/SeismicHazard";
 
 const Hazard = () => {
   const { vs30, locationSetClick, nzCodeDefaultParams } = useContext(
