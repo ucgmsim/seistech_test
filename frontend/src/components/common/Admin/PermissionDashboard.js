@@ -10,6 +10,8 @@ import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 
+import "assets/style/PermissionDashboard.css";
+
 const useStyles = makeStyles({
   root: {
     width: "100%",
@@ -42,7 +44,12 @@ const PermissionDashboard = ({ tableHeaderData, tableBodyData }) => {
           <TableHead>
             <TableRow>
               {tableHeaderData.map((header) => (
-                <TableCell key={header.id} align={"center"}>
+                <TableCell
+                  key={header.id}
+                  align={"center"}
+                  // In the future, with more permission, activate this.
+                  // style={{ width: 200 }}
+                >
                   {header.label}
                 </TableCell>
               ))}
@@ -67,10 +74,24 @@ const PermissionDashboard = ({ tableHeaderData, tableBodyData }) => {
                           align={"center"}
                           style={
                             header.id === "auth0-user-id"
-                              ? { backgroundColor: "white" }
+                              ? {
+                                  backgroundColor: "white",
+                                  // In the future, more permission, activate this to make first column to be fixed
+                                  // position: "sticky",
+                                  // left: 0,
+                                  // zIndex: 1,
+                                }
                               : value === "true"
-                              ? { backgroundColor: "green" }
-                              : { backgroundColor: "red" }
+                              ? {
+                                  backgroundColor: "#7CAF80",
+                                  borderLeft: "1px soild white",
+                                  borderRight: "1px solid white",
+                                }
+                              : {
+                                  backgroundColor: "#ff6666",
+                                  borderLeft: "1px soild white",
+                                  borderRight: "1px solid white",
+                                }
                           }
                         >
                           {header.id === "auth0-user-id" ? value : null}
