@@ -79,7 +79,7 @@ def get_all_projects_from_available_project_table():
 def filter_the_projects_for_dashboard(unfiltered_projects):
     """Get all the available projects we have from Project API
     And customize the way we want to return to the frontend for two reasons.
-    1. For Table's header(will display a name of the project)
+    1. For Table's header(will display the name of the project)
     2. We can use this dictionary to filter the table to tell they have permission
 
     Parameters
@@ -168,13 +168,13 @@ def get_addable_projects(requested_user_id, all_projects):
     get_available_projects is there to do the cross-check for the Project tab,
     compare DB and Project API to see whether users have permission to access.
 
-    This function, get_addable_projects is for Edit User feature in the frontend.
+    This function, get_addable_projects is for the Edit User feature in the frontend.
     It compares the projects between the DB and Project API.
     Then it returns the options that are not intersecting.
     E.g. DB says A, B, C Projects
     Project API says A, B, C, D, E
 
-    Then this function will return D,E for the Frontend.
+    Then this function will return D, E for the Frontend.
 
     Parameters
     ----------
@@ -275,7 +275,7 @@ def _is_permission_in_db(permission_name):
 
 
 def _add_permission_to_db(permission_name):
-    """Add a new permission to the MariaDB if not exist
+    """Add new permission to the MariaDB if not exist
 
     Parameters
     ----------
@@ -430,8 +430,8 @@ def _remove_illegal_permission(user_id, illegal_permission):
 def _filter_granted_permission_table(user_id, trusted_permission_list):
     """Filtering the granted_permission table first
 
-    If the access token has permission of A, B, C but granted_permission table
-    has permission of A, B, C, D. Then remove the permission D from the
+    If the access token has the permission of A, B, C but granted_permission table
+    has the permission of A, B, C, D. Then remove the permission D from the
     granted_permission table as the token is the trusted source of permission.
 
     Parameters
@@ -478,8 +478,7 @@ def get_all_permission():
     # Get all available permission from the DB.
     all_permission_list = models.PageAccessPermission.query.all()
 
-    # Create a list juts with permission name
-
+    # Return a list just with permission name
     return [permission.permission_name for permission in all_permission_list]
 
 
@@ -500,7 +499,7 @@ def get_all_granted_permission():
     # Get all granted permission from the DB.
     all_granted_permission_list = models.GrantedPermission.query.all()
 
-    # return a list of a dictionary in a form of
+    # return a list of a dictionary in the form of
     # {
     #   user_id: user_id,
     #   permission_name: [permission_name]
