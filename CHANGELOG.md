@@ -1,3 +1,10 @@
+## February 26, 2021
+
+### Implement dashboards for Project Permission and Page Permission - ([PR #49](https://github.com/ucgmsim/seistech_psha_frontend/pull/49)
+
+- Now we have a permission config page with permission dashboards to check users' permission.
+- Hence, updated the User DB structure.
+
 ## February 22, 2021
 
 ### Fix Middleware's bug - Circular import - ([PR #48](https://github.com/ucgmsim/seistech_psha_frontend/pull/48)
