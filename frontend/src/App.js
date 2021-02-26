@@ -18,7 +18,7 @@ import {
   Profile,
   Footer,
   FrameworkDocView,
-  Admin,
+  PermissionConfig,
 } from "views";
 
 import History from "utils/History";
@@ -49,7 +49,11 @@ const App = () => {
 
                 <PrivateRoute path="/project" exact component={Project} />
 
-                <PrivateRoute path="/psha-admin" exact component={Admin} />
+                <PrivateRoute
+                  path="/permission-config"
+                  exact
+                  component={PermissionConfig}
+                />
 
                 <PrivateRoute path="/profile" exact component={Profile} />
 

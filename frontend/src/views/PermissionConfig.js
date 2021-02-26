@@ -6,12 +6,12 @@ import {
   EditUserPermission,
   ProjectPermissionDashboard,
   PagePermissionDashboard,
-} from "components/Admin";
+} from "components/PermissionConfig";
 import { SingleColumnView } from "components/common";
 
 import "assets/style/AdminPage.css";
 
-const Admin = () => {
+const PermissionConfig = () => {
   return (
     <Fragment>
       <Tabs defaultActiveKey="edit-user" className="admin-tabs">
@@ -35,4 +35,4 @@ const Admin = () => {
   );
 };
 
-export default Admin;
+export default PermissionConfig;

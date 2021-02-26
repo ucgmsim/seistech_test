@@ -40,7 +40,7 @@ PERMISSION_LIST = [
     "hazard:uhs",
     "hazard:gms",
     "project",
-    "psha-admin",
+    "permission-config",
 ]
 
 # Adding all users from Auth0 to the User table

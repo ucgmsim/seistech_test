@@ -10,7 +10,7 @@ import ProjectSelect from "./ProjectSelect";
 import SingleColumnView from "./SingleColumnView";
 import TwoColumnView from "./TwoColumnView";
 
-import PermissionDashboard from "./Admin/PermissionDashboard";
+import PermissionDashboard from "./PermissionConfig/PermissionDashboard";
 import ContributionTable from "./Disaggregation/ContributionTable";
 import HazardBranchPlot from "./HazardCurve/HazardBranchPlot";
 import HazardEnsemblePlot from "./HazardCurve/HazardEnsemblePlot";
