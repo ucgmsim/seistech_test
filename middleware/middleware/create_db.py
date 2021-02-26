@@ -2,8 +2,8 @@ import os
 
 from flask import Flask
 
-from ..custom_sqlalchemy import CustomSQLALchemy
-from ..auth0 import get_users
+from custom_sqlalchemy import CustomSQLALchemy
+from auth0 import get_users
 
 
 # DB Connection Setup
@@ -22,7 +22,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = CustomSQLALchemy(app)
 
-from ..models import *
+from models import *
 
 # Create tables - It only creates when tables don't exist
 db.create_all()
@@ -40,7 +40,7 @@ PERMISSION_LIST = [
     "hazard:uhs",
     "hazard:gms",
     "project",
-    "permission-config",
+    "psha-admin",
 ]
 
 # Adding all users from Auth0 to the User table
