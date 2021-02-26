@@ -62,7 +62,7 @@ const PagePermissionDashboard = () => {
   }, []);
 
   /*
-    Based on all permission name we pulled from above useEffect Hook,
+    Based on all permission name we pulled from the above useEffect Hook,
     Create an array of objects to set the table's header
   */
   useEffect(() => {
@@ -129,8 +129,8 @@ const PagePermissionDashboard = () => {
   /*
     Create an array of objects for table body
     We need to be sure that the following data aren't empty
-    1. allAvailableProjects -> Data from UserDB, Available_Project table
-    2. allProjects -> Data from Project API, All Projects we provide
+    1. allGrantedPermission -> Data from UserDB, Granted_Permission table
+    2. allPermission -> Data from UserDB, All permission we provide
     3. userOption -> Data from Auth0, existing users
   */
   useEffect(() => {
@@ -146,17 +146,17 @@ const PagePermissionDashboard = () => {
       let tempObj = {};
 
       /*
-      Loop through the object, allAvailableProjects
-      Nested loop through another object, allprojects
+      Loop through the object, allGrantedPermission
+      Nested loop through array, allPermission
 
       The key for a temp object property with "auth0-user-id", 
       is user-email. (using find function to find an object with auth0-id value
       This object is in the format of
       {value: auth0-id, label: email | auth0 or google auth}
-      Then from found object, use the label as we want email to be displayed
+      Then from a found object, use the label as we want email to be displayed
 
-      Then, compare if user's available_projects (projects with permission),
-      contains the project we provide, then its true else false.
+      Then, compare if user's granted_permission (Auth0 access permission),
+      contains the permission we provide, then it's true else false.
       )
     */
       for (const [user_id, Granted_permission] of Object.entries(
