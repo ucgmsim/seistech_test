@@ -45,17 +45,28 @@ const App = () => {
               <Switch>
                 <Route path="/" exact component={Home} />
 
-                <PrivateRoute path="/hazard" exact component={Hazard} />
+                <PrivateRoute
+                  path="/hazard"
+                  permission="hazard"
+                  exact
+                  component={Hazard}
+                />
 
-                <PrivateRoute path="/project" exact component={Project} />
+                <PrivateRoute
+                  path="/project"
+                  permission="project"
+                  exact
+                  component={Project}
+                />
 
                 <PrivateRoute
                   path="/permission-config"
+                  permission="psha-admin"
                   exact
                   component={PermissionConfig}
                 />
 
-                <PrivateRoute path="/profile" exact component={Profile} />
+                <Route path="/profile" exact component={Profile} />
 
                 <Route
                   path="/framework-docs"

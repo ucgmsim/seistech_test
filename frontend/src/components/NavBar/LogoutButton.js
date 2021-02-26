@@ -50,7 +50,7 @@ const LogoutButton = () => {
           Documents
         </DropdownItem>
 
-        {hasPermission("permission-config") ? (
+        {hasPermission("psha-admin") ? (
           <DropdownItem
             tag={RouterNavLink}
             to="/permission-config"
