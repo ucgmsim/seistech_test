@@ -21,7 +21,7 @@ const ProjectPermissionDashboard = () => {
   const [tableBodyData, setTableBodyData] = useState([]);
 
   /*
-    Fetchig All projets we have from Project API to become a table's header
+    Fetching All projects we have from Project API which becomes a table's header
   */
   useEffect(() => {
     const abortController = new AbortController();
