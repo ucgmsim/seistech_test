@@ -4,9 +4,9 @@ from typing import Dict
 from flask import Response
 
 from server import (
-    coreApiBase,
-    projectApiBase,
-    coreApiToken,
+    CORE_API_BASE,
+    PROJECT_API_BASE,
+    CORE_API_TOKEN,
 )
 from db import write_request_details
 
@@ -15,14 +15,12 @@ def proxy_to_api(
     request,
     route,
     methods,
+    to_project_api: bool = False,
     endpoint: str = None,
     content_type: str = "application/json",
     headers: Dict = None,
 ):
-    """Middleware - Handling the communication between Frontend and Core API.
-    We check the request.full_path (e.g., projectAPI/ids/get)
-    If it contains projectAPI, we switch APIBase to Project API path.
-    Default path is the Core API.
+    """IntermediateAPI - Handling the communication between Frontend and Core API/Project API.
 
     Parameters
     ----------
@@ -31,6 +29,8 @@ def proxy_to_api(
         URL path to Core/Project API
     methods: string
         GET/POST methods
+    to_project_api: boolean
+        Tell whether this call belongs to the ProjectAPI
     endpoint: string
         To find out what user is performing
     content_type: string
@@ -40,10 +40,10 @@ def proxy_to_api(
         An object that stores some headers.
     """
 
-    APIBase = coreApiBase
+    api_destination = CORE_API_BASE
 
-    if "projectAPI" in request.full_path:
-        APIBase = projectApiBase
+    if to_project_api is True:
+        api_destination = PROJECT_API_BASE
 
     if endpoint is not None:
         write_request_details(
@@ -57,9 +57,9 @@ def proxy_to_api(
 
     if methods == "POST":
         resp = requests.post(
-            APIBase + route,
+            api_destination + route,
             data=request.data.decode(),
-            headers={"Authorization": coreApiToken},
+            headers={"Authorization": CORE_API_TOKEN},
         )
 
     elif methods == "GET":
@@ -69,7 +69,8 @@ def proxy_to_api(
             querystring = "?" + querystring
 
         resp = requests.get(
-            APIBase + route + querystring, headers={"Authorization": coreApiToken}
+            api_destination + route + querystring,
+            headers={"Authorization": CORE_API_TOKEN},
         )
 
     response = Response(
