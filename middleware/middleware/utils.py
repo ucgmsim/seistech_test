@@ -109,7 +109,8 @@ def get_user_allowed_projects(user_db_projects, api_projects):
 
 
 def get_user_addable_projects(user_db_projects, all_projects):
-    """Similar to the get_allowed_projects above.
+    """Compute cross-check of allowed projects for the specified user
+    with the available projects from the projectAPI
 
     get_allowed_projects is there to do the cross-check for the Project tab,
     compare DB and Project API to see whether users have permission to access.
