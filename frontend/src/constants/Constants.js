@@ -3,8 +3,6 @@
 export const CORE_API_BASE_URL =
   process.env.REACT_APP_CONSTANT_CORE_API_BASE_URL;
 
-export const APP_API_ROUTE_USERDATA = "user";
-
 export const CORE_API_ROUTE_ENSEMBLEIDS = "coreAPI/ensembleids/get";
 export const CORE_API_ROUTE_IMIDS = "coreAPI/ims/get";
 export const CORE_API_ROUTE_CONTEXT_MAP = "coreAPI/contextmap/get";
@@ -53,25 +51,33 @@ export const PROJECT_API_DOWNLOAD_DISAGG = "projectAPI/disagg_download";
 export const PROJECT_API_DOWNLOAD_UHS = "projectAPI/uhs_download";
 export const PROJECT_API_DOWNLOAD_GMS = "projectAPI/gms_download";
 
-/* Middleware API call*/
-export const MIDDLEWARE_API_ROUTE_GET_USER = "middlewareAPI/auth0/user/get";
-export const MIDDLEWARE_API_ROUTE_GET_ADDABLE_PROJECT =
-  "middlewareAPI/projectAPI/addable_projects/get";
-export const MIDDLEWARE_API_ROUTE_GET_ALLOCATED_PROJECT =
-  "middlewareAPI/projectAPI/allocated_projects/get";
-export const MIDDLEWARE_API_ROUTE_ALLOCATE_PROJECTS_TO_USER =
-  "middlewareAPI/allocate_projects";
-export const MIDDLEWARE_API_ROUTE_REMOVE_PROJECTS_FROM_USER =
-  "middlewareAPI/remove_projects";
-export const MIDDLEWARE_API_ROUTE_GET_ALL_PROJECTS_FROM_PROJECT_API =
-  "middlewareAPI/projectAPI/all_projects_from_project_api/get";
-export const MIDDLEWARE_API_ROUTE_GET_ALL_ROW_FROM_AVAILABLE_PROJECT_TABLE =
-  "middlewareAPI/available_project/get";
-export const MIDDLEWARE_API_ROUTE_UPDATE_GRANTED_PERMISSION_TABLE =
-  "middlewareAPI/update_access_permission";
-export const MIDDLEWARE_API_ROUTE_GET_ALL_PERMISSION = "middlewareAPI/all_page_permission/get"
-export const MIDDLEWARE_API_ROUTE_GET_ALL_GRANTED_PERMISSION = 
-"middlewareAPI/all_granted_permission/get"
+/* Intermediate API call*/
+export const INTERMEDIATE_API_ROUTE_GET_USER_DATA = "intermediateAPI/auth0/user/permissions/get";
+export const INTERMEDIATE_API_ROUTE_GET_ALL_AUTH0_USER =
+  "intermediateAPI/auth0/users/get";
+
+export const INTERMEDIATE_API_ROUTE_GET_ALL_ALLOWED_PROJECTS =
+  "intermediateAPI/project/allowed_projects/get";
+export const INTERMEDIATE_API_ROUTE_GET_ALL_PROJECTS =
+  "intermediateAPI/project/all/get";
+
+export const INTERMEDIATE_API_ROUTE_GET_ADDABLE_PROJECTS =
+  "intermediateAPI/project/user/addable_projects/get";
+export const INTERMEDIATE_API_ROUTE_GET_ALLOWED_PROJECTS =
+  "intermediateAPI/project/user/allowed_projects/get";
+
+export const INTERMEDIATE_API_ROUTE_ALLOCATE_PROJECTS_TO_USER =
+  "intermediateAPI/project/user/allocate_projects";
+export const INTERMEDIATE_API_ROUTE_REMOVE_PROJECTS_FROM_USER =
+  "intermediateAPI/project/user/remove_projects";
+
+export const INTERMEDIATE_API_ROUTE_GET_ALL_PAGE_PERMISSIONS =
+  "intermediateAPI/permission/all/get";
+export const INTERMEDIATE_API_ROUTE_GET_USER_PAGE_PERMISSIONS =
+  "intermediateAPI/permission/user/get";
+export const INTERMEDIATE_API_ROUTE_GET_ALL_ALLOWED_PERMISSIONS =
+  "intermediateAPI/permission/all_allowed_permissions/get";
+
 /* 
   Words 
   TODO - See whether it's worth putting as constands due to structure.

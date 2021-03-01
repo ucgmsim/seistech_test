@@ -33,7 +33,7 @@ const ProjectPermissionDashboard = () => {
 
         await fetch(
           CONSTANTS.CORE_API_BASE_URL +
-            CONSTANTS.MIDDLEWARE_API_ROUTE_GET_ALL_PROJECTS_FROM_PROJECT_API,
+            CONSTANTS.INTERMEDIATE_API_ROUTE_GET_ALL_PROJECTS,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -101,7 +101,7 @@ const ProjectPermissionDashboard = () => {
 
         await fetch(
           CONSTANTS.CORE_API_BASE_URL +
-            CONSTANTS.MIDDLEWARE_API_ROUTE_GET_ALL_ROW_FROM_AVAILABLE_PROJECT_TABLE,
+            CONSTANTS.INTERMEDIATE_API_ROUTE_GET_ALL_ALLOWED_PROJECTS,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -198,7 +198,7 @@ const ProjectPermissionDashboard = () => {
         const token = await getTokenSilently();
 
         await fetch(
-          CONSTANTS.CORE_API_BASE_URL + CONSTANTS.MIDDLEWARE_API_ROUTE_GET_USER,
+          CONSTANTS.CORE_API_BASE_URL + CONSTANTS.INTERMEDIATE_API_ROUTE_GET_ALL_AUTH0_USER,
           {
             headers: {
               Authorization: `Bearer ${token}`,

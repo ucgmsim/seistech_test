@@ -84,7 +84,7 @@ const EditUserPermission = () => {
         setUserDataFetching(true);
 
         await fetch(
-          CONSTANTS.CORE_API_BASE_URL + CONSTANTS.MIDDLEWARE_API_ROUTE_GET_USER,
+          CONSTANTS.CORE_API_BASE_URL + CONSTANTS.INTERMEDIATE_API_ROUTE_GET_ALL_AUTH0_USER,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -138,7 +138,7 @@ const EditUserPermission = () => {
           await Promise.all([
             fetch(
               CONSTANTS.CORE_API_BASE_URL +
-                CONSTANTS.MIDDLEWARE_API_ROUTE_GET_ADDABLE_PROJECT +
+                CONSTANTS.INTERMEDIATE_API_ROUTE_GET_ADDABLE_PROJECTS +
                 `?user_id=${selectedUser.value}`,
               {
                 headers: {
@@ -149,7 +149,7 @@ const EditUserPermission = () => {
             ),
             fetch(
               CONSTANTS.CORE_API_BASE_URL +
-                CONSTANTS.MIDDLEWARE_API_ROUTE_GET_ALLOCATED_PROJECT +
+                CONSTANTS.INTERMEDIATE_API_ROUTE_GET_ALLOWED_PROJECTS +
                 `?user_id=${selectedUser.value}`,
               {
                 headers: {
@@ -210,7 +210,7 @@ const EditUserPermission = () => {
 
           await fetch(
             CONSTANTS.CORE_API_BASE_URL +
-              CONSTANTS.MIDDLEWARE_API_ROUTE_ALLOCATE_PROJECTS_TO_USER,
+              CONSTANTS.INTERMEDIATE_API_ROUTE_ALLOCATE_PROJECTS_TO_USER,
             requestOptions
           )
             .then(handleErrors)
@@ -259,7 +259,7 @@ const EditUserPermission = () => {
 
           await fetch(
             CONSTANTS.CORE_API_BASE_URL +
-              CONSTANTS.MIDDLEWARE_API_ROUTE_REMOVE_PROJECTS_FROM_USER,
+              CONSTANTS.INTERMEDIATE_API_ROUTE_REMOVE_PROJECTS_FROM_USER,
             requestOptions
           )
             .then(handleErrors)
