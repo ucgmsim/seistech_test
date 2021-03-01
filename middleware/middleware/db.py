@@ -1,5 +1,7 @@
 from collections import defaultdict
 
+from flask import Response
+
 import middleware.server as server
 import middleware.models as models
 import middleware.auth0 as auth0
@@ -88,7 +90,7 @@ def filter_the_projects_for_dashboard(unfiltered_projects):
 
     Returns
     -------
-    all_projects: dictionary in the form of
+    dictionary in the form of
         {
             project_id: project_full_name
         }
@@ -99,15 +101,13 @@ def filter_the_projects_for_dashboard(unfiltered_projects):
     # Get all projects from the UserDB.
     all_projects = models.Project.query.all()
 
-    all_projects = {
+    return {
         project.project_name: {
             "project_id": project.project_id,
             "project_full_name": unfiltered_projects[project.project_name]["name"],
         }
         for project in all_projects
     }
-
-    return all_projects
 
 
 def get_projects_from_db(user_id):
@@ -118,6 +118,10 @@ def get_projects_from_db(user_id):
     ----------
     user_id: string
         user_id from Auth0 to identify the user
+
+    Returns
+    -------
+    list of Project IDs from DB (Allowed Projects)
     """
     # Get all allowed projects that are allocated to this user.
     allowed_project_objs = (
@@ -126,10 +130,7 @@ def get_projects_from_db(user_id):
         .all()
     )
 
-    # Create a list that contains Project IDs from DB (Allowed Projects)
-    allowed_projects = [project.project_name for project in allowed_project_objs]
-
-    return allowed_projects
+    return [project.project_name for project in allowed_project_objs]
 
 
 def _is_user_in_db(user_id):
@@ -267,7 +268,7 @@ def allocate_projects_to_user(user_id, project_list):
     for project in project_list:
         _add_allowed_project_to_db(user_id, project["value"])
 
-    return "DONE"
+    return Response(status=200)
 
 
 def _remove_allocated_projects(user_id, project_name):
@@ -313,7 +314,7 @@ def remove_projects_from_user(user_id, project_list):
     for project in project_list:
         _remove_allocated_projects(user_id, project["value"])
 
-    return "DONE"
+    return Response(status=200)
 
 
 def _is_in_allowed_permission(user_id, permission):
@@ -413,7 +414,7 @@ def update_allowed_permission(user_id, permission_list):
     for permission in permission_list:
         _allocate_permission_to_db(user_id, permission)
 
-    return "DONE"
+    return Response(status=200)
 
 
 def get_all_permissions():
