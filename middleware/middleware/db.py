@@ -54,20 +54,23 @@ def write_request_details(endpoint, query_dict):
     server.db.session.commit()
 
 
-def get_all_projects_from_available_project_table():
+def get_all_allowed_projects():
     """Create an array form of available projects that are in the DB
 
     Similar to _get_projects_from_db except, this function is designed to pull
     every rows from Available_Project table.
+
+    Returns
+    -------
+        Return a dictionary in the form of:
+        {
+           userA: [ProjectA, ProjectB, ProjectC],
+           userB: [ProjectA, ProjectB]
+        }
     """
     # Get all available projects from the UserDB
-    available_projects = models.AvailableProject.query.all()
+    available_projects = models.AllowedProject.query.all()
 
-    # To make a dictionary looks like
-    # {
-    #   userA: [ProjectA, ProjectB, ProjectC],
-    #   userB: [ProjectA, ProjectB]
-    # }
     available_projects_dict = defaultdict(list)
 
     for project in available_projects:
@@ -85,16 +88,19 @@ def filter_the_projects_for_dashboard(unfiltered_projects):
     Parameters
     ----------
     unfiltered_projects: dictionary
+
+    Returns
+    -------
+        key = project_code (e.g., nzgl, soffitel,qtwn)
+        value = dictionary in form of
+        {project_id: project_full_name}
+        id is the primary key from the UserDB
+        full_name is the user friendly name for project,
+        e.g. Generic New Zealand Locations
     """
     # Get all projects from the UserDB.
     all_projects = models.Project.query.all()
 
-    # Create a dictionary with the following format
-    # key = project_code (e.g., nzgl, soffitel,qtwn)
-    # value = dictionary in form of
-    # {project_id: project_full_name}
-    # id is the primary key from the UserDB
-    # full_name is the user friendly name for project, e.g. Generic New Zealand Locations
     all_projects = {
         project.project_name: {
             "project_id": project.project_id,
@@ -116,8 +122,8 @@ def _get_projects_from_db(user_id):
     """
     # Get all available projects that are allocated to this user.
     available_project_objs = (
-        models.Project.query.join(models.AvailableProject)
-        .filter((models.AvailableProject.user_id == user_id))
+        models.Project.query.join(models.AllowedProject)
+        .filter((models.AllowedProject.user_id == user_id))
         .all()
     )
 
@@ -127,7 +133,7 @@ def _get_projects_from_db(user_id):
     return available_projects
 
 
-def get_available_projects(user_id, available_projects_from_project_api):
+def get_allowed_projects(user_id, available_projects_from_project_api):
     """Do cross-check for the projects.
 
     It finds available projects from the DB.
@@ -163,9 +169,9 @@ def get_available_projects(user_id, available_projects_from_project_api):
 
 
 def get_addable_projects(requested_user_id, all_projects):
-    """Similar to the get_available_projects above.
+    """Similar to the get_allowed_projects above.
 
-    get_available_projects is there to do the cross-check for the Project tab,
+    get_allowed_projects is there to do the cross-check for the Project tab,
     compare DB and Project API to see whether users have permission to access.
 
     This function, get_addable_projects is for the Edit User feature in the frontend.
@@ -312,26 +318,29 @@ def _add_available_project_to_db(user_id, project_name):
     # Find Find a project object with a given project_name to get its project id
     project_obj = models.Project.query.filter_by(project_name=project_name).first()
 
-    server.db.session.add(models.AvailableProject(user_id, project_obj.project_id))
+    server.db.session.add(models.AllowedProject(user_id, project_obj.project_id))
     server.db.session.commit()
     server.db.session.flush()
 
 
-def allocate_projects_to_user():
-    """Allocate projects to the chosen user"""
-    data = json.loads(request.data.decode())
+def allocate_projects_to_user(user_id, project_list):
+    """Allocate projects to the chosen user
 
-    requested_user_id = data["user_info"]["value"]
-    requested_project_list = data["project_info"]
-
+    Parameters
+    ----------
+    user_id: string
+        Selected user's Auth0 id
+    project_list: array
+        List of projects to allocate
+    """
     print(f"Check whether the user is in the DB, if not, add the person to the DB")
-    if not _is_user_in_db(requested_user_id):
-        print(f"{requested_user_id} is not in the DB so updating it.")
-        _add_user_to_db(requested_user_id)
+    if not _is_user_in_db(user_id):
+        print(f"{user_id} is not in the DB so updating it.")
+        _add_user_to_db(user_id)
         server.db.session.flush()
 
-    for project in requested_project_list:
-        _add_available_project_to_db(requested_user_id, project["value"])
+    for project in project_list:
+        _add_available_project_to_db(user_id, project["value"])
 
     return "DONE"
 
@@ -353,7 +362,7 @@ def _remove_allocated_projects(user_id, project_name):
             models.Project.query.filter_by(project_name=project_name).first().project_id
         )
         available_projects_row = (
-            models.AvailableProject.query.filter_by(user_id=user_id)
+            models.AllowedProject.query.filter_by(user_id=user_id)
             .filter_by(project_id=certain_project_id)
             .first()
         )
@@ -365,30 +374,33 @@ def _remove_allocated_projects(user_id, project_name):
         print("Something went wrong.")
 
 
-def remove_projects_from_user():
-    """Remove projects from the chosen user"""
-    data = json.loads(request.data.decode())
+def remove_projects_from_user(user_id, project_list):
+    """Remove projects from the chosen user
 
-    requested_user_id = data["user_info"]["value"]
-    requested_project_list = data["project_info"]
-
-    for project in requested_project_list:
-        _remove_allocated_projects(requested_user_id, project["value"])
+    Parameters
+    ----------
+    user_id: string
+        Selected user's Auth0 id
+    project_list: array
+        List of projects to remove from the DB
+    """
+    for project in project_list:
+        _remove_allocated_projects(user_id, project["value"])
 
     return "DONE"
 
 
-def _is_in_granted_permission(user_id, permission):
+def _is_in_allowed_permission(user_id, permission):
     """Check whether there is a row with given user_id & permission"""
     return bool(
-        models.GrantedPermission.query.filter_by(user_id=user_id)
+        models.AllowedPermission.query.filter_by(user_id=user_id)
         .filter_by(permission_name=permission)
         .first()
     )
 
 
-def _add_permission_to_db(user_id, permission):
-    """This is where we insert data to the bridging table, granted_permission
+def _allocate_permission_to_db(user_id, permission):
+    """This is where we insert data to the bridging table, allowed_permission
 
     Parameters
     ----------
@@ -406,8 +418,8 @@ def _add_permission_to_db(user_id, permission):
         _add_permission_to_db(permission)
         server.db.session.flush()
 
-    if not _is_in_granted_permission(user_id, permission):
-        server.db.session.add(models.GrantedPermission(user_id, permission))
+    if not _is_in_allowed_permission(user_id, permission):
+        server.db.session.add(models.AllowedPermission(user_id, permission))
         server.db.session.commit()
         server.db.session.flush()
     else:
@@ -415,9 +427,9 @@ def _add_permission_to_db(user_id, permission):
 
 
 def _remove_illegal_permission(user_id, illegal_permission):
-    """granted_permission table is outdated, remove illegal permission to update the dashboard"""
+    """allowed_permission table is outdated, remove illegal permission to update the dashboard"""
     illegal_permission_row = (
-        models.GrantedPermission.query.filter_by(user_id=user_id)
+        models.AllowedPermission.query.filter_by(user_id=user_id)
         .filter_by(permission_name=illegal_permission)
         .first()
     )
@@ -427,53 +439,56 @@ def _remove_illegal_permission(user_id, illegal_permission):
     server.db.session.flush()
 
 
-def _filter_granted_permission_table(user_id, trusted_permission_list):
-    """Filtering the granted_permission table first
+def _filter_allowed_permission_table(user_id, trusted_permission_list):
+    """Filtering the allowed_permission table first
 
-    If the access token has the permission of A, B, C but granted_permission table
+    If the access token has the permission of A, B, C but allowed_permission table
     has the permission of A, B, C, D. Then remove the permission D from the
-    granted_permission table as the token is the trusted source of permission.
+    allowed_permission table as the token is the trusted source of permission.
 
     Parameters
     ----------
     user_id: string
         It will be used to find a list of permission with the function,
-        _get_all_granted_permission_for_a_user(user_id)
+        _get_all_allowed_permission_for_a_user(user_id)
     trusted_permission_list: list
-        The list to be compared with the list of permission from granted_permission
+        The list to be compared with the list of permission from allowed_permission
         table
     """
     # Get a list of permission that are allocated to this user
-    unfiltered_granted_permission_list = _get_all_granted_permission_for_a_user(user_id)
+    unfiltered_allowed_permission_list = _get_user_allowed_permissions(user_id)
 
-    for permission in unfiltered_granted_permission_list:
+    for permission in unfiltered_allowed_permission_list:
         if permission not in trusted_permission_list:
             _remove_illegal_permission(user_id, permission)
 
 
-def update_granted_permission_table():
-    """Insert users' granted permission to a table, Granted_Permission"""
-    data = json.loads(request.data.decode())
-
-    requested_user_id = data["user_id"]
-    requested_permission_list = data["permission_list"]
-
-    # Filter the granted_permission table first before we check/update
-    _filter_granted_permission_table(requested_user_id, requested_permission_list)
+def update_allowed_permission(user_id, permission_list):
+    """Update/Insert users' allowed permission to a table, Allowed_Permission
+    
+    Parameters
+    ----------
+    user_id: string
+        Auth0's unique user id
+    permission_list: list
+        List of permission that user has. (From Auth0, trusted source)
+    """
+    # Filter the allowed_permission table first before we check/update
+    _filter_allowed_permission_table(user_id, permission_list)
 
     print(f"Check whether the user is in the DB, if not, add the person to the DB")
-    if not _is_user_in_db(requested_user_id):
-        print(f"{requested_user_id} is not in the DB so updating it.")
-        _add_user_to_db(requested_user_id)
+    if not _is_user_in_db(user_id):
+        print(f"{user_id} is not in the DB so updating it.")
+        _add_user_to_db(user_id)
         server.db.session.flush()
 
-    for permission in requested_permission_list:
-        _add_permission_to_db(requested_user_id, permission)
+    for permission in permission_list:
+        _allocate_permission_to_db(user_id, permission)
 
     return "DONE"
 
 
-def get_all_permission():
+def get_all_permissions():
     """Read every row from Page_Access_Permission table"""
     # Get all available permission from the DB.
     all_permission_list = models.PageAccessPermission.query.all()
@@ -482,31 +497,36 @@ def get_all_permission():
     return [permission.permission_name for permission in all_permission_list]
 
 
-def _get_all_granted_permission_for_a_user(requested_user_id):
+def _get_user_allowed_permissions(requested_user_id):
     """Read every row where the user_id = requested_user_id"""
-    all_granted_permission_for_a_user_list = models.GrantedPermission.query.filter_by(
+    all_allowed_permission_for_a_user_list = models.AllowedPermission.query.filter_by(
         user_id=requested_user_id
     ).all()
 
     return [
         permission.permission_name
-        for permission in all_granted_permission_for_a_user_list
+        for permission in all_allowed_permission_for_a_user_list
     ]
 
 
-def get_all_granted_permission():
-    """Read every row from Granted_Permission table"""
-    # Get all granted permission from the DB.
-    all_granted_permission_list = models.GrantedPermission.query.all()
+def get_all_allowed_permissions():
+    """Read every row from Allowed_Permission table
 
-    # return a list of a dictionary in the form of
-    # {
-    #   user_id: user_id,
-    #   permission_name: [permission_name]
-    # }
-    granted_permission_dict = defaultdict(list)
+    Returns
+    -------
+    Dictionary
+        return a list of a dictionary in the form of
+            {
+              user_id: user_id,
+              permission_name: [permission_name]
+            }
+    """
+    # Get all allowed permission from the DB.
+    all_allowed_permission_list = models.AllowedPermission.query.all()
 
-    for permission in all_granted_permission_list:
-        granted_permission_dict[permission.user_id].append(permission.permission_name)
+    allowed_permission_dict = defaultdict(list)
 
-    return granted_permission_dict
+    for permission in all_allowed_permission_list:
+        allowed_permission_dict[permission.user_id].append(permission.permission_name)
+
+    return allowed_permission_dict
