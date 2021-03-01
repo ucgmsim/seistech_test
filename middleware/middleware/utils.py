@@ -81,9 +81,9 @@ def get_allowed_projects(user_db_projects, api_projects):
     with the available projects from the projectAPI
 
     It finds allowed projects from the DB.
-    (Available_Project that contains user_id and project_name.)
+    (Allowed_Project that contains user_id and project_name.)
     After we get all the existing projects from the Project API.
-    Then we compare [Available Projects] and [All the Existing Projects]
+    Then we compare [Allowed Projects] and [All the Existing Projects]
     to find the matching one.
 
     Parameters
