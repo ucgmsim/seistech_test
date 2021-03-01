@@ -150,7 +150,8 @@ export const Provider = (props) => {
         const token = await getTokenSilently();
 
         await fetch(
-          CONSTANTS.CORE_API_BASE_URL + CONSTANTS.APP_API_ROUTE_USERDATA,
+          CONSTANTS.CORE_API_BASE_URL +
+            CONSTANTS.INTERMEDIATE_API_ROUTE_GET_USER_DATA,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -162,28 +163,6 @@ export const Provider = (props) => {
           .then(async (response) => {
             const decodedToken = await response.json();
             setPermissions(decodedToken.permissions);
-
-            let requestOptions = {
-              method: "POST",
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-              body: JSON.stringify({
-                user_id: decodedToken.id,
-                permission_list: decodedToken.permissions,
-              }),
-              signal: signal,
-            };
-
-            return fetch(
-              CONSTANTS.CORE_API_BASE_URL +
-                CONSTANTS.MIDDLEWARE_API_ROUTE_UPDATE_GRANTED_PERMISSION_TABLE,
-              requestOptions
-            );
-          })
-          .then(handleErrors)
-          .then(async () => {
-            console.log("Granted_Permission table is updated");
           })
           .catch((error) => {
             console.log(error);
