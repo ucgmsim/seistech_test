@@ -54,7 +54,7 @@ def write_request_details(endpoint, query_dict):
 
 
 def get_all_allowed_projects():
-    """Retrieve all allowed projects that are in the DB, Allowed_Project table
+    """Retrieve all allowed projects from Allowed_Project table
 
     Similar to get_projects_from_db except, this function is designed to pull
     every rows from Allowed_Project table.
@@ -79,8 +79,9 @@ def get_all_allowed_projects():
 
 
 def filter_the_projects_for_dashboard(unfiltered_projects):
-    """Get all the allowed projects we have from Project API
-    And customize the way we want to return to the frontend for two reasons.
+    """Retrieve all the allowed projects we have from Project API
+
+    Then customize the format to send to the frontend for two reasons.
     1. For Table's header(will display the name of the project)
     2. We can use this dictionary to filter the table to tell they have permission
 
@@ -111,8 +112,7 @@ def filter_the_projects_for_dashboard(unfiltered_projects):
 
 
 def get_projects_from_db(user_id):
-    """
-    Retrieves all projects ids for the specified user
+    """Retrieves all projects ids for the specified user
 
     Parameters
     ----------
@@ -199,7 +199,7 @@ def _is_permission_in_db(permission_name):
         E.g., hazard, hazard:hazard, project...
     """
     return bool(
-        models.PageAccessPermission.query.filter_by(
+        models.Auth0Permission.query.filter_by(
             permission_name=permission_name
         ).first()
     )
@@ -215,7 +215,7 @@ def _add_permission_to_db(permission_name):
         E.g., hazard, hazard:hazard, project...
     """
     if not _is_permission_in_db(permission_name):
-        server.db.session.add(models.PageAccessPermission(permission_name))
+        server.db.session.add(models.Auth0Permission(permission_name))
         server.db.session.commit()
         server.db.session.flush()
     else:
@@ -425,7 +425,7 @@ def get_all_permissions():
     A list of permission names
     """
     # Get all allowed permission from the DB.
-    all_permission_list = models.PageAccessPermission.query.all()
+    all_permission_list = models.Auth0Permission.query.all()
 
     return [permission.permission_name for permission in all_permission_list]
 

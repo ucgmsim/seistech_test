@@ -50,20 +50,20 @@ class AllowedPermission(server.db.Model):
     permission_name = server.db.Column(
         "permission_name",
         server.db.String(100),
-        server.db.ForeignKey("page_access_permission.permission_name"),
+        server.db.ForeignKey("auth0_permission.permission_name"),
         primary_key=True,
     )
 
     user = server.db.relationship("User", back_populates="permissions")
-    permission = server.db.relationship("PageAccessPermission", back_populates="users")
+    permission = server.db.relationship("Auth0Permission", back_populates="users")
 
     def __init__(self, user_id, permission_name):
         self.user_id = user_id
         self.permission_name = permission_name
 
 
-class PageAccessPermission(server.db.Model):
-    __tablename__ = "page_access_permission"
+class Auth0Permission(server.db.Model):
+    __tablename__ = "auth0_permission"
     permission_name = server.db.Column(server.db.String(100), primary_key=True)
 
     users = server.db.relationship("AllowedPermission", back_populates="permission")

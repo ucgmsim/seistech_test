@@ -48,7 +48,7 @@ for key in auth0.get_users():
     db.session.add(User(key))
     db.session.commit()
 
-# Adding all permission to the PageAccessPermission table
+# Adding all permission to the Auth0Permission table
 for permission in PERMISSION_LIST:
-    db.session.add(PageAccessPermission(permission))
+    db.session.add(Auth0Permission(permission))
     db.session.commit()
