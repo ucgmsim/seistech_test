@@ -47,3 +47,35 @@ PROJECT_API_HAZARD_CURVE_DOWNLOAD_ENDPOINT = "/projectAPI/hazard_download"
 PROJECT_API_HAZARD_DISAGG_DOWNLOAD_ENDPOINT = "/projectAPI/disagg_download"
 PROJECT_API_HAZARD_UHS_DOWNLOAD_ENDPOINT = "/projectAPI/uhs_download"
 PROJECT_API_GMS_DOWNLOAD_ENDPOINT = "/projectAPI/gms_download"
+
+# Intermediate API Endpoints
+INTERMEDIATE_API_AUTH0_USER_INFO_ENDPOINT = (
+    "/intermediateAPI/auth0/user/permissions/get"
+)
+INTERMEDIATE_API_AUTH0_USERS_ENDPOINT = "/intermediateAPI/auth0/users/get"
+
+INTERMEDIATE_API_ALL_ALLOWED_PROJECTS_ENDPOINT = (
+    "/intermediateAPI/project/allowed_projects/get"
+)
+INTERMEDIATE_API_ALL_PROJECTS_ENDPOINT = "/intermediateAPI/project/all/get"
+
+INTERMEDIATE_API_USER_ADDABLE_PROJECTS_ENDPOINT = (
+    "/intermediateAPI/project/user/addable_projects/get"
+)
+INTERMEDIATE_API_USER_ALLOWED_PROJECTS_ENDPOINT = (
+    "/intermediateAPI/project/user/allowed_projects/get"
+)
+
+INTERMEDIATE_API_USER_ALLOCATE_PROJECTS_ENDPOINT = (
+    "/intermediateAPI/project/user/allocate_projects"
+)
+INTERMEDIATE_API_USER_REMOVE_PROJECTS_ENDPOINT = (
+    "/intermediateAPI/project/user/remove_projects"
+)
+
+INTERMEDIATE_API_ALL_PAGE_PERMISSIONS_ENDPOINT = "/intermediateAPI/permission/all/get"
+INTERMEDIATE_API_USER_PERMISSION_ENDPOINT = "/intermediateAPI/permission/user/get"
+
+INTERMEDIATE_API_ALL_ALLOWED_PERMISSIONS_ENDPOINT = (
+    "/intermediateAPI/permission/all_allowed_permissions/get"
+)
