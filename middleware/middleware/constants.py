@@ -74,8 +74,6 @@ INTERMEDIATE_API_USER_REMOVE_PROJECTS_ENDPOINT = (
 )
 
 INTERMEDIATE_API_ALL_PAGE_PERMISSIONS_ENDPOINT = "/intermediateAPI/permission/all/get"
-INTERMEDIATE_API_USER_PERMISSION_ENDPOINT = "/intermediateAPI/permission/user/get"
-
 INTERMEDIATE_API_ALL_ALLOWED_PERMISSIONS_ENDPOINT = (
     "/intermediateAPI/permission/all_allowed_permissions/get"
 )

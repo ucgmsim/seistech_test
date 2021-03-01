@@ -75,8 +75,6 @@ export const INTERMEDIATE_API_USER_REMOVE_PROJECTS_ENDPOINT =
 
 export const INTERMEDIATE_API_ALL_PAGE_PERMISSIONS_ENDPOINT =
   "intermediateAPI/permission/all/get";
-export const INTERMEDIATE_API_USER_PERMISSION_ENDPOINT =
-  "intermediateAPI/permission/user/get";
 export const INTERMEDIATE_API_ALL_ALLOWED_PERMISSIONS_ENDPOINT =
   "intermediateAPI/permission/all_allowed_permissions/get";
 
