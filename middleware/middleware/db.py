@@ -1,8 +1,8 @@
 from collections import defaultdict
 
-from . import server
-from . import models
-from . import auth0
+import middleware.server as server
+import middleware.models as models
+import middleware.auth0 as auth0
 
 
 def write_request_details(endpoint, query_dict):

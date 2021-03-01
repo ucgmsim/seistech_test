@@ -3,14 +3,13 @@ import json
 from flask import jsonify, request
 from jose import jwt
 
-from . import project_api
-
 import middleware.utils as utils
 import middleware.decorator as decorator
 import middleware.auth0 as auth0
 import middleware.server as server
 import middleware.db as db
 import middleware.constants as const
+import middleware.api.project_api as project_api
 
 
 @server.app.route(const.INTERMEDIATE_API_AUTH0_USER_INFO_ENDPOINT, methods=["GET"])

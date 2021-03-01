@@ -3,8 +3,8 @@ from typing import Dict
 
 from flask import Response
 
-from . import server
-from . import db
+import middleware.db as db
+import middleware.server as server
 
 
 def proxy_to_api(
