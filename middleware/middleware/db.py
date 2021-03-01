@@ -54,12 +54,12 @@ def write_request_details(endpoint, query_dict):
 def get_all_allowed_projects():
     """Retrieve all allowed projects that are in the DB, Allowed_Project table
 
-    Similar to _get_projects_from_db except, this function is designed to pull
-    every rows from Available_Project table.
+    Similar to get_projects_from_db except, this function is designed to pull
+    every rows from Allowed_Project table.
 
     Returns
     -------
-        Return a dictionary in the form of:
+    allowed_projects_dict: Dictionary in the form of:
         {
            userA: [ProjectA, ProjectB, ProjectC],
            userB: [ProjectA, ProjectB]
@@ -88,11 +88,12 @@ def filter_the_projects_for_dashboard(unfiltered_projects):
 
     Returns
     -------
-        key = project_code (e.g., nzgl, soffitel,qtwn)
-        value = dictionary in form of
-        {project_id: project_full_name}
-        id is the primary key from the UserDB
-        full_name is the user friendly name for project,
+    all_projects: dictionary in the form of
+        {
+            project_id: project_full_name
+        }
+        project_id = (e.g., nzgl, soffitel,qtwn)
+        project_fulle_name = user friendly name for project,
         e.g. Generic New Zealand Locations
     """
     # Get all projects from the UserDB.
@@ -221,7 +222,8 @@ def _add_permission_to_db(permission_name):
 
 
 def _add_allowed_project_to_db(user_id, project_name):
-    """This is where we insert data to the bridging table, allowed_projects
+    """Insert data(allowed projects) to the bridging table,
+    allowed_projects
 
     Parameters
     ----------
@@ -247,7 +249,7 @@ def _add_allowed_project_to_db(user_id, project_name):
 
 
 def allocate_projects_to_user(user_id, project_list):
-    """Allocate projects to the chosen user
+    """Give user a permission of the chosen projects
 
     Parameters
     ----------
@@ -269,7 +271,8 @@ def allocate_projects_to_user(user_id, project_list):
 
 
 def _remove_allocated_projects(user_id, project_name):
-    """This is where we remove data from the bridging table, allowed_projects
+    """Remove data(project) from the bridging table,
+    allowed_projects
 
     Parameters
     ----------
@@ -323,7 +326,8 @@ def _is_in_allowed_permission(user_id, permission):
 
 
 def _allocate_permission_to_db(user_id, permission):
-    """This is where we insert data to the bridging table, allowed_permission
+    """Insert data(page access permission) to the bridging table,
+    allowed_permission
 
     Parameters
     ----------
@@ -363,7 +367,7 @@ def _remove_illegal_permission(user_id, illegal_permission):
 
 
 def _filter_allowed_permission_table(user_id, trusted_permission_list):
-    """Filtering the allowed_permission table first
+    """Filter the allowed_permission table to remove outdated permission
 
     If the access token has the permission of A, B, C but allowed_permission table
     has the permission of A, B, C, D. Then remove the permission D from the
@@ -387,7 +391,8 @@ def _filter_allowed_permission_table(user_id, trusted_permission_list):
 
 
 def update_allowed_permission(user_id, permission_list):
-    """Update/Insert users' allowed permission to a table, Allowed_Permission
+    """Update/Insert users' allowed permission to a table,
+    Allowed_Permission
     
     Parameters
     ----------
@@ -412,16 +417,25 @@ def update_allowed_permission(user_id, permission_list):
 
 
 def get_all_permissions():
-    """Read every row from Page_Access_Permission table"""
+    """Retrieve all permissions from Page_Access_Permission table
+
+    Returns
+    -------
+    A list of permission names
+    """
     # Get all allowed permission from the DB.
     all_permission_list = models.PageAccessPermission.query.all()
 
-    # Return a list just with permission name
     return [permission.permission_name for permission in all_permission_list]
 
 
 def _get_user_allowed_permissions(requested_user_id):
-    """Read every row where the user_id = requested_user_id"""
+    """Retrieve all permissions for the specified user
+
+    Returns
+    -------
+    A list of permission names
+    """
     all_allowed_permission_for_a_user_list = models.AllowedPermission.query.filter_by(
         user_id=requested_user_id
     ).all()
@@ -433,7 +447,7 @@ def _get_user_allowed_permissions(requested_user_id):
 
 
 def get_all_allowed_permissions():
-    """Read every row from Allowed_Permission table
+    """Retrieve all permissions from Allowed_Permission table
 
     Returns
     -------
