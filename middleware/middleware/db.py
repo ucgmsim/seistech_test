@@ -1,7 +1,4 @@
-import json
 from collections import defaultdict
-
-from flask import request
 
 import server
 import models
