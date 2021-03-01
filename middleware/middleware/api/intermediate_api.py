@@ -50,14 +50,14 @@ def get_auth0_users():
     const.INTERMEDIATE_API_USER_ADDABLE_PROJECTS_ENDPOINT, methods=["GET"]
 )
 @decorator.requires_auth
-def get_addable_projects():
+def get_user_addable_projects():
     """Fetching all the projects that can be allocated to a user
     Will be used for Addable Projects dropdown
     """
     user_id = request.args.to_dict()["user_id"]
 
     return jsonify(
-        utils.get_addable_projects(
+        utils.get_user_addable_projects(
             db.get_projects_from_db(user_id), project_api.get_all_projects()
         )
     )
@@ -74,7 +74,7 @@ def get_user_allowed_projects():
     user_id = request.args.to_dict()["user_id"]
 
     return jsonify(
-        utils.get_allowed_projects(
+        utils.get_user_allowed_projects(
             db.get_projects_from_db(user_id), project_api.get_all_projects(),
         )
     )

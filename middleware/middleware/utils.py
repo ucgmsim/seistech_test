@@ -76,7 +76,7 @@ def proxy_to_api(
     return response
 
 
-def get_allowed_projects(user_db_projects, api_projects):
+def get_user_allowed_projects(user_db_projects, api_projects):
     """Compute cross-check of allowed projects for the specified user
     with the available projects from the projectAPI
 
@@ -101,16 +101,14 @@ def get_allowed_projects(user_db_projects, api_projects):
         project_id: project_name
     }
     """
-    all_projects = {
+    return {
         api_project_id: api_project_name["name"]
         for api_project_id, api_project_name in api_projects.items()
         if api_project_id in user_db_projects
     }
 
-    return all_projects
 
-
-def get_addable_projects(user_db_projects, all_projects):
+def get_user_addable_projects(user_db_projects, all_projects):
     """Similar to the get_allowed_projects above.
 
     get_allowed_projects is there to do the cross-check for the Project tab,
@@ -139,10 +137,8 @@ def get_addable_projects(user_db_projects, all_projects):
         project_id: project_name
     }
     """
-    all_addable_projects = {
+    return {
         api_project_id: api_project_name["name"]
         for api_project_id, api_project_name in all_projects.items()
         if api_project_id not in user_db_projects
     }
-
-    return all_addable_projects
