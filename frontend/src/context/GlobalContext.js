@@ -151,7 +151,7 @@ export const Provider = (props) => {
 
         await fetch(
           CONSTANTS.CORE_API_BASE_URL +
-            CONSTANTS.INTERMEDIATE_API_ROUTE_GET_USER_DATA,
+            CONSTANTS.INTERMEDIATE_API_AUTH0_USER_INFO_ENDPOINT,
           {
             headers: {
               Authorization: `Bearer ${token}`,

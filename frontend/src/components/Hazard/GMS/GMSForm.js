@@ -59,7 +59,7 @@ const GMSForm = () => {
 
         await fetch(
           CONSTANTS.CORE_API_BASE_URL +
-            CONSTANTS.CORE_API_ROUTE_GMS_GET_GM_DATASETS,
+            CONSTANTS.CORE_API_GMS_DATASETS_ENDPOINT,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -73,7 +73,7 @@ const GMSForm = () => {
             const gmDatasetIDs = responseData["gm_dataset_ids"];
             return await fetch(
               CONSTANTS.CORE_API_BASE_URL +
-                CONSTANTS.CORE_API_ROUTE_GMS_GET_AVAILABLE_GMS +
+                CONSTANTS.CORE_API_GMS_IMS_ENDPOINT_ENDPOINT +
                 `?ensemble_id=${selectedEnsemble}&gm_dataset_ids=${gmDatasetIDs.join(
                   ","
                 )}`,
@@ -201,7 +201,7 @@ const GMSForm = () => {
 
           await fetch(
             CONSTANTS.CORE_API_BASE_URL +
-              CONSTANTS.CORE_API_ROUTE_GMS_DEFAULT_CAUSAL_PARAMS +
+              CONSTANTS.CORE_API_GMS_DEFAULT_CAUSAL_PARAMS_ENDPOINT +
               queryString,
             {
               headers: {
@@ -300,7 +300,7 @@ const GMSForm = () => {
 
           await fetch(
             CONSTANTS.CORE_API_BASE_URL +
-              CONSTANTS.CORE_API_ROUTE_GMS_DEFAULT_IM_WEIGHTS +
+              CONSTANTS.CORE_API_GMS_DEFAULT_IM_WEIGHTS_ENDPOINT +
               queryString,
             {
               headers: {

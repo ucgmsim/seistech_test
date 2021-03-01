@@ -158,7 +158,7 @@ const NZS1170Section = () => {
     await Promise.all([
       fetch(
         CONSTANTS.CORE_API_BASE_URL +
-          CONSTANTS.CORE_API_ROUTE_HAZARD_NZCODE +
+          CONSTANTS.CORE_API_HAZARD_NZ11705_ENDPOINT +
           hazardNZCodeQuery,
         {
           headers: {
@@ -169,7 +169,7 @@ const NZS1170Section = () => {
       ),
       fetch(
         CONSTANTS.CORE_API_BASE_URL +
-          CONSTANTS.CORE_API_ROUTE_UHS_NZCODE +
+          CONSTANTS.CORE_API_HAZARD_UHS_NZ11705_ENDPOINT +
           uhsNZCodeQuery,
         {
           headers: {
@@ -231,7 +231,7 @@ const NZS1170Section = () => {
 
     await fetch(
       CONSTANTS.CORE_API_BASE_URL +
-        CONSTANTS.CORE_API_ROUTE_HAZARD_NZCODE +
+        CONSTANTS.CORE_API_HAZARD_NZ11705_ENDPOINT +
         hazardNZCodeQuery,
       {
         headers: {
@@ -293,7 +293,7 @@ const NZS1170Section = () => {
 
     await fetch(
       CONSTANTS.CORE_API_BASE_URL +
-        CONSTANTS.CORE_API_ROUTE_UHS_NZCODE +
+        CONSTANTS.CORE_API_HAZARD_UHS_NZ11705_ENDPOINT +
         uhsNZCodeQuery,
       {
         headers: {

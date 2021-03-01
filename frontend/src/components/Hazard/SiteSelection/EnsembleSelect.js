@@ -35,7 +35,7 @@ const EnsembleSelect = () => {
         const token = await getTokenSilently();
 
         await fetch(
-          CONSTANTS.CORE_API_BASE_URL + CONSTANTS.CORE_API_ROUTE_ENSEMBLEIDS,
+          CONSTANTS.CORE_API_BASE_URL + CONSTANTS.CORE_API_ENSEMBLE_IDS_ENDPOINT,
           {
             headers: {
               Authorization: `Bearer ${token}`,

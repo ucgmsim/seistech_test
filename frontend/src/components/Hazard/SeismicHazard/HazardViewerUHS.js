@@ -113,7 +113,7 @@ const HazardViewerUHS = () => {
 
           await fetch(
             CONSTANTS.CORE_API_BASE_URL +
-              CONSTANTS.CORE_API_ROUTE_UHS +
+              CONSTANTS.CORE_API_HAZARD_UHS_ENDPOINT +
               queryString,
             {
               headers: {
@@ -136,7 +136,7 @@ const HazardViewerUHS = () => {
 
               return fetch(
                 CONSTANTS.CORE_API_BASE_URL +
-                  CONSTANTS.CORE_API_ROUTE_UHS_NZCODE +
+                  CONSTANTS.CORE_API_HAZARD_UHS_NZ11705_ENDPOINT +
                   nzCodeQueryString,
                 {
                   headers: {
@@ -212,7 +212,7 @@ const HazardViewerUHS = () => {
 
       <DownloadButton
         disabled={!showPlotUHS}
-        downloadURL={CONSTANTS.CORE_API_DOWNLOAD_UHS}
+        downloadURL={CONSTANTS.CORE_API_HAZARD_UHS_DOWNLOAD_ENDPOINT}
         downloadToken={{
           uhs_token: downloadUHSToken,
           nz1170p5_hazard_token: uhsNZCodeToken,

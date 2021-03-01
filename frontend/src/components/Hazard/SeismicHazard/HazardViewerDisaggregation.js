@@ -118,7 +118,7 @@ const HazadViewerDisaggregation = () => {
 
           await fetch(
             CONSTANTS.CORE_API_BASE_URL +
-              CONSTANTS.CORE_API_ROUTE_DISAGG +
+              CONSTANTS.CORE_API_HAZARD_DISAGG_ENDPOINT +
               queryString,
             {
               headers: {
@@ -314,7 +314,7 @@ const HazadViewerDisaggregation = () => {
       </Tabs>
       <DownloadButton
         disabled={!showContribTable}
-        downloadURL={CONSTANTS.CORE_API_DOWNLOAD_DISAGG}
+        downloadURL={CONSTANTS.CORE_API_HAZARD_DISAGG_DOWNLOAD_ENDPOINT}
         downloadToken={{
           disagg_token: downloadToken,
         }}

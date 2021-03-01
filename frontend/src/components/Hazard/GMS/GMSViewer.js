@@ -151,7 +151,7 @@ const GMSViewer = () => {
           }
 
           await fetch(
-            CONSTANTS.CORE_API_BASE_URL + CONSTANTS.CORE_API_ROUTE_GMS_COMPUTE,
+            CONSTANTS.CORE_API_BASE_URL + CONSTANTS.CORE_API_GMS_ENDPOINT,
             requestOptions
           )
             .then(handleErrors)
@@ -350,7 +350,7 @@ const GMSViewer = () => {
       <DownloadButton
         // disabled={computedGMS === null || computedGMS["IM_j"] !== GMSIMType}
         disabled
-        downloadURL={CONSTANTS.CORE_API_DOWNLOAD_GMS}
+        downloadURL={CONSTANTS.CORE_API_GMS_DOWNLOAD_ENDPOINT}
         downloadToken={{
           gms_token: downloadToken,
         }}

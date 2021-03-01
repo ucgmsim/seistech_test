@@ -84,7 +84,7 @@ const EditUserPermission = () => {
         setUserDataFetching(true);
 
         await fetch(
-          CONSTANTS.CORE_API_BASE_URL + CONSTANTS.INTERMEDIATE_API_ROUTE_GET_ALL_AUTH0_USER,
+          CONSTANTS.CORE_API_BASE_URL + CONSTANTS.INTERMEDIATE_API_AUTH0_USERS_ENDPOINT,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -138,7 +138,7 @@ const EditUserPermission = () => {
           await Promise.all([
             fetch(
               CONSTANTS.CORE_API_BASE_URL +
-                CONSTANTS.INTERMEDIATE_API_ROUTE_GET_ADDABLE_PROJECTS +
+                CONSTANTS.INTERMEDIATE_API_USER_ADDABLE_PROJECTS_ENDPOINT +
                 `?user_id=${selectedUser.value}`,
               {
                 headers: {
@@ -149,7 +149,7 @@ const EditUserPermission = () => {
             ),
             fetch(
               CONSTANTS.CORE_API_BASE_URL +
-                CONSTANTS.INTERMEDIATE_API_ROUTE_GET_ALLOWED_PROJECTS +
+                CONSTANTS.INTERMEDIATE_API_USER_ALLOWED_PROJECTS_ENDPOINT +
                 `?user_id=${selectedUser.value}`,
               {
                 headers: {
@@ -210,7 +210,7 @@ const EditUserPermission = () => {
 
           await fetch(
             CONSTANTS.CORE_API_BASE_URL +
-              CONSTANTS.INTERMEDIATE_API_ROUTE_ALLOCATE_PROJECTS_TO_USER,
+              CONSTANTS.INTERMEDIATE_API_USER_ALLOCATE_PROJECTS_ENDPOINT,
             requestOptions
           )
             .then(handleErrors)
@@ -259,7 +259,7 @@ const EditUserPermission = () => {
 
           await fetch(
             CONSTANTS.CORE_API_BASE_URL +
-              CONSTANTS.INTERMEDIATE_API_ROUTE_REMOVE_PROJECTS_FROM_USER,
+              CONSTANTS.INTERMEDIATE_API_USER_REMOVE_PROJECTS_ENDPOINT,
             requestOptions
           )
             .then(handleErrors)
@@ -370,7 +370,7 @@ const EditUserPermission = () => {
       </div>
       <div className="row justify-content-lg-center">
         <div className="col-lg-6">
-          <h4>Allocated Projects</h4>
+          <h4>Allowed Projects</h4>
           <h5>(Use to remove projects from a user)</h5>
           <Select
             id="allocated-projects"

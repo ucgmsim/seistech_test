@@ -173,7 +173,7 @@ const SiteSelectionForm = () => {
           });
           await fetch(
             CONSTANTS.CORE_API_BASE_URL +
-              CONSTANTS.CORE_API_ROUTE_STATION +
+              CONSTANTS.CORE_API_STATION_ENDPOINT +
               `?ensemble_id=${selectedEnsemble}&lon=${localLng}&lat=${localLat}`,
             {
               headers: {
@@ -193,7 +193,7 @@ const SiteSelectionForm = () => {
 
               return fetch(
                 CONSTANTS.CORE_API_BASE_URL +
-                  CONSTANTS.CORE_API_ROUTE_HAZARD_NZCODE_DEFAULT_PARAMS +
+                  CONSTANTS.CORE_API_HAZARD_NZ11705_DEFAULT_PARAMS_ENDPOINT +
                   nzCodeDefaultQueryString,
                 {
                   headers: {
@@ -248,7 +248,7 @@ const SiteSelectionForm = () => {
         await Promise.all([
           fetch(
             CONSTANTS.CORE_API_BASE_URL +
-              CONSTANTS.CORE_API_ROUTE_IMIDS +
+              CONSTANTS.CORE_API_IMS_ENDPOINT +
               "?ensemble_id=" +
               selectedEnsemble,
             {
@@ -260,7 +260,7 @@ const SiteSelectionForm = () => {
           ),
           fetch(
             CONSTANTS.CORE_API_BASE_URL +
-              CONSTANTS.CORE_API_ROUTE_HAZARD_NZCODE_SOIL_CLASS,
+              CONSTANTS.CORE_API_HAZARD_NZ11705_SOIL_CLASS_ENDPOINT,
             {
               headers: {
                 Authorization: `Bearer ${token}`,

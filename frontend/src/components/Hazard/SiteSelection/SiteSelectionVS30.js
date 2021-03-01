@@ -37,7 +37,7 @@ const SiteSelectionVS30 = () => {
 
           await fetch(
             CONSTANTS.CORE_API_BASE_URL +
-              CONSTANTS.CORE_API_ROUTE_VS30_MAP +
+              CONSTANTS.CORE_API_VS30_MAP_ENDPOINT +
               `?ensemble_id=${selectedEnsemble}&lon=${siteSelectionLng}&lat=${siteSelectionLat}`,
             {
               headers: {

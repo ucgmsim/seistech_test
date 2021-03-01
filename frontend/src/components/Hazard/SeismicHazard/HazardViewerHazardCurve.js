@@ -92,7 +92,7 @@ const HazardViewerHazardCurve = () => {
 
           fetch(
             CONSTANTS.CORE_API_BASE_URL +
-              CONSTANTS.CORE_API_ROUTE_HAZARD_PLOT +
+              CONSTANTS.CORE_API_HAZARD_ENDPOINT +
               hazardDataQueryString,
             {
               headers: {
@@ -115,7 +115,7 @@ const HazardViewerHazardCurve = () => {
 
               return fetch(
                 CONSTANTS.CORE_API_BASE_URL +
-                  CONSTANTS.CORE_API_ROUTE_HAZARD_NZCODE +
+                  CONSTANTS.CORE_API_HAZARD_NZ11705_ENDPOINT +
                   nzCodeQueryString,
                 {
                   headers: {
@@ -243,7 +243,7 @@ const HazardViewerHazardCurve = () => {
 
       <DownloadButton
         disabled={!showPlotHazard}
-        downloadURL={CONSTANTS.CORE_API_DOWNLOAD_HAZARD}
+        downloadURL={CONSTANTS.CORE_API_HAZARD_CURVE_DOWNLOAD_ENDPOINT}
         downloadToken={{
           hazard_token: downloadHazardToken,
           nz1170p5_hazard_token: hazardNZCodeToken,

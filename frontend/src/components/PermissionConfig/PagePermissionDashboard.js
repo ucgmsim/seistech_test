@@ -33,7 +33,7 @@ const PagePermissionDashboard = () => {
 
         await fetch(
           CONSTANTS.CORE_API_BASE_URL +
-            CONSTANTS.INTERMEDIATE_API_ROUTE_GET_ALL_PAGE_PERMISSIONS,
+            CONSTANTS.INTERMEDIATE_API_ALL_PAGE_PERMISSIONS_ENDPOINT,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -98,7 +98,7 @@ const PagePermissionDashboard = () => {
 
         await fetch(
           CONSTANTS.CORE_API_BASE_URL +
-            CONSTANTS.INTERMEDIATE_API_ROUTE_GET_ALL_ALLOWED_PERMISSIONS,
+            CONSTANTS.INTERMEDIATE_API_ALL_ALLOWED_PERMISSIONS_ENDPOINT,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -193,7 +193,7 @@ const PagePermissionDashboard = () => {
         const token = await getTokenSilently();
 
         await fetch(
-          CONSTANTS.CORE_API_BASE_URL + CONSTANTS.INTERMEDIATE_API_ROUTE_GET_ALL_AUTH0_USER,
+          CONSTANTS.CORE_API_BASE_URL + CONSTANTS.INTERMEDIATE_API_AUTH0_USERS_ENDPOINT,
           {
             headers: {
               Authorization: `Bearer ${token}`,
