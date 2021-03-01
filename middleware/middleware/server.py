@@ -4,7 +4,7 @@ from jose import jwt
 from flask_cors import CORS
 from flask import Flask
 
-from custom_sqlalchemy import CustomSQLALchemy
+import middleware.custom_sqlalchemy as cs
 
 
 # DB Connection Setup
@@ -22,7 +22,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 
-db = CustomSQLALchemy(app)
+db = cs.CustomSQLALchemy(app)
 
 CORS(app)
 

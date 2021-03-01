@@ -3,12 +3,8 @@ from typing import Dict
 
 from flask import Response
 
-from server import (
-    CORE_API_BASE,
-    PROJECT_API_BASE,
-    CORE_API_TOKEN,
-)
-from db import write_request_details
+from . import server
+from . import db
 
 
 def proxy_to_api(
@@ -40,10 +36,10 @@ def proxy_to_api(
         An object that stores some headers.
     """
 
-    api_destination = CORE_API_BASE
+    api_destination = server.CORE_API_BASE
 
     if to_project_api is True:
-        api_destination = PROJECT_API_BASE
+        api_destination = server.PROJECT_API_BASE
 
     if endpoint is not None:
         write_request_details(
@@ -59,7 +55,7 @@ def proxy_to_api(
         resp = requests.post(
             api_destination + route,
             data=request.data.decode(),
-            headers={"Authorization": CORE_API_TOKEN},
+            headers={"Authorization": server.CORE_API_TOKEN},
         )
 
     elif methods == "GET":
@@ -70,7 +66,7 @@ def proxy_to_api(
 
         resp = requests.get(
             api_destination + route + querystring,
-            headers={"Authorization": CORE_API_TOKEN},
+            headers={"Authorization": server.CORE_API_TOKEN},
         )
 
     response = Response(
@@ -78,3 +74,43 @@ def proxy_to_api(
     )
 
     return response
+
+
+def get_allowed_projects(user_id, user_db_projects, api_projects):
+    """Compute cross-check of allowed projects for the specified user
+    with the available projects from the projectAPI
+
+    It finds allowed projects from the DB.
+    (Available_Project that contains user_id and project_name.)
+    After we get all the existing projects from the Project API.
+    Then we compare [Available Projects] and [All the Existing Projects]
+    to find the matching one.
+
+    Parameters
+    ----------
+    user_id: str
+        Auth0 user id
+    user_db_projects: list of dictionaries
+
+    api_projects: list of strings
+        All projects from the project API (i.e. no constraints)
+
+    Returns
+    -------
+    dictionary in the form of
+    {
+        project_id: project_name
+    }
+    """
+    # Finding the allowed projects that are already allocated to the DB with a given user id.
+    # allowed_projects = db.get_projects_from_db(user_id)
+
+    # Create an dictionary in a form of if users have a permission for a certain project
+    # {project_id: project_name}
+    all_projects = {
+        api_project_id: api_project_name["name"]
+        for api_project_id, api_project_name in api_projects.items()
+        if api_project_id in allowed_projects
+    }
+
+    return all_projects

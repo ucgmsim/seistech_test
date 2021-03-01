@@ -5,7 +5,7 @@ import http.client
 from jose import jwt
 from flask import request, jsonify
 
-import server
+import middleware.server as server
 
 
 class AuthError(Exception):

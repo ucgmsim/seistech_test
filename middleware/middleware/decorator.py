@@ -5,12 +5,8 @@ from jose import jwt
 from six.moves.urllib.request import urlopen
 from flask import _request_ctx_stack
 
-from server import (
-    ALGORITHMS,
-    AUTH0_DOMAIN,
-    API_AUDIENCE,
-)
-from auth0 import get_token_auth_header, AuthError
+import middleware.auth0 as auth0
+import middleware.server as server
 
 
 def requires_auth(f):
@@ -18,8 +14,8 @@ def requires_auth(f):
 
     @wraps(f)
     def decorated(*args, **kwargs):
-        token = get_token_auth_header()
-        jsonurl = urlopen("https://" + AUTH0_DOMAIN + "/.well-known/jwks.json")
+        token = auth0.get_token_auth_header()
+        jsonurl = urlopen("https://" + server.AUTH0_DOMAIN + "/.well-known/jwks.json")
         jwks = json.loads(jsonurl.read())
         unverified_header = jwt.get_unverified_header(token)
         rsa_key = {}
@@ -37,16 +33,16 @@ def requires_auth(f):
                 payload = jwt.decode(
                     token,
                     rsa_key,
-                    algorithms=ALGORITHMS,
-                    audience=API_AUDIENCE,
-                    issuer="https://" + AUTH0_DOMAIN + "/",
+                    algorithms=server.ALGORITHMS,
+                    audience=server.API_AUDIENCE,
+                    issuer="https://" + server.AUTH0_DOMAIN + "/",
                 )
             except jwt.ExpiredSignatureError:
-                raise AuthError(
+                raise auth0.AuthError(
                     {"code": "token_expired", "description": "token is expired"}, 401
                 )
             except jwt.JWTClaimsError:
-                raise AuthError(
+                raise auth0.AuthError(
                     {
                         "code": "invalid_claims",
                         "description": "incorrect claims,"
@@ -55,7 +51,7 @@ def requires_auth(f):
                     401,
                 )
             except Exception:
-                raise AuthError(
+                raise auth0.AuthError(
                     {
                         "code": "invalid_header",
                         "description": "Unable to parse authentication" " token.",
@@ -65,7 +61,7 @@ def requires_auth(f):
 
             _request_ctx_stack.top.current_user = payload
             return f(*args, **kwargs)
-        raise AuthError(
+        raise auth0.AuthError(
             {"code": "invalid_header", "description": "Unable to find appropriate key"},
             401,
         )

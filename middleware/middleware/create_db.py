@@ -2,8 +2,8 @@ import os
 
 from flask import Flask
 
-from custom_sqlalchemy import CustomSQLALchemy
-from auth0 import get_users
+import middleware.custom_sqlalchemy as cs
+import middleware.auth0 as auth0
 
 
 # DB Connection Setup
@@ -20,7 +20,7 @@ app = Flask("seistech_web")
 app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-db = CustomSQLALchemy(app)
+db = cs.CustomSQLALchemy(app)
 
 from models import *
 
@@ -28,7 +28,7 @@ from models import *
 db.create_all()
 db.session.commit()
 
-print(get_users())
+print(auth0.get_users())
 
 # Need to be manually done as we cannot pull permission data from Auth0
 PERMISSION_LIST = [
@@ -44,7 +44,7 @@ PERMISSION_LIST = [
 ]
 
 # Adding all users from Auth0 to the User table
-for key in get_users():
+for key in auth0.get_users():
     db.session.add(User(key))
     db.session.commit()
 

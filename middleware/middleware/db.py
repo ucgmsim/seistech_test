@@ -1,8 +1,8 @@
 from collections import defaultdict
 
-import server
-import models
-from auth0 import get_user_id
+from . import server
+from . import models
+from . import auth0
 
 
 def write_request_details(endpoint, query_dict):
@@ -19,7 +19,7 @@ def write_request_details(endpoint, query_dict):
               value -> CCCC
     """
     # Finding an user_id from the token
-    user_id = get_user_id()
+    user_id = auth0.get_user_id()
 
     # Add to History table
     new_history = models.History(user_id, endpoint)
@@ -52,7 +52,7 @@ def write_request_details(endpoint, query_dict):
 
 
 def get_all_allowed_projects():
-    """Create an array form of available projects that are in the DB
+    """Retrieve all allowed projects that are in the DB, Allowed_Project table
 
     Similar to _get_projects_from_db except, this function is designed to pull
     every rows from Available_Project table.
@@ -65,19 +65,19 @@ def get_all_allowed_projects():
            userB: [ProjectA, ProjectB]
         }
     """
-    # Get all available projects from the UserDB
-    available_projects = models.AllowedProject.query.all()
+    # Get all allowed projects from the UserDB
+    allowed_projects = models.AllowedProject.query.all()
 
-    available_projects_dict = defaultdict(list)
+    allowed_projects_dict = defaultdict(list)
 
-    for project in available_projects:
-        available_projects_dict[project.user_id].append(project.project_id)
+    for project in allowed_projects:
+        allowed_projects_dict[project.user_id].append(project.project_id)
 
-    return available_projects_dict
+    return allowed_projects_dict
 
 
 def filter_the_projects_for_dashboard(unfiltered_projects):
-    """Get all the available projects we have from Project API
+    """Get all the allowed projects we have from Project API
     And customize the way we want to return to the frontend for two reasons.
     1. For Table's header(will display the name of the project)
     2. We can use this dictionary to filter the table to tell they have permission
@@ -109,60 +109,26 @@ def filter_the_projects_for_dashboard(unfiltered_projects):
     return all_projects
 
 
-def _get_projects_from_db(user_id):
-    """Create an array form of available projects that are in the DB
+def get_projects_from_db(user_id):
+    """
+    Retrieves all projects ids for the specified user
 
     Parameters
     ----------
     user_id: string
         user_id from Auth0 to identify the user
     """
-    # Get all available projects that are allocated to this user.
-    available_project_objs = (
+    # Get all allowed projects that are allocated to this user.
+    allowed_project_objs = (
         models.Project.query.join(models.AllowedProject)
         .filter((models.AllowedProject.user_id == user_id))
         .all()
     )
 
     # Create a list that contains Project IDs from DB (Allowed Projects)
-    available_projects = [project.project_name for project in available_project_objs]
+    allowed_projects = [project.project_name for project in allowed_project_objs]
 
-    return available_projects
-
-
-def get_allowed_projects(user_id, available_projects_from_project_api):
-    """Do cross-check for the projects.
-
-    It finds available projects from the DB.
-    (Available_Project that contains user_id and project_name.)
-    After we get all the existing projects from the Project API.
-    Then we compare [Available Projects] and [All the Existing Projects]
-    to find the matching one.
-
-    Parameters
-    ----------
-    user_id: str
-        Auth0 user id
-
-    available_projects_from_project_api: dictionary
-        All the projects that the Project API returns
-    """
-    # Finding the available projects that are already allocated to the DB with a given user id.
-    available_projects = _get_projects_from_db(user_id)
-
-    # Get a list of Project IDs & Project Names from Project API (Available Projects)
-    # Form of {project_id: {name : project_name}}
-    all_projects_dicts = available_projects_from_project_api
-
-    # Create an dictionary in a form of if users have a permission for a certain project
-    # {project_id: project_name}
-    all_projects = {
-        api_project_id: api_project_name["name"]
-        for api_project_id, api_project_name in all_projects_dicts.items()
-        if api_project_id in available_projects
-    }
-
-    return all_projects
+    return allowed_projects
 
 
 def get_addable_projects(requested_user_id, all_projects):
@@ -187,8 +153,8 @@ def get_addable_projects(requested_user_id, all_projects):
     all_projects: dictionary
         All the projects that the Project API returns
     """
-    # Finding the available projects that are already allocated to the DB with a given user id.
-    available_projects = _get_projects_from_db(requested_user_id)
+    # Finding the allowed projects that are already allocated to the DB with a given user id.
+    allowed_projects = get_projects_from_db(requested_user_id)
 
     # Get a list of Project IDs & Project Names from Project API (Available Projects)
     # Form of {project_id: {name : project_name}}
@@ -199,7 +165,7 @@ def get_addable_projects(requested_user_id, all_projects):
     all_addable_projects = {
         api_project_id: api_project_name["name"]
         for api_project_id, api_project_name in all_projects_dicts.items()
-        if api_project_id not in available_projects
+        if api_project_id not in allowed_projects
     }
 
     return all_addable_projects
@@ -294,8 +260,8 @@ def _add_permission_to_db(permission_name):
         print(f"Project {permission_name} already exists")
 
 
-def _add_available_project_to_db(user_id, project_name):
-    """This is where we insert data to the bridging table, available_projects
+def _add_allowed_project_to_db(user_id, project_name):
+    """This is where we insert data to the bridging table, allowed_projects
 
     Parameters
     ----------
@@ -337,13 +303,13 @@ def allocate_projects_to_user(user_id, project_list):
         server.db.session.flush()
 
     for project in project_list:
-        _add_available_project_to_db(user_id, project["value"])
+        _add_allowed_project_to_db(user_id, project["value"])
 
     return "DONE"
 
 
 def _remove_allocated_projects(user_id, project_name):
-    """This is where we remove data from the bridging table, available_projects
+    """This is where we remove data from the bridging table, allowed_projects
 
     Parameters
     ----------
@@ -358,13 +324,13 @@ def _remove_allocated_projects(user_id, project_name):
         certain_project_id = (
             models.Project.query.filter_by(project_name=project_name).first().project_id
         )
-        available_projects_row = (
+        allowed_projects_row = (
             models.AllowedProject.query.filter_by(user_id=user_id)
             .filter_by(project_id=certain_project_id)
             .first()
         )
 
-        server.db.session.delete(available_projects_row)
+        server.db.session.delete(allowed_projects_row)
         server.db.session.commit()
         server.db.session.flush()
     except:
@@ -487,7 +453,7 @@ def update_allowed_permission(user_id, permission_list):
 
 def get_all_permissions():
     """Read every row from Page_Access_Permission table"""
-    # Get all available permission from the DB.
+    # Get all allowed permission from the DB.
     all_permission_list = models.PageAccessPermission.query.all()
 
     # Return a list just with permission name
