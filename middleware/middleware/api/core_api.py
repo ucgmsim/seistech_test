@@ -6,6 +6,7 @@ from ..auth0 import AuthError, requires_permission
 from ..decorator import requires_auth
 from .. import constants as const
 
+
 # Site Selection
 @app.route(const.CORE_API_ENSEMBLE_IDS_ENDPOINT, methods=["GET"])
 @requires_auth

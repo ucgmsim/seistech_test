@@ -5,29 +5,29 @@ export const CORE_API_BASE_URL =
 
 export const APP_API_ROUTE_USERDATA = "user";
 
-export const CORE_API_ROUTE_ENSEMBLEIDS = "coreAPI/ensembleids";
-export const CORE_API_ROUTE_IMIDS = "coreAPI/imids";
-export const CORE_API_ROUTE_CONTEXT_MAP = "coreAPI/contextmap";
-export const CORE_API_ROUTE_VS30_MAP = "coreAPI/vs30map";
-export const CORE_API_ROUTE_STATION = "coreAPI/station";
-export const CORE_API_ROUTE_HAZARD_PLOT = "coreAPI/hazard";
-export const CORE_API_ROUTE_HAZARD_NZCODE = "coreAPI/hazard/nz1170p5";
-export const CORE_API_ROUTE_DISAGG = "coreAPI/disagg";
-export const CORE_API_ROUTE_UHS = "coreAPI/uhs";
-export const CORE_API_ROUTE_UHS_NZCODE = "coreAPI/uhs/nz1170p5";
+export const CORE_API_ROUTE_ENSEMBLEIDS = "coreAPI/ensembleids/get";
+export const CORE_API_ROUTE_IMIDS = "coreAPI/ims/get";
+export const CORE_API_ROUTE_CONTEXT_MAP = "coreAPI/contextmap/get";
+export const CORE_API_ROUTE_VS30_MAP = "coreAPI/vs30map/get";
+export const CORE_API_ROUTE_STATION = "coreAPI/station/get";
+export const CORE_API_ROUTE_HAZARD_PLOT = "coreAPI/hazard/get";
+export const CORE_API_ROUTE_HAZARD_NZCODE = "coreAPI/hazard/nz1170p5/get";
+export const CORE_API_ROUTE_DISAGG = "coreAPI/disagg/get";
+export const CORE_API_ROUTE_UHS = "coreAPI/uhs/get";
+export const CORE_API_ROUTE_UHS_NZCODE = "coreAPI/uhs/nz1170p5/get";
 export const CORE_API_ROUTE_HAZARD_NZCODE_SOIL_CLASS =
-  "coreAPI/hazard/nz1170p5/soil_class";
+  "coreAPI/hazard/nz1170p5/soil_class/get";
 export const CORE_API_ROUTE_HAZARD_NZCODE_DEFAULT_PARAMS =
-  "coreAPI/hazard/nz1170p5/default";
-export const CORE_API_ROUTE_GMS_COMPUTE = "coreAPI/gms/ensemble_gms";
+  "coreAPI/hazard/nz1170p5/default/get";
+export const CORE_API_ROUTE_GMS_COMPUTE = "coreAPI/gms/ensemble_gms/get";
 export const CORE_API_ROUTE_GMS_DEFAULT_IM_WEIGHTS =
-  "coreAPI/gms/default_im_weights";
+  "coreAPI/gms/default_im_weights/get";
 export const CORE_API_ROUTE_GMS_DEFAULT_CAUSAL_PARAMS =
-  "coreAPI/gms/default_causal_params";
+  "coreAPI/gms/default_causal_params/get";
 export const CORE_API_ROUTE_GMS_GET_AVAILABLE_GMS =
-  "coreAPI/gms/ensemble_gms/ims";
+  "coreAPI/gms/ensemble_gms/ims/get";
 export const CORE_API_ROUTE_GMS_GET_GM_DATASETS =
-  "coreAPI/gms/ensemble_gms/datasets";
+  "coreAPI/gms/ensemble_gms/datasets/get";
 
 // This endpoint will eventually replace when we implement DB properly
 // As this function reads from Available_Project table (A bridge table between User and Project)

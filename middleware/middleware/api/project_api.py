@@ -49,7 +49,7 @@ def get_project_hazard():
     )
 
 
-@app.route(conts.PROJECT_API_HAZARD_DISAGG_ENDPOINT, methods=["GET"])
+@app.route(const.PROJECT_API_HAZARD_DISAGG_ENDPOINT, methods=["GET"])
 @requires_auth
 def get_project_disagg():
     return proxy_to_api(
