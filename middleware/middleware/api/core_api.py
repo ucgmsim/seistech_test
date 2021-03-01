@@ -7,31 +7,31 @@ from ..decorator import requires_auth
 from .. import constants as const
 
 # Site Selection
-@app.route(const.ENSEMBLE_IDS_ENDPOINT, methods=["GET"])
+@app.route(const.CORE_API_ENSEMBLE_IDS_ENDPOINT, methods=["GET"])
 @requires_auth
 def get_ensemble_ids():
     return proxy_to_api(request, "api/gm_data/ensemble/ids/get", "GET")
 
 
-@app.route(const.IMS_ENDPOINT, methods=["GET"])
+@app.route(const.CORE_API_IMS_ENDPOINT, methods=["GET"])
 @requires_auth
 def get_im_ids():
     return proxy_to_api(request, "api/gm_data/ensemble/ims/get", "GET")
 
 
-@app.route(const.CONTEXT_MAP_ENDPOINT, methods=["GET"])
+@app.route(const.CORE_API_CONTEXT_MAP_ENDPOINT, methods=["GET"])
 @requires_auth
 def get_contextmap():
     return proxy_to_api(request, "api/site/context/map/download", "GET")
 
 
-@app.route(const.VS30_MAP_ENDPOINT, methods=["GET"])
+@app.route(const.CORE_API_VS30_MAP_ENDPOINT, methods=["GET"])
 @requires_auth
 def get_vs30map():
     return proxy_to_api(request, "api/site/vs30/map/download", "GET")
 
 
-@app.route(const.STATION_ENDPOINT, methods=["GET"])
+@app.route(const.CORE_API_STATION_ENDPOINT, methods=["GET"])
 @requires_auth
 def get_station():
     return proxy_to_api(
@@ -43,7 +43,7 @@ def get_station():
 
 
 # Seismic Hazard
-@app.route(const.HAZARD_ENDPOINT, methods=["GET"])
+@app.route(const.CORE_API_HAZARD_ENDPOINT, methods=["GET"])
 @requires_auth
 def get_hazard():
     if requires_permission("hazard:hazard"):
@@ -62,7 +62,7 @@ def get_hazard():
     )
 
 
-@app.route(const.HAZARD_NZ11705_ENDPOINT, methods=["GET"])
+@app.route(const.CORE_API_HAZARD_NZ11705_ENDPOINT, methods=["GET"])
 @requires_auth
 def get_hazard_nzcode():
     if requires_permission("hazard:hazard"):
@@ -81,7 +81,7 @@ def get_hazard_nzcode():
     )
 
 
-@app.route(const.HAZARD_NZ11705_SOIL_CLASS_ENDPOINT, methods=["GET"])
+@app.route(const.CORE_API_HAZARD_NZ11705_SOIL_CLASS_ENDPOINT, methods=["GET"])
 @requires_auth
 def get_nzcode_soil_class():
     if requires_permission("hazard:hazard"):
@@ -95,7 +95,7 @@ def get_nzcode_soil_class():
     )
 
 
-@app.route(const.HAZARD_NZ11705_DEFAULT_PARAMS_ENDPOINT, methods=["GET"])
+@app.route(const.CORE_API_HAZARD_NZ11705_DEFAULT_PARAMS_ENDPOINT, methods=["GET"])
 @requires_auth
 def get_nzcode_default_params():
     if requires_permission("hazard:hazard"):
@@ -109,7 +109,7 @@ def get_nzcode_default_params():
     )
 
 
-@app.route(const.HAZARD_DISAGG_ENDPOINT, methods=["GET"])
+@app.route(const.CORE_API_HAZARD_DISAGG_ENDPOINT, methods=["GET"])
 @requires_auth
 def get_disagg():
     if requires_permission("hazard:disagg"):
@@ -128,7 +128,7 @@ def get_disagg():
     )
 
 
-@app.route(const.HAZARD_UHS_ENDPOINT, methods=["GET"])
+@app.route(const.CORE_API_HAZARD_UHS_ENDPOINT, methods=["GET"])
 @requires_auth
 def get_uhs():
     if requires_permission("hazard:uhs"):
@@ -144,7 +144,7 @@ def get_uhs():
     )
 
 
-@app.route(const.HAZARD_UHS_NZ11705_ENDPOINT, methods=["GET"])
+@app.route(const.CORE_API_HAZARD_UHS_NZ11705_ENDPOINT, methods=["GET"])
 @requires_auth
 def get_uhs_nzcode():
     if requires_permission("hazard:hazard"):
@@ -164,19 +164,19 @@ def get_uhs_nzcode():
 
 
 # GMS
-@app.route(const.GMS_ENDPOINT, methods=["POST"])
+@app.route(const.CORE_API_GMS_ENDPOINT, methods=["POST"])
 @requires_auth
 def compute_ensemble_GMS():
     return proxy_to_api(request, "api/gms/ensemble_gms/compute", "POST", "GMS Compute",)
 
 
-@app.route(const.GMS_DEFAULT_IM_WEIGHTS_ENDPOINT, methods=["GET"])
+@app.route(const.CORE_API_GMS_DEFAULT_IM_WEIGHTS_ENDPOINT, methods=["GET"])
 @requires_auth
 def get_default_IM_weights():
     return proxy_to_api(request, "api/gms/ensemble_gms/get_default_IM_weights", "GET")
 
 
-@app.route(const.GMS_DEFAULT_CAUSAL_PARAMS_ENDPOINT, methods=["GET"])
+@app.route(const.CORE_API_GMS_DEFAULT_CAUSAL_PARAMS_ENDPOINT, methods=["GET"])
 @requires_auth
 def get_default_causal_params():
     return proxy_to_api(
@@ -185,19 +185,19 @@ def get_default_causal_params():
 
 
 # GMS
-@app.route(const.GMS_DATASETS_ENDPOINT, methods=["GET"])
+@app.route(const.CORE_API_GMS_DATASETS_ENDPOINT, methods=["GET"])
 def get_gm_datasets():
     return proxy_to_api(request, "api/gms/ensemble_gms/datasets", "GET")
 
 
-@app.route(const.GMS_IMS_ENDPOINT_ENDPOINT, methods=["GET"])
+@app.route(const.CORE_API_GMS_IMS_ENDPOINT_ENDPOINT, methods=["GET"])
 def get_GMS_available_IMs():
     return proxy_to_api(request, "api/gms/ensemble_gms/ims", "GET")
 
 
 # Download
 # CORE API
-@app.route(const.HAZARD_CURVE_DOWNLOAD_ENDPOINT, methods=["GET"])
+@app.route(const.CORE_API_HAZARD_CURVE_DOWNLOAD_ENDPOINT, methods=["GET"])
 @requires_auth
 def core_api_download_hazard():
     core_response = proxy_to_api(
@@ -212,7 +212,7 @@ def core_api_download_hazard():
     return core_response
 
 
-@app.route(const.HAZARD_DISAGG_DOWNLOAD_ENDPOINT, methods=["GET"])
+@app.route(const.CORE_API_HAZARD_DISAGG_DOWNLOAD_ENDPOINT, methods=["GET"])
 @requires_auth
 def core_api_download_disagg():
     core_response = proxy_to_api(
@@ -227,7 +227,7 @@ def core_api_download_disagg():
     return core_response
 
 
-@app.route(const.HAZARD_UHS_DOWNLOAD_ENDPOINT, methods=["GET"])
+@app.route(const.CORE_API_HAZARD_UHS_DOWNLOAD_ENDPOINT, methods=["GET"])
 @requires_auth
 def core_api_download_uhs():
     core_response = proxy_to_api(
@@ -244,7 +244,7 @@ def core_api_download_uhs():
     return core_response
 
 
-@app.route(const.GMS_DOWNLOAD_ENDPOINT, methods=["GET"])
+@app.route(const.CORE_API_GMS_DOWNLOAD_ENDPOINT, methods=["GET"])
 @requires_auth
 def core_api_download_gms():
     core_response = proxy_to_api(
