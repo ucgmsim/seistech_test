@@ -17,7 +17,10 @@ def get_all_projects():
 @decorator.requires_auth
 def get_available_project_ids():
     user_id = auth0.get_user_id()
-    return db.get_allowed_projects(user_id, get_all_projects())
+    
+    return utils.get_allowed_projects(
+        db.get_projects_from_db(user_id), get_all_projects()
+    )
 
 
 @server.app.route(const.PROJECT_API_SITES_ENDPOINT, methods=["GET"])

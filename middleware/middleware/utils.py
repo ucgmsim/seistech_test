@@ -42,7 +42,7 @@ def proxy_to_api(
         api_destination = server.PROJECT_API_BASE
 
     if endpoint is not None:
-        write_request_details(
+        db.write_request_details(
             endpoint,
             {
                 key: value
@@ -76,7 +76,7 @@ def proxy_to_api(
     return response
 
 
-def get_allowed_projects(user_id, user_db_projects, api_projects):
+def get_allowed_projects(user_db_projects, api_projects):
     """Compute cross-check of allowed projects for the specified user
     with the available projects from the projectAPI
 
@@ -88,9 +88,8 @@ def get_allowed_projects(user_id, user_db_projects, api_projects):
 
     Parameters
     ----------
-    user_id: str
-        Auth0 user id
     user_db_projects: list of dictionaries
+        All allowed projects for the specified user
 
     api_projects: list of strings
         All projects from the project API (i.e. no constraints)
@@ -102,15 +101,48 @@ def get_allowed_projects(user_id, user_db_projects, api_projects):
         project_id: project_name
     }
     """
-    # Finding the allowed projects that are already allocated to the DB with a given user id.
-    # allowed_projects = db.get_projects_from_db(user_id)
-
-    # Create an dictionary in a form of if users have a permission for a certain project
-    # {project_id: project_name}
     all_projects = {
         api_project_id: api_project_name["name"]
         for api_project_id, api_project_name in api_projects.items()
-        if api_project_id in allowed_projects
+        if api_project_id in user_db_projects
     }
 
     return all_projects
+
+
+def get_addable_projects(user_db_projects, all_projects):
+    """Similar to the get_allowed_projects above.
+
+    get_allowed_projects is there to do the cross-check for the Project tab,
+    compare DB and Project API to see whether users have permission to access.
+
+    This function, get_addable_projects is for the Edit User feature in the frontend.
+    It compares the projects between the DB and Project API.
+    Then it returns the options that are not intersecting.
+    E.g. DB says A, B, C Projects
+    Project API says A, B, C, D, E
+
+    Then this function will return D, E for the Frontend.
+
+    Parameters
+    ----------
+    user_db_projects: list of dictionaries
+        All allowed projects for the specified user
+
+    all_projects: dictionary
+        All the projects that the Project API returns
+
+    Returns
+    -------
+    dictionary in the form of
+    {
+        project_id: project_name
+    }
+    """
+    all_addable_projects = {
+        api_project_id: api_project_name["name"]
+        for api_project_id, api_project_name in all_projects.items()
+        if api_project_id not in user_db_projects
+    }
+
+    return all_addable_projects

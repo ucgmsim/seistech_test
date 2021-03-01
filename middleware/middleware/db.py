@@ -131,46 +131,6 @@ def get_projects_from_db(user_id):
     return allowed_projects
 
 
-def get_addable_projects(requested_user_id, all_projects):
-    """Similar to the get_allowed_projects above.
-
-    get_allowed_projects is there to do the cross-check for the Project tab,
-    compare DB and Project API to see whether users have permission to access.
-
-    This function, get_addable_projects is for the Edit User feature in the frontend.
-    It compares the projects between the DB and Project API.
-    Then it returns the options that are not intersecting.
-    E.g. DB says A, B, C Projects
-    Project API says A, B, C, D, E
-
-    Then this function will return D, E for the Frontend.
-
-    Parameters
-    ----------
-    requested_user_id: string
-        Selected user id from Edit User's User dropdown
-
-    all_projects: dictionary
-        All the projects that the Project API returns
-    """
-    # Finding the allowed projects that are already allocated to the DB with a given user id.
-    allowed_projects = get_projects_from_db(requested_user_id)
-
-    # Get a list of Project IDs & Project Names from Project API (Available Projects)
-    # Form of {project_id: {name : project_name}}
-    all_projects_dicts = all_projects
-
-    # Create an dictionary in a form of if users have a permission for a certain project
-    # {project_id: project_name}
-    all_addable_projects = {
-        api_project_id: api_project_name["name"]
-        for api_project_id, api_project_name in all_projects_dicts.items()
-        if api_project_id not in allowed_projects
-    }
-
-    return all_addable_projects
-
-
 def _is_user_in_db(user_id):
     """To check whether the given user_id is in the DB
 
