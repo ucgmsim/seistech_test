@@ -39,11 +39,11 @@ AUTH0_GRANT_TYPE = os.environ["AUTH0_GRANT_TYPE"]
 AUTH0_DOMAIN = os.environ["AUTH0_DOMAIN"]
 
 # For DEV/EA/PROD with ENV
-coreApiBase = os.environ["CORE_API_BASE"]
+CORE_API_BASE = os.environ["CORE_API_BASE"]
 # For Project API with ENV
-projectApiBase = os.environ["PROJECT_API_BASE"]
+PROJECT_API_BASE = os.environ["PROJECT_API_BASE"]
 
 # Generate the coreAPI token
-coreApiToken = "Bearer {}".format(
+CORE_API_TOKEN = "Bearer {}".format(
     jwt.encode({"env": ENV}, JWT_SECRET, algorithm="HS256")
 )
