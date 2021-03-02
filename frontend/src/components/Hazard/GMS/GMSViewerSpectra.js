@@ -8,12 +8,13 @@ import { sortIMs } from "utils/Utils";
 
 import "assets/style/GMSPlot.css";
 
-const GMSViewerSpectra = ({ gmsData, periods, im_type, im_j }) => {
+const GMSViewerSpectra = ({ gmsData, periods, im_type }) => {
   if (gmsData !== null && !gmsData.hasOwnProperty("error") && periods !== []) {
     const cdfX = gmsData["gcim_cdf_x"];
     const cdfY = gmsData["gcim_cdf_y"];
     const realisations = gmsData["realisations"];
     const selectedGMs = gmsData["selected_GMs"];
+    const im_j = gmsData["im_j"];
 
     // If IM Type starts with pSA, add it to periods
     if (im_type.startsWith("pSA")) {

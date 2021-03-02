@@ -255,7 +255,6 @@ const GMSViewer = () => {
           )}
           {isLoading === false &&
             computedGMS !== null &&
-            computedGMS["IM_j"] === GMSIMType &&
             showErrorMessage.isError === false && (
               <Fragment>
                 {validateComputedGMS() === false ? (
@@ -274,11 +273,6 @@ const GMSViewer = () => {
                         gmsData={computedGMS}
                         periods={selectedIMVectors}
                         im_type={GMSIMType}
-                        im_j={
-                          GMSRadio === "im-level"
-                            ? Number(GMSIMLevel)
-                            : Number(GMSExcdRate)
-                        }
                       />
                     ) : (
                       <GMSViewerIMDistributions
