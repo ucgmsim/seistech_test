@@ -17,10 +17,8 @@ def get_all_projects():
 @decorator.requires_auth
 def get_available_project_ids():
     user_id = auth0.get_user_id()
-    
-    return utils.get_user_projects(
-        db.get_user_projects(user_id), get_all_projects()
-    )
+
+    return utils.get_user_projects(db.get_user_projects(user_id), get_all_projects())
 
 
 @server.app.route(const.PROJECT_API_SITES_ENDPOINT, methods=["GET"])
@@ -39,7 +37,11 @@ def get_project_ims():
 @decorator.requires_auth
 def get_project_maps():
     return utils.proxy_to_api(
-        request, "api/project/maps/get", "GET", True, "Project - Site Selection Get"
+        request,
+        "api/project/maps/get",
+        "GET",
+        True,
+        endpoint="Project - Site Selection Get",
     )
 
 
@@ -48,7 +50,11 @@ def get_project_maps():
 @decorator.requires_auth
 def get_project_hazard():
     return utils.proxy_to_api(
-        request, "api/project/hazard/get", "GET", True, "Project - Hazard Compute"
+        request,
+        "api/project/hazard/get",
+        "GET",
+        True,
+        endpoint="Project - Hazard Compute",
     )
 
 
@@ -60,7 +66,7 @@ def get_project_disagg():
         "api/project/disagg/get",
         "GET",
         True,
-        "Project - Disaggregation Compute",
+        endpoint="Project - Disaggregation Compute",
     )
 
 
@@ -80,7 +86,7 @@ def get_project_uhs_rps():
 @decorator.requires_auth
 def get_project_uhs():
     return utils.proxy_to_api(
-        request, "api/project/uhs/get", "GET", True, "Project - UHS Compute"
+        request, "api/project/uhs/get", "GET", True, endpoint="Project - UHS Compute"
     )
 
 
@@ -93,7 +99,7 @@ def project_api_download_hazard():
         "api/project/hazard/download",
         "GET",
         True,
-        "Project - Hazard Download",
+        endpoint="Project - Hazard Download",
         content_type="server.application/zip",
         headers={"Content-Disposition": "attachment; filename=hazard.zip"},
     )
@@ -109,7 +115,7 @@ def project_api_download_disagg():
         "api/project/disagg/download",
         "GET",
         True,
-        "Project - Disaggregation Download",
+        endpoint="Project - Disaggregation Download",
         content_type="server.application/zip",
         headers={"Content-Disposition": "attachment; filename=disaggregation.zip"},
     )
@@ -125,7 +131,7 @@ def project_api_download_uhs():
         "api/project/uhs/download",
         "GET",
         True,
-        "Project - UHS Download",
+        endpoint="Project - UHS Download",
         content_type="server.application/zip",
         headers={
             "Content-Disposition": "attachment; filename=uniform_hazard_spectrum.zip"
@@ -143,6 +149,7 @@ def project_api_download_gms():
         "api/gms/ensemble_gms/download",
         "GET",
         True,
+        endpoint="Project - GMS Download",
         content_type="server.application/zip",
         headers={"Content-Disposition": "attachment; filename=gms.zip"},
     )

@@ -39,7 +39,7 @@ def get_station():
         request,
         "api/site/station/location/get",
         "GET",
-        "Hazard Analysis - Set Station",
+        endpoint="Hazard Analysis - Set Station",
     )
 
 
@@ -52,7 +52,7 @@ def get_hazard():
             request,
             "api/hazard/ensemble_hazard/get",
             "GET",
-            "Hazard Analysis - Hazard Curve Compute",
+            endpoint="Hazard Analysis - Hazard Curve Compute",
         )
     raise auth0.AuthError(
         {
@@ -71,7 +71,7 @@ def get_hazard_nzcode():
             request,
             "api/hazard/nz1170p5/get",
             "GET",
-            "Hazard Analysis - Hazard NZ Code Compute",
+            endpoint="Hazard Analysis - Hazard NZ Code Compute",
         )
     raise auth0.AuthError(
         {
@@ -120,7 +120,7 @@ def get_disagg():
             request,
             "api/disagg/ensemble_disagg/get",
             "GET",
-            "Hazard Analysis - Disaggregation Compute",
+            endpoint="Hazard Analysis - Disaggregation Compute",
         )
     raise auth0.AuthError(
         {
@@ -136,7 +136,10 @@ def get_disagg():
 def get_uhs():
     if auth0.requires_permission("hazard:uhs"):
         return utils.proxy_to_api(
-            request, "api/uhs/ensemble_uhs/get", "GET", "Hazard Analysis - UHS Compute",
+            request,
+            "api/uhs/ensemble_uhs/get",
+            "GET",
+            endpoint="Hazard Analysis - UHS Compute",
         )
     raise auth0.AuthError(
         {
@@ -155,7 +158,7 @@ def get_uhs_nzcode():
             request,
             "api/uhs/nz1170p5/get",
             "GET",
-            "Hazard Analysis - UHS NZ Code Compute",
+            endpoint="Hazard Analysis - UHS NZ Code Compute",
         )
     raise auth0.AuthError(
         {
@@ -171,7 +174,10 @@ def get_uhs_nzcode():
 @decorator.requires_auth
 def compute_ensemble_GMS():
     return utils.proxy_to_api(
-        request, "api/gms/ensemble_gms/compute", "POST", "GMS Compute",
+        request,
+        "api/gms/ensemble_gms/compute",
+        "POST",
+        endpoint="Hazard Analysis - GMS Compute",
     )
 
 
@@ -211,7 +217,7 @@ def core_api_download_hazard():
         request,
         "api/hazard/ensemble_hazard/download",
         "GET",
-        "Hazard Analysis - Hazard Download",
+        endpoint="Hazard Analysis - Hazard Download",
         content_type="server.application/zip",
         headers={"Content-Disposition": "attachment; filename=hazard.zip"},
     )
@@ -226,7 +232,7 @@ def core_api_download_disagg():
         request,
         "api/disagg/ensemble_disagg/download",
         "GET",
-        "Hazard Analysis - Disaggregation Download",
+        endpoint="Hazard Analysis - Disaggregation Download",
         content_type="server.application/zip",
         headers={"Content-Disposition": "attachment; filename=disaggregation.zip"},
     )
@@ -241,7 +247,7 @@ def core_api_download_uhs():
         request,
         "api/uhs/ensemble_uhs/download",
         "GET",
-        "Hazard Analysis - UHS Download",
+        endpoint="Hazard Analysis - UHS Download",
         content_type="server.application/zip",
         headers={
             "Content-Disposition": "attachment; filename=uniform_hazard_spectrum.zip"
@@ -258,6 +264,7 @@ def core_api_download_gms():
         request,
         "api/gms/ensemble_gms/download",
         "GET",
+        endpoint="Hazard Analysis - GMS Download",
         content_type="server.application/zip",
         headers={"Content-Disposition": "attachment; filename=gms.zip"},
     )
