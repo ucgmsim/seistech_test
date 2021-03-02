@@ -54,7 +54,7 @@ INTERMEDIATE_API_AUTH0_USER_INFO_ENDPOINT = (
 )
 INTERMEDIATE_API_AUTH0_USERS_ENDPOINT = "/intermediateAPI/auth0/users/get"
 
-INTERMEDIATE_API_ALL_ALLOWED_PROJECTS_ENDPOINT = (
+INTERMEDIATE_API_ALL_USERS_PROJECTS_ENDPOINT = (
     "/intermediateAPI/project/allowed_projects/get"
 )
 INTERMEDIATE_API_ALL_PROJECTS_ENDPOINT = "/intermediateAPI/project/all/get"
@@ -62,7 +62,7 @@ INTERMEDIATE_API_ALL_PROJECTS_ENDPOINT = "/intermediateAPI/project/all/get"
 INTERMEDIATE_API_USER_ADDABLE_PROJECTS_ENDPOINT = (
     "/intermediateAPI/project/user/addable_projects/get"
 )
-INTERMEDIATE_API_USER_ALLOWED_PROJECTS_ENDPOINT = (
+INTERMEDIATE_API_USER_PROJECTS_ENDPOINT = (
     "/intermediateAPI/project/user/allowed_projects/get"
 )
 
@@ -73,7 +73,7 @@ INTERMEDIATE_API_USER_REMOVE_PROJECTS_ENDPOINT = (
     "/intermediateAPI/project/user/remove_projects"
 )
 
-INTERMEDIATE_API_ALL_PAGE_PERMISSIONS_ENDPOINT = "/intermediateAPI/permission/all/get"
-INTERMEDIATE_API_ALL_ALLOWED_PERMISSIONS_ENDPOINT = (
+INTERMEDIATE_API_ALL_PERMISSIONS_ENDPOINT = "/intermediateAPI/permission/all/get"
+INTERMEDIATE_API_ALL_USERS_PERMISSIONS_ENDPOINT = (
     "/intermediateAPI/permission/all_allowed_permissions/get"
 )

@@ -149,7 +149,7 @@ const EditUserPermission = () => {
             ),
             fetch(
               CONSTANTS.CORE_API_BASE_URL +
-                CONSTANTS.INTERMEDIATE_API_USER_ALLOWED_PROJECTS_ENDPOINT +
+                CONSTANTS.INTERMEDIATE_API_USER_PROJECTS_ENDPOINT +
                 `?user_id=${selectedUser.value}`,
               {
                 headers: {

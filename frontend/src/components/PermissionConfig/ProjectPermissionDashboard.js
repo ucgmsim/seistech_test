@@ -101,7 +101,7 @@ const ProjectPermissionDashboard = () => {
 
         await fetch(
           CONSTANTS.CORE_API_BASE_URL +
-            CONSTANTS.INTERMEDIATE_API_ALL_ALLOWED_PROJECTS_ENDPOINT,
+            CONSTANTS.INTERMEDIATE_API_ALL_USERS_PROJECTS_ENDPOINT,
           {
             headers: {
               Authorization: `Bearer ${token}`,

@@ -27,7 +27,7 @@ def get_auth0_user_key_info():
     permission_list = unverified_claims["permissions"]
 
     # Update the Allowed_Permission table
-    db.update_allowed_permission(user_id, permission_list)
+    db.update_user_permissions(user_id, permission_list)
 
     return jsonify({"permissions": permission_list, "id": user_id})
 
@@ -58,24 +58,22 @@ def get_user_addable_projects():
 
     return jsonify(
         utils.get_user_addable_projects(
-            db.get_projects_from_db(user_id), project_api.get_all_projects()
+            db.get_user_projects(user_id), project_api.get_all_projects()
         )
     )
 
 
-@server.app.route(
-    const.INTERMEDIATE_API_USER_ALLOWED_PROJECTS_ENDPOINT, methods=["GET"]
-)
+@server.app.route(const.INTERMEDIATE_API_USER_PROJECTS_ENDPOINT, methods=["GET"])
 @decorator.requires_auth
-def get_user_allowed_projects():
+def get_user_projects():
     """Fetching all the projects that are already allocated to a user
     Will be used for Allowed Projects dropdown
     """
     user_id = request.args.to_dict()["user_id"]
 
     return jsonify(
-        utils.get_user_allowed_projects(
-            db.get_projects_from_db(user_id), project_api.get_all_projects(),
+        utils.get_user_projects(
+            db.get_user_projects(user_id), project_api.get_all_projects(),
         )
     )
 
@@ -91,7 +89,7 @@ def allocate_projects_to_user():
     user_id = data["user_info"]["value"]
     project_list = data["project_info"]
 
-    return jsonify(db.allocate_projects_to_user(user_id, project_list))
+    return db.allocate_projects_to_user(user_id, project_list)
 
 
 @server.app.route(
@@ -105,34 +103,34 @@ def remove_projects_from_user():
     user_id = data["user_info"]["value"]
     project_list = data["project_info"]
 
-    return jsonify(db.remove_projects_from_user(user_id, project_list))
+    return db.remove_projects_from_user(user_id, project_list)
 
 
 @server.app.route(const.INTERMEDIATE_API_ALL_PROJECTS_ENDPOINT, methods=["GET"])
 @decorator.requires_auth
 def get_all_projects():
     """Get all projects to draw columns in the dashboard"""
-    return db.filter_the_projects_for_dashboard(project_api.get_all_projects())
+    return db.get_all_projects_for_dashboard(project_api.get_all_projects())
 
 
-@server.app.route(const.INTERMEDIATE_API_ALL_ALLOWED_PROJECTS_ENDPOINT, methods=["GET"])
+@server.app.route(const.INTERMEDIATE_API_ALL_USERS_PROJECTS_ENDPOINT, methods=["GET"])
 @decorator.requires_auth
-def get_all_allowed_projects():
+def get_all_users_projects():
     """Get allowed project permissions for all users"""
-    return db.get_all_allowed_projects()
+    return db.get_all_users_projects()
 
 
-@server.app.route(const.INTERMEDIATE_API_ALL_PAGE_PERMISSIONS_ENDPOINT, methods=["GET"])
+@server.app.route(const.INTERMEDIATE_API_ALL_PERMISSIONS_ENDPOINT, methods=["GET"])
 @decorator.requires_auth
-def get_all_page_permission():
-    """Pull every permission from Page_Access_Permission table"""
-    return jsonify({"all_permission": db.get_all_permissions()})
+def get_all_permissions():
+    """Pull every permission from Auth0_Permission table"""
+    return jsonify({"all_permissions": db.get_all_permissions_for_dashboard()})
 
 
 @server.app.route(
-    const.INTERMEDIATE_API_ALL_ALLOWED_PERMISSIONS_ENDPOINT, methods=["GET"]
+    const.INTERMEDIATE_API_ALL_USERS_PERMISSIONS_ENDPOINT, methods=["GET"]
 )
 @decorator.requires_auth
-def get_all_allowed_permission():
+def get_all_users_permissions():
     """Pull every allowed permission from Allow_Permission table"""
-    return db.get_all_allowed_permissions()
+    return db.get_all_users_permissions()

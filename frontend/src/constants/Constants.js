@@ -58,14 +58,14 @@ export const INTERMEDIATE_API_AUTH0_USER_INFO_ENDPOINT = "intermediateAPI/auth0/
 export const INTERMEDIATE_API_AUTH0_USERS_ENDPOINT =
   "intermediateAPI/auth0/users/get";
 
-export const INTERMEDIATE_API_ALL_ALLOWED_PROJECTS_ENDPOINT =
+export const INTERMEDIATE_API_ALL_USERS_PROJECTS_ENDPOINT =
   "intermediateAPI/project/allowed_projects/get";
 export const INTERMEDIATE_API_ALL_PROJECTS_ENDPOINT =
   "intermediateAPI/project/all/get";
 
 export const INTERMEDIATE_API_USER_ADDABLE_PROJECTS_ENDPOINT =
   "intermediateAPI/project/user/addable_projects/get";
-export const INTERMEDIATE_API_USER_ALLOWED_PROJECTS_ENDPOINT =
+export const INTERMEDIATE_API_USER_PROJECTS_ENDPOINT =
   "intermediateAPI/project/user/allowed_projects/get";
 
 export const INTERMEDIATE_API_USER_ALLOCATE_PROJECTS_ENDPOINT =
@@ -73,9 +73,9 @@ export const INTERMEDIATE_API_USER_ALLOCATE_PROJECTS_ENDPOINT =
 export const INTERMEDIATE_API_USER_REMOVE_PROJECTS_ENDPOINT =
   "intermediateAPI/project/user/remove_projects";
 
-export const INTERMEDIATE_API_ALL_PAGE_PERMISSIONS_ENDPOINT =
+export const INTERMEDIATE_API_ALL_PERMISSIONS_ENDPOINT =
   "intermediateAPI/permission/all/get";
-export const INTERMEDIATE_API_ALL_ALLOWED_PERMISSIONS_ENDPOINT =
+export const INTERMEDIATE_API_ALL_USERS_PERMISSIONS_ENDPOINT =
   "intermediateAPI/permission/all_allowed_permissions/get";
 
 /* 

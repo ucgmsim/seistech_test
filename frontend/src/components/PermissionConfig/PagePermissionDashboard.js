@@ -33,7 +33,7 @@ const PagePermissionDashboard = () => {
 
         await fetch(
           CONSTANTS.CORE_API_BASE_URL +
-            CONSTANTS.INTERMEDIATE_API_ALL_PAGE_PERMISSIONS_ENDPOINT,
+            CONSTANTS.INTERMEDIATE_API_ALL_PERMISSIONS_ENDPOINT,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -44,7 +44,7 @@ const PagePermissionDashboard = () => {
           .then(handleErrors)
           .then(async (response) => {
             const responseData = await response.json();
-            setAllPermission(responseData["all_permission"]);
+            setAllPermission(responseData["all_permissions"]);
           })
           .catch((error) => {
             console.log(error);
@@ -98,7 +98,7 @@ const PagePermissionDashboard = () => {
 
         await fetch(
           CONSTANTS.CORE_API_BASE_URL +
-            CONSTANTS.INTERMEDIATE_API_ALL_ALLOWED_PERMISSIONS_ENDPOINT,
+            CONSTANTS.INTERMEDIATE_API_ALL_USERS_PERMISSIONS_ENDPOINT,
           {
             headers: {
               Authorization: `Bearer ${token}`,
