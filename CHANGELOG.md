@@ -12,6 +12,12 @@
     - `Users_Projects` is the bridging table between `User` and `Project`. (It used to be called, `Available_Projects` but saying `Available_Projects` was not 100% clear. So even it's not the best practice of naming the bridging table with connected tables but I thought this was the best we could find for now.)
   - Some of the endpoint's path is also changed.
 
+### Fix the GMS plot issue - ([PR #50](https://github.com/ucgmsim/seistech_psha_frontend/pull/50)
+
+- Fix the GMS plot - instead of using the user's IM/Exceedance rate level, use the IM_j value from the API.
+- Remove the `Highlight.js` package as no longer needed.
+  - It used to be used in the `Profile` page. However, this was a default thing from Auth0 and we will have our version of the `Profile` page later.
+
 ## February 26, 2021
 
 ### Implement dashboards for Project Permission and Page Permission - ([PR #49](https://github.com/ucgmsim/seistech_psha_frontend/pull/49)
