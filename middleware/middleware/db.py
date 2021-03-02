@@ -226,9 +226,6 @@ def get_user_projects(user_id):
 def get_all_users_projects():
     """Retrieve all allowed projects from Allowed_Project table
 
-    Similar to get_projects_from_db except, this function is designed to pull
-    every rows from Allowed_Project table.
-
     Returns
     -------
     allowed_projects_dict: dictionary
