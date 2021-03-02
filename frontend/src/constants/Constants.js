@@ -38,45 +38,52 @@ export const PROJECT_API_MAPS_ENDPOINT = "projectAPI/maps/get";
 
 export const PROJECT_API_HAZARD_ENDPOINT = "projectAPI/hazard/get";
 export const PROJECT_API_HAZARD_DISAGG_ENDPOINT = "projectAPI/disagg/get";
-export const PROJECT_API_HAZARD_DISAGG_RPS_ENDPOINT = "projectAPI/disagg/rps/get";
+export const PROJECT_API_HAZARD_DISAGG_RPS_ENDPOINT =
+  "projectAPI/disagg/rps/get";
 export const PROJECT_API_HAZARD_UHS_ENDPOINT = "projectAPI/uhs/get";
 export const PROJECT_API_HAZARD_UHS_RPS_ENDPOINT = "projectAPI/uhs/rps/get";
 
 /* Download URL */
-export const CORE_API_HAZARD_CURVE_DOWNLOAD_ENDPOINT = "coreAPI/hazard_download";
-export const CORE_API_HAZARD_DISAGG_DOWNLOAD_ENDPOINT = "coreAPI/disagg_download";
+export const CORE_API_HAZARD_CURVE_DOWNLOAD_ENDPOINT =
+  "coreAPI/hazard_download";
+export const CORE_API_HAZARD_DISAGG_DOWNLOAD_ENDPOINT =
+  "coreAPI/disagg_download";
 export const CORE_API_HAZARD_UHS_DOWNLOAD_ENDPOINT = "coreAPI/uhs_download";
 export const CORE_API_GMS_DOWNLOAD_ENDPOINT = "coreAPI/gms_download";
 
-export const PROJECT_API_HAZARD_CURVE_DOWNLOAD_ENDPOINT = "projectAPI/hazard_download";
-export const PROJECT_API_HAZARD_DISAGG_DOWNLOAD_ENDPOINT = "projectAPI/disagg_download";
-export const PROJECT_API_HAZARD_UHS_DOWNLOAD_ENDPOINT = "projectAPI/uhs_download";
+export const PROJECT_API_HAZARD_CURVE_DOWNLOAD_ENDPOINT =
+  "projectAPI/hazard_download";
+export const PROJECT_API_HAZARD_DISAGG_DOWNLOAD_ENDPOINT =
+  "projectAPI/disagg_download";
+export const PROJECT_API_HAZARD_UHS_DOWNLOAD_ENDPOINT =
+  "projectAPI/uhs_download";
 export const PROJECT_API_GMS_DOWNLOAD_ENDPOINT = "projectAPI/gms_download";
 
 /* Intermediate API call*/
-export const INTERMEDIATE_API_AUTH0_USER_INFO_ENDPOINT = "intermediateAPI/auth0/user/permissions/get";
+export const INTERMEDIATE_API_AUTH0_USER_INFO_ENDPOINT =
+  "intermediateAPI/auth0/user/permissions/get";
 export const INTERMEDIATE_API_AUTH0_USERS_ENDPOINT =
   "intermediateAPI/auth0/users/get";
 
 export const INTERMEDIATE_API_ALL_USERS_PROJECTS_ENDPOINT =
-  "intermediateAPI/project/allowed_projects/get";
+  "intermediateAPI/users_projects/all/get";
 export const INTERMEDIATE_API_ALL_PROJECTS_ENDPOINT =
   "intermediateAPI/project/all/get";
 
 export const INTERMEDIATE_API_USER_ADDABLE_PROJECTS_ENDPOINT =
-  "intermediateAPI/project/user/addable_projects/get";
+  "intermediateAPI/user/addable_projects/get";
 export const INTERMEDIATE_API_USER_PROJECTS_ENDPOINT =
-  "intermediateAPI/project/user/allowed_projects/get";
-
+  "intermediateAPI/user/projects/get";
 export const INTERMEDIATE_API_USER_ALLOCATE_PROJECTS_ENDPOINT =
-  "intermediateAPI/project/user/allocate_projects";
+  "intermediateAPI/user/allocate_projects";
 export const INTERMEDIATE_API_USER_REMOVE_PROJECTS_ENDPOINT =
-  "intermediateAPI/project/user/remove_projects";
+  "intermediateAPI/user/remove_projects";
 
 export const INTERMEDIATE_API_ALL_PERMISSIONS_ENDPOINT =
   "intermediateAPI/permission/all/get";
+
 export const INTERMEDIATE_API_ALL_USERS_PERMISSIONS_ENDPOINT =
-  "intermediateAPI/permission/all_allowed_permissions/get";
+  "intermediateAPI/users_permissions/all/get";
 
 /* 
   Words 
