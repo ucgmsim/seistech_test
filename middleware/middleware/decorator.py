@@ -5,8 +5,8 @@ from jose import jwt
 from six.moves.urllib.request import urlopen
 from flask import _request_ctx_stack
 
-import middleware.auth0 as auth0
 import middleware.server as server
+import middleware.auth0 as auth0
 
 
 def requires_auth(f):

@@ -3,11 +3,11 @@ import json
 from flask import jsonify, request
 from jose import jwt
 
-import middleware.utils as utils
-import middleware.decorator as decorator
-import middleware.auth0 as auth0
 import middleware.server as server
 import middleware.db as db
+import middleware.utils as utils
+import middleware.auth0 as auth0
+import middleware.decorator as decorator
 import middleware.constants as const
 import middleware.api.project_api as project_api
 
