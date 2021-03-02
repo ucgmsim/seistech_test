@@ -61,7 +61,8 @@ def get_all_allowed_projects():
 
     Returns
     -------
-    allowed_projects_dict: Dictionary in the form of:
+    allowed_projects_dict: dictionary
+        In the form of:
         {
            userA: [ProjectA, ProjectB, ProjectC],
            userB: [ProjectA, ProjectB]
@@ -91,7 +92,8 @@ def filter_the_projects_for_dashboard(unfiltered_projects):
 
     Returns
     -------
-    dictionary in the form of
+    dictionary:
+        In the form of
         {
             project_id: project_full_name
         }
@@ -199,9 +201,7 @@ def _is_permission_in_db(permission_name):
         E.g., hazard, hazard:hazard, project...
     """
     return bool(
-        models.Auth0Permission.query.filter_by(
-            permission_name=permission_name
-        ).first()
+        models.Auth0Permission.query.filter_by(permission_name=permission_name).first()
     )
 
 
@@ -354,11 +354,11 @@ def _allocate_permission_to_db(user_id, permission):
         print(f"{user_id} already has a permission with ${permission}")
 
 
-def _remove_illegal_permission(user_id, illegal_permission):
+def _remove_illegal_permission(user_id, permission):
     """allowed_permission table is outdated, remove illegal permission to update the dashboard"""
     illegal_permission_row = (
         models.AllowedPermission.query.filter_by(user_id=user_id)
-        .filter_by(permission_name=illegal_permission)
+        .filter_by(permission_name=permission)
         .first()
     )
 
@@ -367,8 +367,10 @@ def _remove_illegal_permission(user_id, illegal_permission):
     server.db.session.flush()
 
 
-def _filter_allowed_permission_table(user_id, trusted_permission_list):
-    """Filter the allowed_permission table to remove outdated permission
+def _sync_permissions(user_id, trusted_permission_list):
+    """Syncs the user access permissions with the ones from
+    the token (the one source of truth)
+    Filter the allowed_permission table to remove outdated permission
 
     If the access token has the permission of A, B, C but allowed_permission table
     has the permission of A, B, C, D. Then remove the permission D from the
@@ -384,14 +386,14 @@ def _filter_allowed_permission_table(user_id, trusted_permission_list):
         table
     """
     # Get a list of permission that are allocated to this user
-    unfiltered_allowed_permission_list = _get_user_allowed_permissions(user_id)
+    unfiltered_allowed_permission_list = _get_user_permissions(user_id)
 
     for permission in unfiltered_allowed_permission_list:
         if permission not in trusted_permission_list:
             _remove_illegal_permission(user_id, permission)
 
 
-def update_allowed_permission(user_id, permission_list):
+def update_user_permissions(user_id, permission_list):
     """Update/Insert users' allowed permission to a table,
     Allowed_Permission
     
@@ -402,8 +404,9 @@ def update_allowed_permission(user_id, permission_list):
     permission_list: list
         List of permission that user has. (From Auth0, trusted source)
     """
-    # Filter the allowed_permission table first before we check/update
-    _filter_allowed_permission_table(user_id, permission_list)
+    # Sync the allowed_permission table to token's permission (trusted source)
+    # first before we check/update
+    _sync_permissions(user_id, permission_list)
 
     print(f"Check whether the user is in the DB, if not, add the person to the DB")
     if not _is_user_in_db(user_id):
@@ -430,7 +433,7 @@ def get_all_permissions():
     return [permission.permission_name for permission in all_permission_list]
 
 
-def _get_user_allowed_permissions(requested_user_id):
+def _get_user_permissions(requested_user_id):
     """Retrieve all permissions for the specified user
 
     Returns
@@ -447,8 +450,9 @@ def _get_user_allowed_permissions(requested_user_id):
     ]
 
 
-def get_all_allowed_permissions():
-    """Retrieve all permissions from Allowed_Permission table
+def get_all_users_permissions():
+    """Retrieve permissions for all users
+    Retrieve all permissions from Allowed_Permission table
 
     Returns
     -------
