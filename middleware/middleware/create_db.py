@@ -22,7 +22,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = cs.CustomSQLALchemy(app)
 
-from models import *
+from middleware.models import *
 
 # Create tables - It only creates when tables don't exist
 db.create_all()
