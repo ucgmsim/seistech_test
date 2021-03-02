@@ -10,6 +10,7 @@
     - `Auth0_Permission` is the table that contains permission information from Auth0.
     - `Users_Permissions` is the bridging table between `User` and `Auth0_Permission`.
     - `Users_Projects` is the bridging table between `User` and `Project`. (It used to be called, `Available_Projects` but saying `Available_Projects` was not 100% clear. So even it's not the best practice of naming the bridging table with connected tables but I thought this was the best we could find for now.)
+  - Some of the endpoint's path is also changed.
 
 ## February 26, 2021
 
