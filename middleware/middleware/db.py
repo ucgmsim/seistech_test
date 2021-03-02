@@ -97,7 +97,7 @@ def _add_permission_to_db(permission_name):
 def _is_user_permission_in_db(user_id, permission):
     """Check whether there is a row with given user_id & permission"""
     return bool(
-        models.AllowedPermission.query.filter_by(user_id=user_id)
+        models.UserPermission.query.filter_by(user_id=user_id)
         .filter_by(permission_name=permission)
         .first()
     )
@@ -124,7 +124,7 @@ def _add_user_permission_to_db(user_id, permission):
         server.db.session.flush()
 
     if not _is_user_permission_in_db(user_id, permission):
-        server.db.session.add(models.AllowedPermission(user_id, permission))
+        server.db.session.add(models.UserPermission(user_id, permission))
         server.db.session.commit()
         server.db.session.flush()
     else:
@@ -153,7 +153,7 @@ def _add_user_project_to_db(user_id, project_name):
     # Find Find a project object with a given project_name to get its project id
     project_obj = models.Project.query.filter_by(project_name=project_name).first()
 
-    server.db.session.add(models.AllowedProject(user_id, project_obj.project_id))
+    server.db.session.add(models.UserProject(user_id, project_obj.project_id))
     server.db.session.commit()
     server.db.session.flush()
 
@@ -176,7 +176,7 @@ def _remove_user_projects_from_db(user_id, project_name):
             models.Project.query.filter_by(project_name=project_name).first().project_id
         )
         allowed_projects_row = (
-            models.AllowedProject.query.filter_by(user_id=user_id)
+            models.UserProject.query.filter_by(user_id=user_id)
             .filter_by(project_id=certain_project_id)
             .first()
         )
@@ -191,7 +191,7 @@ def _remove_user_projects_from_db(user_id, project_name):
 def _remove_user_permission_from_db(user_id, permission):
     """allowed_permission table is outdated, remove illegal permission to update the dashboard"""
     illegal_permission_row = (
-        models.AllowedPermission.query.filter_by(user_id=user_id)
+        models.UserPermission.query.filter_by(user_id=user_id)
         .filter_by(permission_name=permission)
         .first()
     )
@@ -215,8 +215,8 @@ def get_user_projects(user_id):
     """
     # Get all allowed projects that are allocated to this user.
     allowed_project_objs = (
-        models.Project.query.join(models.AllowedProject)
-        .filter((models.AllowedProject.user_id == user_id))
+        models.Project.query.join(models.UserProject)
+        .filter((models.UserProject.user_id == user_id))
         .all()
     )
 
@@ -239,7 +239,7 @@ def get_all_users_projects():
         }
     """
     # Get all allowed projects from the UserDB
-    allowed_projects = models.AllowedProject.query.all()
+    allowed_projects = models.UserProject.query.all()
 
     allowed_projects_dict = defaultdict(list)
 
@@ -328,7 +328,7 @@ def _get_user_permissions(requested_user_id):
     -------
     A list of permission names
     """
-    all_allowed_permission_for_a_user_list = models.AllowedPermission.query.filter_by(
+    all_allowed_permission_for_a_user_list = models.UserPermission.query.filter_by(
         user_id=requested_user_id
     ).all()
 
@@ -352,7 +352,7 @@ def get_all_users_permissions():
             }
     """
     # Get all allowed permission from the DB.
-    all_allowed_permission_list = models.AllowedPermission.query.all()
+    all_allowed_permission_list = models.UserPermission.query.all()
 
     allowed_permission_dict = defaultdict(list)
 
