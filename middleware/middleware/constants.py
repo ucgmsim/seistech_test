@@ -23,10 +23,10 @@ CORE_API_GMS_DATASETS_ENDPOINT = "/coreAPI/gms/ensemble_gms/datasets/get"
 CORE_API_GMS_IMS_ENDPOINT_ENDPOINT = "/coreAPI/gms/ensemble_gms/ims/get"
 
 # Download Endpoints
-CORE_API_HAZARD_CURVE_DOWNLOAD_ENDPOINT = "/coreAPI/hazard_download"
-CORE_API_HAZARD_DISAGG_DOWNLOAD_ENDPOINT = "/coreAPI/disagg_download"
-CORE_API_HAZARD_UHS_DOWNLOAD_ENDPOINT = "/coreAPI/uhs_download"
-CORE_API_GMS_DOWNLOAD_ENDPOINT = "/coreAPI/gms_download"
+CORE_API_HAZARD_CURVE_DOWNLOAD_ENDPOINT = "/coreAPI/hazard/download"
+CORE_API_HAZARD_DISAGG_DOWNLOAD_ENDPOINT = "/coreAPI/disagg/download"
+CORE_API_HAZARD_UHS_DOWNLOAD_ENDPOINT = "/coreAPI/uhs/download"
+CORE_API_GMS_DOWNLOAD_ENDPOINT = "/coreAPI/gms/download"
 
 # Project API Endpoints - Project tab
 # Site Selection
@@ -43,10 +43,10 @@ PROJECT_API_HAZARD_UHS_ENDPOINT = "/projectAPI/uhs/get"
 PROJECT_API_HAZARD_UHS_RPS_ENDPOINT = "/projectAPI/uhs/rps/get"
 
 # Download Endpoints
-PROJECT_API_HAZARD_CURVE_DOWNLOAD_ENDPOINT = "/projectAPI/hazard_download"
-PROJECT_API_HAZARD_DISAGG_DOWNLOAD_ENDPOINT = "/projectAPI/disagg_download"
-PROJECT_API_HAZARD_UHS_DOWNLOAD_ENDPOINT = "/projectAPI/uhs_download"
-PROJECT_API_GMS_DOWNLOAD_ENDPOINT = "/projectAPI/gms_download"
+PROJECT_API_HAZARD_CURVE_DOWNLOAD_ENDPOINT = "/projectAPI/hazard/download"
+PROJECT_API_HAZARD_DISAGG_DOWNLOAD_ENDPOINT = "/projectAPI/disagg/download"
+PROJECT_API_HAZARD_UHS_DOWNLOAD_ENDPOINT = "/projectAPI/uhs/download"
+PROJECT_API_GMS_DOWNLOAD_ENDPOINT = "/projectAPI/gms/download"
 
 # Intermediate API Endpoints
 INTERMEDIATE_API_AUTH0_USER_INFO_ENDPOINT = (

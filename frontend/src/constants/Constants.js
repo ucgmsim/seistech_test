@@ -45,19 +45,19 @@ export const PROJECT_API_HAZARD_UHS_RPS_ENDPOINT = "projectAPI/uhs/rps/get";
 
 /* Download URL */
 export const CORE_API_HAZARD_CURVE_DOWNLOAD_ENDPOINT =
-  "coreAPI/hazard_download";
+  "coreAPI/hazard/download";
 export const CORE_API_HAZARD_DISAGG_DOWNLOAD_ENDPOINT =
-  "coreAPI/disagg_download";
-export const CORE_API_HAZARD_UHS_DOWNLOAD_ENDPOINT = "coreAPI/uhs_download";
-export const CORE_API_GMS_DOWNLOAD_ENDPOINT = "coreAPI/gms_download";
+  "coreAPI/disagg/download";
+export const CORE_API_HAZARD_UHS_DOWNLOAD_ENDPOINT = "coreAPI/uhs/download";
+export const CORE_API_GMS_DOWNLOAD_ENDPOINT = "coreAPI/gms/download";
 
 export const PROJECT_API_HAZARD_CURVE_DOWNLOAD_ENDPOINT =
-  "projectAPI/hazard_download";
+  "projectAPI/hazard/download";
 export const PROJECT_API_HAZARD_DISAGG_DOWNLOAD_ENDPOINT =
-  "projectAPI/disagg_download";
+  "projectAPI/disagg/download";
 export const PROJECT_API_HAZARD_UHS_DOWNLOAD_ENDPOINT =
-  "projectAPI/uhs_download";
-export const PROJECT_API_GMS_DOWNLOAD_ENDPOINT = "projectAPI/gms_download";
+  "projectAPI/uhs/download";
+export const PROJECT_API_GMS_DOWNLOAD_ENDPOINT = "projectAPI/gms/download";
 
 /* Intermediate API call*/
 export const INTERMEDIATE_API_AUTH0_USER_INFO_ENDPOINT =
