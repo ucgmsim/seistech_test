@@ -222,19 +222,22 @@ const GMSViewer = () => {
   }, [computedGMS]);
 
   const validateComputedGMS = () => {
-    let isValidResponse = true;
+    if (computedGMS === undefined || computedGMS === null) {
+      return false;
+    }
+
     Object.values(computedGMS).forEach((x) => {
       // Like ks_bound value is Number and is not working with Object.keys(x).length
       if (!isNaN(x)) {
         return;
       }
-      // When an object doesn't have and values
+      // When an object doesn't have any values
       if (Object.keys(x).length === 0) {
-        isValidResponse = false;
+        return false;
       }
     });
 
-    return isValidResponse;
+    return true;
   };
 
   const validateBounds = () => {
@@ -266,9 +269,7 @@ const GMSViewer = () => {
             computedGMS !== null &&
             showErrorMessage.isError === false && (
               <Fragment>
-                {validateComputedGMS() === false ? (
-                  <ErrorMessage />
-                ) : (
+                {validateComputedGMS() ? (
                   <Fragment>
                     <Select
                       id="im-vectors"
@@ -286,6 +287,8 @@ const GMSViewer = () => {
                       />
                     )}
                   </Fragment>
+                ) : (
+                  <ErrorMessage />
                 )}
               </Fragment>
             )}
@@ -308,9 +311,7 @@ const GMSViewer = () => {
             computedGMS !== null &&
             showErrorMessage.isError === false && (
               <Fragment>
-                {validateComputedGMS() === false ? (
-                  <ErrorMessage />
-                ) : (
+                {validateComputedGMS() ? (
                   <Fragment>
                     <Select
                       id="metadata"
@@ -343,6 +344,8 @@ const GMSViewer = () => {
                       <ErrorMessage />
                     )}
                   </Fragment>
+                ) : (
+                  <ErrorMessage />
                 )}
               </Fragment>
             )}
