@@ -89,7 +89,7 @@ export const Provider = (props) => {
   const [uhsRateTable, setUHSRateTable] = useState([]);
 
   /*
-    Project Tab
+    GMS
   */
   const [GMSComputeClick, setGMSComputeClick] = useState(null);
   const [GMSIMLevel, setGMSIMLevel] = useState("");
@@ -106,6 +106,10 @@ export const Provider = (props) => {
   const [GMSRrupMax, setGMSRrupMax] = useState("");
   const [GMSVS30Min, setGMSVS30Min] = useState("");
   const [GMSVS30Max, setGMSVS30Max] = useState("");
+
+  /*
+    Project Tab
+  */
 
   // Site Selection
   // Response for Location is an object and we need an array for dropdowns
