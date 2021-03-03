@@ -8,18 +8,7 @@ import { ErrorMessage } from "components/common";
 import "assets/style/GMSPlot.css";
 
 const GMSViewerMwRrupPlot = ({ gmsData, causalParamBounds }) => {
-  const validateBounds = () => {
-    let isValidated = false;
-    Object.values(causalParamBounds).forEach(
-      (x) => (isValidated = x === "" ? false : true)
-    );
-    return isValidated;
-  };
-  if (
-    gmsData !== null &&
-    !gmsData.hasOwnProperty("error") &&
-    validateBounds()
-  ) {
+  if (gmsData !== null && !gmsData.hasOwnProperty("error")) {
     const metadata = gmsData["metadata"];
 
     /* 
