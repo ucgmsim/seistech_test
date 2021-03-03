@@ -157,6 +157,7 @@ const GMSViewer = () => {
             .then(handleErrors)
             .then(async (response) => {
               const responseData = await response.json();
+              console.log(responseData);
               setComputedGMS(responseData);
               setSelectedIMVectors(newIMVector);
               setDownloadToken(responseData["download_token"]);
@@ -236,6 +237,14 @@ const GMSViewer = () => {
     return isValidResponse;
   };
 
+  const validateBounds = () => {
+    let isValidated = false;
+    Object.values(causalParamBounds).forEach(
+      (x) => (isValidated = x === "" ? false : true)
+    );
+    return isValidated;
+  };
+
   return (
     <div className="gms-viewer">
       <Tabs defaultActiveKey="GMSViewerIMDistributions">
@@ -269,11 +278,7 @@ const GMSViewer = () => {
                       isSearchable={false}
                     />
                     {specifiedIM.value === "spectra" ? (
-                      <GMSViewerSpectra
-                        gmsData={computedGMS}
-                        periods={selectedIMVectors}
-                        im_type={GMSIMType}
-                      />
+                      <GMSViewerSpectra gmsData={computedGMS} />
                     ) : (
                       <GMSViewerIMDistributions
                         gmsData={computedGMS}
@@ -323,17 +328,19 @@ const GMSViewer = () => {
                         );
                       }}
                     />
-                    {specifiedMetadata.value === "mwrrupplot" ? (
-                      <GMSViewerMwRrupPlot
-                        gmsData={computedGMS}
-                        causalParamBounds={causalParamBounds}
-                      />
-                    ) : (
+                    {specifiedMetadata.value !== "mwrrupplot" ? (
                       <GMSViewerCausalParameters
                         gmsData={computedGMS}
                         metadata={specifiedMetadata.value}
                         causalParamBounds={causalParamBounds}
                       />
+                    ) : validateBounds() ? (
+                      <GMSViewerMwRrupPlot
+                        gmsData={computedGMS}
+                        causalParamBounds={causalParamBounds}
+                      />
+                    ) : (
+                      <ErrorMessage />
                     )}
                   </Fragment>
                 )}

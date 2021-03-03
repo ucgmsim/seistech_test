@@ -8,13 +8,15 @@ import { sortIMs } from "utils/Utils";
 
 import "assets/style/GMSPlot.css";
 
-const GMSViewerSpectra = ({ gmsData, periods, im_type }) => {
-  if (gmsData !== null && !gmsData.hasOwnProperty("error") && periods !== []) {
+const GMSViewerSpectra = ({ gmsData }) => {
+  if (gmsData !== null && !gmsData.hasOwnProperty("error")) {
     const cdfX = gmsData["gcim_cdf_x"];
     const cdfY = gmsData["gcim_cdf_y"];
     const realisations = gmsData["realisations"];
     const selectedGMs = gmsData["selected_GMs"];
     const im_j = gmsData["im_j"];
+    const periods = gmsData["IMs"];
+    const im_type = gmsData["IM_j"];
 
     // If IM Type starts with pSA, add it to periods
     if (im_type.startsWith("pSA")) {
@@ -55,7 +57,9 @@ const GMSViewerSpectra = ({ gmsData, periods, im_type }) => {
         sortedCDFY[IM] = cdfY[IM];
         sortedRealisations[IM] = realisations[IM];
         sortedSelectedGMs[IM] = selectedGMs[IM];
-        // If IM is equal to IM Type, we put im_j as a y value, selectedGMs is a bit different as the Core API returns with its own data for this IM (which is equal to IM Type)
+        // If IM is equal to IM Type, we put im_j as a y value,
+        // selectedGMs is a bit different as the Core API
+        //returns with its own data for this IM (which is equal to IM Type)
       } else {
         sortedCDFX[IM] = values;
         sortedCDFY[IM] = im_j;
