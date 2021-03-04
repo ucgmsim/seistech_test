@@ -58,10 +58,10 @@ const GMSForm = () => {
 
   const [arrow, setArrow] = useState(true);
 
-  const [selectedIMType, setSelectedIMType] = useState(null);
+  const [selectedIMType, setSelectedIMType] = useState("");
 
   const [localNumGMS, setLocalNumGMS] = useState("");
-  const [localWeights, setLocalWeights] = useState("");
+  const [localWeights, setLocalWeights] = useState({});
   const [localDatabase, setLocalDatabase] = useState(null);
   const [localReplicates, setLocalReplicates] = useState(1);
 
@@ -311,6 +311,7 @@ const GMSForm = () => {
           )
             .then(async function (response) {
               const responseData = await response.json();
+              console.log(`IM THE WEIGHTS: ${responseData}`);
               setLocalWeights(responseData);
 
               setGetIMWeightMButton({
