@@ -21,6 +21,7 @@ import {
   ErrorMessage,
 } from "components/common";
 import { handleErrors, GMSIMLabelConverter } from "utils/Utils";
+import { calculateGMSSpectra } from "utils/calculations/GMSSpectra";
 
 import "assets/style/GMSViewer.css";
 
@@ -53,6 +54,7 @@ const GMSViewer = () => {
   const [selectedIMVectors, setSelectedIMVectors] = useState([]);
 
   const [computedGMS, setComputedGMS] = useState(null);
+  const [spectraData, setSpectraData] = useState([]);
 
   const [specifiedIM, setSpecifiedIM] = useState([]);
   const [localIMVectors, setLocalIMVectors] = useState([]);
@@ -221,6 +223,13 @@ const GMSViewer = () => {
     }
   }, [computedGMS]);
 
+  useEffect(() => {
+    if (computedGMS !== null) {
+      console.log(computedGMS);
+      setSpectraData(calculateGMSSpectra(computedGMS));
+    }
+  }, [computedGMS]);
+
   const validateComputedGMS = () => {
     if (computedGMS === undefined || computedGMS === null) {
       return false;
@@ -279,7 +288,7 @@ const GMSViewer = () => {
                       isSearchable={false}
                     />
                     {specifiedIM.value === "spectra" ? (
-                      <GMSViewerSpectra gmsData={computedGMS} />
+                      <GMSViewerSpectra spectraData={spectraData} />
                     ) : (
                       <GMSViewerIMDistributions
                         gmsData={computedGMS}
