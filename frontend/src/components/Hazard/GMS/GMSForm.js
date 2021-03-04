@@ -176,20 +176,6 @@ const GMSForm = () => {
     setLocalIMs(localIMs);
   }, [availableIMs]);
 
-  const validGetPreGMParams = () => {
-    if (localIMExdRateRadio === "im-level") {
-      if (selectedIMType !== null && localIMLevel !== "") {
-        return false;
-      }
-    } else if (localIMExdRateRadio === "exceedance-rate") {
-      if (selectedIMType !== null && localExcdRate !== "") {
-        return false;
-      }
-    }
-
-    return true;
-  };
-
   useEffect(() => {
     const abortController = new AbortController();
     const signal = abortController.signal;
@@ -265,10 +251,6 @@ const GMSForm = () => {
       abortController.abort();
     };
   }, [getPreGMParamsClick]);
-
-  const validIMVectors = () => {
-    return localIMVector.length == 0;
-  };
 
   /*
     Fetch data from Core API -> To get a default weight for each IM Vector.
@@ -400,6 +382,24 @@ const GMSForm = () => {
       ((localIMExdRateRadio === "exceedance-rate" && localExcdRate !== "") ||
         (localIMExdRateRadio === "im-level" && localIMLevel !== ""))
     );
+  };
+
+  const validIMVectors = () => {
+    return localIMVector.length == 0;
+  };
+
+  const validGetPreGMParams = () => {
+    if (localIMExdRateRadio === "im-level") {
+      if (selectedIMType !== null && localIMLevel !== "") {
+        return false;
+      }
+    } else if (localIMExdRateRadio === "exceedance-rate") {
+      if (selectedIMType !== null && localExcdRate !== "") {
+        return false;
+      }
+    }
+
+    return true;
   };
 
   const computeGMS = () => {
