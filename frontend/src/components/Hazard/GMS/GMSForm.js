@@ -51,17 +51,10 @@ const GMSForm = () => {
     { value: "C", label: "C" },
   ]);
 
-  const [downArrow, setDownArrow] = useState(
-    <FontAwesomeIcon icon="caret-down" size="2x" />
-  );
-  const [upArrow, setUpArrow] = useState(
-    <FontAwesomeIcon icon="caret-up" size="2x" />
-  );
-
-  const arrowSets = {
-    true: downArrow,
-    false: upArrow,
-  };
+  const [arrowSets, setArrowSets] = useState({
+    true: <FontAwesomeIcon icon="caret-down" size="2x" />,
+    false: <FontAwesomeIcon icon="caret-up" size="2x" />,
+  });
 
   const [arrow, setArrow] = useState(true);
 
