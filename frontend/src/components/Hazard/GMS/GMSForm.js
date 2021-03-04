@@ -364,6 +364,23 @@ const GMSForm = () => {
     }
   }, [selectedIMType, localIMLevel, localExcdRate]);
 
+  /* 
+    Filtering the IMVectors based on chosen IM Type
+    For instance, IMVectors used to be
+    [PGA, pSA_0.01, pSA_0.04, pSA_0.05, pSA_0.2]
+    and IM Type was
+    pSA_5.0
+    By changing the IM Type to PGA, PGA should not be in the IMVectors list hence,
+    filter the chosen IM Vectors to remove the duplication, PGA for this example 
+  */
+  useEffect(() => {
+    if (selectedIMType !== "" && localIMVector.length !== 0) {
+      setLocalIMVector(
+        localIMVector.filter((vector) => vector.label !== selectedIMType)
+      );
+    }
+  }, [selectedIMType]);
+
   const validInputs = () => {
     return (
       selectedEnsemble !== ("" && null) &&
@@ -532,7 +549,6 @@ const GMSForm = () => {
           >
             IM Vector
           </label>
-          {/* <pre>IM Vector</pre> */}
           <GuideTooltip
             explanation={CONSTANTS.TOOLTIP_MESSAGES["HAZARD_GMS_IM_VECTOR"]}
           />
@@ -541,10 +557,9 @@ const GMSForm = () => {
             closeMenuOnSelect={false}
             components={animatedComponents}
             isMulti
+            value={localIMVector}
             onChange={(value) => setLocalIMVector(value || [])}
-            options={localIMs.filter((e) => {
-              return e.value !== selectedIMType;
-            })}
+            options={localIMs.filter((im) => im.value !== selectedIMType)}
             isDisabled={localIMs.length === 0}
           />
         </div>
