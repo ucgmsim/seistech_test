@@ -45,6 +45,72 @@ const GMSForm = () => {
   const [availableIMs, setAvailableIMs] = useState([]);
   const [localIMs, setLocalIMs] = useState([]);
 
+  const [availableDatabases, setAvailableDatabases] = useState([
+    { value: "A", label: "A" },
+    { value: "B", label: "B" },
+    { value: "C", label: "C" },
+  ]);
+
+  const [downArrow, setDownArrow] = useState(
+    <FontAwesomeIcon icon="caret-down" size="2x" />
+  );
+  const [upArrow, setUpArrow] = useState(
+    <FontAwesomeIcon icon="caret-up" size="2x" />
+  );
+
+  const arrowSets = {
+    true: downArrow,
+    false: upArrow,
+  };
+
+  const [arrow, setArrow] = useState(true);
+
+  const [selectedIMType, setSelectedIMType] = useState(null);
+
+  const [localNumGMS, setLocalNumGMS] = useState("");
+  const [localWeights, setLocalWeights] = useState("");
+  const [localDatabase, setLocalDatabase] = useState(null);
+  const [localReplicates, setLocalReplicates] = useState(1);
+
+  /*
+    Pre-GM Filtering Parameters Table
+  */
+  const [localMwMin, setLocalMwMin] = useState("");
+  const [localMwMax, setLocalMwMax] = useState("");
+  const [localRrupMin, setLocalRrupMin] = useState("");
+  const [localRrupMax, setLocalRrupMax] = useState("");
+  const [localVS30Min, setLocalVS30Min] = useState("");
+  const [localVS30Max, setLocalVS30Max] = useState("");
+
+  /*
+   IM Level/Exceedance Rate Section
+ */
+
+  // IM Level / Exceedance Rate
+  const [localIMExdRateRadio, setLocalImExdRateRadio] = useState("im-level");
+
+  const [localIMLevel, setLocalIMLevel] = useState("");
+
+  const [localExcdRate, setLocalExcdRate] = useState("");
+
+  const [getPreGMParamsClick, setGetPreGMParamsClick] = useState(null);
+  const [getPreGMButton, setGetPreGMButton] = useState({
+    text: "Get causal parameters bounds",
+    isFetching: false,
+  });
+
+  /*
+    IM Vector Section
+  */
+  const [localIMVector, setLocalIMVector] = useState([]);
+  const [getIMWeightsClick, setGetIMWeightsClick] = useState(null);
+
+  const [getIMWeightMButton, setGetIMWeightMButton] = useState({
+    text: "Get IM vector Weights",
+    isFetching: false,
+  });
+  const [localWeightsTable, setLocalWeightsTable] = useState([]);
+
   useEffect(() => {
     const abortController = new AbortController();
     const signal = abortController.signal;
@@ -117,55 +183,6 @@ const GMSForm = () => {
     setLocalIMs(localIMs);
   }, [availableIMs]);
 
-  const availableDatabases = [
-    { value: "A", label: "A" },
-    { value: "B", label: "B" },
-    { value: "C", label: "C" },
-  ];
-  const downArrow = <FontAwesomeIcon icon="caret-down" size="2x" />;
-  const upArrow = <FontAwesomeIcon icon="caret-up" size="2x" />;
-
-  const arrowSets = {
-    true: downArrow,
-    false: upArrow,
-  };
-
-  const [arrow, setArrow] = useState(true);
-
-  const [selectedIMType, setSelectedIMType] = useState(null);
-
-  const [localNumGMS, setLocalNumGMS] = useState("");
-  const [localWeights, setLocalWeights] = useState("");
-  const [localDatabase, setLocalDatabase] = useState(null);
-  const [localReplicates, setLocalReplicates] = useState(1);
-
-  /*
-    Pre-GM Filtering Parameters Table
-  */
-  const [localMwMin, setLocalMwMin] = useState("");
-  const [localMwMax, setLocalMwMax] = useState("");
-  const [localRrupMin, setLocalRrupMin] = useState("");
-  const [localRrupMax, setLocalRrupMax] = useState("");
-  const [localVS30Min, setLocalVS30Min] = useState("");
-  const [localVS30Max, setLocalVS30Max] = useState("");
-
-  /*
-    IM Level/Exceedance Rate Section
-  */
-
-  // IM Level / Exceedance Rate
-  const [localIMExdRateRadio, setLocalImExdRateRadio] = useState("im-level");
-
-  const [localIMLevel, setLocalIMLevel] = useState("");
-
-  const [localExcdRate, setLocalExcdRate] = useState("");
-
-  const [getPreGMParamsClick, setGetPreGMParamsClick] = useState(null);
-  const [getPreGMButton, setGetPreGMButton] = useState({
-    text: "Get causal parameters bounds",
-    isFetching: false,
-  });
-
   const validGetPreGMParams = () => {
     if (localIMExdRateRadio === "im-level") {
       if (selectedIMType !== null && localIMLevel !== "") {
@@ -179,6 +196,7 @@ const GMSForm = () => {
 
     return true;
   };
+
   useEffect(() => {
     const abortController = new AbortController();
     const signal = abortController.signal;
@@ -254,17 +272,6 @@ const GMSForm = () => {
       abortController.abort();
     };
   }, [getPreGMParamsClick]);
-
-  /*
-    IM Vector Section
-  */
-  const [localIMVector, setLocalIMVector] = useState([]);
-  const [getIMWeightsClick, setGetIMWeightsClick] = useState(null);
-
-  const [getIMWeightMButton, setGetIMWeightMButton] = useState({
-    text: "Get IM vector Weights",
-    isFetching: false,
-  });
 
   const validIMVectors = () => {
     return localIMVector.length == 0;
@@ -343,7 +350,6 @@ const GMSForm = () => {
   /*
     IM Vector -> Create Weights Table inside Advanced tab
   */
-  const [localWeightsTable, setLocalWeightsTable] = useState([]);
 
   useEffect(() => {
     // To check whether we have any default weights from Core API or NOT
