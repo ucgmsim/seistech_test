@@ -293,7 +293,6 @@ const GMSForm = () => {
           )
             .then(async function (response) {
               const responseData = await response.json();
-              console.log(`IM THE WEIGHTS: ${responseData}`);
               setLocalWeights(responseData);
 
               setGetIMWeightMButton({
