@@ -8,6 +8,8 @@ from flask import _request_ctx_stack
 import middleware.server as server
 import middleware.auth0 as auth0
 
+ALGORITHMS = os.environ["ALGORITHMS"]
+API_AUDIENCE = os.environ["API_AUDIENCE"]
 
 def requires_auth(f):
     """Determines if the Access Token is valid"""

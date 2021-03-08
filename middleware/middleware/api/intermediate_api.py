@@ -29,7 +29,10 @@ def get_auth0_user_key_info():
     # Update the Allowed_Permission table
     db.update_user_permissions(user_id, permission_list)
 
+    return jsonify({})
+    return 200, ""
     return jsonify({"permissions": permission_list, "id": user_id})
+
 
 
 # Edit User

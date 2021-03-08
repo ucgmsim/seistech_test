@@ -8,6 +8,14 @@ import middleware.auth0 as auth0
 import middleware.constants as const
 
 
+# For Project API with ENV
+PROJECT_API_BASE = os.environ["PROJECT_API_BASE"]
+
+# Generate the coreAPI token
+CORE_API_TOKEN = "Bearer {}".format(
+    jwt.encode({"env": os.environ["ENV"]}, os.environ["CORE_API_SECRET"], algorithm="HS256")
+)
+
 # Site Selection
 def get_all_projects():
     return utils.proxy_to_api(request, "api/project/ids/get", "GET", True).get_json()

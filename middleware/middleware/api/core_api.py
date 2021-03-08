@@ -1,20 +1,30 @@
 from flask import request
 
+
 import middleware.server as server
 import middleware.utils as utils
 import middleware.auth0 as auth0
 import middleware.decorator as decorator
 import middleware.constants as const
+from middleware import app
 
+
+# For DEV/EA/PROD with ENV
+CORE_API_BASE = os.environ["CORE_API_BASE"]
+
+# Generate the coreAPI token
+CORE_API_TOKEN = "Bearer {}".format(
+    jwt.encode({"env": os.environ["ENV"]}, os.environ["CORE_API_SECRET"], algorithm="HS256")
+)
 
 # Site Selection
-@server.app.route(const.CORE_API_ENSEMBLE_IDS_ENDPOINT, methods=["GET"])
+@app.route(const.CORE_API_ENSEMBLE_IDS_ENDPOINT, methods=["GET"])
 @decorator.requires_auth
 def get_ensemble_ids():
     return utils.proxy_to_api(request, "api/gm_data/ensemble/ids/get", "GET")
 
 
-@server.app.route(const.CORE_API_IMS_ENDPOINT, methods=["GET"])
+@app.route(const.CORE_API_IMS_ENDPOINT, methods=["GET"])
 @decorator.requires_auth
 def get_im_ids():
     return utils.proxy_to_api(request, "api/gm_data/ensemble/ims/get", "GET")

@@ -11,7 +11,7 @@ def proxy_to_api(
     request,
     route,
     methods,
-    to_project_api: bool = False,
+    api_base: str,
     endpoint: str = None,
     content_type: str = "application/json",
     headers: Dict = None,
@@ -35,11 +35,6 @@ def proxy_to_api(
     headers: object
         An object that stores some headers.
     """
-
-    api_destination = server.CORE_API_BASE
-
-    if to_project_api is True:
-        api_destination = server.PROJECT_API_BASE
 
     if endpoint is not None:
         db.write_request_details(

@@ -5,8 +5,14 @@ import http.client
 from jose import jwt
 from flask import request, jsonify
 
-import middleware.server as server
+from middleware import app
 
+# To communicate with Management API
+AUTH0_CLIENT_ID = os.environ["AUTH0_CLIENT_ID"]
+AUTH0_CLIENT_SECRET = os.environ["AUTH0_CLIENT_SECRET"]
+AUTH0_AUDIENCE = os.environ["AUTH0_AUDIENCE"]
+AUTH0_GRANT_TYPE = os.environ["AUTH0_GRANT_TYPE"]
+AUTH0_DOMAIN = os.environ["AUTH0_DOMAIN"]
 
 class AuthError(Exception):
     def __init__(self, error, status_code):

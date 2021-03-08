@@ -1,10 +1,8 @@
 from collections import defaultdict
 
-from flask import Response
-
-import middleware.server as server
 import middleware.models as models
 import middleware.auth0 as auth0
+from middleware import db
 
 
 def _is_user_in_db(user_id):
@@ -298,8 +296,6 @@ def allocate_projects_to_user(user_id, project_list):
 
     for project in project_list:
         _add_user_project_to_db(user_id, project["value"])
-
-    return Response(status=200)
 
 
 def remove_projects_from_user(user_id, project_list):

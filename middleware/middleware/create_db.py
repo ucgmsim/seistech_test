@@ -2,26 +2,10 @@ import os
 
 from flask import Flask
 
-import middleware.custom_sqlalchemy as cs
 import middleware.auth0 as auth0
+import middleware.custom_sqlalchemy as cs
 
-
-# DB Connection Setup
-DATABASE = "mysql+pymysql://{0}:{1}@{2}/{3}".format(
-    os.environ["DB_USERNAME"],
-    os.environ["DB_PASSWORD"],
-    os.environ["DB_SERVER"],
-    os.environ["DB_NAME"],
-)
-
-app = Flask("seistech_web")
-
-# Connect to DB
-app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-
-db = cs.CustomSQLALchemy(app)
-
+from middleware import db
 from middleware.models import *
 
 # Create tables - It only creates when tables don't exist
