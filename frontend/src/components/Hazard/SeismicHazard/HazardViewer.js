@@ -1,14 +1,16 @@
 import React, { Fragment, useContext, useState, useEffect } from "react";
-import Tabs from "react-bootstrap/Tabs";
-import { Tab } from "react-bootstrap";
+
+import { Tabs, Tab } from "react-bootstrap";
 
 import { GlobalContext } from "context";
 
-import "assets/style/HazardForms.css";
+import {
+  HazardViewerHazardCurve,
+  HazardViewerDisaggregation,
+  HazardViewerUHS,
+} from "components/Hazard/SeismicHazard";
 
-import HazardViewerHazardCurve from "./HazardViewerHazardCurve";
-import HazadViewerDisaggregation from "./HazardViewerDisaggregation";
-import HazardViewerUhs from "./HazardViewerUHS";
+import "assets/style/HazardForms.css";
 
 const HazardViewer = () => {
   const {
@@ -59,10 +61,10 @@ const HazardViewer = () => {
           <HazardViewerHazardCurve />
         </Tab>
         <Tab eventKey="disagg" title="Disaggregation">
-          <HazadViewerDisaggregation />
+          <HazardViewerDisaggregation />
         </Tab>
         <Tab eventKey="uhs" title="Uniform Hazard Spectrum">
-          <HazardViewerUhs />
+          <HazardViewerUHS />
         </Tab>
       </Tabs>
     </Fragment>

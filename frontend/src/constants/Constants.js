@@ -3,62 +3,87 @@
 export const CORE_API_BASE_URL =
   process.env.REACT_APP_CONSTANT_CORE_API_BASE_URL;
 
-export const APP_API_ROUTE_USERDATA = "user";
+export const CORE_API_ENSEMBLE_IDS_ENDPOINT = "coreAPI/ensembleids/get";
+export const CORE_API_IMS_ENDPOINT = "coreAPI/ims/get";
+export const CORE_API_CONTEXT_MAP_ENDPOINT = "coreAPI/contextmap/get";
+export const CORE_API_VS30_MAP_ENDPOINT = "coreAPI/vs30map/get";
+export const CORE_API_STATION_ENDPOINT = "coreAPI/station/get";
 
-export const CORE_API_ROUTE_ENSEMBLEIDS = "coreAPI/ensembleids";
-export const CORE_API_ROUTE_IMIDS = "coreAPI/imids";
-export const CORE_API_ROUTE_CONTEXT_MAP = "coreAPI/contextmap";
-export const CORE_API_ROUTE_VS30_MAP = "coreAPI/vs30map";
-export const CORE_API_ROUTE_STATION = "coreAPI/station";
-export const CORE_API_ROUTE_HAZARD_PLOT = "coreAPI/hazard";
-export const CORE_API_ROUTE_HAZARD_NZCODE = "coreAPI/hazard/nz1170p5";
-export const CORE_API_ROUTE_DISAGG = "coreAPI/disagg";
-export const CORE_API_ROUTE_UHS = "coreAPI/uhs";
-export const CORE_API_ROUTE_UHS_NZCODE = "coreAPI/uhs/nz1170p5";
-export const CORE_API_ROUTE_HAZARD_NZCODE_SOIL_CLASS =
-  "coreAPI/hazard/nz1170p5/soil_class";
-export const CORE_API_ROUTE_HAZARD_NZCODE_DEFAULT_PARAMS =
-  "coreAPI/hazard/nz1170p5/default";
-export const CORE_API_ROUTE_GMS_COMPUTE = "coreAPI/gms/ensemble_gms";
-export const CORE_API_ROUTE_GMS_DEFAULT_IM_WEIGHTS =
-  "coreAPI/gms/default_im_weights";
-export const CORE_API_ROUTE_GMS_DEFAULT_CAUSAL_PARAMS =
-  "coreAPI/gms/default_causal_params";
-export const CORE_API_ROUTE_GMS_GET_AVAILABLE_GMS =
-  "coreAPI/gms/ensemble_gms/ims";
-export const CORE_API_ROUTE_GMS_GET_GM_DATASETS =
-  "coreAPI/gms/ensemble_gms/datasets";
+export const CORE_API_HAZARD_ENDPOINT = "coreAPI/hazard/get";
+export const CORE_API_HAZARD_NZ11705_ENDPOINT = "coreAPI/hazard/nz1170p5/get";
+export const CORE_API_HAZARD_DISAGG_ENDPOINT = "coreAPI/disagg/get";
+export const CORE_API_HAZARD_UHS_ENDPOINT = "coreAPI/uhs/get";
+export const CORE_API_HAZARD_UHS_NZ11705_ENDPOINT = "coreAPI/uhs/nz1170p5/get";
+export const CORE_API_HAZARD_NZ11705_SOIL_CLASS_ENDPOINT =
+  "coreAPI/hazard/nz1170p5/soil_class/get";
+export const CORE_API_HAZARD_NZ11705_DEFAULT_PARAMS_ENDPOINT =
+  "coreAPI/hazard/nz1170p5/default/get";
+
+export const CORE_API_GMS_ENDPOINT = "coreAPI/gms/ensemble_gms/get";
+export const CORE_API_GMS_DEFAULT_IM_WEIGHTS_ENDPOINT =
+  "coreAPI/gms/default_im_weights/get";
+export const CORE_API_GMS_DEFAULT_CAUSAL_PARAMS_ENDPOINT =
+  "coreAPI/gms/default_causal_params/get";
+export const CORE_API_GMS_IMS_ENDPOINT_ENDPOINT =
+  "coreAPI/gms/ensemble_gms/ims/get";
+export const CORE_API_GMS_DATASETS_ENDPOINT =
+  "coreAPI/gms/ensemble_gms/datasets/get";
 
 // This endpoint will eventually replace when we implement DB properly
 // As this function reads from Available_Project table (A bridge table between User and Project)
-// export const PROJECT_API_ROUTE_PROJECT_IDS = "projectAPI/available_ids/get";
-export const PROJECT_API_ROUTE_PROJECT_IDS = "projectAPI/ids/get";
-export const PROJECT_API_ROUTE_PROJECT_SITES = "projectAPI/sites/get";
-export const PROJECT_API_ROUTE_PROJECT_IMS = "projectAPI/ims/get";
-export const PROJECT_API_ROUTE_PROJECT_HAZARD_GET = "projectAPI/hazard/get";
-export const PROJECT_API_ROUTE_PROJECT_DISAGG_GET = "projectAPI/disagg/get";
-export const PROJECT_API_ROUTE_PROJECT_DISAGG_RPS = "projectAPI/disagg/rps/get";
-export const PROJECT_API_ROUTE_PROJECT_UHS_RPS = "projectAPI/uhs/rps/get";
-export const PROJECT_API_ROUTE_PROJECT_UHS_GET = "projectAPI/uhs/get";
-export const PROJECT_API_ROUTE_PROJECT_MAPS = "projectAPI/maps/get";
+export const PROJECT_API_PROJECT_IDS_ENDPOINT = "projectAPI/ids/get";
+export const PROJECT_API_SITES_ENDPOINT = "projectAPI/sites/get";
+export const PROJECT_API_IMS_ENDPOINT = "projectAPI/ims/get";
+export const PROJECT_API_MAPS_ENDPOINT = "projectAPI/maps/get";
+
+export const PROJECT_API_HAZARD_ENDPOINT = "projectAPI/hazard/get";
+export const PROJECT_API_HAZARD_DISAGG_ENDPOINT = "projectAPI/disagg/get";
+export const PROJECT_API_HAZARD_DISAGG_RPS_ENDPOINT =
+  "projectAPI/disagg/rps/get";
+export const PROJECT_API_HAZARD_UHS_ENDPOINT = "projectAPI/uhs/get";
+export const PROJECT_API_HAZARD_UHS_RPS_ENDPOINT = "projectAPI/uhs/rps/get";
 
 /* Download URL */
-export const CORE_API_DOWNLOAD_HAZARD = "coreAPI/hazard_download";
-export const CORE_API_DOWNLOAD_DISAGG = "coreAPI/disagg_download";
-export const CORE_API_DOWNLOAD_UHS = "coreAPI/uhs_download";
-export const CORE_API_DOWNLOAD_GMS = "coreAPI/gms_download";
+export const CORE_API_HAZARD_CURVE_DOWNLOAD_ENDPOINT =
+  "coreAPI/hazard/download";
+export const CORE_API_HAZARD_DISAGG_DOWNLOAD_ENDPOINT =
+  "coreAPI/disagg/download";
+export const CORE_API_HAZARD_UHS_DOWNLOAD_ENDPOINT = "coreAPI/uhs/download";
+export const CORE_API_GMS_DOWNLOAD_ENDPOINT = "coreAPI/gms/download";
 
-export const PROJECT_API_DOWNLOAD_HAZARD = "projectAPI/hazard_download";
-export const PROJECT_API_DOWNLOAD_DISAGG = "projectAPI/disagg_download";
-export const PROJECT_API_DOWNLOAD_UHS = "projectAPI/uhs_download";
-export const PROJECT_API_DOWNLOAD_GMS = "projectAPI/gms_download";
+export const PROJECT_API_HAZARD_CURVE_DOWNLOAD_ENDPOINT =
+  "projectAPI/hazard/download";
+export const PROJECT_API_HAZARD_DISAGG_DOWNLOAD_ENDPOINT =
+  "projectAPI/disagg/download";
+export const PROJECT_API_HAZARD_UHS_DOWNLOAD_ENDPOINT =
+  "projectAPI/uhs/download";
+export const PROJECT_API_GMS_DOWNLOAD_ENDPOINT = "projectAPI/gms/download";
 
-/* Middleware API call - That doesn't need to communicate to neither Core API nor Project API */
-export const MIDDLEWARE_API_ROUTE_GET_USER = "middlewareAPI/auth0/user/get";
-export const MIDDLEWARE_API_ROUTE_GET_PROJECT =
-  "middlewareAPI/projectAPI/addable_projects/get";
-export const MIDDLEWARE_API_ROUTE_ALLOCATE_PROJECTS_TO_USER =
-  "middlewareAPI/allocate_projects";
+/* Intermediate API call*/
+export const INTERMEDIATE_API_AUTH0_USER_INFO_ENDPOINT =
+  "intermediateAPI/auth0/user/permissions/get";
+export const INTERMEDIATE_API_AUTH0_USERS_ENDPOINT =
+  "intermediateAPI/auth0/users/get";
+
+export const INTERMEDIATE_API_ALL_USERS_PROJECTS_ENDPOINT =
+  "intermediateAPI/users_projects/all/get";
+export const INTERMEDIATE_API_ALL_PROJECTS_ENDPOINT =
+  "intermediateAPI/project/all/get";
+
+export const INTERMEDIATE_API_USER_ADDABLE_PROJECTS_ENDPOINT =
+  "intermediateAPI/user/addable_projects/get";
+export const INTERMEDIATE_API_USER_PROJECTS_ENDPOINT =
+  "intermediateAPI/user/projects/get";
+export const INTERMEDIATE_API_USER_ALLOCATE_PROJECTS_ENDPOINT =
+  "intermediateAPI/user/allocate_projects";
+export const INTERMEDIATE_API_USER_REMOVE_PROJECTS_ENDPOINT =
+  "intermediateAPI/user/remove_projects";
+
+export const INTERMEDIATE_API_ALL_PERMISSIONS_ENDPOINT =
+  "intermediateAPI/permission/all/get";
+
+export const INTERMEDIATE_API_ALL_USERS_PERMISSIONS_ENDPOINT =
+  "intermediateAPI/users_permissions/all/get";
 
 /* 
   Words 

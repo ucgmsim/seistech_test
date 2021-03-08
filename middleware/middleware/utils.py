@@ -3,26 +3,20 @@ from typing import Dict
 
 from flask import Response
 
-from server import (
-    coreApiBase,
-    projectApiBase,
-    coreApiToken,
-)
-from db import write_request_details
+import middleware.server as server
+import middleware.db as db
 
 
 def proxy_to_api(
     request,
     route,
     methods,
+    to_project_api: bool = False,
     endpoint: str = None,
     content_type: str = "application/json",
     headers: Dict = None,
 ):
-    """Middleware - Handling the communication between Frontend and Core API.
-    We check the request.full_path (e.g., projectAPI/ids/get)
-    If it contains projectAPI, we switch APIBase to Project API path.
-    Default path is the Core API.
+    """IntermediateAPI - Handling the communication between Frontend and Core API/Project API.
 
     Parameters
     ----------
@@ -31,6 +25,8 @@ def proxy_to_api(
         URL path to Core/Project API
     methods: string
         GET/POST methods
+    to_project_api: boolean
+        Tell whether this call belongs to the ProjectAPI
     endpoint: string
         To find out what user is performing
     content_type: string
@@ -40,13 +36,13 @@ def proxy_to_api(
         An object that stores some headers.
     """
 
-    APIBase = coreApiBase
+    api_destination = server.CORE_API_BASE
 
-    if "projectAPI" in request.full_path:
-        APIBase = projectApiBase
+    if to_project_api is True:
+        api_destination = server.PROJECT_API_BASE
 
     if endpoint is not None:
-        write_request_details(
+        db.write_request_details(
             endpoint,
             {
                 key: value
@@ -57,9 +53,9 @@ def proxy_to_api(
 
     if methods == "POST":
         resp = requests.post(
-            APIBase + route,
+            api_destination + route,
             data=request.data.decode(),
-            headers={"Authorization": coreApiToken},
+            headers={"Authorization": server.CORE_API_TOKEN},
         )
 
     elif methods == "GET":
@@ -69,7 +65,8 @@ def proxy_to_api(
             querystring = "?" + querystring
 
         resp = requests.get(
-            APIBase + route + querystring, headers={"Authorization": coreApiToken}
+            api_destination + route + querystring,
+            headers={"Authorization": server.CORE_API_TOKEN},
         )
 
     response = Response(
@@ -77,3 +74,72 @@ def proxy_to_api(
     )
 
     return response
+
+
+def get_user_projects(user_db_projects, api_projects):
+    """Compute cross-check of allowed projects for the specified user
+    with the available projects from the projectAPI
+
+    It finds allowed projects from the DB.
+    (Allowed_Project that contains user_id and project_name.)
+    After we get all the existing projects from the Project API.
+    Then we compare [Allowed Projects] and [All the Existing Projects]
+    to find the matching one.
+
+    Parameters
+    ----------
+    user_db_projects: list of dictionaries
+        All allowed projects for the specified user
+
+    api_projects: list of strings
+        All projects from the project API (i.e. no constraints)
+
+    Returns
+    -------
+    dictionary in the form of
+    {
+        project_id: project_name
+    }
+    """
+    return {
+        api_project_id: api_project_name["name"]
+        for api_project_id, api_project_name in api_projects.items()
+        if api_project_id in user_db_projects
+    }
+
+
+def get_user_addable_projects(user_db_projects, all_projects):
+    """Compute cross-check of allowed projects for the specified user
+    with the available projects from the projectAPI
+
+    get_allowed_projects is there to do the cross-check for the Project tab,
+    compare DB and Project API to see whether users have permission to access.
+
+    This function, get_addable_projects is for the Edit User feature in the frontend.
+    It compares the projects between the DB and Project API.
+    Then it returns the options that are not intersecting.
+    E.g. DB says A, B, C Projects
+    Project API says A, B, C, D, E
+
+    Then this function will return D, E for the Frontend.
+
+    Parameters
+    ----------
+    user_db_projects: list of dictionaries
+        All allowed projects for the specified user
+
+    all_projects: dictionary
+        All the projects that the Project API returns
+
+    Returns
+    -------
+    dictionary in the form of
+    {
+        project_id: project_name
+    }
+    """
+    return {
+        api_project_id: api_project_name["name"]
+        for api_project_id, api_project_name in all_projects.items()
+        if api_project_id not in user_db_projects
+    }

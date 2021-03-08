@@ -1,10 +1,12 @@
 import React, { Fragment } from "react";
-import Tabs from "react-bootstrap/Tabs";
-import { Tab } from "react-bootstrap";
 
-import SiteSelectionMap from "./SiteSelectionMap";
-import SiteSelectionVs30 from "./SiteSelectionVS30";
-import SiteSelectionRegional from "./SiteSelectionRegional";
+import { Tabs, Tab } from "react-bootstrap";
+
+import {
+  SiteSelectionMap,
+  SiteSelectionVS30,
+  SiteSelectionRegional,
+} from "components/Hazard/SiteSelection";
 
 const SiteSelectionViewer = () => {
   return (
@@ -19,7 +21,7 @@ const SiteSelectionViewer = () => {
         </Tab>
 
         <Tab eventKey="vs30" title="VS30">
-          <SiteSelectionVs30 />
+          <SiteSelectionVS30 />
         </Tab>
       </Tabs>
     </Fragment>

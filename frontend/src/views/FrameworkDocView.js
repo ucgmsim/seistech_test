@@ -1,7 +1,6 @@
 import React, { useState, useEffect, Fragment } from "react";
 
 import ReactMarkdown from "react-markdown";
-
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -10,6 +9,8 @@ import ListSubheader from "@material-ui/core/ListSubheader";
 import Collapse from "@material-ui/core/Collapse";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
+
+import "assets/style/TwoColumnView.css";
 
 // Reference
 // https://webpack.js.org/guides/dependency-management/#requirecontext
@@ -131,7 +132,7 @@ const FrameworkDocView = () => {
   }, []);
 
   return (
-    <div className="hazard-inner">
+    <div className="two-column-inner">
       <div className="row two-column-row">
         <div className="col-3 controlGroup form-panel">
           <List

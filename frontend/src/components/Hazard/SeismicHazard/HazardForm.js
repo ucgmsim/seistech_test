@@ -1,10 +1,13 @@
 import React, { Fragment } from "react";
-import "assets/style/HazardForms.css";
 
-import HazardCurveSection from "./HazardCurveSection";
-import DisaggregationSection from "./DisaggregationSection";
-import UHSSection from "./UHSSection";
-import NZS1170Section from "./NZS1170Section";
+import {
+  HazardCurveSection,
+  DisaggregationSection,
+  UHSSection,
+  NZS1170Section,
+} from "components/Hazard/SeismicHazard";
+
+import "assets/style/HazardForms.css";
 
 const HazardForm = () => {
   return (

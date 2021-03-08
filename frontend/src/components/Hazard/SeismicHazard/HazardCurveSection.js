@@ -1,9 +1,11 @@
 import React, { useState, useContext, useEffect, Fragment } from "react";
-import IMSelect from "components/common/IMSelect";
-import GuideTooltip from "components/common/GuideTooltip";
-import * as CONSTANTS from "constants/Constants";
+
 import { v4 as uuidv4 } from "uuid";
+
+import * as CONSTANTS from "constants/Constants";
 import { GlobalContext } from "context";
+
+import { IMSelect, GuideTooltip } from "components/common";
 
 const HazardCurveSection = () => {
   const {

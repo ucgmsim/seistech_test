@@ -1,17 +1,19 @@
-import React, { useState, useEffect, useContext } from "react";
-import { Fragment } from "react";
+import React, { Fragment, useState, useEffect, useContext } from "react";
+
+import $ from "jquery";
+import { Tabs, Tab } from "react-bootstrap";
+
 import { useAuth0 } from "components/common/ReactAuth0SPA";
 import * as CONSTANTS from "constants/Constants";
-import { Tabs, Tab } from "react-bootstrap";
-import $ from "jquery";
-
-import LoadingSpinner from "components/common/LoadingSpinner";
-import DownloadButton from "components/common/DownloadButton";
-import GuideMessage from "components/common/GuideMessage";
-import ErrorMessage from "components/common/ErrorMessage";
-
 import { GlobalContext } from "context";
-import ContributionTable from "../../common/Disaggregation/ContributionTable";
+
+import {
+  LoadingSpinner,
+  DownloadButton,
+  GuideMessage,
+  ErrorMessage,
+  ContributionTable,
+} from "components/common";
 import { handleErrors } from "utils/Utils";
 
 const HazadViewerDisaggregation = () => {
@@ -119,7 +121,7 @@ const HazadViewerDisaggregation = () => {
 
           await fetch(
             CONSTANTS.CORE_API_BASE_URL +
-              CONSTANTS.PROJECT_API_ROUTE_PROJECT_DISAGG_GET +
+              CONSTANTS.PROJECT_API_HAZARD_DISAGG_ENDPOINT +
               queryString,
             {
               headers: {
@@ -315,7 +317,7 @@ const HazadViewerDisaggregation = () => {
       </Tabs>
       <DownloadButton
         disabled={!showContribTable}
-        downloadURL={CONSTANTS.PROJECT_API_DOWNLOAD_DISAGG}
+        downloadURL={CONSTANTS.PROJECT_API_HAZARD_DISAGG_DOWNLOAD_ENDPOINT}
         downloadToken={{
           disagg_token: downloadToken,
         }}

@@ -1,11 +1,18 @@
 import React, { useEffect, useContext } from "react";
-import PropTypes from "prop-types";
 import { Route, withRouter } from "react-router-dom";
+
+import PropTypes from "prop-types";
 
 import { useAuth0 } from "components/common/ReactAuth0SPA";
 import { GlobalContext } from "context";
 
-const PrivateRoute = ({ component: Component, path, location, ...rest }) => {
+const PrivateRoute = ({
+  component: Component,
+  path,
+  permission,
+  location,
+  ...rest
+}) => {
   const { hasPermission } = useContext(GlobalContext);
   const { isAuthenticated, loginWithRedirect } = useAuth0();
 
@@ -26,10 +33,9 @@ const PrivateRoute = ({ component: Component, path, location, ...rest }) => {
       if user is authenticated (logged in) and has permission to access, they can access to the page
       if user is authenticated (logged in) but has no permission to access, they will see the error message
     */
-    isAuthenticated === true && hasPermission(path.split("/")[1]) === true ? (
+    isAuthenticated === true && hasPermission(permission) === true ? (
       <Component {...props} />
-    ) : isAuthenticated === true &&
-      hasPermission(path.split("/")[1]) === false ? (
+    ) : isAuthenticated === true && hasPermission(permission) === false ? (
       <div>
         <strong>You do not have permission to view this page.</strong>
       </div>

@@ -1,9 +1,11 @@
 import React, { createContext, useState, useEffect } from "react";
-import { useAuth0 } from "components/common/ReactAuth0SPA";
-import PropTypes from "prop-types";
-import { handleErrors } from "utils/Utils";
 
+import PropTypes from "prop-types";
+
+import { useAuth0 } from "components/common/ReactAuth0SPA";
 import * as CONSTANTS from "constants/Constants";
+
+import { handleErrors } from "utils/Utils";
 
 export const Context = createContext({});
 
@@ -140,31 +142,35 @@ export const Provider = (props) => {
   const [permissions, setPermissions] = useState([]);
 
   useEffect(() => {
+    const abortController = new AbortController();
+    const signal = abortController.signal;
     // To get user data, we need to check that it is authenticated first
-    if (isAuthenticated) {
+    if (isAuthenticated && permissions.length === 0) {
       const callGetUserData = async () => {
         const token = await getTokenSilently();
 
         await fetch(
-          CONSTANTS.CORE_API_BASE_URL + CONSTANTS.APP_API_ROUTE_USERDATA,
+          CONSTANTS.CORE_API_BASE_URL +
+            CONSTANTS.INTERMEDIATE_API_AUTH0_USER_INFO_ENDPOINT,
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
+            signal: signal,
           }
         )
           .then(handleErrors)
           .then(async (response) => {
-            const ud = await response.json();
-
-            let userPermissions = ud.permissions;
-
-            setPermissions(userPermissions);
+            const decodedToken = await response.json();
+            setPermissions(decodedToken.permissions);
+          })
+          .catch((error) => {
+            console.log(error);
           });
       };
       callGetUserData();
     }
-  }, []);
+  }, [isAuthenticated]);
 
   const hasPermission = (permission) => {
     return permissions.includes(permission);

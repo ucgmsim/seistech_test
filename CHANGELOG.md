@@ -1,3 +1,24 @@
+## March 3, 2021
+
+### Restructure the Intermediate API - ([PR #49](https://github.com/ucgmsim/seistech_psha_frontend/pull/49)
+
+- Restructure the Intermediate API.
+  - Change the way we import packages like the SeisTech package does(CoreAPI/ProjectAPI) to keep the conventions.
+  - Rename a few functions name to make them simple but meaningful.
+  - Also, updated a few docstrings to make them simple but meaningful, also added Parameters and Returns information.
+  - Updated a few tables names to avoid any confusion
+    - `Auth0_Permission` is the table that contains permission information from Auth0.
+    - `Users_Permissions` is the bridging table between `User` and `Auth0_Permission`.
+    - `Users_Projects` is the bridging table between `User` and `Project`. (It used to be called, `Available_Projects` but saying `Available_Projects` was not 100% clear. So even it's not the best practice of naming the bridging table with connected tables but I thought this was the best we could find for now.)
+  - Some of the endpoint's path is also changed.
+
+## February 26, 2021
+
+### Implement dashboards for Project Permission and Page Permission - ([PR #49](https://github.com/ucgmsim/seistech_psha_frontend/pull/49)
+
+- Now we have a permission config page with permission dashboards to check users' permission.
+- Hence, updated the User DB structure.
+
 ## February 22, 2021
 
 ### Fix Middleware's bug - Circular import - ([PR #48](https://github.com/ucgmsim/seistech_psha_frontend/pull/48)

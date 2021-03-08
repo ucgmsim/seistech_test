@@ -1,8 +1,9 @@
 import React from "react";
 
 import Plot from "react-plotly.js";
+
 import { PLOT_MARGIN, PLOT_CONFIG } from "constants/Constants";
-import ErrorMessage from "components/common/ErrorMessage";
+import { ErrorMessage } from "components/common";
 
 import "assets/style/GMSPlot.css";
 

@@ -1,16 +1,19 @@
 import React, { Fragment, useState, useEffect, useContext } from "react";
+
+import $ from "jquery";
 import { v4 as uuidv4 } from "uuid";
-import { useAuth0 } from "components/common/ReactAuth0SPA";
 import { Accordion, Card } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { GlobalContext } from "context";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
-import IMSelect from "components/common/IMSelect";
-import GuideTooltip from "components/common/GuideTooltip";
+
 import * as CONSTANTS from "constants/Constants";
-import $ from "jquery";
+import { GlobalContext } from "context";
+import { useAuth0 } from "components/common/ReactAuth0SPA";
+
+import { IMSelect, GuideTooltip } from "components/common";
 import { renderSigfigs, sortIMs, handleErrors } from "utils/Utils";
+
 import "assets/style/GMSForm.css";
 
 const GMSForm = () => {
@@ -56,7 +59,7 @@ const GMSForm = () => {
 
         await fetch(
           CONSTANTS.CORE_API_BASE_URL +
-            CONSTANTS.CORE_API_ROUTE_GMS_GET_GM_DATASETS,
+            CONSTANTS.CORE_API_GMS_DATASETS_ENDPOINT,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -70,7 +73,7 @@ const GMSForm = () => {
             const gmDatasetIDs = responseData["gm_dataset_ids"];
             return await fetch(
               CONSTANTS.CORE_API_BASE_URL +
-                CONSTANTS.CORE_API_ROUTE_GMS_GET_AVAILABLE_GMS +
+                CONSTANTS.CORE_API_GMS_IMS_ENDPOINT_ENDPOINT +
                 `?ensemble_id=${selectedEnsemble}&gm_dataset_ids=${gmDatasetIDs.join(
                   ","
                 )}`,
@@ -198,7 +201,7 @@ const GMSForm = () => {
 
           await fetch(
             CONSTANTS.CORE_API_BASE_URL +
-              CONSTANTS.CORE_API_ROUTE_GMS_DEFAULT_CAUSAL_PARAMS +
+              CONSTANTS.CORE_API_GMS_DEFAULT_CAUSAL_PARAMS_ENDPOINT +
               queryString,
             {
               headers: {
@@ -297,7 +300,7 @@ const GMSForm = () => {
 
           await fetch(
             CONSTANTS.CORE_API_BASE_URL +
-              CONSTANTS.CORE_API_ROUTE_GMS_DEFAULT_IM_WEIGHTS +
+              CONSTANTS.CORE_API_GMS_DEFAULT_IM_WEIGHTS_ENDPOINT +
               queryString,
             {
               headers: {

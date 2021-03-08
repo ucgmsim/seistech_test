@@ -1,19 +1,21 @@
 import React, { Fragment, useContext, useEffect, useState } from "react";
 
 import { v4 as uuidv4 } from "uuid";
-import { GlobalContext } from "context";
-import { useAuth0 } from "components/common/ReactAuth0SPA";
-import GuideTooltip from "components/common/GuideTooltip";
-import * as CONSTANTS from "constants/Constants";
-import { disableScrollOnNumInput, handleErrors, sortIMs } from "utils/Utils";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TextField from "@material-ui/core/TextField";
 
+import * as CONSTANTS from "constants/Constants";
+import { GlobalContext } from "context";
+import { useAuth0 } from "components/common/ReactAuth0SPA";
+
+import { GuideTooltip } from "components/common";
+import { disableScrollOnNumInput, handleErrors, sortIMs } from "utils/Utils";
+import {
+  EnsembleSelect,
+  SiteSelectionVS30SiteConditions,
+} from "components/Hazard/SiteSelection";
+
 import "assets/style/HazardForms.css";
-
-import EnsembleSelect from "./EnsembleSelect";
-import SiteConditions from "./SiteSelectionVS30SiteConditions";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const SiteSelectionForm = () => {
   const { getTokenSilently } = useAuth0();
@@ -171,7 +173,7 @@ const SiteSelectionForm = () => {
           });
           await fetch(
             CONSTANTS.CORE_API_BASE_URL +
-              CONSTANTS.CORE_API_ROUTE_STATION +
+              CONSTANTS.CORE_API_STATION_ENDPOINT +
               `?ensemble_id=${selectedEnsemble}&lon=${localLng}&lat=${localLat}`,
             {
               headers: {
@@ -191,7 +193,7 @@ const SiteSelectionForm = () => {
 
               return fetch(
                 CONSTANTS.CORE_API_BASE_URL +
-                  CONSTANTS.CORE_API_ROUTE_HAZARD_NZCODE_DEFAULT_PARAMS +
+                  CONSTANTS.CORE_API_HAZARD_NZ11705_DEFAULT_PARAMS_ENDPOINT +
                   nzCodeDefaultQueryString,
                 {
                   headers: {
@@ -246,7 +248,7 @@ const SiteSelectionForm = () => {
         await Promise.all([
           fetch(
             CONSTANTS.CORE_API_BASE_URL +
-              CONSTANTS.CORE_API_ROUTE_IMIDS +
+              CONSTANTS.CORE_API_IMS_ENDPOINT +
               "?ensemble_id=" +
               selectedEnsemble,
             {
@@ -258,7 +260,7 @@ const SiteSelectionForm = () => {
           ),
           fetch(
             CONSTANTS.CORE_API_BASE_URL +
-              CONSTANTS.CORE_API_ROUTE_HAZARD_NZCODE_SOIL_CLASS,
+              CONSTANTS.CORE_API_HAZARD_NZ11705_SOIL_CLASS_ENDPOINT,
             {
               headers: {
                 Authorization: `Bearer ${token}`,
@@ -402,7 +404,7 @@ const SiteSelectionForm = () => {
         />
       </div>
 
-      <SiteConditions />
+      <SiteSelectionVS30SiteConditions />
     </Fragment>
   );
 };

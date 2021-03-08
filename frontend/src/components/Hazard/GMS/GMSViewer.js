@@ -1,21 +1,25 @@
 import React, { Fragment, useContext, useState, useEffect } from "react";
-import Tabs from "react-bootstrap/Tabs";
-import { Tab } from "react-bootstrap";
+
+import { Tabs, Tab } from "react-bootstrap";
 import Select from "react-select";
 import dompurify from "dompurify";
+
 import { GlobalContext } from "context";
 import * as CONSTANTS from "constants/Constants";
 import { useAuth0 } from "components/common/ReactAuth0SPA";
 
-import GMSViewerIMDistributions from "./GMSViewerIMDistributions";
-import GMSViewerSpectra from "./GMSViewerSpectra";
-import GMSViewerMwRrupPlot from "./GMSViewerMwRrupPlot";
-import GMSViewerCausalParameters from "./GMSViewerCausalParameters";
-import LoadingSpinner from "components/common/LoadingSpinner";
-import DownloadButton from "components/common/DownloadButton";
-import GuideMessage from "components/common/GuideMessage";
-import ErrorMessage from "components/common/ErrorMessage";
-
+import {
+  GMSViewerIMDistributions,
+  GMSViewerSpectra,
+  GMSViewerMwRrupPlot,
+  GMSViewerCausalParameters,
+} from "components/Hazard/GMS";
+import {
+  LoadingSpinner,
+  DownloadButton,
+  GuideMessage,
+  ErrorMessage,
+} from "components/common";
 import { handleErrors, GMSIMLabelConverter } from "utils/Utils";
 
 import "assets/style/GMSViewer.css";
@@ -147,7 +151,7 @@ const GMSViewer = () => {
           }
 
           await fetch(
-            CONSTANTS.CORE_API_BASE_URL + CONSTANTS.CORE_API_ROUTE_GMS_COMPUTE,
+            CONSTANTS.CORE_API_BASE_URL + CONSTANTS.CORE_API_GMS_ENDPOINT,
             requestOptions
           )
             .then(handleErrors)
@@ -346,7 +350,7 @@ const GMSViewer = () => {
       <DownloadButton
         // disabled={computedGMS === null || computedGMS["IM_j"] !== GMSIMType}
         disabled
-        downloadURL={CONSTANTS.CORE_API_DOWNLOAD_GMS}
+        downloadURL={CONSTANTS.CORE_API_GMS_DOWNLOAD_ENDPOINT}
         downloadToken={{
           gms_token: downloadToken,
         }}

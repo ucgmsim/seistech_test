@@ -1,202 +1,10 @@
-import json
-import requests
-import http.client
+from collections import defaultdict
 
-from flask import request, jsonify
+from flask import Response
 
-import server
-import models
-from auth0 import get_user_id
-
-
-def _get_management_api_token():
-    """Connect to AUTH0 Management API to get access token"""
-    conn = http.client.HTTPSConnection(server.AUTH0_DOMAIN)
-
-    payload = json.dumps(
-        {
-            "client_id": server.AUTH0_CLIENT_ID,
-            "client_secret": server.AUTH0_CLIENT_SECRET,
-            "audience": server.AUTH0_AUDIENCE,
-            "grant_type": server.AUTH0_GRANT_TYPE,
-        }
-    )
-
-    headers = {"content-type": "application/json"}
-
-    conn.request("POST", "/oauth/token", payload, headers)
-
-    res = conn.getresponse()
-    # Convert the string dictionary to dictionary
-    data = json.loads(res.read().decode("utf-8"))
-
-    return data["access_token"]
-
-
-def get_users():
-    """Get all users"""
-    resp = requests.get(
-        server.AUTH0_AUDIENCE + "users",
-        headers={"Authorization": "Bearer {}".format(_get_management_api_token())},
-    )
-
-    # List of dictionaries
-    user_list, user_dict = resp.json(), {}
-
-    # We want to store in a dictionary in the form of
-    # { user_id : email | provider}
-    # The reason we keep both email and provider is due to preventing confusion
-    # Based on having the same emails but different provider
-    # For instance, email A with Google and email A with Auth0
-    for user_dic in user_list:
-        if "user_id" in user_dic.keys():
-            temp_value = "{} | {}".format(
-                user_dic["email"], user_dic["identities"][0]["provider"]
-            )
-            user_dict[user_dic["user_id"].split("|")[1]] = temp_value
-        else:
-            print(f"WARNING: No user_id found for user_dict {user_dict}")
-
-    return user_dict
-
-
-def write_request_details(endpoint, query_dict):
-    """Record users' interaction into the DB
-
-    Parameters
-    ----------
-    endpoint: string
-        What users chose to do
-        E.g., Hazard Curve Compute, UHS Compute, Disaggregation Compute...
-    query_dict: dictionary
-        It is basically a query dictionary that contains attribute and value
-        E.g., Attribute -> Station
-              value -> CCCC
-    """
-    # Finding an user_id from the token
-    user_id = get_user_id()
-
-    # Add to History table
-    new_history = models.History(user_id, endpoint)
-    server.db.session.add(new_history)
-    server.db.session.commit()
-
-    # Get a current user's history id key which would be the last row in a table
-    latest_history_id = (
-        models.History.query.filter_by(user_id=user_id)
-        .order_by(models.History.history_id.desc())
-        .first()
-        .history_id
-    )
-
-    # For History_Request with attribute and value
-    for attribute, value in query_dict.items():
-        if attribute == "exceedances":
-            # 'exceedances' value is comma-separated
-            exceedances_list = value.split(",")
-            for exceedance in exceedances_list:
-                new_history = models.History_Request(
-                    latest_history_id, attribute, exceedance
-                )
-                server.db.session.add(new_history)
-        else:
-            new_history = models.History_Request(latest_history_id, attribute, value)
-            server.db.session.add(new_history)
-
-    server.db.session.commit()
-
-
-def _get_projects_from_db(user_id):
-    """Create an array form of available projects that are in the DB
-
-    Parameters
-    ----------
-    user_id: string
-        user_id from Auth0 to identify the user
-    """
-    # Get all available projects that are allocated to this user.
-    available_project_objs = (
-        models.Project.query.join(models.available_projects_table)
-        .filter((models.available_projects_table.c.user_id == user_id))
-        .all()
-    )
-
-    # Create a list that contains Project IDs from DB (Allowed Projects)
-    available_projects = [project.project_name for project in available_project_objs]
-
-    return available_projects
-
-
-def get_available_projects(available_projects_from_project_api):
-    """Do cross-check for the projects.
-
-    It finds available projects from the DB.
-    (Available_Project that contains user_id and project_name.)
-    After we get all the existing projects from the Project API.
-    Then we compare [Available Projects] and [All the Existing Projects]
-    to find the matching one.
-
-    Parameters
-    ----------
-    available_projects_from_project_api: dictionary
-        All the projects that the Project API returns
-    """
-    # Finding the available projects that are already allocated to the DB with a given user id.
-    available_projects = _get_projects_from_db(get_user_id())
-
-    # Get a list of Project IDs & Project Names from Project API (Available Projects)
-    # Form of {project_id: {name : project_name}}
-    all_projects_dicts = available_projects_from_project_api
-
-    # Create an dictionary in a form of if users have a permission for a certain project
-    # {project_id: project_name}
-    all_projects = {
-        api_project_id: api_project_name["name"]
-        for api_project_id, api_project_name in all_projects_dicts.items()
-        if api_project_id in available_projects
-    }
-
-    return jsonify(all_projects)
-
-
-def get_addable_projects(requested_user_id, all_projects):
-    """Similar to the get_available_projects above.
-
-    get_available_projects is there to do the cross-check for the Project tab,
-    compare DB and Project API to see whether users have permission to access.
-
-    This function, get_addable_projects is for Edit User feature in the frontend.
-    It compares the projects between the DB and Project API.
-    Then it returns the options that are not intersecting.
-    E.g. DB says A, B, C Projects
-    Project API says A, B, C, D, E
-
-    Then this function will return D,E for the Frontend.
-
-    Parameters
-    ----------
-    requested_user_id: string
-        Selected user id from Edit User's User dropdown
-
-    all_projects: dictionary
-        All the projects that the Project API returns
-    """
-    # Finding the available projects that are already allocated to the DB with a given user id.
-    available_projects = _get_projects_from_db(requested_user_id)
-
-    # Get a list of Project IDs & Project Names from Project API (Available Projects)
-    # Form of {project_id: {name : project_name}}
-    all_projects_dicts = all_projects
-
-    # Create an dictionary in a form of if users have a permission for a certain project
-    # {project_id: project_name}
-    all_addable_projects = {
-        api_project_id: api_project_name["name"]
-        for api_project_id, api_project_name in all_projects_dicts.items()
-        if api_project_id not in available_projects
-    }
-
-    return all_addable_projects
+import middleware.server as server
+import middleware.models as models
+import middleware.auth0 as auth0
 
 
 def _is_user_in_db(user_id):
@@ -255,12 +63,77 @@ def _add_project_to_db(project_name):
         print(f"Project {project_name} already exists")
 
 
-def _add_available_project_to_db(user_id, project_name):
-    """This is where we insert data to the bridging table, available_projects
-    Unlike any other query, to a bridging table, we need to do the following steps:
-    1. Find a User object by using user_id
-    2. Find a Project object by using project_name
-    3. Append(Allocate, they use Append for a bridging table) the User object to the Project object
+def _is_permission_in_db(permission_name):
+    """To check whether the given permission is in the DB
+
+    Parameters
+    ----------
+    permission_name: string
+        A permission name we use internally.
+        E.g., hazard, hazard:hazard, project...
+    """
+    return bool(
+        models.Auth0Permission.query.filter_by(permission_name=permission_name).first()
+    )
+
+
+def _add_permission_to_db(permission_name):
+    """Add new permission to the MariaDB if not exist
+
+    Parameters
+    ----------
+    permission_name: string
+        A permission name we use internally.
+        E.g., hazard, hazard:hazard, project...
+    """
+    if not _is_permission_in_db(permission_name):
+        server.db.session.add(models.Auth0Permission(permission_name))
+        server.db.session.commit()
+        server.db.session.flush()
+    else:
+        print(f"Project {permission_name} already exists")
+
+
+def _is_user_permission_in_db(user_id, permission):
+    """Check whether there is a row with given user_id & permission"""
+    return bool(
+        models.UserPermission.query.filter_by(user_id=user_id)
+        .filter_by(permission_name=permission)
+        .first()
+    )
+
+
+def _add_user_permission_to_db(user_id, permission):
+    """Insert data(page access permission) to the bridging table,
+    allowed_permission
+
+    Parameters
+    ----------
+    user_id: string
+        Selected user's Auth0 id
+    permission: string
+        Selected user's permission
+        E.g., hazard, hazard:hazard, project...
+    """
+    print(
+        f"Check whether the permission is in the DB, if not, add the permission to the DB"
+    )
+    if not _is_permission_in_db(permission):
+        print(f"{permission} is not in the DB so updating it.")
+        _add_permission_to_db(permission)
+        server.db.session.flush()
+
+    if not _is_user_permission_in_db(user_id, permission):
+        server.db.session.add(models.UserPermission(user_id, permission))
+        server.db.session.commit()
+        server.db.session.flush()
+    else:
+        print(f"{user_id} already has a permission with ${permission}")
+
+
+def _add_user_project_to_db(user_id, project_name):
+    """Insert data(allowed projects) to the bridging table,
+    allowed_projects
 
     Parameters
     ----------
@@ -270,11 +143,6 @@ def _add_available_project_to_db(user_id, project_name):
         Selected project's project code.
         E.g., gnzl, mac_raes, nzgs_pga, soffitel_qtwn...
     """
-    print(f"Check whether the user is in the DB, if not, add the person to the DB")
-    if not _is_user_in_db(user_id):
-        print(f"{user_id} is not in the DB so updating it.")
-        _add_user_to_db(user_id)
-        server.db.session.flush()
 
     print(f"Check whether the project is in the DB, if not, add the project to the DB")
     if not _is_project_in_db(project_name):
@@ -282,23 +150,322 @@ def _add_available_project_to_db(user_id, project_name):
         _add_project_to_db(project_name)
         server.db.session.flush()
 
-    # Find objects to user SQLAlchemy way of inserting to a bridging table.
+    # Find Find a project object with a given project_name to get its project id
     project_obj = models.Project.query.filter_by(project_name=project_name).first()
-    user_obj = models.User.query.filter_by(user_id=user_id).first()
 
-    project_obj.allocate.append(user_obj)
+    server.db.session.add(models.UserProject(user_id, project_obj.project_id))
     server.db.session.commit()
     server.db.session.flush()
 
 
-def allocate_users_to_projects():
-    """Allocate projects to the chosen user"""
-    data = json.loads(request.data.decode())
+def _remove_user_projects_from_db(user_id, project_name):
+    """Remove data(project) from the bridging table,
+    allowed_projects
 
-    requested_user_id = data["user_info"]["value"]
-    requested_project_list = data["project_info"]
+    Parameters
+    ----------
+    user_id: string
+        Selected user's Auth0 id
+    project_name: string
+        Selected project's project code.
+        E.g., gnzl, mac_raes, nzgs_pga, soffitel_qtwn...
+    """
+    try:
+        # Get the project id with the given project name
+        certain_project_id = (
+            models.Project.query.filter_by(project_name=project_name).first().project_id
+        )
+        allowed_projects_row = (
+            models.UserProject.query.filter_by(user_id=user_id)
+            .filter_by(project_id=certain_project_id)
+            .first()
+        )
 
-    for project in requested_project_list:
-        _add_available_project_to_db(requested_user_id, project["value"])
+        server.db.session.delete(allowed_projects_row)
+        server.db.session.commit()
+        server.db.session.flush()
+    except:
+        print("Something went wrong.")
 
-    return "DONE"
+
+def _remove_user_permission_from_db(user_id, permission):
+    """allowed_permission table is outdated, remove illegal permission to update the dashboard"""
+    illegal_permission_row = (
+        models.UserPermission.query.filter_by(user_id=user_id)
+        .filter_by(permission_name=permission)
+        .first()
+    )
+
+    server.db.session.delete(illegal_permission_row)
+    server.db.session.commit()
+    server.db.session.flush()
+
+
+def get_user_projects(user_id):
+    """Retrieves all projects ids for the specified user
+
+    Parameters
+    ----------
+    user_id: string
+        user_id from Auth0 to identify the user
+
+    Returns
+    -------
+    list of Project IDs from DB (Allowed Projects)
+    """
+    # Get all allowed projects that are allocated to this user.
+    allowed_project_objs = (
+        models.Project.query.join(models.UserProject)
+        .filter((models.UserProject.user_id == user_id))
+        .all()
+    )
+
+    return [project.project_name for project in allowed_project_objs]
+
+
+def get_all_users_projects():
+    """Retrieve all allowed projects from Allowed_Project table
+
+    Returns
+    -------
+    allowed_projects_dict: dictionary
+        In the form of:
+        {
+           userA: [ProjectA, ProjectB, ProjectC],
+           userB: [ProjectA, ProjectB]
+        }
+    """
+    # Get all allowed projects from the UserDB
+    allowed_projects = models.UserProject.query.all()
+
+    allowed_projects_dict = defaultdict(list)
+
+    for project in allowed_projects:
+        allowed_projects_dict[project.user_id].append(project.project_id)
+
+    return allowed_projects_dict
+
+
+def get_all_projects_for_dashboard(projects):
+    """Retrieve all the projects we have from Project API
+
+    Then customize the format to send to the frontend for two reasons.
+    1. For Table's header(will display the name of the project)
+    2. We can use this dictionary to filter the table to tell they have permission
+
+    Parameters
+    ----------
+    projects: dictionary
+
+    Returns
+    -------
+    dictionary:
+        In the form of
+        {
+            project_id: project_full_name
+        }
+        project_id = (e.g., nzgl, soffitel,qtwn)
+        project_fulle_name = user friendly name for project,
+        e.g. Generic New Zealand Locations
+    """
+    # Get all projects from the UserDB.
+    all_projects = models.Project.query.all()
+
+    return {
+        project.project_name: {
+            "project_id": project.project_id,
+            "project_full_name": projects[project.project_name]["name"],
+        }
+        for project in all_projects
+    }
+
+
+def allocate_projects_to_user(user_id, project_list):
+    """Give user a permission of the chosen projects
+
+    Parameters
+    ----------
+    user_id: string
+        Selected user's Auth0 id
+    project_list: array
+        List of projects to allocate
+    """
+    print(f"Check whether the user is in the DB, if not, add the person to the DB")
+    if not _is_user_in_db(user_id):
+        print(f"{user_id} is not in the DB so updating it.")
+        _add_user_to_db(user_id)
+        server.db.session.flush()
+
+    for project in project_list:
+        _add_user_project_to_db(user_id, project["value"])
+
+    return Response(status=200)
+
+
+def remove_projects_from_user(user_id, project_list):
+    """Remove projects from the chosen user
+
+    Parameters
+    ----------
+    user_id: string
+        Selected user's Auth0 id
+    project_list: array
+        List of projects to remove from the DB
+    """
+    for project in project_list:
+        _remove_user_projects_from_db(user_id, project["value"])
+
+    return Response(status=200)
+
+
+def _get_user_permissions(requested_user_id):
+    """Retrieve all permissions for the specified user
+
+    Returns
+    -------
+    A list of permission names
+    """
+    all_allowed_permission_for_a_user_list = models.UserPermission.query.filter_by(
+        user_id=requested_user_id
+    ).all()
+
+    return [
+        permission.permission_name
+        for permission in all_allowed_permission_for_a_user_list
+    ]
+
+
+def get_all_users_permissions():
+    """Retrieve permissions for all users
+    Retrieve all permissions from Allowed_Permission table
+
+    Returns
+    -------
+    Dictionary
+        return a list of a dictionary in the form of
+            {
+              user_id: user_id,
+              permission_name: [permission_name]
+            }
+    """
+    # Get all allowed permission from the DB.
+    all_allowed_permission_list = models.UserPermission.query.all()
+
+    allowed_permission_dict = defaultdict(list)
+
+    for permission in all_allowed_permission_list:
+        allowed_permission_dict[permission.user_id].append(permission.permission_name)
+
+    return allowed_permission_dict
+
+
+def get_all_permissions_for_dashboard():
+    """Retrieve all permissions from Auth0_Permission table
+
+    Returns
+    -------
+    A list of permission names
+    """
+    # Get all allowed permission from the DB.
+    all_permission_list = models.Auth0Permission.query.all()
+
+    return [permission.permission_name for permission in all_permission_list]
+
+
+def update_user_permissions(user_id, permission_list):
+    """Update/Insert user's allowed permission to a table,
+    Allowed_Permission
+    
+    Parameters
+    ----------
+    user_id: string
+        Auth0's unique user id
+    permission_list: list
+        List of permission that user has. (From Auth0, trusted source)
+    """
+    # Sync the allowed_permission table to token's permission (trusted source)
+    # first before we check/update
+    _sync_permissions(user_id, permission_list)
+
+    print(f"Check whether the user is in the DB, if not, add the person to the DB")
+    if not _is_user_in_db(user_id):
+        print(f"{user_id} is not in the DB so updating it.")
+        _add_user_to_db(user_id)
+        server.db.session.flush()
+
+    for permission in permission_list:
+        _add_user_permission_to_db(user_id, permission)
+
+    return Response(status=200)
+
+
+def _sync_permissions(user_id, trusted_permission_list):
+    """Syncs the user access permissions with the ones from
+    the token (the one source of truth)
+    Filter the allowed_permission table to remove outdated permission
+
+    If the access token has the permission of A, B, C but allowed_permission table
+    has the permission of A, B, C, D. Then remove the permission D from the
+    allowed_permission table as the token is the trusted source of permission.
+
+    Parameters
+    ----------
+    user_id: string
+        It will be used to find a list of permission with the function,
+        _get_all_allowed_permission_for_a_user(user_id)
+    trusted_permission_list: list
+        The list to be compared with the list of permission from allowed_permission
+        table
+    """
+    # Get a list of permission that are allocated to this user
+    unfiltered_allowed_permission_list = _get_user_permissions(user_id)
+
+    for permission in unfiltered_allowed_permission_list:
+        if permission not in trusted_permission_list:
+            _remove_user_permission_from_db(user_id, permission)
+
+
+def write_request_details(endpoint, query_dict):
+    """Record users' interaction into the DB
+
+    Parameters
+    ----------
+    endpoint: string
+        What users chose to do
+        E.g., Hazard Curve Compute, UHS Compute, Disaggregation Compute...
+    query_dict: dictionary
+        It is basically a query dictionary that contains attribute and value
+        E.g., Attribute -> Station
+              value -> CCCC
+    """
+    # Finding an user_id from the token
+    user_id = auth0.get_user_id()
+
+    # Add to History table
+    new_history = models.History(user_id, endpoint)
+    server.db.session.add(new_history)
+    server.db.session.commit()
+
+    # Get a current user's history id key which would be the last row in a table
+    latest_history_id = (
+        models.History.query.filter_by(user_id=user_id)
+        .order_by(models.History.history_id.desc())
+        .first()
+        .history_id
+    )
+
+    # For History_Request with attribute and value
+    for attribute, value in query_dict.items():
+        if attribute == "exceedances":
+            # 'exceedances' value is comma-separated
+            exceedances_list = value.split(",")
+            for exceedance in exceedances_list:
+                new_history = models.HistoryRequest(
+                    latest_history_id, attribute, exceedance
+                )
+                server.db.session.add(new_history)
+        else:
+            new_history = models.HistoryRequest(latest_history_id, attribute, value)
+            server.db.session.add(new_history)
+
+    server.db.session.commit()

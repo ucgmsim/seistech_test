@@ -1,19 +1,21 @@
 import React, { useState, useEffect, useContext, Fragment } from "react";
+
 import { Tabs, Tab } from "react-bootstrap";
 
 import { GlobalContext } from "context";
 import { useAuth0 } from "components/common/ReactAuth0SPA";
 import * as CONSTANTS from "constants/Constants";
 
-import LoadingSpinner from "components/common/LoadingSpinner";
-import DownloadButton from "components/common/DownloadButton";
-import GuideMessage from "components/common/GuideMessage";
-import ErrorMessage from "components/common/ErrorMessage";
+import {
+  LoadingSpinner,
+  DownloadButton,
+  GuideMessage,
+  ErrorMessage,
+  HazardEnsemblePlot,
+  HazardBranchPlot,
+} from "components/common";
+import { HazardCurveMetadata } from "components/Hazard/SeismicHazard";
 import { handleErrors } from "utils/Utils";
-
-import HazardEnsemblePlot from "../../common/HazardCurve/HazardEnsemblePlot";
-import HazardBranchPlot from "../../common/HazardCurve/HazardBranchPlot";
-import HazardCurveMetadata from "./HazardCurveMetadata";
 
 const HazardViewerHazardCurve = () => {
   const { getTokenSilently } = useAuth0();
@@ -90,7 +92,7 @@ const HazardViewerHazardCurve = () => {
 
           fetch(
             CONSTANTS.CORE_API_BASE_URL +
-              CONSTANTS.CORE_API_ROUTE_HAZARD_PLOT +
+              CONSTANTS.CORE_API_HAZARD_ENDPOINT +
               hazardDataQueryString,
             {
               headers: {
@@ -113,7 +115,7 @@ const HazardViewerHazardCurve = () => {
 
               return fetch(
                 CONSTANTS.CORE_API_BASE_URL +
-                  CONSTANTS.CORE_API_ROUTE_HAZARD_NZCODE +
+                  CONSTANTS.CORE_API_HAZARD_NZ11705_ENDPOINT +
                   nzCodeQueryString,
                 {
                   headers: {
@@ -241,7 +243,7 @@ const HazardViewerHazardCurve = () => {
 
       <DownloadButton
         disabled={!showPlotHazard}
-        downloadURL={CONSTANTS.CORE_API_DOWNLOAD_HAZARD}
+        downloadURL={CONSTANTS.CORE_API_HAZARD_CURVE_DOWNLOAD_ENDPOINT}
         downloadToken={{
           hazard_token: downloadHazardToken,
           nz1170p5_hazard_token: hazardNZCodeToken,

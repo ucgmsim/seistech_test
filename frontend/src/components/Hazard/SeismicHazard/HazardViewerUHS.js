@@ -1,13 +1,16 @@
 import React, { Fragment, useEffect, useState, useContext } from "react";
+
 import { useAuth0 } from "components/common/ReactAuth0SPA";
 import * as CONSTANTS from "constants/Constants";
 import { GlobalContext } from "context";
 
-import UHSPlot from "../../common/UHS/UHSPlot";
-import LoadingSpinner from "components/common/LoadingSpinner";
-import DownloadButton from "components/common/DownloadButton";
-import GuideMessage from "components/common/GuideMessage";
-import ErrorMessage from "components/common/ErrorMessage";
+import {
+  UHSPlot,
+  LoadingSpinner,
+  DownloadButton,
+  GuideMessage,
+  ErrorMessage,
+} from "components/common";
 import { handleErrors } from "utils/Utils";
 
 const HazardViewerUHS = () => {
@@ -110,7 +113,7 @@ const HazardViewerUHS = () => {
 
           await fetch(
             CONSTANTS.CORE_API_BASE_URL +
-              CONSTANTS.CORE_API_ROUTE_UHS +
+              CONSTANTS.CORE_API_HAZARD_UHS_ENDPOINT +
               queryString,
             {
               headers: {
@@ -133,7 +136,7 @@ const HazardViewerUHS = () => {
 
               return fetch(
                 CONSTANTS.CORE_API_BASE_URL +
-                  CONSTANTS.CORE_API_ROUTE_UHS_NZCODE +
+                  CONSTANTS.CORE_API_HAZARD_UHS_NZ11705_ENDPOINT +
                   nzCodeQueryString,
                 {
                   headers: {
@@ -209,7 +212,7 @@ const HazardViewerUHS = () => {
 
       <DownloadButton
         disabled={!showPlotUHS}
-        downloadURL={CONSTANTS.CORE_API_DOWNLOAD_UHS}
+        downloadURL={CONSTANTS.CORE_API_HAZARD_UHS_DOWNLOAD_ENDPOINT}
         downloadToken={{
           uhs_token: downloadUHSToken,
           nz1170p5_hazard_token: uhsNZCodeToken,

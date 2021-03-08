@@ -1,12 +1,12 @@
 import React, { Fragment, useContext, useEffect, useState } from "react";
 
 import { v4 as uuidv4 } from "uuid";
-import { GlobalContext } from "context";
 
+import { GlobalContext } from "context";
 import { useAuth0 } from "components/common/ReactAuth0SPA";
 import * as CONSTANTS from "constants/Constants";
-import ProjectSelect from "components/common/ProjectSelect";
-import GuideTooltip from "components/common/GuideTooltip";
+
+import { ProjectSelect, GuideTooltip } from "components/common";
 import { handleErrors, sortIMs, renderSigfigs } from "utils/Utils";
 
 import "assets/style/HazardForms.css";
@@ -55,7 +55,7 @@ const SiteSelectionForm = () => {
         const token = await getTokenSilently();
 
         await fetch(
-          CONSTANTS.CORE_API_BASE_URL + CONSTANTS.PROJECT_API_ROUTE_PROJECT_IDS,
+          CONSTANTS.CORE_API_BASE_URL + CONSTANTS.PROJECT_API_PROJECT_IDS_ENDPOINT,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -96,7 +96,7 @@ const SiteSelectionForm = () => {
           await Promise.all([
             fetch(
               CONSTANTS.CORE_API_BASE_URL +
-                CONSTANTS.PROJECT_API_ROUTE_PROJECT_SITES +
+                CONSTANTS.PROJECT_API_SITES_ENDPOINT +
                 `?project_id=${localProjectId}`,
               {
                 headers: {
@@ -107,7 +107,7 @@ const SiteSelectionForm = () => {
             ),
             fetch(
               CONSTANTS.CORE_API_BASE_URL +
-                CONSTANTS.PROJECT_API_ROUTE_PROJECT_IMS +
+                CONSTANTS.PROJECT_API_IMS_ENDPOINT +
                 `?project_id=${localProjectId}`,
               {
                 headers: {
@@ -118,7 +118,7 @@ const SiteSelectionForm = () => {
             ),
             fetch(
               CONSTANTS.CORE_API_BASE_URL +
-                CONSTANTS.PROJECT_API_ROUTE_PROJECT_DISAGG_RPS +
+                CONSTANTS.PROJECT_API_HAZARD_DISAGG_RPS_ENDPOINT +
                 `?project_id=${localProjectId}`,
               {
                 headers: {
@@ -129,7 +129,7 @@ const SiteSelectionForm = () => {
             ),
             fetch(
               CONSTANTS.CORE_API_BASE_URL +
-                CONSTANTS.PROJECT_API_ROUTE_PROJECT_UHS_RPS +
+                CONSTANTS.PROJECT_API_HAZARD_UHS_RPS_ENDPOINT +
                 `?project_id=${localProjectId}`,
               {
                 headers: {

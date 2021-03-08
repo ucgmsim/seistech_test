@@ -1,15 +1,17 @@
 import React, { useState, useEffect, useContext, Fragment } from "react";
-import { GlobalContext } from "context";
+
 import TextField from "@material-ui/core/TextField";
 import Select from "react-select";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import { GlobalContext } from "context";
 import * as CONSTANTS from "constants/Constants";
 import { useAuth0 } from "components/common/ReactAuth0SPA";
-import GuideTooltip from "components/common/GuideTooltip";
 
-import "assets/style/NZS1170Section.css";
+import { GuideTooltip } from "components/common";
 import { handleErrors } from "utils/Utils";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import "assets/style/NZS1170Section.css";
 
 const NZS1170Section = () => {
   const { getTokenSilently } = useAuth0();
@@ -156,7 +158,7 @@ const NZS1170Section = () => {
     await Promise.all([
       fetch(
         CONSTANTS.CORE_API_BASE_URL +
-          CONSTANTS.CORE_API_ROUTE_HAZARD_NZCODE +
+          CONSTANTS.CORE_API_HAZARD_NZ11705_ENDPOINT +
           hazardNZCodeQuery,
         {
           headers: {
@@ -167,7 +169,7 @@ const NZS1170Section = () => {
       ),
       fetch(
         CONSTANTS.CORE_API_BASE_URL +
-          CONSTANTS.CORE_API_ROUTE_UHS_NZCODE +
+          CONSTANTS.CORE_API_HAZARD_UHS_NZ11705_ENDPOINT +
           uhsNZCodeQuery,
         {
           headers: {
@@ -229,7 +231,7 @@ const NZS1170Section = () => {
 
     await fetch(
       CONSTANTS.CORE_API_BASE_URL +
-        CONSTANTS.CORE_API_ROUTE_HAZARD_NZCODE +
+        CONSTANTS.CORE_API_HAZARD_NZ11705_ENDPOINT +
         hazardNZCodeQuery,
       {
         headers: {
@@ -291,7 +293,7 @@ const NZS1170Section = () => {
 
     await fetch(
       CONSTANTS.CORE_API_BASE_URL +
-        CONSTANTS.CORE_API_ROUTE_UHS_NZCODE +
+        CONSTANTS.CORE_API_HAZARD_UHS_NZ11705_ENDPOINT +
         uhsNZCodeQuery,
       {
         headers: {

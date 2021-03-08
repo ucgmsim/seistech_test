@@ -1,16 +1,13 @@
 import React, { useContext, useEffect, useState, Fragment } from "react";
 
+import * as CONSTANTS from "constants/Constants";
 import { GlobalContext } from "context";
 import { useAuth0 } from "components/common/ReactAuth0SPA";
-import * as CONSTANTS from "constants/Constants";
 
-import LoadingSpinner from "components/common/LoadingSpinner";
-import GuideMessage from "components/common/GuideMessage";
-import ErrorMessage from "components/common/ErrorMessage";
-
+import { LoadingSpinner, GuideMessage, ErrorMessage } from "components/common";
 import { handleErrors } from "utils/Utils";
 
-const SiteSelectionVs30 = () => {
+const SiteSelectionVS30 = () => {
   const { getTokenSilently } = useAuth0();
 
   const {
@@ -40,7 +37,7 @@ const SiteSelectionVs30 = () => {
 
           await fetch(
             CONSTANTS.CORE_API_BASE_URL +
-              CONSTANTS.CORE_API_ROUTE_VS30_MAP +
+              CONSTANTS.CORE_API_VS30_MAP_ENDPOINT +
               `?ensemble_id=${selectedEnsemble}&lon=${siteSelectionLng}&lat=${siteSelectionLat}`,
             {
               headers: {
@@ -107,4 +104,4 @@ const SiteSelectionVs30 = () => {
   );
 };
 
-export default SiteSelectionVs30;
+export default SiteSelectionVS30;

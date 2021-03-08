@@ -1,13 +1,16 @@
 import React, { Fragment, useEffect, useState, useContext } from "react";
-import { useAuth0 } from "components/common/ReactAuth0SPA";
+
 import * as CONSTANTS from "constants/Constants";
 import { GlobalContext } from "context";
+import { useAuth0 } from "components/common/ReactAuth0SPA";
 
-import UHSPlot from "../../common/UHS/UHSPlot";
-import LoadingSpinner from "components/common/LoadingSpinner";
-import DownloadButton from "components/common/DownloadButton";
-import GuideMessage from "components/common/GuideMessage";
-import ErrorMessage from "components/common/ErrorMessage";
+import {
+  UHSPlot,
+  LoadingSpinner,
+  DownloadButton,
+  GuideMessage,
+  ErrorMessage,
+} from "components/common";
 import { handleErrors } from "utils/Utils";
 
 const HazardViewerUHS = () => {
@@ -100,7 +103,7 @@ const HazardViewerUHS = () => {
 
           await fetch(
             CONSTANTS.CORE_API_BASE_URL +
-              CONSTANTS.PROJECT_API_ROUTE_PROJECT_UHS_GET +
+              CONSTANTS.PROJECT_API_HAZARD_UHS_ENDPOINT +
               queryString,
             {
               headers: {
@@ -179,7 +182,7 @@ const HazardViewerUHS = () => {
 
       <DownloadButton
         disabled={!showPlotUHS}
-        downloadURL={CONSTANTS.PROJECT_API_DOWNLOAD_UHS}
+        downloadURL={CONSTANTS.PROJECT_API_HAZARD_UHS_DOWNLOAD_ENDPOINT}
         downloadToken={{
           uhs_token: downloadToken,
         }}

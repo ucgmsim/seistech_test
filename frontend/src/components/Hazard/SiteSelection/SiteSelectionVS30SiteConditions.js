@@ -1,8 +1,11 @@
 import React, { useContext, Fragment, useEffect, useState } from "react";
-import { GlobalContext } from "context";
-import { disableScrollOnNumInput } from "utils/Utils";
+
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
+
+import { GlobalContext } from "context";
+
+import { disableScrollOnNumInput } from "utils/Utils";
 
 const SiteConditions = () => {
   const [localVS30, setLocalVS30] = useState("");

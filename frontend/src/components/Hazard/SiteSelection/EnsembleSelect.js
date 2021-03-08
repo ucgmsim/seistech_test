@@ -1,9 +1,11 @@
 import React, { useContext, Fragment, useEffect, useState } from "react";
+
 import Select from "react-select";
 
+import * as CONSTANTS from "constants/Constants";
 import { GlobalContext } from "context";
 import { useAuth0 } from "components/common/ReactAuth0SPA";
-import * as CONSTANTS from "constants/Constants";
+
 import { handleErrors } from "utils/Utils";
 
 const EnsembleSelect = () => {
@@ -33,7 +35,7 @@ const EnsembleSelect = () => {
         const token = await getTokenSilently();
 
         await fetch(
-          CONSTANTS.CORE_API_BASE_URL + CONSTANTS.CORE_API_ROUTE_ENSEMBLEIDS,
+          CONSTANTS.CORE_API_BASE_URL + CONSTANTS.CORE_API_ENSEMBLE_IDS_ENDPOINT,
           {
             headers: {
               Authorization: `Bearer ${token}`,

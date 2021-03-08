@@ -1,7 +1,6 @@
 import React, { Fragment, useState } from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 import Tooltip from "@material-ui/core/Tooltip";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 

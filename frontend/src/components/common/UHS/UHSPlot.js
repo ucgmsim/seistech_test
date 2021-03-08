@@ -1,5 +1,7 @@
 import React from "react";
+
 import Plot from "react-plotly.js";
+
 import { getPlotData, renderSigfigs } from "utils/Utils.js";
 import {
   PLOT_MARGIN,
@@ -7,7 +9,7 @@ import {
   APP_UI_SIGFIGS,
   APP_UI_UHS_RATETABLE_RATE_SIGFIGS,
 } from "constants/Constants";
-import ErrorMessage from "components/common/ErrorMessage";
+import { ErrorMessage } from "components/common";
 
 import "assets/style/UHSPlot.css";
 

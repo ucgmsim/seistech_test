@@ -1,9 +1,12 @@
 import React, { useState } from "react";
-import { useAuth0 } from "components/common/ReactAuth0SPA";
-import { CORE_API_BASE_URL } from "constants/Constants";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { handleErrors } from "utils/Utils";
+
 import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import { useAuth0 } from "components/common/ReactAuth0SPA";
+
+import { CORE_API_BASE_URL } from "constants/Constants";
+import { handleErrors } from "utils/Utils";
 
 const DownloadButton = ({
   downloadURL,

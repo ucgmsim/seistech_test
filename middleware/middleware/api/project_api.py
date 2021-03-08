@@ -1,116 +1,138 @@
 from flask import request
 
-from ..server import app
-from ..db import get_available_projects
-from ..utils import proxy_to_api
-from ..decorator import requires_auth
+import middleware.server as server
+import middleware.db as db
+import middleware.utils as utils
+import middleware.decorator as decorator
+import middleware.auth0 as auth0
+import middleware.constants as const
 
 
 # Site Selection
-@app.route("/projectAPI/ids/get", methods=["GET"])
-@requires_auth
+def get_all_projects():
+    return utils.proxy_to_api(request, "api/project/ids/get", "GET", True).get_json()
+
+
+@server.app.route(const.PROJECT_API_PROJECT_IDS_ENDPOINT, methods=["GET"])
+@decorator.requires_auth
 def get_available_project_ids():
-    all_projects_from_project_api = proxy_to_api(
-        request, "api/project/ids/get", "GET",
-    ).get_json()
-    return get_available_projects(all_projects_from_project_api)
+    user_id = auth0.get_user_id()
+
+    return utils.get_user_projects(db.get_user_projects(user_id), get_all_projects())
 
 
-@app.route("/projectAPI/sites/get", methods=["GET"])
-@requires_auth
+@server.app.route(const.PROJECT_API_SITES_ENDPOINT, methods=["GET"])
+@decorator.requires_auth
 def get_project_sites():
-    return proxy_to_api(request, "api/project/sites/get", "GET",)
+    return utils.proxy_to_api(request, "api/project/sites/get", "GET", True)
 
 
-@app.route("/projectAPI/ims/get", methods=["GET"])
-@requires_auth
+@server.app.route(const.PROJECT_API_IMS_ENDPOINT, methods=["GET"])
+@decorator.requires_auth
 def get_project_ims():
-    return proxy_to_api(request, "api/project/ims/get", "GET",)
+    return utils.proxy_to_api(request, "api/project/ims/get", "GET", True)
 
 
-@app.route("/projectAPI/maps/get", methods=["GET"])
-@requires_auth
+@server.app.route(const.PROJECT_API_MAPS_ENDPOINT, methods=["GET"])
+@decorator.requires_auth
 def get_project_maps():
-    return proxy_to_api(
-        request, "api/project/maps/get", "GET", "Project - Site Selection Get"
+    return utils.proxy_to_api(
+        request,
+        "api/project/maps/get",
+        "GET",
+        True,
+        endpoint="Project - Site Selection Get",
     )
 
 
 # Seismic Hazard
-@app.route("/projectAPI/hazard/get", methods=["GET"])
-@requires_auth
+@server.app.route(const.PROJECT_API_HAZARD_ENDPOINT, methods=["GET"])
+@decorator.requires_auth
 def get_project_hazard():
-    return proxy_to_api(
-        request, "api/project/hazard/get", "GET", "Project - Hazard Compute"
+    return utils.proxy_to_api(
+        request,
+        "api/project/hazard/get",
+        "GET",
+        True,
+        endpoint="Project - Hazard Compute",
     )
 
 
-@app.route("/projectAPI/disagg/get", methods=["GET"])
-@requires_auth
+@server.app.route(const.PROJECT_API_HAZARD_DISAGG_ENDPOINT, methods=["GET"])
+@decorator.requires_auth
 def get_project_disagg():
-    return proxy_to_api(
-        request, "api/project/disagg/get", "GET", "Project - Disaggregation Compute",
+    return utils.proxy_to_api(
+        request,
+        "api/project/disagg/get",
+        "GET",
+        True,
+        endpoint="Project - Disaggregation Compute",
     )
 
 
-@app.route("/projectAPI/disagg/rps/get", methods=["GET"])
-@requires_auth
+@server.app.route(const.PROJECT_API_HAZARD_DISAGG_RPS_ENDPOINT, methods=["GET"])
+@decorator.requires_auth
 def get_project_disagg_rps():
-    return proxy_to_api(request, "api/project/disagg/rps/get", "GET",)
+    return utils.proxy_to_api(request, "api/project/disagg/rps/get", "GET", True)
 
 
-@app.route("/projectAPI/uhs/rps/get", methods=["GET"])
-@requires_auth
+@server.app.route(const.PROJECT_API_HAZARD_UHS_RPS_ENDPOINT, methods=["GET"])
+@decorator.requires_auth
 def get_project_uhs_rps():
-    return proxy_to_api(request, "api/project/uhs/rps/get", "GET",)
+    return utils.proxy_to_api(request, "api/project/uhs/rps/get", "GET", True)
 
 
-@app.route("/projectAPI/uhs/get", methods=["GET"])
-@requires_auth
+@server.app.route(const.PROJECT_API_HAZARD_UHS_ENDPOINT, methods=["GET"])
+@decorator.requires_auth
 def get_project_uhs():
-    return proxy_to_api(request, "api/project/uhs/get", "GET", "Project - UHS Compute")
+    return utils.proxy_to_api(
+        request, "api/project/uhs/get", "GET", True, endpoint="Project - UHS Compute"
+    )
 
 
 # PROJECT
-@app.route("/projectAPI/hazard_download", methods=["GET"])
-@requires_auth
+@server.app.route(const.PROJECT_API_HAZARD_CURVE_DOWNLOAD_ENDPOINT, methods=["GET"])
+@decorator.requires_auth
 def project_api_download_hazard():
-    project_response = proxy_to_api(
+    project_response = utils.proxy_to_api(
         request,
         "api/project/hazard/download",
         "GET",
-        "Project - Hazard Download",
-        content_type="application/zip",
+        True,
+        endpoint="Project - Hazard Download",
+        content_type="server.application/zip",
         headers={"Content-Disposition": "attachment; filename=hazard.zip"},
     )
 
     return project_response
 
 
-@app.route("/projectAPI/disagg_download", methods=["GET"])
-@requires_auth
+@server.app.route(const.PROJECT_API_HAZARD_DISAGG_DOWNLOAD_ENDPOINT, methods=["GET"])
+@decorator.requires_auth
 def project_api_download_disagg():
-    project_response = proxy_to_api(
+    project_response = utils.proxy_to_api(
         request,
         "api/project/disagg/download",
         "GET",
-        "Project - Disaggregation Download",
-        content_type="application/zip",
+        True,
+        endpoint="Project - Disaggregation Download",
+        content_type="server.application/zip",
         headers={"Content-Disposition": "attachment; filename=disaggregation.zip"},
     )
 
     return project_response
 
 
-@app.route("/projectAPI/uhs_download", methods=["GET"])
-@requires_auth
+@server.app.route(const.PROJECT_API_HAZARD_UHS_DOWNLOAD_ENDPOINT, methods=["GET"])
+@decorator.requires_auth
 def project_api_download_uhs():
-    project_response = proxy_to_api(
+    project_response = utils.proxy_to_api(
         request,
         "api/project/uhs/download",
         "GET",
-        "Project - UHS Download",
-        content_type="application/zip",
+        True,
+        endpoint="Project - UHS Download",
+        content_type="server.application/zip",
         headers={
             "Content-Disposition": "attachment; filename=uniform_hazard_spectrum.zip"
         },
@@ -119,14 +141,16 @@ def project_api_download_uhs():
     return project_response
 
 
-@app.route("/projectAPI/gms_download", methods=["GET"])
-@requires_auth
+@server.app.route(const.PROJECT_API_GMS_DOWNLOAD_ENDPOINT, methods=["GET"])
+@decorator.requires_auth
 def project_api_download_gms():
-    project_response = proxy_to_api(
+    project_response = utils.proxy_to_api(
         request,
         "api/gms/ensemble_gms/download",
         "GET",
-        content_type="application/zip",
+        True,
+        endpoint="Project - GMS Download",
+        content_type="server.application/zip",
         headers={"Content-Disposition": "attachment; filename=gms.zip"},
     )
 

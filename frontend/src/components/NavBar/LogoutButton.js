@@ -1,19 +1,17 @@
 import React, { useContext } from "react";
+
 import { NavLink as RouterNavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-import { useAuth0 } from "components/common/ReactAuth0SPA";
-
-import { ENV } from "constants/Constants";
-
-import { GlobalContext } from "context";
-
 import {
   UncontrolledDropdown,
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
 } from "reactstrap";
+
+import { useAuth0 } from "components/common/ReactAuth0SPA";
+import { ENV } from "constants/Constants";
+import { GlobalContext } from "context";
 
 const LogoutButton = () => {
   const { user, logout } = useAuth0();
@@ -52,14 +50,14 @@ const LogoutButton = () => {
           Documents
         </DropdownItem>
 
-        {hasPermission("edit-user") ? (
+        {hasPermission("psha-admin") ? (
           <DropdownItem
             tag={RouterNavLink}
-            to="/edit-user"
+            to="/permission-config"
             className="dropdown-profile"
             activeClassName="router-link-exact-active"
           >
-            <FontAwesomeIcon icon="tools" className="mr-3" /> Edit User
+            <FontAwesomeIcon icon="tools" className="mr-3" /> Permission Config
           </DropdownItem>
         ) : null}
 
