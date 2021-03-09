@@ -86,7 +86,9 @@ def allocate_projects_to_user():
     user_id = data["user_info"]["value"]
     project_list = data["project_info"]
 
-    return db.allocate_projects_to_user(user_id, project_list)
+    db.allocate_projects_to_user(user_id, project_list)
+
+    return Response(status=200)
 
 
 @app.route(const.INTERMEDIATE_API_USER_REMOVE_PROJECTS_ENDPOINT, methods=["POST"])
