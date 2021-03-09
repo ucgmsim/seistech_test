@@ -1,6 +1,7 @@
+from middleware import db
 import middleware.auth0 as auth0
 
-from middleware import db
+# Because models need to be imported after db gets imported
 from middleware.models import *
 
 # Create tables - It only creates when tables don't exist
