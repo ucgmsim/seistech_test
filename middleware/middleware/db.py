@@ -330,7 +330,7 @@ def _get_user_permissions(requested_user_id):
 
 def get_all_users_permissions():
     """Retrieve permissions for all users
-    Retrieve all permissions from Allowed_Permission table
+    Retrieve all permissions from Users_Permissions table
 
     Returns
     -------
@@ -367,7 +367,7 @@ def get_all_permissions_for_dashboard():
 
 def update_user_permissions(user_id, permission_list):
     """Update/Insert user's allowed permission to a table,
-    Allowed_Permission
+    Users_Permissions
     
     Parameters
     ----------
@@ -416,14 +416,14 @@ def _sync_permissions(user_id, trusted_permission_list):
             _remove_user_permission_from_db(user_id, permission)
 
 
-def write_request_details(user_id, endpoint, query_dict):
+def write_request_details(user_id, action, query_dict):
     """Record users' interaction into the DB
 
     Parameters
     ----------
     user_id: string
         Determining the user
-    endpoint: string
+    action: string
         What users chose to do
         E.g., Hazard Curve Compute, UHS Compute, Disaggregation Compute...
     query_dict: dictionary
@@ -432,7 +432,7 @@ def write_request_details(user_id, endpoint, query_dict):
               value -> CCCC
     """
     # Add to History table
-    new_history = models.History(user_id, endpoint)
+    new_history = models.History(user_id, action)
     db.session.add(new_history)
     db.session.commit()
 

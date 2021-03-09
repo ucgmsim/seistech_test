@@ -27,7 +27,7 @@ def get_auth0_user_key_info():
     user_id = unverified_claims["sub"].split("|")[1]
     permission_list = unverified_claims["permissions"]
 
-    # Update the Allowed_Permission table
+    # Update the Users_Permissions table
     db.update_user_permissions(user_id, permission_list)
 
     return jsonify({"permissions": permission_list, "id": user_id})
