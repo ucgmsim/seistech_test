@@ -145,7 +145,9 @@ def requires_permission(required_permission):
     """
     token = get_token_auth_header()
     unverified_claims = jwt.get_unverified_claims(token)
+
     if unverified_claims.get("permissions"):
         token_permissions = unverified_claims["permissions"]
         return required_permission in token_permissions
+
     return False
