@@ -19,8 +19,6 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = cs.CustomSQLALchemy(app)
 
-print(db.Model, type(db.Model))
-
 # See Circular Import section on here for some attempt at justification of this
 # https://flask.palletsprojects.com/en/1.1.x/patterns/packages/
 from middleware.api import core_api, project_api, intermediate_api
