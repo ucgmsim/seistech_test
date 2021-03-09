@@ -1,6 +1,6 @@
 import json
 
-from flask import jsonify, request
+from flask import jsonify, request, Response
 from jose import jwt
 
 from middleware import app
@@ -30,8 +30,6 @@ def get_auth0_user_key_info():
     # Update the Allowed_Permission table
     db.update_user_permissions(user_id, permission_list)
 
-    return jsonify({})
-    return 200, ""
     return jsonify({"permissions": permission_list, "id": user_id})
 
 
@@ -100,7 +98,9 @@ def remove_projects_from_user():
     user_id = data["user_info"]["value"]
     project_list = data["project_info"]
 
-    return db.remove_projects_from_user(user_id, project_list)
+    db.remove_projects_from_user(user_id, project_list)
+
+    return Response(status=200)
 
 
 @app.route(const.INTERMEDIATE_API_ALL_PROJECTS_ENDPOINT, methods=["GET"])

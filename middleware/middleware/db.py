@@ -311,8 +311,6 @@ def remove_projects_from_user(user_id, project_list):
     for project in project_list:
         _remove_user_projects_from_db(user_id, project["value"])
 
-    return Response(status=200)
-
 
 def _get_user_permissions(requested_user_id):
     """Retrieve all permissions for the specified user
@@ -391,8 +389,6 @@ def update_user_permissions(user_id, permission_list):
 
     for permission in permission_list:
         _add_user_permission_to_db(user_id, permission)
-
-    return Response(status=200)
 
 
 def _sync_permissions(user_id, trusted_permission_list):
