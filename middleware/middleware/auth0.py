@@ -1,3 +1,4 @@
+import os
 import json
 import requests
 import http.client
@@ -14,13 +15,14 @@ AUTH0_AUDIENCE = os.environ["AUTH0_AUDIENCE"]
 AUTH0_GRANT_TYPE = os.environ["AUTH0_GRANT_TYPE"]
 AUTH0_DOMAIN = os.environ["AUTH0_DOMAIN"]
 
+
 class AuthError(Exception):
     def __init__(self, error, status_code):
         self.error = error
         self.status_code = status_code
 
 
-@server.app.errorhandler(AuthError)
+@app.errorhandler(AuthError)
 def handle_auth_error(ex):
     response = jsonify(ex.error)
     response.status_code = ex.status_code
@@ -80,14 +82,14 @@ def get_user_id():
 
 def _get_management_api_token():
     """Connect to AUTH0 Management API to get access token"""
-    conn = http.client.HTTPSConnection(server.AUTH0_DOMAIN)
+    conn = http.client.HTTPSConnection(AUTH0_DOMAIN)
 
     payload = json.dumps(
         {
-            "client_id": server.AUTH0_CLIENT_ID,
-            "client_secret": server.AUTH0_CLIENT_SECRET,
-            "audience": server.AUTH0_AUDIENCE,
-            "grant_type": server.AUTH0_GRANT_TYPE,
+            "client_id": AUTH0_CLIENT_ID,
+            "client_secret": AUTH0_CLIENT_SECRET,
+            "audience": AUTH0_AUDIENCE,
+            "grant_type": AUTH0_GRANT_TYPE,
         }
     )
 
@@ -103,20 +105,24 @@ def _get_management_api_token():
 
 
 def get_users():
-    """Get all users"""
+    """Get all users
+
+    Returns
+    -------
+    dictionary:
+        In the form of
+        { user_id : email | provider}
+        The reason we keep both email and provider is due to preventing confusion
+        Based on having the same emails but different provider
+        For instance, email A with Google and email A with Auth0
+    """
     resp = requests.get(
-        server.AUTH0_AUDIENCE + "users",
+        AUTH0_AUDIENCE + "users",
         headers={"Authorization": "Bearer {}".format(_get_management_api_token())},
     )
 
-    # List of dictionaries
     user_list, user_dict = resp.json(), {}
 
-    # We want to store in a dictionary in the form of
-    # { user_id : email | provider}
-    # The reason we keep both email and provider is due to preventing confusion
-    # Based on having the same emails but different provider
-    # For instance, email A with Google and email A with Auth0
     for user_dic in user_list:
         if "user_id" in user_dic.keys():
             temp_value = "{} | {}".format(

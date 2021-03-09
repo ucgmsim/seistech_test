@@ -1,3 +1,4 @@
+import os
 import json
 from functools import wraps
 
@@ -5,11 +6,11 @@ from jose import jwt
 from six.moves.urllib.request import urlopen
 from flask import _request_ctx_stack
 
-import middleware.server as server
 import middleware.auth0 as auth0
 
 ALGORITHMS = os.environ["ALGORITHMS"]
 API_AUDIENCE = os.environ["API_AUDIENCE"]
+
 
 def requires_auth(f):
     """Determines if the Access Token is valid"""
@@ -17,8 +18,8 @@ def requires_auth(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         token = auth0.get_token_auth_header()
-        jsonurl = urlopen("https://" + server.AUTH0_DOMAIN + "/.well-known/jwks.json")
-        jwks = json.loads(jsonurl.read())
+        json_url = urlopen("https://" + auth0.AUTH0_DOMAIN + "/.well-known/jwks.json")
+        jwks = json.loads(json_url.read())
         unverified_header = jwt.get_unverified_header(token)
         rsa_key = {}
         for key in jwks["keys"]:
@@ -35,9 +36,9 @@ def requires_auth(f):
                 payload = jwt.decode(
                     token,
                     rsa_key,
-                    algorithms=server.ALGORITHMS,
-                    audience=server.API_AUDIENCE,
-                    issuer="https://" + server.AUTH0_DOMAIN + "/",
+                    algorithms=ALGORITHMS,
+                    audience=API_AUDIENCE,
+                    issuer="https://" + auth0.AUTH0_DOMAIN + "/",
                 )
             except jwt.ExpiredSignatureError:
                 raise auth0.AuthError(

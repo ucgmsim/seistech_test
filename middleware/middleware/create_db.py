@@ -1,11 +1,5 @@
-import os
-
-from flask import Flask
-
 import middleware.auth0 as auth0
-import middleware.custom_sqlalchemy as cs
 
-from middleware import db
 from middleware.models import *
 
 # Create tables - It only creates when tables don't exist

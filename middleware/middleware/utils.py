@@ -3,7 +3,6 @@ from typing import Dict
 
 from flask import Response
 
-import middleware.server as server
 import middleware.db as db
 
 
@@ -11,7 +10,7 @@ def proxy_to_api(
     request,
     route,
     methods,
-    api_base: str,
+    api_destination: str,
     endpoint: str = None,
     content_type: str = "application/json",
     headers: Dict = None,
@@ -25,8 +24,8 @@ def proxy_to_api(
         URL path to Core/Project API
     methods: string
         GET/POST methods
-    to_project_api: boolean
-        Tell whether this call belongs to the ProjectAPI
+    api_destination: string
+        To determine the destination, either the CoreAPI or ProjectAPI
     endpoint: string
         To find out what user is performing
     content_type: string

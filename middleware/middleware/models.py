@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from middleware.server import db
+from middleware import db
 
 
 class UserProject(db.Model):
