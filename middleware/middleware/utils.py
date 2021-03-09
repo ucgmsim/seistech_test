@@ -76,7 +76,7 @@ def proxy_to_api(
     return response
 
 
-def get_user_projects(user_db_projects, api_projects):
+def get_user_projects(db_user_projects, api_projects):
     """Compute cross-check of allowed projects for the specified user
     with the available projects from the projectAPI
 
@@ -88,7 +88,7 @@ def get_user_projects(user_db_projects, api_projects):
 
     Parameters
     ----------
-    user_db_projects: list of dictionaries
+    db_user_projects: list of dictionaries
         All allowed projects for the specified user
 
     api_projects: list of strings
@@ -104,11 +104,11 @@ def get_user_projects(user_db_projects, api_projects):
     return {
         api_project_id: api_project_name["name"]
         for api_project_id, api_project_name in api_projects.items()
-        if api_project_id in user_db_projects
+        if api_project_id in db_user_projects
     }
 
 
-def get_user_addable_projects(user_db_projects, all_projects):
+def get_user_addable_projects(db_user_projects, all_projects):
     """Compute cross-check of allowed projects for the specified user
     with the available projects from the projectAPI
 
@@ -125,7 +125,7 @@ def get_user_addable_projects(user_db_projects, all_projects):
 
     Parameters
     ----------
-    user_db_projects: list of dictionaries
+    db_user_projects: list of dictionaries
         All allowed projects for the specified user
 
     all_projects: dictionary
@@ -141,5 +141,5 @@ def get_user_addable_projects(user_db_projects, all_projects):
     return {
         api_project_id: api_project_name["name"]
         for api_project_id, api_project_name in all_projects.items()
-        if api_project_id not in user_db_projects
+        if api_project_id not in db_user_projects
     }
