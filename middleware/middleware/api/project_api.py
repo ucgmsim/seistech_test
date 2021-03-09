@@ -4,7 +4,6 @@ from jose import jwt
 from flask import request
 
 from middleware import app
-
 import middleware.db as db
 import middleware.utils as utils
 import middleware.decorators as decorators
@@ -16,15 +15,18 @@ import middleware.constants as const
 PROJECT_API_BASE = os.environ["PROJECT_API_BASE"]
 
 # Generate the coreAPI token
-CORE_API_TOKEN = "Bearer {}".format(
+PROJECT_API_TOKEN = "Bearer {}".format(
     jwt.encode(
         {"env": os.environ["ENV"]}, os.environ["CORE_API_SECRET"], algorithm="HS256"
     )
 )
 
+
 # Site Selection
 def get_all_projects():
-    return utils.proxy_to_api(request, "api/project/ids/get", "GET", True).get_json()
+    return utils.proxy_to_api(
+        request, "api/project/ids/get", "GET", PROJECT_API_BASE, PROJECT_API_TOKEN
+    ).get_json()
 
 
 @app.route(const.PROJECT_API_PROJECT_IDS_ENDPOINT, methods=["GET"])
@@ -38,13 +40,17 @@ def get_available_project_ids():
 @app.route(const.PROJECT_API_SITES_ENDPOINT, methods=["GET"])
 @decorators.requires_auth
 def get_project_sites():
-    return utils.proxy_to_api(request, "api/project/sites/get", "GET", PROJECT_API_BASE)
+    return utils.proxy_to_api(
+        request, "api/project/sites/get", "GET", PROJECT_API_BASE, PROJECT_API_TOKEN
+    )
 
 
 @app.route(const.PROJECT_API_IMS_ENDPOINT, methods=["GET"])
 @decorators.requires_auth
 def get_project_ims():
-    return utils.proxy_to_api(request, "api/project/ims/get", "GET", PROJECT_API_BASE)
+    return utils.proxy_to_api(
+        request, "api/project/ims/get", "GET", PROJECT_API_BASE, PROJECT_API_TOKEN
+    )
 
 
 @app.route(const.PROJECT_API_MAPS_ENDPOINT, methods=["GET"])
@@ -55,7 +61,9 @@ def get_project_maps():
         "api/project/maps/get",
         "GET",
         PROJECT_API_BASE,
-        endpoint="Project - Site Selection Get",
+        PROJECT_API_TOKEN,
+        user_id=auth0.get_user_id(),
+        action="Project - Site Selection Get",
     )
 
 
@@ -68,7 +76,9 @@ def get_project_hazard():
         "api/project/hazard/get",
         "GET",
         PROJECT_API_BASE,
-        endpoint="Project - Hazard Compute",
+        PROJECT_API_TOKEN,
+        user_id=auth0.get_user_id(),
+        action="Project - Hazard Compute",
     )
 
 
@@ -80,7 +90,9 @@ def get_project_disagg():
         "api/project/disagg/get",
         "GET",
         PROJECT_API_BASE,
-        endpoint="Project - Disaggregation Compute",
+        PROJECT_API_TOKEN,
+        user_id=auth0.get_user_id(),
+        action="Project - Disaggregation Compute",
     )
 
 
@@ -88,7 +100,11 @@ def get_project_disagg():
 @decorators.requires_auth
 def get_project_disagg_rps():
     return utils.proxy_to_api(
-        request, "api/project/disagg/rps/get", "GET", PROJECT_API_BASE
+        request,
+        "api/project/disagg/rps/get",
+        "GET",
+        PROJECT_API_BASE,
+        PROJECT_API_TOKEN,
     )
 
 
@@ -96,7 +112,7 @@ def get_project_disagg_rps():
 @decorators.requires_auth
 def get_project_uhs_rps():
     return utils.proxy_to_api(
-        request, "api/project/uhs/rps/get", "GET", PROJECT_API_BASE
+        request, "api/project/uhs/rps/get", "GET", PROJECT_API_BASE, PROJECT_API_TOKEN
     )
 
 
@@ -108,7 +124,9 @@ def get_project_uhs():
         "api/project/uhs/get",
         "GET",
         PROJECT_API_BASE,
-        endpoint="Project - UHS Compute",
+        PROJECT_API_TOKEN,
+        user_id=auth0.get_user_id(),
+        action="Project - UHS Compute",
     )
 
 
@@ -121,7 +139,9 @@ def project_api_download_hazard():
         "api/project/hazard/download",
         "GET",
         PROJECT_API_BASE,
-        endpoint="Project - Hazard Download",
+        PROJECT_API_TOKEN,
+        user_id=auth0.get_user_id(),
+        action="Project - Hazard Download",
         content_type="application/zip",
         headers={"Content-Disposition": "attachment; filename=hazard.zip"},
     )
@@ -137,7 +157,9 @@ def project_api_download_disagg():
         "api/project/disagg/download",
         "GET",
         PROJECT_API_BASE,
-        endpoint="Project - Disaggregation Download",
+        PROJECT_API_TOKEN,
+        user_id=auth0.get_user_id(),
+        action="Project - Disaggregation Download",
         content_type="application/zip",
         headers={"Content-Disposition": "attachment; filename=disaggregation.zip"},
     )
@@ -153,7 +175,9 @@ def project_api_download_uhs():
         "api/project/uhs/download",
         "GET",
         PROJECT_API_BASE,
-        endpoint="Project - UHS Download",
+        PROJECT_API_TOKEN,
+        user_id=auth0.get_user_id(),
+        action="Project - UHS Download",
         content_type="application/zip",
         headers={
             "Content-Disposition": "attachment; filename=uniform_hazard_spectrum.zip"
@@ -171,7 +195,9 @@ def project_api_download_gms():
         "api/gms/ensemble_gms/download",
         "GET",
         PROJECT_API_BASE,
-        endpoint="Project - GMS Download",
+        PROJECT_API_TOKEN,
+        user_id=auth0.get_user_id(),
+        action="Project - GMS Download",
         content_type="application/zip",
         headers={"Content-Disposition": "attachment; filename=gms.zip"},
     )

@@ -11,7 +11,9 @@ def proxy_to_api(
     route,
     methods,
     api_destination: str,
-    endpoint: str = None,
+    api_token: str,
+    user_id: str = None,
+    action: str = None,
     content_type: str = "application/json",
     headers: Dict = None,
 ):
@@ -26,7 +28,11 @@ def proxy_to_api(
         GET/POST methods
     api_destination: string
         To determine the destination, either the CoreAPI or ProjectAPI
-    endpoint: string
+    api_token: string
+        Special token to pass the CoreAPI/ProjectAPI's authorization check
+    user_id: string
+        Determining the user
+    action: string
         To find out what user is performing
     content_type: string
         Entry-header field indicates the media type of the entity-body sent to the recipient.
@@ -35,9 +41,10 @@ def proxy_to_api(
         An object that stores some headers.
     """
 
-    if endpoint is not None:
+    if action is not None and user_id is not None:
         db.write_request_details(
-            endpoint,
+            user_id,
+            action,
             {
                 key: value
                 for key, value in request.args.to_dict().items()
@@ -49,7 +56,7 @@ def proxy_to_api(
         resp = requests.post(
             api_destination + route,
             data=request.data.decode(),
-            headers={"Authorization": server.CORE_API_TOKEN},
+            headers={"Authorization": api_token},
         )
 
     elif methods == "GET":
@@ -59,8 +66,7 @@ def proxy_to_api(
             querystring = "?" + querystring
 
         resp = requests.get(
-            api_destination + route + querystring,
-            headers={"Authorization": server.CORE_API_TOKEN},
+            api_destination + route + querystring, headers={"Authorization": api_token},
         )
 
     response = Response(

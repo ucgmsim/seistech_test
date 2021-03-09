@@ -4,7 +4,6 @@ from jose import jwt
 from flask import request
 
 from middleware import app
-
 import middleware.utils as utils
 import middleware.auth0 as auth0
 import middleware.decorators as decorators
@@ -21,12 +20,13 @@ CORE_API_TOKEN = "Bearer {}".format(
     )
 )
 
+
 # Site Selection
 @app.route(const.CORE_API_ENSEMBLE_IDS_ENDPOINT, methods=["GET"])
 @decorators.requires_auth
 def get_ensemble_ids():
     return utils.proxy_to_api(
-        request, "api/gm_data/ensemble/ids/get", "GET", CORE_API_BASE
+        request, "api/gm_data/ensemble/ids/get", "GET", CORE_API_BASE, CORE_API_TOKEN
     )
 
 
@@ -34,7 +34,7 @@ def get_ensemble_ids():
 @decorators.requires_auth
 def get_im_ids():
     return utils.proxy_to_api(
-        request, "api/gm_data/ensemble/ims/get", "GET", CORE_API_BASE
+        request, "api/gm_data/ensemble/ims/get", "GET", CORE_API_BASE, CORE_API_TOKEN
     )
 
 
@@ -42,7 +42,7 @@ def get_im_ids():
 @decorators.requires_auth
 def get_contextmap():
     return utils.proxy_to_api(
-        request, "api/site/context/map/download", "GET", CORE_API_BASE
+        request, "api/site/context/map/download", "GET", CORE_API_BASE, CORE_API_TOKEN
     )
 
 
@@ -50,7 +50,7 @@ def get_contextmap():
 @decorators.requires_auth
 def get_vs30map():
     return utils.proxy_to_api(
-        request, "api/site/vs30/map/download", "GET", CORE_API_BASE
+        request, "api/site/vs30/map/download", "GET", CORE_API_BASE, CORE_API_TOKEN
     )
 
 
@@ -62,7 +62,9 @@ def get_station():
         "api/site/station/location/get",
         "GET",
         CORE_API_BASE,
-        endpoint="Hazard Analysis - Set Station",
+        CORE_API_TOKEN,
+        user_id=auth0.get_user_id(),
+        action="Hazard Analysis - Set Station",
     )
 
 
@@ -76,7 +78,9 @@ def get_hazard():
             "api/hazard/ensemble_hazard/get",
             "GET",
             CORE_API_BASE,
-            endpoint="Hazard Analysis - Hazard Curve Compute",
+            CORE_API_TOKEN,
+            user_id=auth0.get_user_id(),
+            action="Hazard Analysis - Hazard Curve Compute",
         )
     raise auth0.AuthError(
         {
@@ -96,7 +100,9 @@ def get_hazard_nzcode():
             "api/hazard/nz1170p5/get",
             "GET",
             CORE_API_BASE,
-            endpoint="Hazard Analysis - Hazard NZ Code Compute",
+            CORE_API_TOKEN,
+            user_id=auth0.get_user_id(),
+            action="Hazard Analysis - Hazard NZ Code Compute",
         )
     raise auth0.AuthError(
         {
@@ -112,7 +118,11 @@ def get_hazard_nzcode():
 def get_nzcode_soil_class():
     if auth0.requires_permission("hazard:hazard"):
         return utils.proxy_to_api(
-            request, "api/hazard/nz1170p5/soil_class", "GET", CORE_API_BASE
+            request,
+            "api/hazard/nz1170p5/soil_class",
+            "GET",
+            CORE_API_BASE,
+            CORE_API_TOKEN,
         )
     raise auth0.AuthError(
         {
@@ -128,7 +138,11 @@ def get_nzcode_soil_class():
 def get_nzcode_default_params():
     if auth0.requires_permission("hazard:hazard"):
         return utils.proxy_to_api(
-            request, "api/hazard/nz1170p5/default_params", "GET", CORE_API_BASE
+            request,
+            "api/hazard/nz1170p5/default_params",
+            "GET",
+            CORE_API_BASE,
+            CORE_API_TOKEN,
         )
     raise auth0.AuthError(
         {
@@ -148,7 +162,9 @@ def get_disagg():
             "api/disagg/ensemble_disagg/get",
             "GET",
             CORE_API_BASE,
-            endpoint="Hazard Analysis - Disaggregation Compute",
+            CORE_API_TOKEN,
+            user_id=auth0.get_user_id(),
+            action="Hazard Analysis - Disaggregation Compute",
         )
     raise auth0.AuthError(
         {
@@ -168,7 +184,9 @@ def get_uhs():
             "api/uhs/ensemble_uhs/get",
             "GET",
             CORE_API_BASE,
-            endpoint="Hazard Analysis - UHS Compute",
+            CORE_API_TOKEN,
+            user_id=auth0.get_user_id(),
+            action="Hazard Analysis - UHS Compute",
         )
     raise auth0.AuthError(
         {
@@ -188,7 +206,9 @@ def get_uhs_nzcode():
             "api/uhs/nz1170p5/get",
             "GET",
             CORE_API_BASE,
-            endpoint="Hazard Analysis - UHS NZ Code Compute",
+            CORE_API_TOKEN,
+            user_id=auth0.get_user_id(),
+            action="Hazard Analysis - UHS NZ Code Compute",
         )
     raise auth0.AuthError(
         {
@@ -208,7 +228,9 @@ def compute_ensemble_GMS():
         "api/gms/ensemble_gms/compute",
         "POST",
         CORE_API_BASE,
-        endpoint="Hazard Analysis - GMS Compute",
+        CORE_API_TOKEN,
+        user_id=auth0.get_user_id(),
+        action="Hazard Analysis - GMS Compute",
     )
 
 
@@ -216,7 +238,11 @@ def compute_ensemble_GMS():
 @decorators.requires_auth
 def get_default_IM_weights():
     return utils.proxy_to_api(
-        request, "api/gms/ensemble_gms/get_default_IM_weights", "GET"
+        request,
+        "api/gms/ensemble_gms/get_default_IM_weights",
+        "GET",
+        CORE_API_BASE,
+        CORE_API_TOKEN,
     )
 
 
@@ -224,7 +250,11 @@ def get_default_IM_weights():
 @decorators.requires_auth
 def get_default_causal_params():
     return utils.proxy_to_api(
-        request, "api/gms/ensemble_gms/get_default_causal_params", "GET", CORE_API_BASE
+        request,
+        "api/gms/ensemble_gms/get_default_causal_params",
+        "GET",
+        CORE_API_BASE,
+        CORE_API_TOKEN,
     )
 
 
@@ -232,13 +262,15 @@ def get_default_causal_params():
 @app.route(const.CORE_API_GMS_DATASETS_ENDPOINT, methods=["GET"])
 def get_gm_datasets():
     return utils.proxy_to_api(
-        request, "api/gms/ensemble_gms/datasets", "GET", CORE_API_BASE
+        request, "api/gms/ensemble_gms/datasets", "GET", CORE_API_BASE, CORE_API_TOKEN
     )
 
 
 @app.route(const.CORE_API_GMS_IMS_ENDPOINT_ENDPOINT, methods=["GET"])
 def get_GMS_available_IMs():
-    return utils.proxy_to_api(request, "api/gms/ensemble_gms/ims", "GET", CORE_API_BASE)
+    return utils.proxy_to_api(
+        request, "api/gms/ensemble_gms/ims", "GET", CORE_API_BASE, CORE_API_TOKEN
+    )
 
 
 # Download
@@ -251,7 +283,9 @@ def core_api_download_hazard():
         "api/hazard/ensemble_hazard/download",
         "GET",
         CORE_API_BASE,
-        endpoint="Hazard Analysis - Hazard Download",
+        CORE_API_TOKEN,
+        user_id=auth0.get_user_id(),
+        action="Hazard Analysis - Hazard Download",
         content_type="application/zip",
         headers={"Content-Disposition": "attachment; filename=hazard.zip"},
     )
@@ -267,7 +301,9 @@ def core_api_download_disagg():
         "api/disagg/ensemble_disagg/download",
         "GET",
         CORE_API_BASE,
-        endpoint="Hazard Analysis - Disaggregation Download",
+        CORE_API_TOKEN,
+        user_id=auth0.get_user_id(),
+        action="Hazard Analysis - Disaggregation Download",
         content_type="application/zip",
         headers={"Content-Disposition": "attachment; filename=disaggregation.zip"},
     )
@@ -283,7 +319,9 @@ def core_api_download_uhs():
         "api/uhs/ensemble_uhs/download",
         "GET",
         CORE_API_BASE,
-        endpoint="Hazard Analysis - UHS Download",
+        CORE_API_TOKEN,
+        user_id=auth0.get_user_id(),
+        action="Hazard Analysis - UHS Download",
         content_type="application/zip",
         headers={
             "Content-Disposition": "attachment; filename=uniform_hazard_spectrum.zip"
@@ -301,7 +339,9 @@ def core_api_download_gms():
         "api/gms/ensemble_gms/download",
         "GET",
         CORE_API_BASE,
-        endpoint="Hazard Analysis - GMS Download",
+        CORE_API_TOKEN,
+        user_id=auth0.get_user_id(),
+        action="Hazard Analysis - GMS Download",
         content_type="application/zip",
         headers={"Content-Disposition": "attachment; filename=gms.zip"},
     )

@@ -2,7 +2,6 @@ from collections import defaultdict
 
 from middleware import db
 import middleware.models as models
-import middleware.auth0 as auth0
 
 
 def _is_user_in_db(user_id):
@@ -417,11 +416,13 @@ def _sync_permissions(user_id, trusted_permission_list):
             _remove_user_permission_from_db(user_id, permission)
 
 
-def write_request_details(endpoint, query_dict):
+def write_request_details(user_id, endpoint, query_dict):
     """Record users' interaction into the DB
 
     Parameters
     ----------
+    user_id: string
+        Determining the user
     endpoint: string
         What users chose to do
         E.g., Hazard Curve Compute, UHS Compute, Disaggregation Compute...
@@ -430,9 +431,6 @@ def write_request_details(endpoint, query_dict):
         E.g., Attribute -> Station
               value -> CCCC
     """
-    # Finding an user_id from the token
-    user_id = auth0.get_user_id()
-
     # Add to History table
     new_history = models.History(user_id, endpoint)
     db.session.add(new_history)
