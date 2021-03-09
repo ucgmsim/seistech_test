@@ -1,5 +1,6 @@
 import middleware.auth0 as auth0
 
+from middleware import db
 from middleware.models import *
 
 # Create tables - It only creates when tables don't exist
