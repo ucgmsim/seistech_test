@@ -40,7 +40,7 @@ def get_im_ids():
 
 @app.route(const.CORE_API_CONTEXT_MAP_ENDPOINT, methods=["GET"])
 @decorators.requires_auth
-def get_contextmap():
+def get_context_map():
     return utils.proxy_to_api(
         request, "api/site/context/map/download", "GET", CORE_API_BASE, CORE_API_TOKEN
     )
@@ -48,7 +48,7 @@ def get_contextmap():
 
 @app.route(const.CORE_API_VS30_MAP_ENDPOINT, methods=["GET"])
 @decorators.requires_auth
-def get_vs30map():
+def get_vs30_map():
     return utils.proxy_to_api(
         request, "api/site/vs30/map/download", "GET", CORE_API_BASE, CORE_API_TOKEN
     )
@@ -93,7 +93,7 @@ def get_hazard():
 
 @app.route(const.CORE_API_HAZARD_NZ11705_ENDPOINT, methods=["GET"])
 @decorators.requires_auth
-def get_hazard_nzcode():
+def get_hazard_nz_code():
     if auth0.requires_permission("hazard:hazard"):
         return utils.proxy_to_api(
             request,
@@ -115,7 +115,7 @@ def get_hazard_nzcode():
 
 @app.route(const.CORE_API_HAZARD_NZ11705_SOIL_CLASS_ENDPOINT, methods=["GET"])
 @decorators.requires_auth
-def get_nzcode_soil_class():
+def get_nz_code_soil_class():
     if auth0.requires_permission("hazard:hazard"):
         return utils.proxy_to_api(
             request,
@@ -135,7 +135,7 @@ def get_nzcode_soil_class():
 
 @app.route(const.CORE_API_HAZARD_NZ11705_DEFAULT_PARAMS_ENDPOINT, methods=["GET"])
 @decorators.requires_auth
-def get_nzcode_default_params():
+def get_nz_code_default_params():
     if auth0.requires_permission("hazard:hazard"):
         return utils.proxy_to_api(
             request,
@@ -199,7 +199,7 @@ def get_uhs():
 
 @app.route(const.CORE_API_HAZARD_UHS_NZ11705_ENDPOINT, methods=["GET"])
 @decorators.requires_auth
-def get_uhs_nzcode():
+def get_uhs_nz_code():
     if auth0.requires_permission("hazard:hazard"):
         return utils.proxy_to_api(
             request,
@@ -222,7 +222,7 @@ def get_uhs_nzcode():
 # GMS
 @app.route(const.CORE_API_GMS_ENDPOINT, methods=["POST"])
 @decorators.requires_auth
-def compute_ensemble_GMS():
+def compute_ensemble_gms():
     return utils.proxy_to_api(
         request,
         "api/gms/ensemble_gms/compute",
@@ -236,7 +236,7 @@ def compute_ensemble_GMS():
 
 @app.route(const.CORE_API_GMS_DEFAULT_IM_WEIGHTS_ENDPOINT, methods=["GET"])
 @decorators.requires_auth
-def get_default_IM_weights():
+def get_default_im_weights():
     return utils.proxy_to_api(
         request,
         "api/gms/ensemble_gms/get_default_IM_weights",
@@ -267,7 +267,7 @@ def get_gm_datasets():
 
 
 @app.route(const.CORE_API_GMS_IMS_ENDPOINT_ENDPOINT, methods=["GET"])
-def get_GMS_available_IMs():
+def get_gms_available_ims():
     return utils.proxy_to_api(
         request, "api/gms/ensemble_gms/ims", "GET", CORE_API_BASE, CORE_API_TOKEN
     )
