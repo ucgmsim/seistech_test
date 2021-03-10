@@ -17,7 +17,7 @@ const ProjectPermissionDashboard = () => {
   const [allProjects, setAllProjects] = useState({});
   const [tableHeaderData, setTableHeaderData] = useState([]);
 
-  const [allAvailableProjects, setAllAvailableProjects] = useState({});
+  const [allUsersProjects, setAllUsersProjects] = useState({});
   const [tableBodyData, setTableBodyData] = useState([]);
 
   /*
@@ -110,6 +110,7 @@ const ProjectPermissionDashboard = () => {
 
   /*
     Pull every row from Users_Projects table
+    Which is Private Project
   */
   useEffect(() => {
     const abortController = new AbortController();
@@ -132,7 +133,7 @@ const ProjectPermissionDashboard = () => {
           .then(handleErrors)
           .then(async (response) => {
             const responseData = await response.json();
-            setAllAvailableProjects(responseData);
+            setAllUsersProjects(responseData);
           })
           .catch((error) => {
             console.log(error);
@@ -152,15 +153,15 @@ const ProjectPermissionDashboard = () => {
   /*
     Create an array of objects for table body
     We need to be sure that the following data aren't empty
-    1. allAvailableProjects -> Data from UserDB, Available_Project table
-    2. allProjects -> Data from Project API, All Projects we provide
+    1. allUsersProjects -> Data from Users_Projects table
+    2. allProjects -> Data from Project table, All Public & Private projects
     3. userOption -> Data from Auth0, existing users
   */
   useEffect(() => {
     if (
-      (allAvailableProjects &&
-        Object.keys(allAvailableProjects).length === 0 &&
-        allAvailableProjects.constructor === Object) === false &&
+      (allUsersProjects &&
+        Object.keys(allUsersProjects).length === 0 &&
+        allUsersProjects.constructor === Object) === false &&
       (allProjects &&
         Object.keys(allProjects).length === 0 &&
         allProjects.constructor === Object) === false &&
@@ -170,7 +171,7 @@ const ProjectPermissionDashboard = () => {
       let tempObj = {};
 
       /*
-        Loop through the object, allAvailableProjects
+        Loop through the object, allUsersProjects
         Nested loop through another object, allprojects
 
         The key for a temp object property with "auth0-user-id", 
@@ -184,7 +185,7 @@ const ProjectPermissionDashboard = () => {
         )
       */
       for (const [user_id, available_projects] of Object.entries(
-        allAvailableProjects
+        allUsersProjects
       )) {
         for (const access_level in allProjects) {
           tempObj["auth0-user-id"] = userOption.find(
@@ -210,7 +211,7 @@ const ProjectPermissionDashboard = () => {
 
       setTableBodyData(tempArray);
     }
-  }, [allAvailableProjects, allProjects, userOption]);
+  }, [allUsersProjects, allProjects, userOption]);
 
   /*
     Fetching user information from the API(Auth0)
