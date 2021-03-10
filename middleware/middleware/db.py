@@ -147,7 +147,7 @@ def _add_user_project_to_db(user_id, project_code):
         _add_project_to_db(project_code)
         db.session.flush()
 
-    # Find Find a project object with a given project_code to get its project id
+    # Find a project object with a given project_code to get its project id
     project_obj = models.Project.query.filter_by(project_code=project_code).first()
 
     db.session.add(models.UserProject(user_id, project_obj.project_code))
