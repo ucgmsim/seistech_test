@@ -47,6 +47,20 @@ def get_auth0_users():
     return jsonify(auth0.get_users())
 
 
+@app.route(const.INTERMEDIATE_API_ALL_PRIVATE_PROJECTS_ENDPOINT, methods=["GET"])
+@decorators.requires_auth
+def get_private_projects():
+    """Fetching all private projects from the Project table"""
+    return jsonify(db.get_certain_access_level_projects("private"))
+
+
+@app.route(const.INTERMEDIATE_API_ALL_PUBLIC_PROJECTS_ENDPOINT, methods=["GET"])
+@decorators.requires_auth
+def get_public_projects():
+    """Fetching all public projects from the Project table"""
+    return jsonify(db.get_certain_access_level_projects("public"))
+
+
 @app.route(const.INTERMEDIATE_API_USER_ADDABLE_PROJECTS_ENDPOINT, methods=["GET"])
 @decorators.requires_auth
 def get_user_addable_projects():

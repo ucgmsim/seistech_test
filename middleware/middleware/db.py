@@ -453,3 +453,34 @@ def write_request_details(user_id, action, query_dict):
             db.session.add(new_history)
 
     db.session.commit()
+
+
+def get_certain_access_level_projects(access_level):
+    """Get all projects that have a given access_level from the Project table
+
+    Parameters
+    ----------
+    access_level: string
+        Determining the access level
+
+    Returns
+    -------
+    Dictionary of dictionaries in the form of
+    {
+        project_code: {
+            project_name: project_name,
+            access_level: access_level
+        }
+    }
+    """
+    access_level_projects = models.Project.query.filter_by(
+        access_level=access_level
+    ).all()
+
+    return {
+        project.project_code: {
+            "project_name": project.project_name,
+            "access_level": project.access_level,
+        }
+        for project in access_level_projects
+    }
