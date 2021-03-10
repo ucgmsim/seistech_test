@@ -31,6 +31,8 @@ PROJECT_DICT = {
     "wel_par_accom": "Wellington Parliament Accomodation",
 }
 
+PUBLIC_PROJECT_CODES = {"gnzl", "nzgs_pga"}
+
 # Adding all users from Auth0 to the User table
 for key in auth0.get_users():
     db.session.add(User(key))
@@ -43,7 +45,7 @@ for permission in PERMISSION_LIST:
 
 # Adding initial five project ids to the Project table
 for code, name in PROJECT_DICT.items():
-    if code == "gnzl" or code == "nzgs_pga":
+    if code in PUBLIC_PROJECT_CODES:
         db.session.add(Project(code, name, "public"))
         db.session.commit()
     else:
