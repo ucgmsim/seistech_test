@@ -61,7 +61,7 @@ const HazardCurveSection = () => {
           checked={showHazardNZS1170p5}
           onChange={() => setShowHazardNZS1170p5(!showHazardNZS1170p5)}
         />
-        <span className="show-nzs">&nbsp;Show NZS1170.5</span>
+        <span className="show-nzs1170p5">&nbsp;Show NZS1170.5</span>
       </div>
     </Fragment>
   );

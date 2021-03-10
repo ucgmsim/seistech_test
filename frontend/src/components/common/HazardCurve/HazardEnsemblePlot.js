@@ -66,7 +66,7 @@ const HazardEnsemblePlot = ({
             y: plotData.nzs1170p5.index,
             type: "scatter",
             mode: "lines+markers",
-            name: "NZ code",
+            name: "NZS1170p5 code",
             marker: { symbol: "triangle-up" },
             line: { color: "black", dash: "dot" },
             visible: showNZS1170p5,

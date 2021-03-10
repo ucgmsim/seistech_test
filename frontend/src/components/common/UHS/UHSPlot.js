@@ -21,7 +21,7 @@ const UHSPlot = ({ uhsData, nzs1170p5Data, showNZS1170p5 = true, extra }) => {
       E.g., "14".indexOf(".") returns -1 as it does not have "." in it
 
       displayRP = Selected RPs
-      isNZS1170p5 = to check whether its for NZCode or not, default to false.
+      isNZS1170p5 = to check whether its for NZS1170P5Code or not, default to false.
      */
     const createLabel = (displayRP, isNZS1170p5 = false) => {
       // Depends on the isNZS1170p5 status, newLabel starts with NZS1170p5 Code - or an empty string

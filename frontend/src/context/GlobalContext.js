@@ -57,11 +57,11 @@ export const Provider = (props) => {
 
   const [soilClass, setSoilClass] = useState({});
 
-  // Check box stats for Hazard Curve and UHS for NZCode, default is true
+  // Check box stats for Hazard Curve and UHS for NZS1170p5 Code, default is true
   const [showHazardNZS1170p5, setShowHazardNZS1170p5] = useState(true);
   const [showUHSNZS1170p5, setShowUHSNZS1170p5] = useState(true);
 
-  // NZ Code is now splitted
+  // NZS1170p5 Code is now splitted
   const [hazardNZS1170p5Data, setHazardNZS1170p5Data] = useState(null);
   const [uhsNZS1170p5Data, setUHSNZS1170p5Data] = useState(null);
 
