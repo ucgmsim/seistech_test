@@ -67,11 +67,7 @@ export const INTERMEDIATE_API_AUTH0_USERS_ENDPOINT =
 
 export const INTERMEDIATE_API_ALL_USERS_PROJECTS_ENDPOINT =
   "intermediateAPI/users_projects/all/get";
-export const INTERMEDIATE_API_ALL_PROJECTS_ENDPOINT =
-  "intermediateAPI/project/all/get";
 
-export const INTERMEDIATE_API_USER_ADDABLE_PROJECTS_ENDPOINT =
-  "intermediateAPI/user/addable_projects/get";
 export const INTERMEDIATE_API_USER_PROJECTS_ENDPOINT =
   "intermediateAPI/user/projects/get";
 export const INTERMEDIATE_API_USER_ALLOCATE_PROJECTS_ENDPOINT =

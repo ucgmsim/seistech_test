@@ -55,11 +55,7 @@ INTERMEDIATE_API_AUTH0_USER_INFO_ENDPOINT = (
 INTERMEDIATE_API_AUTH0_USERS_ENDPOINT = "/intermediateAPI/auth0/users/get"
 
 INTERMEDIATE_API_ALL_USERS_PROJECTS_ENDPOINT = "/intermediateAPI/users_projects/all/get"
-INTERMEDIATE_API_ALL_PROJECTS_ENDPOINT = "/intermediateAPI/project/all/get"
 
-INTERMEDIATE_API_USER_ADDABLE_PROJECTS_ENDPOINT = (
-    "/intermediateAPI/user/addable_projects/get"
-)
 INTERMEDIATE_API_USER_PROJECTS_ENDPOINT = "/intermediateAPI/user/projects/get"
 INTERMEDIATE_API_USER_ALLOCATE_PROJECTS_ENDPOINT = (
     "/intermediateAPI/user/allocate_projects"

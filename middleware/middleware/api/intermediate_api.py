@@ -61,21 +61,6 @@ def get_public_projects():
     return jsonify(db.get_certain_access_level_projects("public"))
 
 
-@app.route(const.INTERMEDIATE_API_USER_ADDABLE_PROJECTS_ENDPOINT, methods=["GET"])
-@decorators.requires_auth
-def get_user_addable_projects():
-    """Fetching all the projects that can be allocated to a user
-    Will be used for Addable Projects dropdown
-    """
-    user_id = request.args.to_dict()["user_id"]
-
-    return jsonify(
-        utils.get_user_addable_projects(
-            db.get_user_projects(user_id), project_api.get_all_projects()
-        )
-    )
-
-
 @app.route(const.INTERMEDIATE_API_USER_PROJECTS_ENDPOINT, methods=["GET"])
 @decorators.requires_auth
 def get_user_projects():
@@ -113,13 +98,6 @@ def remove_projects_from_user():
     db.remove_projects_from_user(user_id, project_list)
 
     return Response(status=200)
-
-
-@app.route(const.INTERMEDIATE_API_ALL_PROJECTS_ENDPOINT, methods=["GET"])
-@decorators.requires_auth
-def get_all_projects():
-    """Get all projects to draw columns in the dashboard"""
-    return db.get_all_projects_for_dashboard()
 
 
 @app.route(const.INTERMEDIATE_API_ALL_USERS_PROJECTS_ENDPOINT, methods=["GET"])
