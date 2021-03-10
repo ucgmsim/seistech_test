@@ -30,9 +30,10 @@ class Project(db.Model):
 
     users = db.relationship("UserProject", back_populates="project")
 
-    def __init__(self, project_code, project_name):
+    def __init__(self, project_code, project_name, access_level="private"):
         self.project_code = project_code
         self.project_name = project_name
+        self.access_level = access_level
 
     def __repr__(self):
         return "<Project %r>" % self.project_code
