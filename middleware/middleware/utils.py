@@ -104,7 +104,7 @@ def get_user_projects(db_user_projects, api_projects):
     return {
         api_project_code: api_project_name["name"]
         for api_project_code, api_project_name in api_projects.items()
-        if api_project_code in db_user_projects
+        if api_project_name["name"] in db_user_projects
     }
 
 
@@ -141,5 +141,5 @@ def get_user_addable_projects(db_user_projects, all_projects):
     return {
         api_project_code: api_project_name["name"]
         for api_project_code, api_project_name in all_projects.items()
-        if api_project_code not in db_user_projects
+        if api_project_name["name"] not in db_user_projects
     }
