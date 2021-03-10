@@ -258,10 +258,10 @@ def get_all_projects_for_dashboard():
     dictionary:
         In the form of
         {
-            project_code: project_full_name
+            project_code: project_name
         }
         project_code = (e.g., nzgl, soffitel,qtwn)
-        project_fulle_name = user friendly name for project,
+        project_name = user friendly name for project,
         e.g. Generic New Zealand Locations
     """
     # Get all projects from the UserDB.
