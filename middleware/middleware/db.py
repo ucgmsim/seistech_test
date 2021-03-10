@@ -246,16 +246,12 @@ def get_all_users_projects():
     return allowed_projects_dict
 
 
-def get_all_projects_for_dashboard(projects):
-    """Retrieve all the projects we have from Project API
+def get_all_projects_for_dashboard():
+    """Retrieve all the projects we have from Project table
 
     Then customize the format to send to the frontend for two reasons.
     1. For Table's header(will display the name of the project)
     2. We can use this dictionary to filter the table to tell they have permission
-
-    Parameters
-    ----------
-    projects: dictionary
 
     Returns
     -------
@@ -274,7 +270,7 @@ def get_all_projects_for_dashboard(projects):
     return {
         project.project_name: {
             "project_code": project.project_code,
-            "project_full_name": projects[project.project_name]["name"],
+            "project_full_name": project.project_name,
         }
         for project in all_projects
     }
