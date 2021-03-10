@@ -400,7 +400,7 @@ const EditUserPermission = () => {
       </div>
       <div className="row justify-content-lg-center">
         <div className="col-lg-6">
-          <h4>Allowed Projects</h4>
+          <h4>Allowed Private Projects</h4>
           <h5>(Use to remove projects from a user)</h5>
           <Select
             id="allocated-projects"
@@ -439,7 +439,7 @@ const EditUserPermission = () => {
         </div>
 
         <div className="col-lg-6">
-          <h4>Addable Projects</h4>
+          <h4>Addable Private Projects</h4>
           <h5>(Use to add projects to a user)</h5>
           <Select
             id="available-projects"
