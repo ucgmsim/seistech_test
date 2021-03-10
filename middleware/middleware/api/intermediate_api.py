@@ -109,7 +109,7 @@ def remove_projects_from_user():
 @decorators.requires_auth
 def get_all_projects():
     """Get all projects to draw columns in the dashboard"""
-    return db.get_all_projects_for_dashboard(project_api.get_all_projects())
+    return db.get_all_projects_for_dashboard()
 
 
 @app.route(const.INTERMEDIATE_API_ALL_USERS_PROJECTS_ENDPOINT, methods=["GET"])
