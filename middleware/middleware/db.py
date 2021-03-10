@@ -220,7 +220,7 @@ def get_user_projects(user_id):
         .all()
     )
 
-    return [project.project_name for project in allowed_project_objs]
+    return {project.project_code: project.project_name for project in allowed_project_objs}
 
 
 def get_all_users_projects():
@@ -467,10 +467,7 @@ def get_certain_access_level_projects(access_level):
     -------
     Dictionary of dictionaries in the form of
     {
-        project_code: {
-            project_name: project_name,
-            access_level: access_level
-        }
+        project_code: project_name
     }
     """
     access_level_projects = models.Project.query.filter_by(
@@ -478,9 +475,5 @@ def get_certain_access_level_projects(access_level):
     ).all()
 
     return {
-        project.project_code: {
-            "project_name": project.project_name,
-            "access_level": project.access_level,
-        }
-        for project in access_level_projects
+        project.project_code: project.project_name for project in access_level_projects
     }
