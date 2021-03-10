@@ -84,7 +84,8 @@ const EditUserPermission = () => {
         setUserDataFetching(true);
 
         await fetch(
-          CONSTANTS.CORE_API_BASE_URL + CONSTANTS.INTERMEDIATE_API_AUTH0_USERS_ENDPOINT,
+          CONSTANTS.CORE_API_BASE_URL +
+            CONSTANTS.INTERMEDIATE_API_AUTH0_USERS_ENDPOINT,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -138,8 +139,7 @@ const EditUserPermission = () => {
           await Promise.all([
             fetch(
               CONSTANTS.CORE_API_BASE_URL +
-                CONSTANTS.INTERMEDIATE_API_USER_ADDABLE_PROJECTS_ENDPOINT +
-                `?user_id=${selectedUser.value}`,
+                CONSTANTS.INTERMEDIATE_API_ALL_PRIVATE_PROJECTS_ENDPOINT,
               {
                 headers: {
                   Authorization: `Bearer ${token}`,
@@ -161,12 +161,20 @@ const EditUserPermission = () => {
           ])
 
             .then(handleErrors)
-            .then(async ([addableProjects, allocatedProjects]) => {
-              const addableProjectData = await addableProjects.json();
-              const allocatedProjectData = await allocatedProjects.json();
+            .then(async ([allPrivateProjects, userProjects]) => {
+              const allPrivateProjectsData = await allPrivateProjects.json();
+              const userProjectsData = await userProjects.json();
 
-              setAddableProjectData(addableProjectData);
-              setAllocatedProjectData(allocatedProjectData);
+              setAddableProjectData(
+                filterToGetAddableProjects(
+                  allPrivateProjectsData,
+                  userProjectsData
+                )
+              );
+              console.log(filterToGetAllowedProjects(userProjectsData));
+              setAllocatedProjectData(
+                filterToGetAllowedProjects(userProjectsData)
+              );
 
               setProjectDataFetching(false);
             })
@@ -351,6 +359,28 @@ const EditUserPermission = () => {
     bodyString += `\nfrom ${selectedUser.label}`;
 
     return bodyString;
+  };
+
+  const filterToGetAddableProjects = (allPrivateProjects, userProjects) => {
+    let tempObj = {};
+
+    for (const [key, value] of Object.entries(allPrivateProjects)) {
+      if (!Object.keys(userProjects).includes(key)) {
+        tempObj[key] = value;
+      }
+    }
+
+    return tempObj;
+  };
+
+  const filterToGetAllowedProjects = (userProjects) => {
+    let tempObj = {};
+
+    for (const [key, value] of Object.entries(userProjects)) {
+      tempObj[key] = value;
+    }
+
+    return tempObj;
   };
 
   return (

@@ -84,11 +84,7 @@ def get_user_projects():
     """
     user_id = request.args.to_dict()["user_id"]
 
-    return jsonify(
-        utils.get_user_projects(
-            db.get_user_projects(user_id), project_api.get_all_projects(),
-        )
-    )
+    return jsonify(db.get_user_projects(user_id))
 
 
 @app.route(const.INTERMEDIATE_API_USER_ALLOCATE_PROJECTS_ENDPOINT, methods=["POST"])
