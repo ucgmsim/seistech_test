@@ -115,7 +115,7 @@ def get_all_projects():
 @app.route(const.INTERMEDIATE_API_ALL_USERS_PROJECTS_ENDPOINT, methods=["GET"])
 @decorators.requires_auth
 def get_all_users_projects():
-    """Get allowed project permissions for all users"""
+    """Pull every allowed project for all users from Users_Projects table"""
     return db.get_all_users_projects()
 
 
@@ -129,5 +129,5 @@ def get_all_permissions():
 @app.route(const.INTERMEDIATE_API_ALL_USERS_PERMISSIONS_ENDPOINT, methods=["GET"])
 @decorators.requires_auth
 def get_all_users_permissions():
-    """Pull every allowed permission from Allow_Permission table"""
+    """Pull every allowed access permission for all uesrs from Users_Permissions table"""
     return db.get_all_users_permissions()
