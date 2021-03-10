@@ -193,7 +193,7 @@ const SiteSelectionForm = () => {
 
               return fetch(
                 CONSTANTS.CORE_API_BASE_URL +
-                  CONSTANTS.CORE_API_HAZARD_NZ11705_DEFAULT_PARAMS_ENDPOINT +
+                  CONSTANTS.CORE_API_HAZARD_NZS1170P5_DEFAULT_PARAMS_ENDPOINT +
                   nzCodeDefaultQueryString,
                 {
                   headers: {
@@ -260,7 +260,7 @@ const SiteSelectionForm = () => {
           ),
           fetch(
             CONSTANTS.CORE_API_BASE_URL +
-              CONSTANTS.CORE_API_HAZARD_NZ11705_SOIL_CLASS_ENDPOINT,
+              CONSTANTS.CORE_API_HAZARD_NZS1170P5_SOIL_CLASS_ENDPOINT,
             {
               headers: {
                 Authorization: `Bearer ${token}`,

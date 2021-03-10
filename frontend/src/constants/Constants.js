@@ -10,13 +10,13 @@ export const CORE_API_VS30_MAP_ENDPOINT = "coreAPI/vs30map/get";
 export const CORE_API_STATION_ENDPOINT = "coreAPI/station/get";
 
 export const CORE_API_HAZARD_ENDPOINT = "coreAPI/hazard/get";
-export const CORE_API_HAZARD_NZ11705_ENDPOINT = "coreAPI/hazard/nz1170p5/get";
+export const CORE_API_HAZARD_NZS1170P5_ENDPOINT = "coreAPI/hazard/nz1170p5/get";
 export const CORE_API_HAZARD_DISAGG_ENDPOINT = "coreAPI/disagg/get";
 export const CORE_API_HAZARD_UHS_ENDPOINT = "coreAPI/uhs/get";
-export const CORE_API_HAZARD_UHS_NZ11705_ENDPOINT = "coreAPI/uhs/nz1170p5/get";
-export const CORE_API_HAZARD_NZ11705_SOIL_CLASS_ENDPOINT =
+export const CORE_API_HAZARD_UHS_NZS1170P5_ENDPOINT = "coreAPI/uhs/nz1170p5/get";
+export const CORE_API_HAZARD_NZS1170P5_SOIL_CLASS_ENDPOINT =
   "coreAPI/hazard/nz1170p5/soil_class/get";
-export const CORE_API_HAZARD_NZ11705_DEFAULT_PARAMS_ENDPOINT =
+export const CORE_API_HAZARD_NZS1170P5_DEFAULT_PARAMS_ENDPOINT =
   "coreAPI/hazard/nz1170p5/default/get";
 
 export const CORE_API_GMS_ENDPOINT = "coreAPI/gms/ensemble_gms/get";

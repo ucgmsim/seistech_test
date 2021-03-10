@@ -136,7 +136,7 @@ const HazardViewerUHS = () => {
 
               return fetch(
                 CONSTANTS.CORE_API_BASE_URL +
-                  CONSTANTS.CORE_API_HAZARD_UHS_NZ11705_ENDPOINT +
+                  CONSTANTS.CORE_API_HAZARD_UHS_NZS1170P5_ENDPOINT +
                   nzCodeQueryString,
                 {
                   headers: {
