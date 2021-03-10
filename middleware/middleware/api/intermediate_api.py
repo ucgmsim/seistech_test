@@ -10,7 +10,6 @@ import middleware.utils as utils
 import middleware.auth0 as auth0
 import middleware.decorators as decorators
 import middleware.constants as const
-import middleware.api.project_api as project_api
 
 
 @app.route(const.INTERMEDIATE_API_AUTH0_USER_INFO_ENDPOINT, methods=["GET"])
