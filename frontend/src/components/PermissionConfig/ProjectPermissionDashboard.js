@@ -166,15 +166,12 @@ const ProjectPermissionDashboard = () => {
       for (const [user_id, available_projects] of Object.entries(
         allAvailableProjects
       )) {
-        for (const [project_code, project_detail] of Object.entries(
-          allProjects
-        )) {
+        for (const project_code in allProjects) {
           tempObj["auth0-user-id"] = userOption.find(
             (user) => user.value === user_id
           ).label;
-          tempObj[project_code] = available_projects.includes(
-            project_detail.project_id
-          )
+
+          tempObj[project_code] = available_projects.includes(project_code)
             ? "true"
             : "false";
         }
@@ -198,7 +195,8 @@ const ProjectPermissionDashboard = () => {
         const token = await getTokenSilently();
 
         await fetch(
-          CONSTANTS.CORE_API_BASE_URL + CONSTANTS.INTERMEDIATE_API_AUTH0_USERS_ENDPOINT,
+          CONSTANTS.CORE_API_BASE_URL +
+            CONSTANTS.INTERMEDIATE_API_AUTH0_USERS_ENDPOINT,
           {
             headers: {
               Authorization: `Bearer ${token}`,
