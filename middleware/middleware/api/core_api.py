@@ -93,7 +93,7 @@ def get_hazard():
 
 @app.route(const.CORE_API_HAZARD_NZS1170P5_ENDPOINT, methods=["GET"])
 @decorators.requires_auth
-def get_hazard_nz_code():
+def get_hazard_nzs1170p5():
     if auth0.requires_permission("hazard:hazard"):
         return utils.proxy_to_api(
             request,
@@ -115,7 +115,7 @@ def get_hazard_nz_code():
 
 @app.route(const.CORE_API_HAZARD_NZS1170P5_SOIL_CLASS_ENDPOINT, methods=["GET"])
 @decorators.requires_auth
-def get_nz_code_soil_class():
+def get_nzs1170p5_soil_class():
     if auth0.requires_permission("hazard:hazard"):
         return utils.proxy_to_api(
             request,
@@ -135,7 +135,7 @@ def get_nz_code_soil_class():
 
 @app.route(const.CORE_API_HAZARD_NZS1170P5_DEFAULT_PARAMS_ENDPOINT, methods=["GET"])
 @decorators.requires_auth
-def get_nz_code_default_params():
+def get_nzs1170p5_default_params():
     if auth0.requires_permission("hazard:hazard"):
         return utils.proxy_to_api(
             request,
@@ -199,7 +199,7 @@ def get_uhs():
 
 @app.route(const.CORE_API_HAZARD_UHS_NZS1170P5_ENDPOINT, methods=["GET"])
 @decorators.requires_auth
-def get_uhs_nz_code():
+def get_uhs_nzs1170p5():
     if auth0.requires_permission("hazard:hazard"):
         return utils.proxy_to_api(
             request,
