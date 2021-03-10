@@ -69,5 +69,9 @@ INTERMEDIATE_API_ALL_USERS_PERMISSIONS_ENDPOINT = (
 )
 
 # With updated Project table, new endpoints
-INTERMEDIATE_API_ALL_PRIVATE_PROJECTS_ENDPOINT = "/intermediateAPI/project/private/all/get"
-INTERMEDIATE_API_ALL_PUBLIC_PROJECTS_ENDPOINT = "/intermediateAPI/project/public/all/get"
+INTERMEDIATE_API_ALL_PRIVATE_PROJECTS_ENDPOINT = (
+    "/intermediateAPI/project/private/all/get"
+)
+INTERMEDIATE_API_ALL_PUBLIC_PROJECTS_ENDPOINT = (
+    "/intermediateAPI/project/public/all/get"
+)

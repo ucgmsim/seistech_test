@@ -82,8 +82,10 @@ export const INTERMEDIATE_API_ALL_USERS_PERMISSIONS_ENDPOINT =
   "intermediateAPI/users_permissions/all/get";
 
 // With updated Project table, new endpoints
-export const INTERMEDIATE_API_ALL_PRIVATE_PROJECTS_ENDPOINT = "intermediateAPI/project/private/all/get"
-export const INTERMEDIATE_API_ALL_PUBLIC_PROJECTS_ENDPOINT = "intermediateAPI/project/public/all/get"
+export const INTERMEDIATE_API_ALL_PRIVATE_PROJECTS_ENDPOINT =
+  "intermediateAPI/project/private/all/get";
+export const INTERMEDIATE_API_ALL_PUBLIC_PROJECTS_ENDPOINT =
+  "intermediateAPI/project/public/all/get";
 
 /* 
   Words 
