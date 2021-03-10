@@ -57,7 +57,10 @@ const HazardViewerUHS = () => {
   useEffect(() => {
     // By switching the tab between Project <-> Hazarad Analysis, it goes to undefined
     // and we only update extraParams for storing DB only if they are not undefined
-    if (selectedSoilClass !== undefined && nzs1170p5DefaultParams !== undefined) {
+    if (
+      selectedSoilClass !== undefined &&
+      nzs1170p5DefaultParams !== undefined
+    ) {
       setExtraParams({
         ...extraParams,
         soil_class: `${selectedSoilClass["value"]}`,

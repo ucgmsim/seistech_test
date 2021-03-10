@@ -131,7 +131,9 @@ const HazardViewerHazardCurve = () => {
               setHazardNZS1170p5Data(
                 nzs1170p5CodeDataResponse["nz1170p5_hazard"]["im_values"]
               );
-              setHazardNZS1170p5Token(nzs1170p5CodeDataResponse["download_token"]);
+              setHazardNZS1170p5Token(
+                nzs1170p5CodeDataResponse["download_token"]
+              );
               setIsNZS1170p5Computed(true);
               setShowSpinnerHazard(false);
               setShowPlotHazard(true);
