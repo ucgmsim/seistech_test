@@ -21,7 +21,7 @@ const ProjectPermissionDashboard = () => {
   const [tableBodyData, setTableBodyData] = useState([]);
 
   /*
-    Fetching All projects we have from Project API which becomes a table's header
+    Fetching All projects we have from Project table which becomes a table's header
   */
   useEffect(() => {
     const abortController = new AbortController();
@@ -78,10 +78,10 @@ const ProjectPermissionDashboard = () => {
           label: "Auth0 ID",
         },
       ];
-      for (const [key, value] of Object.entries(allProjects)) {
+      for (const [code, name] of Object.entries(allProjects)) {
         tempArray.push({
-          id: key,
-          label: value.project_full_name,
+          id: code,
+          label: name,
         });
       }
       setTableHeaderData(tempArray);

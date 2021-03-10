@@ -267,13 +267,7 @@ def get_all_projects_for_dashboard():
     # Get all projects from the UserDB.
     all_projects = models.Project.query.all()
 
-    return {
-        project.project_name: {
-            "project_code": project.project_code,
-            "project_full_name": project.project_name,
-        }
-        for project in all_projects
-    }
+    return {project.project_code: project.project_name for project in all_projects}
 
 
 def allocate_projects_to_user(user_id, project_list):
