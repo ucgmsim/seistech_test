@@ -6,7 +6,7 @@ import HazardViewer from "./HazardViewer";
 import HazardViewerDisaggregation from "./HazardViewerDisaggregation";
 import HazardViewerHazardCurve from "./HazardViewerHazardCurve";
 import HazardViewerUHS from "./HazardViewerUHS";
-import NZS1170Section from "./NZS1170Section";
+import NZS1170p5Section from "./NZS1170p5Section";
 import UHSSection from "./UHSSection";
 
 export {
@@ -18,6 +18,6 @@ export {
   HazardViewerDisaggregation,
   HazardViewerHazardCurve,
   HazardViewerUHS,
-  NZS1170Section,
+  NZS1170p5Section,
   UHSSection,
 };

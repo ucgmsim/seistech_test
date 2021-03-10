@@ -14,7 +14,7 @@ import { GMSForm, GMSViewer } from "components/Hazard/GMS";
 import { HazardForm, HazardViewer } from "components/Hazard/SeismicHazard";
 
 const Hazard = () => {
-  const { vs30, locationSetClick, nzCodeDefaultParams } = useContext(
+  const { vs30, locationSetClick, nzs1170p5DefaultParams } = useContext(
     GlobalContext
   );
 
@@ -34,7 +34,7 @@ const Hazard = () => {
           disabled={
             locationSetClick === null ||
             vs30 === "" ||
-            nzCodeDefaultParams.length === 0
+            nzs1170p5DefaultParams.length === 0
           }
           tabClassName="seismic-hazard-tab"
         >

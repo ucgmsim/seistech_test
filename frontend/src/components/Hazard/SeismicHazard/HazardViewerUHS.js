@@ -19,7 +19,7 @@ const HazardViewerUHS = () => {
   const {
     uhsComputeClick,
     selectedSoilClass,
-    nzCodeDefaultParams,
+    nzs1170p5DefaultParams,
     selectedZFactor,
     vs30,
     defaultVS30,
@@ -28,11 +28,11 @@ const HazardViewerUHS = () => {
     uhsRateTable,
     siteSelectionLat,
     siteSelectionLng,
-    uhsNZCodeData,
-    setUHSNZCodeData,
-    uhsNZCodeToken,
-    setUHSNZCodeToken,
-    showUHSNZCode,
+    uhsNZS1170p5Data,
+    setUHSNZS1170p5Data,
+    uhsNZS1170p5Token,
+    setUHSNZS1170p5Token,
+    showUHSNZS1170p5,
   } = useContext(GlobalContext);
 
   const [uhsData, setUHSData] = useState(null);
@@ -57,14 +57,14 @@ const HazardViewerUHS = () => {
   useEffect(() => {
     // By switching the tab between Project <-> Hazarad Analysis, it goes to undefined
     // and we only update extraParams for storing DB only if they are not undefined
-    if (selectedSoilClass !== undefined && nzCodeDefaultParams !== undefined) {
+    if (selectedSoilClass !== undefined && nzs1170p5DefaultParams !== undefined) {
       setExtraParams({
         ...extraParams,
         soil_class: `${selectedSoilClass["value"]}`,
-        distance: Number(nzCodeDefaultParams["distance"]),
+        distance: Number(nzs1170p5DefaultParams["distance"]),
       });
     }
-  }, [selectedSoilClass, nzCodeDefaultParams]);
+  }, [selectedSoilClass, nzs1170p5DefaultParams]);
 
   /*
     Reset tabs if users change IM or Vs30
@@ -128,16 +128,16 @@ const HazardViewerUHS = () => {
               setUHSData(responseData["uhs_df"]);
               setDownloadUHSToken(responseData["download_token"]);
 
-              let nzCodeQueryString = `?ensemble_id=${selectedEnsemble}&station=${station}&exceedances=${getExceedances().join(
+              let nzs1170p5CodeQueryString = `?ensemble_id=${selectedEnsemble}&station=${station}&exceedances=${getExceedances().join(
                 ","
               )}&soil_class=${selectedSoilClass["value"]}&distance=${Number(
-                nzCodeDefaultParams["distance"]
+                nzs1170p5DefaultParams["distance"]
               )}&z_factor=${selectedZFactor}`;
 
               return fetch(
                 CONSTANTS.CORE_API_BASE_URL +
                   CONSTANTS.CORE_API_HAZARD_UHS_NZS1170P5_ENDPOINT +
-                  nzCodeQueryString,
+                  nzs1170p5CodeQueryString,
                 {
                   headers: {
                     Authorization: `Bearer ${token}`,
@@ -147,10 +147,10 @@ const HazardViewerUHS = () => {
               );
             })
             .then(handleErrors)
-            .then(async (nzCodeResponse) => {
-              const nzCodeDataResponse = await nzCodeResponse.json();
-              setUHSNZCodeData(nzCodeDataResponse["nz_code_uhs_df"]);
-              setUHSNZCodeToken(nzCodeDataResponse["download_token"]);
+            .then(async (nzs1170p5CodeResponse) => {
+              const nzs1170p5CodeDataResponse = await nzs1170p5CodeResponse.json();
+              setUHSNZS1170p5Data(nzs1170p5CodeDataResponse["nz_code_uhs_df"]);
+              setUHSNZS1170p5Token(nzs1170p5CodeDataResponse["download_token"]);
               setShowSpinnerUHS(false);
               setShowPlotUHS(true);
             })
@@ -202,8 +202,8 @@ const HazardViewerUHS = () => {
             <Fragment>
               <UHSPlot
                 uhsData={uhsData}
-                nzCodeData={uhsNZCodeData}
-                showNZCode={showUHSNZCode}
+                nzs1170p5Data={uhsNZS1170p5Data}
+                showNZS1170p5={showUHSNZS1170p5}
                 extra={extraInfo}
               />
             </Fragment>
@@ -215,7 +215,7 @@ const HazardViewerUHS = () => {
         downloadURL={CONSTANTS.CORE_API_HAZARD_UHS_DOWNLOAD_ENDPOINT}
         downloadToken={{
           uhs_token: downloadUHSToken,
-          nz1170p5_hazard_token: uhsNZCodeToken,
+          nz1170p5_hazard_token: uhsNZS1170p5Token,
         }}
         extraParams={extraParams}
         fileName="uniform_hazard_spectrum.zip"

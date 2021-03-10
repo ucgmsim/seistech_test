@@ -53,17 +53,17 @@ export const Provider = (props) => {
 
   const [uhsComputeClick, setUHSComputeClick] = useState(null);
 
-  const [nzCodeDefaultParams, setNzCodeDefaultParams] = useState([]);
+  const [nzs1170p5DefaultParams, setNZS1170p5DefaultParams] = useState([]);
 
   const [soilClass, setSoilClass] = useState({});
 
   // Check box stats for Hazard Curve and UHS for NZCode, default is true
-  const [showHazardNZCode, setShowHazardNZCode] = useState(true);
-  const [showUHSNZCode, setShowUHSNZCode] = useState(true);
+  const [showHazardNZS1170p5, setShowHazardNZS1170p5] = useState(true);
+  const [showUHSNZS1170p5, setShowUHSNZS1170p5] = useState(true);
 
   // NZ Code is now splitted
-  const [hazardNZCodeData, setHazardNZCodeData] = useState(null);
-  const [uhsNZCodeData, setUHSNZCodeData] = useState(null);
+  const [hazardNZS1170p5Data, setHazardNZS1170p5Data] = useState(null);
+  const [uhsNZS1170p5Data, setUHSNZS1170p5Data] = useState(null);
 
   // For a selected soil class
   const [selectedSoilClass, setSelectedSoilClass] = useState({});
@@ -74,13 +74,13 @@ export const Provider = (props) => {
   // For a computed Z Factor, to validate compute button
   const [computedZFactor, setComputedZFactor] = useState(0);
 
-  // To update Metadata after we recompute nzcode
-  const [isNZCodeComputed, setIsNZCodeComputed] = useState(false);
+  // To update Metadata after we recompute NZS1170.5
+  const [isNZS1170p5Computed, setIsNZS1170p5Computed] = useState(false);
 
   // Download Token which is needed for Hazard Curve
-  const [hazardNZCodeToken, setHazardNZCodeToken] = useState("");
+  const [hazardNZS1170p5Token, setHazardNZS1170p5Token] = useState("");
   // and UHS
-  const [uhsNZCodeToken, setUHSNZCodeToken] = useState("");
+  const [uhsNZS1170p5Token, setUHSNZS1170p5Token] = useState("");
 
   /*
     TODO - Future usage
@@ -239,8 +239,8 @@ export const Provider = (props) => {
     setDisaggComputeClick,
     uhsComputeClick,
     setUHSComputeClick,
-    nzCodeDefaultParams,
-    setNzCodeDefaultParams,
+    nzs1170p5DefaultParams,
+    setNZS1170p5DefaultParams,
     soilClass,
     setSoilClass,
     selectedSoilClass,
@@ -251,20 +251,20 @@ export const Provider = (props) => {
     setSelectedZFactor,
     computedZFactor,
     setComputedZFactor,
-    showHazardNZCode,
-    setShowHazardNZCode,
-    showUHSNZCode,
-    setShowUHSNZCode,
-    hazardNZCodeData,
-    setHazardNZCodeData,
-    uhsNZCodeData,
-    setUHSNZCodeData,
-    isNZCodeComputed,
-    setIsNZCodeComputed,
-    hazardNZCodeToken,
-    setHazardNZCodeToken,
-    uhsNZCodeToken,
-    setUHSNZCodeToken,
+    showHazardNZS1170p5,
+    setShowHazardNZS1170p5,
+    showUHSNZS1170p5,
+    setShowUHSNZS1170p5,
+    hazardNZS1170p5Data,
+    setHazardNZS1170p5Data,
+    uhsNZS1170p5Data,
+    setUHSNZS1170p5Data,
+    isNZS1170p5Computed,
+    setIsNZS1170p5Computed,
+    hazardNZS1170p5Token,
+    setHazardNZS1170p5Token,
+    uhsNZS1170p5Token,
+    setUHSNZS1170p5Token,
 
     uhsRateTable,
     setUHSRateTable,

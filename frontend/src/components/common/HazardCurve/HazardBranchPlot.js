@@ -11,14 +11,14 @@ import "assets/style/HazardPlots.css";
 const HazardBranchPlot = ({
   hazardData,
   im,
-  nzCodeData,
-  showNZCode = true,
+  nzs1170p5Data,
+  showNZS1170p5 = true,
   extra,
 }) => {
   if (
     hazardData !== null &&
     !hazardData.hasOwnProperty("error") &&
-    nzCodeData !== null
+    nzs1170p5Data !== null
   ) {
     const branchHazard = hazardData["branches_hazard"];
     // // Create the scatter objects for the branch totals
@@ -35,8 +35,8 @@ const HazardBranchPlot = ({
       });
     }
 
-    // For NZ Code
-    const nzCode = getPlotData(nzCodeData);
+    // For NZS1170P5 code
+    const nzs1170p5 = getPlotData(nzs1170p5Data);
 
     // Add the scatter object for the ensemble total
     const ensHazard = hazardData["ensemble_hazard"];
@@ -51,16 +51,16 @@ const HazardBranchPlot = ({
     });
 
     scatterObjs.push(
-      // NZ Code
+      // For NZS1170P5 code
       {
-        x: nzCode.values,
-        y: nzCode.index,
+        x: nzs1170p5.values,
+        y: nzs1170p5.index,
         type: "scatter",
         mode: "lines+markers",
-        name: "NZ code",
+        name: "NZS1170p5",
         marker: { symbol: "triangle-up" },
         line: { color: "black", dash: "dot" },
-        visible: showNZCode,
+        visible: showNZS1170p5,
       }
     );
     return (
