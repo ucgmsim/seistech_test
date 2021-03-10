@@ -23,6 +23,14 @@ PERMISSION_LIST = [
     "psha-admin",
 ]
 
+PROJECT_DICT = {
+    "gnzl": "Generic New Zealand Locations",
+    "mac_raes": "MacRaes Oceania Gold",
+    "nzgs_pga": "NZGS",
+    "soffitel_qtwn": "Soffitel, Queenstown",
+    "wel_par_accom": "Wellington Parliament Accomodation",
+}
+
 # Adding all users from Auth0 to the User table
 for key in auth0.get_users():
     db.session.add(User(key))
@@ -32,3 +40,12 @@ for key in auth0.get_users():
 for permission in PERMISSION_LIST:
     db.session.add(Auth0Permission(permission))
     db.session.commit()
+
+# Adding initial five project ids to the Project table
+for code, name in PROJECT_DICT.items():
+    if code == "gnzl" or code == "nzgs_pga":
+        db.session.add(Project(code, name, "public"))
+        db.session.commit()
+    else:
+        db.session.add(Project(code, name))
+        db.session.commit()
