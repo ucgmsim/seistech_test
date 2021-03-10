@@ -279,7 +279,7 @@ def allocate_projects_to_user(user_id, project_list):
         Selected user's Auth0 id
     project_list: array of dictionaries
         List of projects(dictionary) to allocate in the form of
-        [{label: readable label, value: project_code}]
+        [{label: project_name, value: project_code}]
     """
     print(f"Check whether the user is in the DB, if not, add the person to the DB")
     if not _is_user_in_db(user_id):
