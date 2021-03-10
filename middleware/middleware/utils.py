@@ -98,13 +98,13 @@ def get_user_projects(db_user_projects, api_projects):
     -------
     dictionary in the form of
     {
-        project_id: project_name
+        project_code: project_name
     }
     """
     return {
-        api_project_id: api_project_name["name"]
-        for api_project_id, api_project_name in api_projects.items()
-        if api_project_id in db_user_projects
+        api_project_code: api_project_name["name"]
+        for api_project_code, api_project_name in api_projects.items()
+        if api_project_code in db_user_projects
     }
 
 
@@ -135,11 +135,11 @@ def get_user_addable_projects(db_user_projects, all_projects):
     -------
     dictionary in the form of
     {
-        project_id: project_name
+        project_code: project_name
     }
     """
     return {
-        api_project_id: api_project_name["name"]
-        for api_project_id, api_project_name in all_projects.items()
-        if api_project_id not in db_user_projects
+        api_project_code: api_project_name["name"]
+        for api_project_code, api_project_name in all_projects.items()
+        if api_project_code not in db_user_projects
     }
