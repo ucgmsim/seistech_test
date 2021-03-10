@@ -76,7 +76,7 @@ const PermissionDashboard = ({ tableHeaderData, tableBodyData }) => {
                             header.id === "auth0-user-id"
                               ? {
                                   backgroundColor: "white",
-                                  // In the future, more permission, activate this to make first column to be fixed
+                                  // In the future, with more permission, activate this to make first column to be fixed
                                   // position: "sticky",
                                   // left: 0,
                                   // zIndex: 1,
