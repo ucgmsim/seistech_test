@@ -31,20 +31,37 @@ const ProjectPermissionDashboard = () => {
       try {
         const token = await getTokenSilently();
 
-        await fetch(
-          CONSTANTS.CORE_API_BASE_URL +
-            CONSTANTS.INTERMEDIATE_API_ALL_PROJECTS_ENDPOINT,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-            signal: signal,
-          }
-        )
+        await Promise.all([
+          fetch(
+            CONSTANTS.CORE_API_BASE_URL +
+              CONSTANTS.INTERMEDIATE_API_ALL_PUBLIC_PROJECTS_ENDPOINT,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+              signal: signal,
+            }
+          ),
+          fetch(
+            CONSTANTS.CORE_API_BASE_URL +
+              CONSTANTS.INTERMEDIATE_API_ALL_PRIVATE_PROJECTS_ENDPOINT,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+              signal: signal,
+            }
+          ),
+        ])
           .then(handleErrors)
-          .then(async (response) => {
-            const responseData = await response.json();
-            setAllProjects(responseData);
+          .then(async ([publicProjects, privateProjects]) => {
+            const publicProjectsData = await publicProjects.json();
+            const privateProjectsData = await privateProjects.json();
+
+            setAllProjects({
+              public: { ...publicProjectsData },
+              private: { ...privateProjectsData },
+            });
           })
           .catch((error) => {
             console.log(error);
@@ -78,18 +95,21 @@ const ProjectPermissionDashboard = () => {
           label: "Auth0 ID",
         },
       ];
-      for (const [code, name] of Object.entries(allProjects)) {
-        tempArray.push({
-          id: code,
-          label: name,
-        });
+
+      for (const access_level of Object.keys(allProjects)) {
+        for (const [code, name] of Object.entries(allProjects[access_level])) {
+          tempArray.push({
+            id: code,
+            label: `${name} - ${access_level}`,
+          });
+        }
       }
       setTableHeaderData(tempArray);
     }
   }, [allProjects]);
 
   /*
-    Pull every row from Available_Project table
+    Pull every row from Users_Projects table
   */
   useEffect(() => {
     const abortController = new AbortController();
@@ -166,14 +186,23 @@ const ProjectPermissionDashboard = () => {
       for (const [user_id, available_projects] of Object.entries(
         allAvailableProjects
       )) {
-        for (const project_code in allProjects) {
+        for (const access_level in allProjects) {
           tempObj["auth0-user-id"] = userOption.find(
             (user) => user.value === user_id
           ).label;
-
-          tempObj[project_code] = available_projects.includes(project_code)
-            ? "true"
-            : "false";
+          // If access_level is public, default to true, means have permission to use
+          if (access_level === "public") {
+            for (const project_code in allProjects[access_level]) {
+              tempObj[project_code] = "true";
+            }
+            // acces_level is not public, then compare with Users_Projects to check the permission
+          } else {
+            for (const project_code in allProjects[access_level]) {
+              tempObj[project_code] = available_projects.includes(project_code)
+                ? "true"
+                : "false";
+            }
+          }
         }
         tempArray.push(tempObj);
         tempObj = {};
