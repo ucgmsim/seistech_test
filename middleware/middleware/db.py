@@ -31,33 +31,33 @@ def _add_user_to_db(user_id):
         print(f"User {user_id} already exists")
 
 
-def _is_project_in_db(project_name):
+def _is_project_in_db(project_code):
     """To check whether the given project is in the DB
 
     Parameters
     ----------
-    project_name: string
+    project_code: string
         A project code we use internally.
         E.g., gnzl, mac_raes, nzgs_pga, soffitel_qtwn...
     """
-    return bool(models.Project.query.filter_by(project_name=project_name).first())
+    return bool(models.Project.query.filter_by(project_code=project_code).first())
 
 
-def _add_project_to_db(project_name):
+def _add_project_to_db(project_code):
     """Add a new project to the MariaDB if not exist
 
     Parameters
     ----------
-    project_name: string
+    project_code: string
         A project code we use internally.
         E.g., gnzl, mac_raes, nzgs_pga, soffitel_qtwn...
     """
-    if not _is_project_in_db(project_name):
-        db.session.add(models.Project(project_name))
+    if not _is_project_in_db(project_code):
+        db.session.add(models.Project(project_code))
         db.session.commit()
         db.session.flush()
     else:
-        print(f"Project {project_name} already exists")
+        print(f"Project {project_code} already exists")
 
 
 def _is_permission_in_db(permission_name):
@@ -128,7 +128,7 @@ def _add_user_permission_to_db(user_id, permission):
         print(f"{user_id} already has a permission with ${permission}")
 
 
-def _add_user_project_to_db(user_id, project_name):
+def _add_user_project_to_db(user_id, project_code):
     """Insert data(allowed projects) to the bridging table,
     allowed_projects
 
@@ -136,26 +136,26 @@ def _add_user_project_to_db(user_id, project_name):
     ----------
     user_id: string
         Selected user's Auth0 id
-    project_name: string
+    project_code: string
         Selected project's project code.
         E.g., gnzl, mac_raes, nzgs_pga, soffitel_qtwn...
     """
 
     print(f"Check whether the project is in the DB, if not, add the project to the DB")
-    if not _is_project_in_db(project_name):
-        print(f"{project_name} is not in the DB so updating it.")
-        _add_project_to_db(project_name)
+    if not _is_project_in_db(project_code):
+        print(f"{project_code} is not in the DB so updating it.")
+        _add_project_to_db(project_code)
         db.session.flush()
 
-    # Find Find a project object with a given project_name to get its project id
-    project_obj = models.Project.query.filter_by(project_name=project_name).first()
+    # Find Find a project object with a given project_code to get its project id
+    project_obj = models.Project.query.filter_by(project_code=project_code).first()
 
-    db.session.add(models.UserProject(user_id, project_obj.project_id))
+    db.session.add(models.UserProject(user_id, project_obj.project_code))
     db.session.commit()
     db.session.flush()
 
 
-def _remove_user_projects_from_db(user_id, project_name):
+def _remove_user_projects_from_db(user_id, project_code):
     """Remove data(project) from the bridging table,
     allowed_projects
 
@@ -163,18 +163,21 @@ def _remove_user_projects_from_db(user_id, project_name):
     ----------
     user_id: string
         Selected user's Auth0 id
-    project_name: string
+    project_code: string
         Selected project's project code.
         E.g., gnzl, mac_raes, nzgs_pga, soffitel_qtwn...
     """
     try:
         # Get the project id with the given project name
         certain_project_id = (
-            models.Project.query.filter_by(project_name=project_name).first().project_id
+            models.Project.query.filter_by(project_code=project_code)
+            .first()
+            .project_code
         )
+
         allowed_projects_row = (
             models.UserProject.query.filter_by(user_id=user_id)
-            .filter_by(project_id=certain_project_id)
+            .filter_by(project_code=certain_project_id)
             .first()
         )
 
@@ -238,7 +241,7 @@ def get_all_users_projects():
     allowed_projects_dict = defaultdict(list)
 
     for project in allowed_projects:
-        allowed_projects_dict[project.user_id].append(project.project_id)
+        allowed_projects_dict[project.user_id].append(project.project_code)
 
     return allowed_projects_dict
 
@@ -259,9 +262,9 @@ def get_all_projects_for_dashboard(projects):
     dictionary:
         In the form of
         {
-            project_id: project_full_name
+            project_code: project_full_name
         }
-        project_id = (e.g., nzgl, soffitel,qtwn)
+        project_code = (e.g., nzgl, soffitel,qtwn)
         project_fulle_name = user friendly name for project,
         e.g. Generic New Zealand Locations
     """
@@ -270,7 +273,7 @@ def get_all_projects_for_dashboard(projects):
 
     return {
         project.project_name: {
-            "project_id": project.project_id,
+            "project_code": project.project_code,
             "project_full_name": projects[project.project_name]["name"],
         }
         for project in all_projects
@@ -284,8 +287,9 @@ def allocate_projects_to_user(user_id, project_list):
     ----------
     user_id: string
         Selected user's Auth0 id
-    project_list: array
-        List of projects to allocate
+    project_list: array of dictionaries
+        List of projects(dictionary) to allocate in the form of
+        [{label: readable label, value: project_code}]
     """
     print(f"Check whether the user is in the DB, if not, add the person to the DB")
     if not _is_user_in_db(user_id):
