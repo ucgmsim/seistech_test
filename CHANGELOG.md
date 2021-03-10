@@ -1,3 +1,13 @@
+## March 10, 2021
+
+### Refactor the IntermediateAPI & Frontend - ([PR #51](https://github.com/ucgmsim/seistech_psha_frontend/pull/51)
+
+- Update the Project table to have the following attributes:
+  1. project_code - E.g., gnzl, mac_raes, nzgs_pga...
+  2. project_name - Generic New Zealand Locations, MacRaes Oceania Gold...
+  3. access_level - At the moment, only public or private
+- Refactor the IntermediateAPI & Frontend due to restructuring the DB
+
 ## March 9, 2021
 
 ### Restructure the Middleware - ([PR #50](https://github.com/ucgmsim/seistech_psha_frontend/pull/50)
