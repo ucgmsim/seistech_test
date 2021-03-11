@@ -1,3 +1,10 @@
+## March 12, 2021
+
+### Update the logic on Middleware(Mainly the IntermediateAPI & DB) - ([PR #53](https://github.com/ucgmsim/seistech_psha_frontend/pull/53)
+
+- Make Intermediate API's endpoints as simple as possible.
+- Transfer some logic from the backend to the frontend.
+
 ## March 11, 2021
 
 ### Replace the frontend's NZCode to NZS1170p5 - ([PR #52](https://github.com/ucgmsim/seistech_psha_frontend/pull/52)
