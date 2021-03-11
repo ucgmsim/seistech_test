@@ -3,7 +3,6 @@ from typing import Dict
 
 from flask import Response
 
-import middleware.server as server
 import middleware.db as db
 
 
@@ -11,8 +10,10 @@ def proxy_to_api(
     request,
     route,
     methods,
-    to_project_api: bool = False,
-    endpoint: str = None,
+    api_destination: str,
+    api_token: str,
+    user_id: str = None,
+    action: str = None,
     content_type: str = "application/json",
     headers: Dict = None,
 ):
@@ -25,9 +26,13 @@ def proxy_to_api(
         URL path to Core/Project API
     methods: string
         GET/POST methods
-    to_project_api: boolean
-        Tell whether this call belongs to the ProjectAPI
-    endpoint: string
+    api_destination: string
+        To determine the destination, either the CoreAPI or ProjectAPI
+    api_token: string
+        Special token to pass the CoreAPI/ProjectAPI's authorization check
+    user_id: string
+        Determining the user
+    action: string
         To find out what user is performing
     content_type: string
         Entry-header field indicates the media type of the entity-body sent to the recipient.
@@ -36,14 +41,10 @@ def proxy_to_api(
         An object that stores some headers.
     """
 
-    api_destination = server.CORE_API_BASE
-
-    if to_project_api is True:
-        api_destination = server.PROJECT_API_BASE
-
-    if endpoint is not None:
+    if action and user_id:
         db.write_request_details(
-            endpoint,
+            user_id,
+            action,
             {
                 key: value
                 for key, value in request.args.to_dict().items()
@@ -55,7 +56,7 @@ def proxy_to_api(
         resp = requests.post(
             api_destination + route,
             data=request.data.decode(),
-            headers={"Authorization": server.CORE_API_TOKEN},
+            headers={"Authorization": api_token},
         )
 
     elif methods == "GET":
@@ -65,8 +66,7 @@ def proxy_to_api(
             querystring = "?" + querystring
 
         resp = requests.get(
-            api_destination + route + querystring,
-            headers={"Authorization": server.CORE_API_TOKEN},
+            api_destination + route + querystring, headers={"Authorization": api_token},
         )
 
     response = Response(
@@ -76,7 +76,7 @@ def proxy_to_api(
     return response
 
 
-def get_user_projects(user_db_projects, api_projects):
+def get_user_projects(db_user_projects, api_projects):
     """Compute cross-check of allowed projects for the specified user
     with the available projects from the projectAPI
 
@@ -88,7 +88,7 @@ def get_user_projects(user_db_projects, api_projects):
 
     Parameters
     ----------
-    user_db_projects: list of dictionaries
+    db_user_projects: list of dictionaries
         All allowed projects for the specified user
 
     api_projects: list of strings
@@ -104,11 +104,11 @@ def get_user_projects(user_db_projects, api_projects):
     return {
         api_project_id: api_project_name["name"]
         for api_project_id, api_project_name in api_projects.items()
-        if api_project_id in user_db_projects
+        if api_project_id in db_user_projects
     }
 
 
-def get_user_addable_projects(user_db_projects, all_projects):
+def get_user_addable_projects(db_user_projects, all_projects):
     """Compute cross-check of allowed projects for the specified user
     with the available projects from the projectAPI
 
@@ -125,7 +125,7 @@ def get_user_addable_projects(user_db_projects, all_projects):
 
     Parameters
     ----------
-    user_db_projects: list of dictionaries
+    db_user_projects: list of dictionaries
         All allowed projects for the specified user
 
     all_projects: dictionary
@@ -141,5 +141,5 @@ def get_user_addable_projects(user_db_projects, all_projects):
     return {
         api_project_id: api_project_name["name"]
         for api_project_id, api_project_name in all_projects.items()
-        if api_project_id not in user_db_projects
+        if api_project_id not in db_user_projects
     }

@@ -4,7 +4,7 @@ import {
   HazardCurveSection,
   DisaggregationSection,
   UHSSection,
-  NZS1170Section,
+  NZS1170p5Section,
 } from "components/Hazard/SeismicHazard";
 
 import "assets/style/HazardForms.css";
@@ -24,7 +24,7 @@ const HazardForm = () => {
 
       <div className="hr"></div>
 
-      <NZS1170Section />
+      <NZS1170p5Section />
     </Fragment>
   );
 };

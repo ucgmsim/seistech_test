@@ -1,27 +1,7 @@
-import os
-
-from flask import Flask
-
-import middleware.custom_sqlalchemy as cs
+from middleware import db
 import middleware.auth0 as auth0
 
-
-# DB Connection Setup
-DATABASE = "mysql+pymysql://{0}:{1}@{2}/{3}".format(
-    os.environ["DB_USERNAME"],
-    os.environ["DB_PASSWORD"],
-    os.environ["DB_SERVER"],
-    os.environ["DB_NAME"],
-)
-
-app = Flask("seistech_web")
-
-# Connect to DB
-app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-
-db = cs.CustomSQLALchemy(app)
-
+# Because models need to be imported after db gets imported
 from middleware.models import *
 
 # Create tables - It only creates when tables don't exist

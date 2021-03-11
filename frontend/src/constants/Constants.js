@@ -10,13 +10,14 @@ export const CORE_API_VS30_MAP_ENDPOINT = "coreAPI/vs30map/get";
 export const CORE_API_STATION_ENDPOINT = "coreAPI/station/get";
 
 export const CORE_API_HAZARD_ENDPOINT = "coreAPI/hazard/get";
-export const CORE_API_HAZARD_NZ11705_ENDPOINT = "coreAPI/hazard/nz1170p5/get";
+export const CORE_API_HAZARD_NZS1170P5_ENDPOINT = "coreAPI/hazard/nz1170p5/get";
 export const CORE_API_HAZARD_DISAGG_ENDPOINT = "coreAPI/disagg/get";
 export const CORE_API_HAZARD_UHS_ENDPOINT = "coreAPI/uhs/get";
-export const CORE_API_HAZARD_UHS_NZ11705_ENDPOINT = "coreAPI/uhs/nz1170p5/get";
-export const CORE_API_HAZARD_NZ11705_SOIL_CLASS_ENDPOINT =
+export const CORE_API_HAZARD_UHS_NZS1170P5_ENDPOINT =
+  "coreAPI/uhs/nz1170p5/get";
+export const CORE_API_HAZARD_NZS1170P5_SOIL_CLASS_ENDPOINT =
   "coreAPI/hazard/nz1170p5/soil_class/get";
-export const CORE_API_HAZARD_NZ11705_DEFAULT_PARAMS_ENDPOINT =
+export const CORE_API_HAZARD_NZS1170P5_DEFAULT_PARAMS_ENDPOINT =
   "coreAPI/hazard/nz1170p5/default/get";
 
 export const CORE_API_GMS_ENDPOINT = "coreAPI/gms/ensemble_gms/get";
@@ -307,7 +308,7 @@ export const TOOLTIP_MESSAGES = {
     "Specify the annual exceedance rate (inverse of return period) to compute the disaggregation distribution. The adopted intensity measure is that specified in the Intensity Measure tab.",
   HAZARD_UHS:
     "Specify one or more annual exceedance rates (inverse of return period) to compute the Uniform Hazard Spectrum (UHS) for. Specified rates are displayed, which can be subsequently removed.",
-  HAZARD_NZCODE:
+  HAZARD_NZS1170P5_CODE:
     "Select the parameters of NZS1170.5:2004 to compare with the site-specific hazard results. Based on the location and Vs30 values assigned, these parameters have been estimated, but can be manually over-ridden.",
   PROJECT_SITE_SELECTION_PROJECT_ID:
     "Select the Project title from the list of available alternatives.",
@@ -352,7 +353,7 @@ export const TOOLTIP_MESSAGES = {
   Hyperlinks for Tooltips
 */
 export const TOOLTIP_URL = {
-  HAZARD_NZCODE: "https://google.com",
+  HAZARD_NZS1170P5_CODE: "https://google.com",
 };
 
 /*

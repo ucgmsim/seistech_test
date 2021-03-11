@@ -11,14 +11,14 @@ import "assets/style/HazardPlots.css";
 const HazardEnsemblePlot = ({
   hazardData,
   im,
-  nzCodeData,
-  showNZCode = true,
+  nzs1170p5Data,
+  showNZS1170p5 = true,
   extra,
 }) => {
   if (
     hazardData !== null &&
     !hazardData.hasOwnProperty("error") &&
-    nzCodeData !== null
+    nzs1170p5Data !== null
   ) {
     const ensHazard = hazardData["ensemble_hazard"];
     const plotData = {};
@@ -27,7 +27,7 @@ const HazardEnsemblePlot = ({
       plotData[typeKey] = getPlotData(ensHazard[typeKey]);
     }
 
-    plotData["nzCode"] = getPlotData(nzCodeData);
+    plotData["nzs1170p5"] = getPlotData(nzs1170p5Data);
 
     return (
       <Plot
@@ -60,16 +60,16 @@ const HazardEnsemblePlot = ({
             name: "Total",
             line: { color: "blue" },
           },
-          // NZ code
+          // NZS1170P5 code
           {
-            x: plotData.nzCode.values,
-            y: plotData.nzCode.index,
+            x: plotData.nzs1170p5.values,
+            y: plotData.nzs1170p5.index,
             type: "scatter",
             mode: "lines+markers",
-            name: "NZ code",
+            name: "NZS1170p5 code",
             marker: { symbol: "triangle-up" },
             line: { color: "black", dash: "dot" },
-            visible: showNZCode,
+            visible: showNZS1170p5,
           },
         ]}
         layout={{
