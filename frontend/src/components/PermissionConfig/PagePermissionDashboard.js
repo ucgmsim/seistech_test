@@ -17,11 +17,11 @@ const PagePermissionDashboard = () => {
   const [allPermission, setAllPermission] = useState([]);
   const [tableHeaderData, setTableHeaderData] = useState([]);
 
-  const [allGrantedPermission, setAllGrantedPermission] = useState({});
+  const [allUsersPermission, setAllUsersPermission] = useState({});
   const [tableBodyData, setTableBodyData] = useState([]);
 
   /*
-    Fetchig All projets we have from Project API to become a table's header
+    Fetchig All projets we have from Auth0_Permission table to become a table's header
   */
   useEffect(() => {
     const abortController = new AbortController();
@@ -63,7 +63,7 @@ const PagePermissionDashboard = () => {
 
   /*
     Based on all permission name we pulled from the above useEffect Hook,
-    Create an array of objects to set the table's header
+    Create an readable array of objects for material-ui table
   */
   useEffect(() => {
     // If and only if the object is not empty, create list for table's header
@@ -86,13 +86,14 @@ const PagePermissionDashboard = () => {
   }, [allPermission]);
 
   /*
-    Pull every row from Granted_permission table
+    Pull every row from the Users_Permissions table
+    (Private projects that the user has permission)
   */
   useEffect(() => {
     const abortController = new AbortController();
     const signal = abortController.signal;
 
-    const getAllGrantedPermission = async () => {
+    const getAllUsersPermissions = async () => {
       try {
         const token = await getTokenSilently();
 
@@ -109,7 +110,7 @@ const PagePermissionDashboard = () => {
           .then(handleErrors)
           .then(async (response) => {
             const responseData = await response.json();
-            setAllGrantedPermission(responseData);
+            setAllUsersPermission(responseData);
           })
           .catch((error) => {
             console.log(error);
@@ -119,7 +120,7 @@ const PagePermissionDashboard = () => {
       }
     };
 
-    getAllGrantedPermission();
+    getAllUsersPermissions();
 
     return () => {
       abortController.abort();
@@ -129,15 +130,15 @@ const PagePermissionDashboard = () => {
   /*
     Create an array of objects for table body
     We need to be sure that the following data aren't empty
-    1. allGrantedPermission -> Data from UserDB, Granted_Permission table
-    2. allPermission -> Data from UserDB, All permission we provide
+    1. allUsersPermission -> Data from the DB, Users_Permissions table
+    2. allPermission -> Data from DB, Auth0_Permission table
     3. userOption -> Data from Auth0, existing users
   */
   useEffect(() => {
     if (
-      (allGrantedPermission &&
-        Object.keys(allGrantedPermission).length === 0 &&
-        allGrantedPermission.constructor === Object) ===
+      (allUsersPermission &&
+        Object.keys(allUsersPermission).length === 0 &&
+        allUsersPermission.constructor === Object) ===
         false > 0 &&
       allPermission.length > 0 &&
       userOption.length > 0
@@ -146,7 +147,7 @@ const PagePermissionDashboard = () => {
       let tempObj = {};
 
       /*
-      Loop through the object, allGrantedPermission
+      Loop through the object, allUsersPermission
       Nested loop through array, allPermission
 
       The key for a temp object property with "auth0-user-id", 
@@ -155,21 +156,19 @@ const PagePermissionDashboard = () => {
       {value: auth0-id, label: email | auth0 or google auth}
       Then from a found object, use the label as we want email to be displayed
 
-      Then, compare if user's granted_permission (Auth0 access permission),
-      contains the permission we provide, then it's true else false.
+      Then, compare if user's users_permission table
+      contains the permission we provide (Auth0), then it's true else false.
       )
     */
-      for (const [user_id, Granted_permission] of Object.entries(
-        allGrantedPermission
+      for (const [user_id, user_permission] of Object.entries(
+        allUsersPermission
       )) {
         for (let i = 0; i < allPermission.length; i++) {
           tempObj["auth0-user-id"] = userOption.find(
             (user) => user.value === user_id
           ).label;
 
-          tempObj[allPermission[i]] = Granted_permission.includes(
-            allPermission[i]
-          )
+          tempObj[allPermission[i]] = user_permission.includes(allPermission[i])
             ? "true"
             : "false";
         }
@@ -179,7 +178,7 @@ const PagePermissionDashboard = () => {
 
       setTableBodyData(tempArray);
     }
-  }, [allGrantedPermission, allPermission, userOption]);
+  }, [allUsersPermission, allPermission, userOption]);
 
   /*
     Fetching user information from the API(Auth0)
@@ -193,7 +192,8 @@ const PagePermissionDashboard = () => {
         const token = await getTokenSilently();
 
         await fetch(
-          CONSTANTS.CORE_API_BASE_URL + CONSTANTS.INTERMEDIATE_API_AUTH0_USERS_ENDPOINT,
+          CONSTANTS.CORE_API_BASE_URL +
+            CONSTANTS.INTERMEDIATE_API_AUTH0_USERS_ENDPOINT,
           {
             headers: {
               Authorization: `Bearer ${token}`,
