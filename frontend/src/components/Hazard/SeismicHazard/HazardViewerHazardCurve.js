@@ -28,19 +28,19 @@ const HazardViewerHazardCurve = () => {
     selectedIM,
     selectedEnsemble,
     station,
-    hazardNZCodeData,
-    setHazardNZCodeData,
-    nzCodeDefaultParams,
+    hazardNZS1170p5Data,
+    setHazardNZS1170p5Data,
+    nzs1170p5DefaultParams,
     selectedSoilClass,
     selectedZFactor,
-    showHazardNZCode,
-    setIsNZCodeComputed,
+    showHazardNZS1170p5,
+    setIsNZS1170p5Computed,
     setComputedSoilClass,
     setComputedZFactor,
     siteSelectionLat,
     siteSelectionLng,
-    hazardNZCodeToken,
-    setHazardNZCodeToken,
+    hazardNZS1170p5Token,
+    setHazardNZS1170p5Token,
   } = useContext(GlobalContext);
 
   const [showSpinnerHazard, setShowSpinnerHazard] = useState(false);
@@ -79,7 +79,7 @@ const HazardViewerHazardCurve = () => {
           setShowPlotHazard(false);
           setShowSpinnerHazard(true);
           setShowErrorMessage({ isError: false, errorCode: null });
-          setIsNZCodeComputed(false);
+          setIsNZS1170p5Computed(false);
           setComputedZFactor(selectedZFactor);
           setComputedSoilClass(selectedSoilClass);
 
@@ -107,16 +107,16 @@ const HazardViewerHazardCurve = () => {
               setHazardData(hazardData);
               setDownloadHazardToken(hazardData["download_token"]);
 
-              let nzCodeQueryString = `?ensemble_id=${selectedEnsemble}&station=${station}&im=${selectedIM}&soil_class=${
+              let nzs1170p5CodeQueryString = `?ensemble_id=${selectedEnsemble}&station=${station}&im=${selectedIM}&soil_class=${
                 selectedSoilClass["value"]
               }&distance=${Number(
-                nzCodeDefaultParams["distance"]
+                nzs1170p5DefaultParams["distance"]
               )}&z_factor=${selectedZFactor}`;
 
               return fetch(
                 CONSTANTS.CORE_API_BASE_URL +
                   CONSTANTS.CORE_API_HAZARD_NZS1170P5_ENDPOINT +
-                  nzCodeQueryString,
+                  nzs1170p5CodeQueryString,
                 {
                   headers: {
                     Authorization: `Bearer ${token}`,
@@ -127,12 +127,14 @@ const HazardViewerHazardCurve = () => {
             })
             .then(handleErrors)
             .then(async (response) => {
-              const nzCodeDataResponse = await response.json();
-              setHazardNZCodeData(
-                nzCodeDataResponse["nz1170p5_hazard"]["im_values"]
+              const nzs1170p5CodeDataResponse = await response.json();
+              setHazardNZS1170p5Data(
+                nzs1170p5CodeDataResponse["nz1170p5_hazard"]["im_values"]
               );
-              setHazardNZCodeToken(nzCodeDataResponse["download_token"]);
-              setIsNZCodeComputed(true);
+              setHazardNZS1170p5Token(
+                nzs1170p5CodeDataResponse["download_token"]
+              );
+              setIsNZS1170p5Computed(true);
               setShowSpinnerHazard(false);
               setShowPlotHazard(true);
             })
@@ -187,8 +189,8 @@ const HazardViewerHazardCurve = () => {
                 <HazardBranchPlot
                   hazardData={hazardData}
                   im={selectedIM}
-                  nzCodeData={hazardNZCodeData}
-                  showNZCode={showHazardNZCode}
+                  nzs1170p5Data={hazardNZS1170p5Data}
+                  showNZS1170p5={showHazardNZS1170p5}
                   extra={extraInfo}
                 />
                 <HazardCurveMetadata
@@ -227,8 +229,8 @@ const HazardViewerHazardCurve = () => {
                 <HazardEnsemblePlot
                   hazardData={hazardData}
                   im={selectedIM}
-                  nzCodeData={hazardNZCodeData}
-                  showNZCode={showHazardNZCode}
+                  nzs1170p5Data={hazardNZS1170p5Data}
+                  showNZS1170p5={showHazardNZS1170p5}
                   extra={extraInfo}
                 />
                 <HazardCurveMetadata
@@ -246,7 +248,7 @@ const HazardViewerHazardCurve = () => {
         downloadURL={CONSTANTS.CORE_API_HAZARD_CURVE_DOWNLOAD_ENDPOINT}
         downloadToken={{
           hazard_token: downloadHazardToken,
-          nz1170p5_hazard_token: hazardNZCodeToken,
+          nz1170p5_hazard_token: hazardNZS1170p5Token,
         }}
         extraParams={{
           ensemble_id: selectedEnsemble,

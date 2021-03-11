@@ -37,7 +37,7 @@ const SiteSelectionForm = () => {
     setDisaggComputeClick,
     setUHSComputeClick,
     setUHSRateTable,
-    setNzCodeDefaultParams,
+    setNZS1170p5DefaultParams,
   } = useContext(GlobalContext);
 
   const [locationSetButton, setLocationSetButton] = useState({
@@ -189,12 +189,12 @@ const SiteSelectionForm = () => {
               setVS30(responseData.vs30);
               setDefaultVS30(responseData.vs30);
 
-              let nzCodeDefaultQueryString = `?ensemble_id=${selectedEnsemble}&station=${responseData.station}`;
+              let nzs1170p5CodeDefaultQueryString = `?ensemble_id=${selectedEnsemble}&station=${responseData.station}`;
 
               return fetch(
                 CONSTANTS.CORE_API_BASE_URL +
                   CONSTANTS.CORE_API_HAZARD_NZS1170P5_DEFAULT_PARAMS_ENDPOINT +
-                  nzCodeDefaultQueryString,
+                  nzs1170p5CodeDefaultQueryString,
                 {
                   headers: {
                     Authorization: `Bearer ${token}`,
@@ -205,8 +205,8 @@ const SiteSelectionForm = () => {
             })
             .then(handleErrors)
             .then(async (response) => {
-              const nzCodeDefaultParams = await response.json();
-              setNzCodeDefaultParams(nzCodeDefaultParams);
+              const nzs1170p5DefaultParams = await response.json();
+              setNZS1170p5DefaultParams(nzs1170p5DefaultParams);
               setLocationSetButton({
                 text: "Set",
                 isFetching: false,

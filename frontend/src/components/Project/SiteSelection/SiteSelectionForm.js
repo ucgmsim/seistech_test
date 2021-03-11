@@ -55,7 +55,8 @@ const SiteSelectionForm = () => {
         const token = await getTokenSilently();
 
         await fetch(
-          CONSTANTS.CORE_API_BASE_URL + CONSTANTS.PROJECT_API_PROJECT_IDS_ENDPOINT,
+          CONSTANTS.CORE_API_BASE_URL +
+            CONSTANTS.PROJECT_API_PROJECT_IDS_ENDPOINT,
           {
             headers: {
               Authorization: `Bearer ${token}`,

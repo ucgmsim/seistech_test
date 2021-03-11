@@ -198,7 +198,8 @@ const ProjectPermissionDashboard = () => {
         const token = await getTokenSilently();
 
         await fetch(
-          CONSTANTS.CORE_API_BASE_URL + CONSTANTS.INTERMEDIATE_API_AUTH0_USERS_ENDPOINT,
+          CONSTANTS.CORE_API_BASE_URL +
+            CONSTANTS.INTERMEDIATE_API_AUTH0_USERS_ENDPOINT,
           {
             headers: {
               Authorization: `Bearer ${token}`,
