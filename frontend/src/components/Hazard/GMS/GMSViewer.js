@@ -271,35 +271,46 @@ const GMSViewer = () => {
       For instance, selected IMVectors are PGA, pSA_0.01 and pSA_0.03
       Then 1~4 objects must have properties of PGA, pSA_0.01 and pSA_0.03
     */
-    // Returned IMVectors and selected Vectors aren't matching
-    console.log(`I am computed is\n ${computedGMS["IMs"].sort()}`);
-    console.log(
-      `IM chosen IMVectors is\n ${GMSIMVector.map((im) => im.value).sort()}`
-    );
-    if (
-      !arrayEquals(
-        computedGMS["IMs"].sort(),
-        GMSIMVector.map((im) => im.value).sort()
-      )
-    ) {
-      console.log(
-        `What is the result? ${arrayEquals(
-          computedGMS["IMs"].sort(),
-          GMSIMVector.sort()
-        )}`
-      );
-      return false;
-    }
-    // Compare if gcim_cdf_x has the keys of IMs
-    if (
-      !arrayEquals(
-        Object.keys(computedGMS["gcim_cdf_x"]).sort(),
-        GMSIMVector.map((im) => im.value).sort()
-      )
-    ) {
+    // Compare IMVectors and selected Vectors to see if they are matching
+    if (!validateArrayWithIMVectors(computedGMS["IMs"])) {
       return false;
     }
 
+    // Compare if gcim_cdf_x has the keys of IMs
+    if (!validateArrayWithIMVectors(computedGMS["gcim_cdf_x"])) {
+      return false;
+    }
+
+    // Compare if gcim_cdf_y has the keys of IMs
+    if (!validateArrayWithIMVectors(computedGMS["gcim_cdf_y"])) {
+      return false;
+    }
+
+    // Compare if realisations has the keys of IMs
+    if (!validateArrayWithIMVectors(computedGMS["realisations"])) {
+      return false;
+    }
+
+    // Compare if selectedGMs has the keys of IMs
+    // computedGMS["selected_GMs"]
+
+    // Compare if IM_j equals to the selected IM Type
+    if (computedGMS["IM_j"] !== GMSIMType) {
+      return false;
+    }
+
+    return true;
+  };
+
+  const validateArrayWithIMVectors = (certainPropertyObj) => {
+    if (
+      !arrayEquals(
+        Object.keys(certainPropertyObj).sort(),
+        GMSIMVector.map((im) => im.value).sort()
+      )
+    ) {
+      return false;
+    }
     return true;
   };
 
