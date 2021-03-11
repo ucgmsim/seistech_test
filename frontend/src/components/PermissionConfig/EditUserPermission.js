@@ -332,31 +332,18 @@ const EditUserPermission = () => {
 
   const validateBtn = (selectedProjects) => {
     return (
-      Object.entries(selectedUser).length > 0 &&
-      selectedProjects.length > 0
-    )
-  }
+      Object.entries(selectedUser).length > 0 && selectedProjects.length > 0
+    );
+  };
 
-  const addProjectsBodyText = () => {
-    let bodyString = `Successfully added the following projects:\n\n`;
+  const modalBodyText = (action, selectedProjects) => {
+    let bodyString = `Successfully ${action} the following projects:\n\n`;
 
-    for (let i = 0; i < addableSelectedProject.length; i++) {
-      bodyString += `${i + 1}: ${addableSelectedProject[i].label}\n`;
+    for (let i = 0; i < selectedProjects.length; i++) {
+      bodyString += `${i + 1}: ${selectedProjects[i].label}\n`;
     }
 
     bodyString += `\nto ${selectedUser.label}`;
-
-    return bodyString;
-  };
-
-  const removeProjectsBodyText = () => {
-    let bodyString = `Successfully removed the following projects:\n\n`;
-
-    for (let i = 0; i < allocatedSelectedProject.length; i++) {
-      bodyString += `${i + 1}: ${allocatedSelectedProject[i].label}\n`;
-    }
-
-    bodyString += `\nfrom ${selectedUser.label}`;
 
     return bodyString;
   };
@@ -481,14 +468,14 @@ const EditUserPermission = () => {
         modal={addModal}
         setModal={setAddModal}
         title="Successfully added"
-        body={addProjectsBodyText()}
+        body={modalBodyText("added", addableSelectedProject)}
       />
 
       <ModalComponent
         modal={removeModal}
         setModal={setRemoveModal}
         title="Successfully removed"
-        body={removeProjectsBodyText()}
+        body={modalBodyText("removed", allocatedSelectedProject)}
       />
     </div>
   );
