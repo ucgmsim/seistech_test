@@ -4,7 +4,6 @@ from flask import jsonify, request, Response
 from jose import jwt
 
 from middleware import app
-
 import middleware.db as db
 import middleware.utils as utils
 import middleware.auth0 as auth0
