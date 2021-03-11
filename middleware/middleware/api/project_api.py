@@ -24,7 +24,7 @@ PROJECT_API_TOKEN = "Bearer {}".format(
 
 
 # Site Selection
-def get_all_projects():
+def _get_all_projects():
     return utils.proxy_to_api(
         request, "api/project/ids/get", "GET", PROJECT_API_BASE, PROJECT_API_TOKEN
     ).get_json()
@@ -38,7 +38,7 @@ def get_available_project_ids():
     return utils.get_user_projects(
         db.get_user_projects(user_id),
         intermediate_api.get_public_projects().get_json(),
-        get_all_projects()
+        _get_all_projects(),
     )
 
 
