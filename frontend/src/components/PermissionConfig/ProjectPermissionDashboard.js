@@ -17,17 +17,17 @@ const ProjectPermissionDashboard = () => {
   const [allProjects, setAllProjects] = useState({});
   const [tableHeaderData, setTableHeaderData] = useState([]);
 
-  const [allUsersProjects, setAllUsersProjects] = useState({});
+  const [allUsersPrivateProjects, setAllUsersPrivateProjects] = useState({});
   const [tableBodyData, setTableBodyData] = useState([]);
 
   /*
-    Fetching All projects we have from Project table which becomes a table's header
+    Fetching All projects(Public and Private) we have from Project table which becomes a table's header
   */
   useEffect(() => {
     const abortController = new AbortController();
     const signal = abortController.signal;
 
-    const getProjects = async () => {
+    const getAllProjects = async () => {
       try {
         const token = await getTokenSilently();
 
@@ -71,7 +71,7 @@ const ProjectPermissionDashboard = () => {
       }
     };
 
-    getProjects();
+    getAllProjects();
 
     return () => {
       abortController.abort();
@@ -80,7 +80,7 @@ const ProjectPermissionDashboard = () => {
 
   /*
     Based on all projects name we pulled from above useEffect Hook,
-    Create an array of objects to set the table's header
+    Create an readable array of objects for material-ui table
   */
   useEffect(() => {
     // If and only if the object is not empty, create list for table's header
@@ -97,10 +97,12 @@ const ProjectPermissionDashboard = () => {
       ];
 
       for (const access_level of Object.keys(allProjects)) {
-        for (const [code, name] of Object.entries(allProjects[access_level])) {
+        for (const [project_code, project_name] of Object.entries(
+          allProjects[access_level]
+        )) {
           tempArray.push({
-            id: code,
-            label: `${name} - ${access_level}`,
+            id: project_code,
+            label: `${project_name} - ${access_level}`,
           });
         }
       }
@@ -116,7 +118,7 @@ const ProjectPermissionDashboard = () => {
     const abortController = new AbortController();
     const signal = abortController.signal;
 
-    const getAllAvailableProjects = async () => {
+    const getAllUsersProjects = async () => {
       try {
         const token = await getTokenSilently();
 
@@ -133,7 +135,7 @@ const ProjectPermissionDashboard = () => {
           .then(handleErrors)
           .then(async (response) => {
             const responseData = await response.json();
-            setAllUsersProjects(responseData);
+            setAllUsersPrivateProjects(responseData);
           })
           .catch((error) => {
             console.log(error);
@@ -143,7 +145,7 @@ const ProjectPermissionDashboard = () => {
       }
     };
 
-    getAllAvailableProjects();
+    getAllUsersProjects();
 
     return () => {
       abortController.abort();
@@ -153,15 +155,15 @@ const ProjectPermissionDashboard = () => {
   /*
     Create an array of objects for table body
     We need to be sure that the following data aren't empty
-    1. allUsersProjects -> Data from Users_Projects table
+    1. allUsersPrivateProjects -> Data from Users_Projects table
     2. allProjects -> Data from Project table, All Public & Private projects
     3. userOption -> Data from Auth0, existing users
   */
   useEffect(() => {
     if (
-      (allUsersProjects &&
-        Object.keys(allUsersProjects).length === 0 &&
-        allUsersProjects.constructor === Object) === false &&
+      (allUsersPrivateProjects &&
+        Object.keys(allUsersPrivateProjects).length === 0 &&
+        allUsersPrivateProjects.constructor === Object) === false &&
       (allProjects &&
         Object.keys(allProjects).length === 0 &&
         allProjects.constructor === Object) === false &&
@@ -171,7 +173,7 @@ const ProjectPermissionDashboard = () => {
       let tempObj = {};
 
       /*
-        Loop through the object, allUsersProjects
+        Loop through the object, allUsersPrivateProjects
         Nested loop through another object, allprojects
 
         The key for a temp object property with "auth0-user-id", 
@@ -180,12 +182,12 @@ const ProjectPermissionDashboard = () => {
         {value: auth0-id, label: email | auth0 or google auth}
         Then from a found object, use the label as we want email to be displayed
 
-        Then, compare if user's available_projects (projects with permission),
+        Then, compare if user's user_private_projects (projects with permission),
         contains the project we provide, then it's true else false.
         )
       */
-      for (const [user_id, available_projects] of Object.entries(
-        allUsersProjects
+      for (const [user_id, user_private_projects] of Object.entries(
+        allUsersPrivateProjects
       )) {
         for (const access_level in allProjects) {
           tempObj["auth0-user-id"] = userOption.find(
@@ -199,7 +201,9 @@ const ProjectPermissionDashboard = () => {
             // acces_level is not public, then compare with Users_Projects to check the permission
           } else {
             for (const project_code in allProjects[access_level]) {
-              tempObj[project_code] = available_projects.includes(project_code)
+              tempObj[project_code] = user_private_projects.includes(
+                project_code
+              )
                 ? "true"
                 : "false";
             }
@@ -211,7 +215,7 @@ const ProjectPermissionDashboard = () => {
 
       setTableBodyData(tempArray);
     }
-  }, [allUsersProjects, allProjects, userOption]);
+  }, [allUsersPrivateProjects, allProjects, userOption]);
 
   /*
     Fetching user information from the API(Auth0)
