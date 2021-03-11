@@ -443,7 +443,7 @@ def get_certain_access_level_projects(access_level):
 
     Returns
     -------
-    Dictionary of dictionaries in the form of
+    Dictionary in the form of
     {
         project_code: project_name
     }
