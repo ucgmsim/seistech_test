@@ -14,15 +14,15 @@ const EditUserPermission = () => {
 
   const [userData, setUserData] = useState({});
   const [addableProjectData, setAddableProjectData] = useState([]);
-  const [allocatedProjectData, setAllocatedProjectData] = useState([]);
+  const [assignedProjectData, setAssignedProjectData] = useState([]);
 
   const [userOption, setUserOption] = useState([]);
   const [addableProjectOption, setAddableProjectOption] = useState([]);
-  const [allocatedProjectOption, setAllocatedProjectOption] = useState([]);
+  const [assignedProjectOption, setAssignedProjectOption] = useState([]);
 
   const [selectedUser, setSelectedUser] = useState([]);
   const [addableSelectedProject, setAddableSelectedProject] = useState([]);
-  const [allocatedSelectedProject, setAllocatedSelectedProject] = useState([]);
+  const [removableSelectedProject, setRemovableSelectedProject] = useState([]);
 
   const [userDataFetching, setUserDataFetching] = useState(false);
   const [projectDataFetching, setProjectDataFetching] = useState(false);
@@ -61,14 +61,14 @@ const EditUserPermission = () => {
   useEffect(() => {
     /*
       If fetched addable projects are more than 0, then display them as options.
-      If it is 0, then it is either API is not working or there are no more projects which can be added to this user.
+      If it is 0, then it is either API is not working or there are no more projects which can be removed from this user.
     */
-    if (Object.entries(allocatedProjectData).length > 0) {
-      setAllocatedProjectOption(createProjectIDArray(allocatedProjectData));
+    if (Object.entries(assignedProjectData).length > 0) {
+      setAssignedProjectOption(createProjectIDArray(assignedProjectData));
     } else {
-      setAllocatedProjectOption([]);
+      setAssignedProjectOption([]);
     }
-  }, [allocatedProjectData]);
+  }, [assignedProjectData]);
 
   /*
     Fetching user information from the Auth0
@@ -115,7 +115,7 @@ const EditUserPermission = () => {
   }, []);
 
   /*
-    Fetching projects that are not allocated to user.
+    Fetching projects that are not assigned to user.
     Addable projects
     Compare Users_Projects table and Project table with Private Projects
   */
@@ -127,10 +127,10 @@ const EditUserPermission = () => {
       if (selectedUser.length != 0) {
         // Reset the selected option
         setAddableSelectedProject([]);
-        setAllocatedSelectedProject([]);
+        setRemovableSelectedProject([]);
 
         setAddableProjectOption([]);
-        setAllocatedProjectOption([]);
+        setAssignedProjectOption([]);
 
         setProjectDataFetching(true);
 
@@ -173,7 +173,7 @@ const EditUserPermission = () => {
                 )
               );
 
-              setAllocatedProjectData(
+              setAssignedProjectData(
                 filterToGetAllowedProjects(userProjectsData)
               );
 
@@ -267,7 +267,7 @@ const EditUserPermission = () => {
             },
             body: JSON.stringify({
               user_info: selectedUser,
-              project_info: allocatedSelectedProject,
+              project_info: removableSelectedProject,
             }),
             signal: signal,
           };
@@ -303,9 +303,9 @@ const EditUserPermission = () => {
   useEffect(() => {
     if (addModal === false && setAllocateClick !== null) {
       setAddableSelectedProject([]);
-      setAllocatedSelectedProject([]);
+      setRemovableSelectedProject([]);
       setAddableProjectOption([]);
-      setAllocatedProjectOption([]);
+      setAssignedProjectOption([]);
       setSelectedUser([]);
     }
   }, [addModal]);
@@ -313,9 +313,9 @@ const EditUserPermission = () => {
   useEffect(() => {
     if (removeModal === false && setRemoveClick !== null) {
       setAddableSelectedProject([]);
-      setAllocatedSelectedProject([]);
+      setRemovableSelectedProject([]);
       setAddableProjectOption([]);
-      setAllocatedProjectOption([]);
+      setAssignedProjectOption([]);
       setSelectedUser([]);
     }
   }, [removeModal]);
@@ -390,26 +390,26 @@ const EditUserPermission = () => {
           <h4>Assigned Private Projects</h4>
           <h5>(Use to remove projects from a user)</h5>
           <Select
-            id="allocated-projects"
-            onChange={(value) => setAllocatedSelectedProject(value || [])}
-            value={allocatedSelectedProject}
-            options={allocatedProjectOption}
+            id="assigned-projects"
+            onChange={(value) => setRemovableSelectedProject(value || [])}
+            value={removableSelectedProject}
+            options={assignedProjectOption}
             isMulti
             closeMenuOnSelect={false}
-            isDisabled={allocatedProjectOption.length === 0}
+            isDisabled={assignedProjectOption.length === 0}
             placeholder={
               selectedUser.length === 0
                 ? "Please select a user first..."
                 : selectedUser.length !== 0 &&
                   projectDataFetching === true &&
-                  allocatedProjectOption.length === 0
+                  assignedProjectOption.length === 0
                 ? "Loading..."
                 : selectedUser.length !== 0 &&
                   projectDataFetching === false &&
-                  allocatedProjectOption.length === 0
-                ? "No allocated projects"
+                  assignedProjectOption.length === 0
+                ? "No assigned projects"
                 : selectedUser.length !== 0 &&
-                  allocatedProjectOption.length !== 0
+                  assignedProjectOption.length !== 0
                 ? "Select projects to remove"
                 : "Something went wrong"
             }
@@ -419,7 +419,7 @@ const EditUserPermission = () => {
             type="button"
             className="btn btn-primary mt-4"
             onClick={() => removeProjects()}
-            disabled={!validateBtn(allocatedSelectedProject)}
+            disabled={!validateBtn(removableSelectedProject)}
           >
             {allocatedStatusText}
           </button>
@@ -475,7 +475,7 @@ const EditUserPermission = () => {
         modal={removeModal}
         setModal={setRemoveModal}
         title="Successfully removed"
-        body={modalBodyText("removed", allocatedSelectedProject)}
+        body={modalBodyText("removed", removableSelectedProject)}
       />
     </div>
   );
