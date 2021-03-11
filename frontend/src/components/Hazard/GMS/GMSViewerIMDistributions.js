@@ -8,7 +8,6 @@ import { range } from "utils/Utils";
 import "assets/style/GMSPlot.css";
 
 const GMSViewerIMDistributions = ({ gmsData, IM }) => {
-  console.log("OW IM HERE~~~~ IM DISTRIBUTION")
   const cdfX = gmsData["gcim_cdf_x"][IM];
   const cdfY = gmsData["gcim_cdf_y"][IM];
   const realisations = gmsData["realisations"][IM];
