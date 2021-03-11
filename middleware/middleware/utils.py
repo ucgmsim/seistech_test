@@ -76,22 +76,26 @@ def proxy_to_api(
     return response
 
 
-def get_user_projects(db_user_projects, api_projects):
+def get_user_projects(db_user_projects, public_projects, api_projects):
     """Compute cross-check of allowed projects for the specified user
     with the available projects from the projectAPI
 
     It finds allowed projects from the DB.
-    (Allowed_Project that contains user_id and project_name.)
+    (Users_Projects that contains user_id and project_name.)
+    We also retr
     After we get all the existing projects from the Project API.
     Then we compare [Allowed Projects] and [All the Existing Projects]
     to find the matching one.
 
     Parameters
     ----------
-    db_user_projects: list of dictionaries
+    db_user_projects: Dictionary
         All allowed projects for the specified user
 
-    api_projects: list of strings
+    public_projects: Dictionary
+        All Public projects from Project table
+
+    api_projects: Dictionary
         All projects from the project API (i.e. no constraints)
 
     Returns
@@ -101,8 +105,9 @@ def get_user_projects(db_user_projects, api_projects):
         project_code: project_name
     }
     """
+
     return {
         api_project_code: api_project_name["name"]
         for api_project_code, api_project_name in api_projects.items()
-        if api_project_name["name"] in db_user_projects
+        if (api_project_code in db_user_projects or api_project_code in public_projects)
     }
