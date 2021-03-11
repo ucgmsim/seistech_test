@@ -62,7 +62,7 @@ def get_public_projects():
 @app.route(const.INTERMEDIATE_API_USER_PROJECTS_ENDPOINT, methods=["GET"])
 @decorators.requires_auth
 def get_user_assigned_projects_from_db():
-    """Fetching all the projects that are already allocated to a user
+    """Fetching all the projects that are already assigned to a user
     Will be used for Allowed Projects dropdown
     """
     user_id = request.args.to_dict()["user_id"]

@@ -211,9 +211,9 @@ def get_user_assigned_projects_from_db(user_id):
 
     Returns
     -------
-    list of Project IDs from DB (Allowed Projects)
+    list of Project IDs from DB (Assigned Projects from Users_Projects table)
     """
-    # Get all allowed projects that are allocated to this user.
+    # Get all allowed projects that are assigned to this user.
     allowed_project_objs = (
         models.Project.query.join(models.UserProject)
         .filter((models.UserProject.user_id == user_id))
@@ -380,10 +380,10 @@ def _sync_permissions(user_id, trusted_permission_list):
         The list to be compared with the list of permission from allowed_permission
         table
     """
-    # Get a list of permission that are allocated to this user
-    unfiltered_allowed_permission_list = _get_user_permissions(user_id)
+    # Get a list of permission that are assigned to this user
+    unfiltered_assigned_permission_list = _get_user_permissions(user_id)
 
-    for permission in unfiltered_allowed_permission_list:
+    for permission in unfiltered_assigned_permission_list:
         if permission not in trusted_permission_list:
             _remove_user_permission_from_db(user_id, permission)
 
