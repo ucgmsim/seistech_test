@@ -78,13 +78,15 @@ def proxy_to_api(
 
 def get_user_projects(db_user_projects, public_projects, api_projects):
     """Compute cross-check of allowed projects for the specified user
-    with the available projects from the projectAPI
+    with the verified projects(one with values that can be used) from the projectAPI
 
-    It finds allowed projects from the DB.
-    (Users_Projects that contains user_id and project_name.)
-    Then, with these allowed projects + public projects, check with projects
-    from Project API to check whether they are actually the valid projects
-    (For intsance, the projects with values that we can use)
+    It finds allowed private projects from the Users_Permission table.
+    Then check these allowed projects + all public projects(From Project table), 
+    with verified projects from Project API to check 
+    whether they are valid projects to perform/use
+
+    For instance, nzgl is in the DB but some issues found and disabled from ProjectAPI,
+    then the user will not see nzgl until we fix any issues.
 
     Parameters
     ----------
@@ -92,7 +94,7 @@ def get_user_projects(db_user_projects, public_projects, api_projects):
         All allowed private projects for the specified user
 
     public_projects: Dictionary
-        All Public projects from Project table
+        All Public projects from the Project table
 
     api_projects: Dictionary
         All projects from the project API
