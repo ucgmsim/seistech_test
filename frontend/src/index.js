@@ -1,12 +1,19 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
+import { stopReportingRuntimeErrors } from "react-error-overlay";
+
 import { Auth0Provider } from "./components/common/ReactAuth0SPA";
 
 import App from "./App";
 import History from "utils/History";
 
 import "assets/style/index.css";
+
+// Discuss first whether we want to disable the error overlays for EA
+if (process.env.REACT_APP_ENV === "EA") {
+  stopReportingRuntimeErrors(); // disables error overlays
+}
 
 const onRedirectCallback = (appState) => {
   History.push(
