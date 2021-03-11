@@ -36,7 +36,7 @@ def get_auth0_user_key_info():
 @decorators.requires_auth
 def get_auth0_users():
     """Fetching all the existing users from the Auth0
-    Will be used for User dropdown
+    These will be used for User dropdown in the Permission Config
 
     Have to use Auth0 as source for users, to allow
     setting user permission to users that don't
@@ -45,18 +45,22 @@ def get_auth0_users():
     return jsonify(auth0.get_users())
 
 
-@app.route(const.INTERMEDIATE_API_ALL_PRIVATE_PROJECTS_ENDPOINT, methods=["GET"])
+@app.route(
+    const.INTERMEDIATE_API_ALL_CERTAIN_ACCESS_LEVEL_PROJECTS_ENDPOINT, methods=["GET"]
+)
 @decorators.requires_auth
-def get_private_projects():
-    """Fetching all private projects from the Project table"""
-    return jsonify(db.get_certain_access_level_projects("private"))
+def get_certain_access_level_projects(access_level):
+    """Fetching all projects with a given access_level
+    from the Project table
 
+    Route path contains <access_level> which can be used as a parameter
 
-@app.route(const.INTERMEDIATE_API_ALL_PUBLIC_PROJECTS_ENDPOINT, methods=["GET"])
-@decorators.requires_auth
-def get_public_projects():
-    """Fetching all public projects from the Project table"""
-    return jsonify(db.get_certain_access_level_projects("public"))
+    Parameters
+    ----------
+    access_level: string
+        Currently, either private or public
+    """
+    return jsonify(db.get_certain_access_level_projects(access_level))
 
 
 @app.route(const.INTERMEDIATE_API_USER_PROJECTS_ENDPOINT, methods=["GET"])
