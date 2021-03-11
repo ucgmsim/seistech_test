@@ -228,17 +228,11 @@ const GMSViewer = () => {
   // This is the issue that changes IMs and responseData which doesn make sense
   useEffect(() => {
     if (computedGMS !== null) {
-      console.log(computedGMS);
-      let tempObj = {
-        gcim_cdf_x: computedGMS["gcim_cdf_x"],
-        gcim_cdf_y: computedGMS["gcim_cdf_y"],
-        realisations: computedGMS["realisations"],
-        selected_GMs: computedGMS["selected_GMs"],
-        im_j: computedGMS["im_j"],
-        IMs: computedGMS["IMs"],
-        IM_j: computedGMS["IM_j"],
-      };
-      setSpectraData(calculateGMSSpectra(tempObj));
+      // Deep copy the Object as Javascript, Objects and Arrays are
+      // by reference not value, means if it gets changed inside
+      // calculatedGMSSpectra function, will affect the actual object
+      let clonedComputedGMS = JSON.parse(JSON.stringify(computedGMS));
+      setSpectraData(calculateGMSSpectra(clonedComputedGMS));
     }
   }, [computedGMS]);
 
@@ -282,29 +276,29 @@ const GMSViewer = () => {
     console.log(
       `IM chosen IMVectors is\n ${GMSIMVector.map((im) => im.value).sort()}`
     );
-    // if (
-    //   !arrayEquals(
-    //     computedGMS["IMs"].sort(),
-    //     GMSIMVector.map((im) => im.value).sort()
-    //   )
-    // ) {
-    //   console.log(
-    //     `What is the result? ${arrayEquals(
-    //       computedGMS["IMs"].sort(),
-    //       GMSIMVector.sort()
-    //     )}`
-    //   );
-    //   return false;
-    // }
+    if (
+      !arrayEquals(
+        computedGMS["IMs"].sort(),
+        GMSIMVector.map((im) => im.value).sort()
+      )
+    ) {
+      console.log(
+        `What is the result? ${arrayEquals(
+          computedGMS["IMs"].sort(),
+          GMSIMVector.sort()
+        )}`
+      );
+      return false;
+    }
     // Compare if gcim_cdf_x has the keys of IMs
-    // if (
-    //   !arrayEquals(
-    //     Object.keys(computedGMS["gcim_cdf_x"]).sort(),
-    //     GMSIMVector.map((im) => im.value).sort()
-    //   )
-    // ) {
-    //   return false;
-    // }
+    if (
+      !arrayEquals(
+        Object.keys(computedGMS["gcim_cdf_x"]).sort(),
+        GMSIMVector.map((im) => im.value).sort()
+      )
+    ) {
+      return false;
+    }
 
     return true;
   };
@@ -337,30 +331,29 @@ const GMSViewer = () => {
           {isLoading === false &&
             computedGMS !== null &&
             showErrorMessage.isError === false && (
-              // <Fragment>
-              //   {validateComputedGMS() ? (
-              //     <Fragment>
-              //       <Select
-              //         id="im-vectors"
-              //         onChange={(value) => setSpecifiedIM(value || [])}
-              //         defaultValue={specifiedIM}
-              //         options={localIMVectors}
-              //         isSearchable={false}
-              //       />
-              //       {specifiedIM.value === "spectra" ? (
-              //         <GMSViewerSpectra spectraData={spectraData} />
-              //       ) : (
-              //         <GMSViewerIMDistributions
-              //           gmsData={computedGMS}
-              //           IM={specifiedIM.value}
-              //         />
-              //       )}
-              //     </Fragment>
-              //   ) : (
-              //     <ErrorMessage />
-              //   )}
-              // </Fragment>
-              <Fragment>TEST</Fragment>
+              <Fragment>
+                {validateComputedGMS() ? (
+                  <Fragment>
+                    <Select
+                      id="im-vectors"
+                      onChange={(value) => setSpecifiedIM(value || [])}
+                      defaultValue={specifiedIM}
+                      options={localIMVectors}
+                      isSearchable={false}
+                    />
+                    {specifiedIM.value === "spectra" ? (
+                      <GMSViewerSpectra spectraData={spectraData} />
+                    ) : (
+                      <GMSViewerIMDistributions
+                        gmsData={computedGMS}
+                        IM={specifiedIM.value}
+                      />
+                    )}
+                  </Fragment>
+                ) : (
+                  <ErrorMessage />
+                )}
+              </Fragment>
             )}
         </Tab>
         <Tab eventKey="GMSViewerCausalParameters" title="Causal Parameters">
@@ -380,45 +373,44 @@ const GMSViewer = () => {
           {isLoading === false &&
             computedGMS !== null &&
             showErrorMessage.isError === false && (
-              // <Fragment>
-              //   {validateComputedGMS() ? (
-              //     <Fragment>
-              //       <Select
-              //         id="metadata"
-              //         onChange={(value) => setSpecifiedMetadata(value || [])}
-              //         defaultValue={specifiedMetadata}
-              //         options={localMetadatas}
-              //         isSearchable={false}
-              //         formatOptionLabel={(data) => {
-              //           return (
-              //             <span
-              //               dangerouslySetInnerHTML={{
-              //                 __html: sanitizer(data.label),
-              //               }}
-              //             />
-              //           );
-              //         }}
-              //       />
-              //       {specifiedMetadata.value !== "mwrrupplot" ? (
-              //         <GMSViewerCausalParameters
-              //           gmsData={computedGMS}
-              //           metadata={specifiedMetadata.value}
-              //           causalParamBounds={causalParamBounds}
-              //         />
-              //       ) : validateBounds() ? (
-              //         <GMSViewerMwRrupPlot
-              //           gmsData={computedGMS}
-              //           causalParamBounds={causalParamBounds}
-              //         />
-              //       ) : (
-              //         <ErrorMessage />
-              //       )}
-              //     </Fragment>
-              //   ) : (
-              //     <ErrorMessage />
-              //   )}
-              // </Fragment>
-              <Fragment>Test</Fragment>
+              <Fragment>
+                {validateComputedGMS() ? (
+                  <Fragment>
+                    <Select
+                      id="metadata"
+                      onChange={(value) => setSpecifiedMetadata(value || [])}
+                      defaultValue={specifiedMetadata}
+                      options={localMetadatas}
+                      isSearchable={false}
+                      formatOptionLabel={(data) => {
+                        return (
+                          <span
+                            dangerouslySetInnerHTML={{
+                              __html: sanitizer(data.label),
+                            }}
+                          />
+                        );
+                      }}
+                    />
+                    {specifiedMetadata.value !== "mwrrupplot" ? (
+                      <GMSViewerCausalParameters
+                        gmsData={computedGMS}
+                        metadata={specifiedMetadata.value}
+                        causalParamBounds={causalParamBounds}
+                      />
+                    ) : validateBounds() ? (
+                      <GMSViewerMwRrupPlot
+                        gmsData={computedGMS}
+                        causalParamBounds={causalParamBounds}
+                      />
+                    ) : (
+                      <ErrorMessage />
+                    )}
+                  </Fragment>
+                ) : (
+                  <ErrorMessage />
+                )}
+              </Fragment>
             )}
         </Tab>
       </Tabs>
