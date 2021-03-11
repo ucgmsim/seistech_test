@@ -1,3 +1,9 @@
+## March 11, 2021
+
+### Replace the frontend's NZCode to NZS1170p5 - ([PR #52](https://github.com/ucgmsim/seistech_psha_frontend/pull/52)
+
+- As we decided to use the term `NZS1170p5`, update old NZCode variables to NZS1170p5.
+
 ## March 10, 2021
 
 ### Refactor the IntermediateAPI & Frontend - ([PR #51](https://github.com/ucgmsim/seistech_psha_frontend/pull/51)
