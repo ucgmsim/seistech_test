@@ -201,8 +201,8 @@ def _remove_user_permission_from_db(user_id, permission):
     db.session.flush()
 
 
-def get_user_projects(user_id):
-    """Retrieves all projects ids for the specified user
+def get_user_assigned_projects_from_db(user_id):
+    """Retrieves all projects ids for the specified user from Users_Permissions table
 
     Parameters
     ----------
