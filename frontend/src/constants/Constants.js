@@ -89,8 +89,8 @@ export const INTERMEDIATE_API_ALL_PUBLIC_PROJECTS_ENDPOINT =
 
 /* 
   Words 
-  TODO - See whether it's worth putting as constands due to structure.
-  E.g., We may go up two ~ three directoris to get an access to this Constants.js
+  TODO - See whether it's worth putting as constants due to structure.
+  E.g., We may go up two ~ three directories to get access to this Constants.js
   */
 
 export const HAZARD_ANALYSIS = "Hazard Analysis";
@@ -181,12 +181,12 @@ export const DISAGGREGATION_GUIDE_MSG_TABLE =
   "Please do the following steps to see the contribution table.";
 export const DISAGGREGATION_INSTRUCTION_PLOT = [
   "Choose the Intensity Measure first.",
-  "Update input fields in the 'Disaggregation' section to get probability.",
+  "Update input fields in the 'Disaggregation' section to get a probability.",
   "Click the compute button in the 'Disaggregation' section to see plots.",
 ];
 export const DISAGGREGATION_INSTRUCTION_TABLE = [
   "Choose the Intensity Measure first.",
-  "Update input fields in the 'Disaggregation' section to get probability.",
+  "Update input fields in the 'Disaggregation' section to get a probability.",
   "Click the compute button in the 'Disaggregation' section to see the contribution table.",
 ];
 
@@ -228,19 +228,19 @@ export const PROJECT_SITE_SELECTION_INSTRUCTION = [
 
 export const PROJECT_HAZARD_CURVE_INSTRUCTION = [
   "Choose the Intensity Measure.",
-  "Click the Get buton in the 'Hazard Curve' section to see plots.",
+  "Click the Get button in the 'Hazard Curve' section to see plots.",
 ];
 
 export const PROJECT_DISAGG_INSTRUCTION_PLOT = [
   "Choose the Intensity Measure.",
   "Choose the Return Period",
-  "Click the Get buton in the 'Disaggregation' section to see plots.",
+  "Click the Get button in the 'Disaggregation' section to see plots.",
 ];
 
 export const PROJECT_DISAGG_INSTRUCTION_TABLE = [
   "Choose the Intensity Measure.",
   "Choose the Return Period",
-  "Click the Get buton in the 'Disaggregation' section to see contribution table.",
+  "Click the Get button in the 'Disaggregation' section to see contribution table.",
 ];
 
 /*
