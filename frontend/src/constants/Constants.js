@@ -82,11 +82,6 @@ export const INTERMEDIATE_API_ALL_USERS_PERMISSIONS_ENDPOINT =
 export const INTERMEDIATE_API_ALL_USERS_PROJECTS_ENDPOINT =
   "intermediateAPI/users_projects/get/all";
 
-/*
-  Equivalent to Middleware's
-  INTERMEDIATE_API_ALL_CERTAIN_ACCESS_LEVEL_PROJECTS_ENDPOINT
-  except, these come with value in the path, e.g., either public or private
-*/
 export const INTERMEDIATE_API_ALL_PRIVATE_PROJECTS_ENDPOINT =
   "intermediateAPI/project/private/get/all";
 export const INTERMEDIATE_API_ALL_PUBLIC_PROJECTS_ENDPOINT =
