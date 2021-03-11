@@ -21,8 +21,8 @@ const EditUserPermission = () => {
   const [assignedProjectOption, setAssignedProjectOption] = useState([]);
 
   const [selectedUser, setSelectedUser] = useState([]);
-  const [addableSelectedProject, setAddableSelectedProject] = useState([]);
-  const [removableSelectedProject, setRemovableSelectedProject] = useState([]);
+  const [selectedAddableProject, setSelectedAddableProject] = useState([]);
+  const [selectedAssignedProject, setSelectedAssignedProject] = useState([]);
 
   const [userDataFetching, setUserDataFetching] = useState(false);
   const [projectDataFetching, setProjectDataFetching] = useState(false);
@@ -126,8 +126,8 @@ const EditUserPermission = () => {
     const getAddableProjectData = async () => {
       if (selectedUser.length != 0) {
         // Reset the selected option
-        setAddableSelectedProject([]);
-        setRemovableSelectedProject([]);
+        setSelectedAddableProject([]);
+        setSelectedAssignedProject([]);
 
         setAddableProjectOption([]);
         setAssignedProjectOption([]);
@@ -215,7 +215,7 @@ const EditUserPermission = () => {
             },
             body: JSON.stringify({
               user_info: selectedUser,
-              project_info: addableSelectedProject,
+              project_info: selectedAddableProject,
             }),
             signal: signal,
           };
@@ -267,7 +267,7 @@ const EditUserPermission = () => {
             },
             body: JSON.stringify({
               user_info: selectedUser,
-              project_info: removableSelectedProject,
+              project_info: selectedAssignedProject,
             }),
             signal: signal,
           };
@@ -302,8 +302,8 @@ const EditUserPermission = () => {
   // Reset the select field after the modal is closed.
   useEffect(() => {
     if (addModal === false && setAllocateClick !== null) {
-      setAddableSelectedProject([]);
-      setRemovableSelectedProject([]);
+      setSelectedAddableProject([]);
+      setSelectedAssignedProject([]);
       setAddableProjectOption([]);
       setAssignedProjectOption([]);
       setSelectedUser([]);
@@ -312,8 +312,8 @@ const EditUserPermission = () => {
 
   useEffect(() => {
     if (removeModal === false && setRemoveClick !== null) {
-      setAddableSelectedProject([]);
-      setRemovableSelectedProject([]);
+      setSelectedAddableProject([]);
+      setSelectedAssignedProject([]);
       setAddableProjectOption([]);
       setAssignedProjectOption([]);
       setSelectedUser([]);
@@ -391,8 +391,8 @@ const EditUserPermission = () => {
           <h5>(Use to remove projects from a user)</h5>
           <Select
             id="assigned-projects"
-            onChange={(value) => setRemovableSelectedProject(value || [])}
-            value={removableSelectedProject}
+            onChange={(value) => setSelectedAssignedProject(value || [])}
+            value={selectedAssignedProject}
             options={assignedProjectOption}
             isMulti
             closeMenuOnSelect={false}
@@ -419,7 +419,7 @@ const EditUserPermission = () => {
             type="button"
             className="btn btn-primary mt-4"
             onClick={() => removeProjects()}
-            disabled={!validateBtn(removableSelectedProject)}
+            disabled={!validateBtn(selectedAssignedProject)}
           >
             {allocatedStatusText}
           </button>
@@ -430,8 +430,8 @@ const EditUserPermission = () => {
           <h5>(Use to add projects to a user)</h5>
           <Select
             id="available-projects"
-            onChange={(value) => setAddableSelectedProject(value || [])}
-            value={addableSelectedProject}
+            onChange={(value) => setSelectedAddableProject(value || [])}
+            value={selectedAddableProject}
             options={addableProjectOption}
             isMulti
             closeMenuOnSelect={false}
@@ -457,7 +457,7 @@ const EditUserPermission = () => {
             type="button"
             className="btn btn-primary mt-4"
             onClick={() => allocateProjects()}
-            disabled={!validateBtn(addableSelectedProject)}
+            disabled={!validateBtn(selectedAddableProject)}
           >
             {addableStatusText}
           </button>
@@ -468,14 +468,14 @@ const EditUserPermission = () => {
         modal={addModal}
         setModal={setAddModal}
         title="Successfully added"
-        body={modalBodyText("added", addableSelectedProject)}
+        body={modalBodyText("added", selectedAddableProject)}
       />
 
       <ModalComponent
         modal={removeModal}
         setModal={setRemoveModal}
         title="Successfully removed"
-        body={modalBodyText("removed", removableSelectedProject)}
+        body={modalBodyText("removed", selectedAssignedProject)}
       />
     </div>
   );
