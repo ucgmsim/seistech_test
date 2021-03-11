@@ -72,6 +72,9 @@ INTERMEDIATE_API_ALL_USERS_PERMISSIONS_ENDPOINT = (
     "/intermediateAPI/users_permissions/get/all"
 )
 
-INTERMEDIATE_API_ALL_CERTAIN_ACCESS_LEVEL_PROJECTS_ENDPOINT = (
-    "/intermediateAPI/project/<access_level>/get/all"
+INTERMEDIATE_API_ALL_PRIVATE_PROJECTS_ENDPOINT = (
+    "/intermediateAPI/project/private/get/all"
+)
+INTERMEDIATE_API_ALL_PUBLIC_PROJECTS_ENDPOINT = (
+    "/intermediateAPI/project/public/get/all"
 )

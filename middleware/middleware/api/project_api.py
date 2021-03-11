@@ -37,7 +37,7 @@ def get_available_project_ids():
 
     return utils.get_user_projects(
         db.get_user_assigned_projects_from_db(user_id),
-        intermediate_api.get_certain_access_level_projects("public").get_json(),
+        intermediate_api.get_public_projects().get_json(),
         _get_all_projects(),
     )
 
