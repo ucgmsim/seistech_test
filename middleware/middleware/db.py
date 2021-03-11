@@ -346,7 +346,7 @@ def update_user_permissions(user_id, permission_list):
     user_id: string
         Auth0's unique user id
     permission_list: list
-        List of permission that user has. (From Auth0, trusted source)
+        List of permission that the user has. (From Auth0, trusted source)
     """
     # Sync the allowed_permission table to token's permission (trusted source)
     # first before we check/update

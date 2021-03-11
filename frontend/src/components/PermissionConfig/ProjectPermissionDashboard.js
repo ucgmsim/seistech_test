@@ -174,7 +174,7 @@ const ProjectPermissionDashboard = () => {
 
       /*
         Loop through the object, allUsersPrivateProjects
-        Nested loop through another object, allprojects
+        Nested loop through another object, allProjects
 
         The key for a temp object property with "auth0-user-id", 
         is user-email. (using find function to find an object with auth0-id value

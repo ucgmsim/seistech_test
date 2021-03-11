@@ -63,7 +63,7 @@ const PagePermissionDashboard = () => {
 
   /*
     Based on all permission name we pulled from the above useEffect Hook,
-    Create an readable array of objects for material-ui table
+    Create a readable array of objects for material-ui table
   */
   useEffect(() => {
     // If and only if the object is not empty, create list for table's header
@@ -148,7 +148,7 @@ const PagePermissionDashboard = () => {
 
       /*
       Loop through the object, allUsersPermission
-      Nested loop through array, allPermission
+      Nested loop through the array, allPermission
 
       The key for a temp object property with "auth0-user-id", 
       is user-email. (using find function to find an object with auth0-id value
