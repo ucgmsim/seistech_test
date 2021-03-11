@@ -11,24 +11,24 @@ import { useAuth0 } from "components/common/ReactAuth0SPA";
 import { GuideTooltip } from "components/common";
 import { handleErrors } from "utils/Utils";
 
-import "assets/style/NZS1170Section.css";
+import "assets/style/NZS1170p5Section.css";
 
-const NZS1170Section = () => {
+const NZS1170p5Section = () => {
   const { getTokenSilently } = useAuth0();
 
   const {
     selectedEnsemble,
     station,
     selectedIM,
-    setHazardNZCodeData,
-    setUHSNZCodeData,
+    setHazardNZS1170p5Data,
+    setUHSNZS1170p5Data,
     soilClass,
-    nzCodeDefaultParams,
+    nzs1170p5DefaultParams,
     selectedSoilClass,
     setSelectedSoilClass,
     selectedZFactor,
     setSelectedZFactor,
-    setIsNZCodeComputed,
+    setIsNZS1170p5Computed,
     computedSoilClass,
     setComputedSoilClass,
     computedZFactor,
@@ -36,8 +36,8 @@ const NZS1170Section = () => {
     hazardCurveComputeClick,
     uhsComputeClick,
     uhsRateTable,
-    setHazardNZCodeToken,
-    setUHSNZCodeToken,
+    setHazardNZS1170p5Token,
+    setUHSNZS1170p5Token,
   } = useContext(GlobalContext);
 
   const [computeButton, setComputeButton] = useState({
@@ -80,15 +80,15 @@ const NZS1170Section = () => {
     Convert them into a proper form to be used for react-select
   */
   useEffect(() => {
-    // only if nzCodeDefaultParams is not an empty array, its default value is []
-    if (nzCodeDefaultParams.length !== 0) {
+    // only if nzs1170p5DefaultParams is not an empty array, its default value is []
+    if (nzs1170p5DefaultParams.length !== 0) {
       /*
         Out of options we have, find the array that matches with default Soil Class
         E.g., if the default Soil Class is D - soft or deep soil,
         defaultSoilClass will be an object that has a value of D
       */
       let defaultSoilClass = localSoilClasses.filter((obj) => {
-        return obj.value === nzCodeDefaultParams["soil_class"];
+        return obj.value === nzs1170p5DefaultParams["soil_class"];
       });
 
       // Set the default soil class to 1. Global, 2. Default, 3. Local - where gets displayed
@@ -102,12 +102,12 @@ const NZS1170Section = () => {
         (React doesn't recommend having a form with controlled and uncontrolled at the same time.)
       */
       if (localZFactor === -1) {
-        setLocalZFactor(Number(nzCodeDefaultParams["z_factor"]));
-        setSelectedZFactor(Number(nzCodeDefaultParams["z_factor"]));
-        setDefaultZFactor(Number(nzCodeDefaultParams["z_factor"]));
+        setLocalZFactor(Number(nzs1170p5DefaultParams["z_factor"]));
+        setSelectedZFactor(Number(nzs1170p5DefaultParams["z_factor"]));
+        setDefaultZFactor(Number(nzs1170p5DefaultParams["z_factor"]));
       }
     }
-  }, [nzCodeDefaultParams]);
+  }, [nzs1170p5DefaultParams]);
 
   const onClickDefaultZFactor = () => {
     setLocalZFactor(defaultZFactor);
@@ -122,7 +122,7 @@ const NZS1170Section = () => {
   /*
    API calls that wil be eventually separated
   */
-  const computeBothNZCode = async () => {
+  const computeBothNZS1170p5Code = async () => {
     const abortController = new AbortController();
     const signal = abortController.signal;
 
@@ -141,25 +141,25 @@ const NZS1170Section = () => {
     setComputedZFactor(selectedZFactor);
     setComputedSoilClass(selectedSoilClass);
 
-    let hazardNZCodeQuery = `?ensemble_id=${selectedEnsemble}&station=${station}&im=${selectedIM}&soil_class=${
+    let hazardNZS1170p5CodeQuery = `?ensemble_id=${selectedEnsemble}&station=${station}&im=${selectedIM}&soil_class=${
       selectedSoilClass["value"]
     }&distance=${Number(
-      nzCodeDefaultParams["distance"]
+      nzs1170p5DefaultParams["distance"]
     )}&z_factor=${selectedZFactor}`;
 
-    let uhsNZCodeQuery = `?ensemble_id=${selectedEnsemble}&station=${station}&exceedances=${exceedances.join(
+    let uhsNZS1170p5CodeQuery = `?ensemble_id=${selectedEnsemble}&station=${station}&exceedances=${exceedances.join(
       ","
     )}&soil_class=${selectedSoilClass["value"]}&distance=${Number(
-      nzCodeDefaultParams["distance"]
+      nzs1170p5DefaultParams["distance"]
     )}&z_factor=${selectedZFactor}`;
 
-    setIsNZCodeComputed(false);
+    setIsNZS1170p5Computed(false);
 
     await Promise.all([
       fetch(
         CONSTANTS.CORE_API_BASE_URL +
-          CONSTANTS.CORE_API_HAZARD_NZ11705_ENDPOINT +
-          hazardNZCodeQuery,
+          CONSTANTS.CORE_API_HAZARD_NZS1170P5_ENDPOINT +
+          hazardNZS1170p5CodeQuery,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -169,8 +169,8 @@ const NZS1170Section = () => {
       ),
       fetch(
         CONSTANTS.CORE_API_BASE_URL +
-          CONSTANTS.CORE_API_HAZARD_UHS_NZ11705_ENDPOINT +
-          uhsNZCodeQuery,
+          CONSTANTS.CORE_API_HAZARD_UHS_NZS1170P5_ENDPOINT +
+          uhsNZS1170p5CodeQuery,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -181,15 +181,17 @@ const NZS1170Section = () => {
     ])
       .then(handleErrors)
       .then(async ([hazard, uhs]) => {
-        const hazardNZCodeData = await hazard.json();
-        const uhsNZCodeData = await uhs.json();
-        setHazardNZCodeData(hazardNZCodeData["nz1170p5_hazard"]["im_values"]);
-        setUHSNZCodeData(uhsNZCodeData["nz_code_uhs_df"]);
+        const hazardNZS1170p5Data = await hazard.json();
+        const uhsNZS1170p5Data = await uhs.json();
+        setHazardNZS1170p5Data(
+          hazardNZS1170p5Data["nz1170p5_hazard"]["im_values"]
+        );
+        setUHSNZS1170p5Data(uhsNZS1170p5Data["nz_code_uhs_df"]);
 
-        setHazardNZCodeToken(hazardNZCodeData["download_token"]);
-        setUHSNZCodeToken(uhsNZCodeData["download_token"]);
+        setHazardNZS1170p5Token(hazardNZS1170p5Data["download_token"]);
+        setUHSNZS1170p5Token(uhsNZS1170p5Data["download_token"]);
 
-        setIsNZCodeComputed(true);
+        setIsNZS1170p5Computed(true);
         setComputeButton({
           text: "Compute",
           isFetching: false,
@@ -206,7 +208,7 @@ const NZS1170Section = () => {
       });
   };
 
-  const computeHazardNZCode = async () => {
+  const computeHazardNZS1170p5Code = async () => {
     const abortController = new AbortController();
     const signal = abortController.signal;
 
@@ -221,18 +223,18 @@ const NZS1170Section = () => {
     setComputedZFactor(selectedZFactor);
     setComputedSoilClass(selectedSoilClass);
 
-    let hazardNZCodeQuery = `?ensemble_id=${selectedEnsemble}&station=${station}&im=${selectedIM}&soil_class=${
+    let hazardNZS1170p5CodeQuery = `?ensemble_id=${selectedEnsemble}&station=${station}&im=${selectedIM}&soil_class=${
       selectedSoilClass["value"]
     }&distance=${Number(
-      nzCodeDefaultParams["distance"]
+      nzs1170p5DefaultParams["distance"]
     )}&z_factor=${selectedZFactor}`;
 
-    setIsNZCodeComputed(false);
+    setIsNZS1170p5Computed(false);
 
     await fetch(
       CONSTANTS.CORE_API_BASE_URL +
-        CONSTANTS.CORE_API_HAZARD_NZ11705_ENDPOINT +
-        hazardNZCodeQuery,
+        CONSTANTS.CORE_API_HAZARD_NZS1170P5_ENDPOINT +
+        hazardNZS1170p5CodeQuery,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -242,12 +244,14 @@ const NZS1170Section = () => {
     )
       .then(handleErrors)
       .then(async (response) => {
-        const hazardNZCodeData = await response.json();
-        setHazardNZCodeData(hazardNZCodeData["nz1170p5_hazard"]["im_values"]);
+        const hazardNZS1170p5Data = await response.json();
+        setHazardNZS1170p5Data(
+          hazardNZS1170p5Data["nz1170p5_hazard"]["im_values"]
+        );
 
-        setHazardNZCodeToken(hazardNZCodeData["download_token"]);
+        setHazardNZS1170p5Token(hazardNZS1170p5Data["download_token"]);
 
-        setIsNZCodeComputed(true);
+        setIsNZS1170p5Computed(true);
         setComputeButton({
           text: "Compute",
           isFetching: false,
@@ -264,7 +268,7 @@ const NZS1170Section = () => {
       });
   };
 
-  const computeUHSNZCode = async () => {
+  const computeUHSNZS1170p5Code = async () => {
     const abortController = new AbortController();
     const signal = abortController.signal;
 
@@ -283,18 +287,18 @@ const NZS1170Section = () => {
       return parseFloat(entry) > 0 ? parseFloat(entry) : 1 / parseFloat(entry);
     });
 
-    let uhsNZCodeQuery = `?ensemble_id=${selectedEnsemble}&station=${station}&exceedances=${exceedances.join(
+    let uhsNZS1170p5CodeQuery = `?ensemble_id=${selectedEnsemble}&station=${station}&exceedances=${exceedances.join(
       ","
     )}&soil_class=${selectedSoilClass["value"]}&distance=${Number(
-      nzCodeDefaultParams["distance"]
+      nzs1170p5DefaultParams["distance"]
     )}&z_factor=${selectedZFactor}`;
 
-    setIsNZCodeComputed(false);
+    setIsNZS1170p5Computed(false);
 
     await fetch(
       CONSTANTS.CORE_API_BASE_URL +
-        CONSTANTS.CORE_API_HAZARD_UHS_NZ11705_ENDPOINT +
-        uhsNZCodeQuery,
+        CONSTANTS.CORE_API_HAZARD_UHS_NZS1170P5_ENDPOINT +
+        uhsNZS1170p5CodeQuery,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -304,12 +308,12 @@ const NZS1170Section = () => {
     )
       .then(handleErrors)
       .then(async (response) => {
-        const uhsNZCodeData = await response.json();
-        setUHSNZCodeData(uhsNZCodeData["nz_code_uhs_df"]);
+        const uhsNZS1170p5Data = await response.json();
+        setUHSNZS1170p5Data(uhsNZS1170p5Data["nz_code_uhs_df"]);
 
-        setUHSNZCodeToken(uhsNZCodeData["download_token"]);
+        setUHSNZS1170p5Token(uhsNZS1170p5Data["download_token"]);
 
-        setIsNZCodeComputed(true);
+        setIsNZS1170p5Computed(true);
         setComputeButton({
           text: "Compute",
           isFetching: false,
@@ -327,20 +331,20 @@ const NZS1170Section = () => {
   };
 
   /*
-    When NZ Code's Compute gets clicked
+    When NZS1170P5 code's Compute gets clicked
     Depends on the situation, it has three different scenarios
-    1. Only Hazard Curve is valid, call Hazard Curve's NZCode to update its NZ Code data
-    2. Only UHS is valid, call UHSs NZCode to update its NZ Code data
-    3. Both Hazad Curve and UHS are valid, call both API to update their NZ Code data.
+    1. Only Hazard Curve is valid, call Hazard Curve's NZS1170P5 to update its NZS1170P5 code data
+    2. Only UHS is valid, call UHSs NZS1170P5 to update its NZS1170P5 code data
+    3. Both Hazad Curve and UHS are valid, call both API to update their NZS1170P5 code data.
   */
 
-  const computeNZCode = () => {
+  const computeNZS11705pCode = () => {
     if (hazardCurveComputeClick === null && uhsComputeClick !== null) {
-      computeUHSNZCode();
+      computeUHSNZS1170p5Code();
     } else if (uhsComputeClick === null && hazardCurveComputeClick !== null) {
-      computeHazardNZCode();
+      computeHazardNZS1170p5Code();
     } else if (uhsComputeClick !== null && hazardCurveComputeClick !== null) {
-      computeBothNZCode();
+      computeBothNZS1170p5Code();
     }
   };
 
@@ -364,8 +368,8 @@ const NZS1170Section = () => {
         <div className="form-group form-section-title">
           NZS1170.5
           <GuideTooltip
-            explanation={CONSTANTS.TOOLTIP_MESSAGES["HAZARD_NZCODE"]}
-            hyperlink={CONSTANTS.TOOLTIP_URL["HAZARD_NZCODE"]}
+            explanation={CONSTANTS.TOOLTIP_MESSAGES["HAZARD_NZS1170P5_CODE"]}
+            hyperlink={CONSTANTS.TOOLTIP_URL["HAZARD_NZS1170P5_CODE"]}
           />
         </div>
 
@@ -451,11 +455,11 @@ const NZS1170Section = () => {
 
         <div className="form-row">
           <button
-            id="compute-nz-code"
+            id="compute-nzs1170p5-code"
             type="button"
             className="btn btn-primary"
             disabled={!computeBtnValidator()}
-            onClick={() => computeNZCode()}
+            onClick={() => computeNZS11705pCode()}
           >
             {computeButton.text}
           </button>
@@ -465,4 +469,4 @@ const NZS1170Section = () => {
   );
 };
 
-export default NZS1170Section;
+export default NZS1170p5Section;

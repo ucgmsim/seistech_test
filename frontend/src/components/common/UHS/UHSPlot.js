@@ -13,7 +13,7 @@ import { ErrorMessage } from "components/common";
 
 import "assets/style/UHSPlot.css";
 
-const UHSPlot = ({ uhsData, nzCodeData, showNZCode = true, extra }) => {
+const UHSPlot = ({ uhsData, nzs1170p5Data, showNZS1170p5 = true, extra }) => {
   if (uhsData !== null && !uhsData.hasOwnProperty("error")) {
     /* 
       if the string(displayRP parameter) contains `.` means it's in float/decimal that needs to display in 4SF for RP, 3SF for rate
@@ -21,11 +21,11 @@ const UHSPlot = ({ uhsData, nzCodeData, showNZCode = true, extra }) => {
       E.g., "14".indexOf(".") returns -1 as it does not have "." in it
 
       displayRP = Selected RPs
-      isNZCode = to check whether its for NZCode or not, default to false.
+      isNZS1170p5 = to check whether its for NZS1170P5Code or not, default to false.
      */
-    const createLabel = (displayRP, isNZCode = false) => {
-      // Depends on the isNZCode status, newLabel starts with NZ Code - or an empty string
-      let newLabel = isNZCode === true ? "" : "NZ Code - ";
+    const createLabel = (displayRP, isNZS1170p5 = false) => {
+      // Depends on the isNZS1170p5 status, newLabel starts with NZS1170p5 Code - or an empty string
+      let newLabel = isNZS1170p5 === true ? "" : "NZS1170p5 Code - ";
 
       if (displayRP.indexOf(".") === -1) {
         newLabel += `RP ${Number(displayRP)} - ${renderSigfigs(
@@ -44,9 +44,9 @@ const UHSPlot = ({ uhsData, nzCodeData, showNZCode = true, extra }) => {
 
       return newLabel;
     };
-    // Create NZ code UHS scatter objs
+    // Create NZS1170p5 Code UHS scatter objs
     const scatterObjs = [];
-    for (let [curExcd, curData] of Object.entries(nzCodeData)) {
+    for (let [curExcd, curData] of Object.entries(nzs1170p5Data)) {
       // The object contains the value of NaN, so we dont plot
       if (Object.values(curData).includes("nan")) {
         continue;
@@ -63,7 +63,7 @@ const UHSPlot = ({ uhsData, nzCodeData, showNZCode = true, extra }) => {
           line: { color: "black" },
           name: createLabel(displayRP, true),
           text: createLabel(displayRP, true),
-          visible: showNZCode,
+          visible: showNZS1170p5,
           hoverinfo: "text",
         });
       }

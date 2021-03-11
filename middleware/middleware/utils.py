@@ -41,7 +41,7 @@ def proxy_to_api(
         An object that stores some headers.
     """
 
-    if action is not None and user_id is not None:
+    if action and user_id:
         db.write_request_details(
             user_id,
             action,

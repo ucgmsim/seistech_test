@@ -21,8 +21,8 @@ const UHSSection = () => {
     hasPermission,
     uhsTableAddRow,
     uhsTableDeleteRow,
-    showUHSNZCode,
-    setShowUHSNZCode,
+    showUHSNZS1170p5,
+    setShowUHSNZS1170p5,
     IMs,
   } = useContext(GlobalContext);
 
@@ -170,10 +170,10 @@ const UHSSection = () => {
       <div className="form-group">
         <input
           type="checkbox"
-          checked={showUHSNZCode}
-          onChange={() => setShowUHSNZCode(!showUHSNZCode)}
+          checked={showUHSNZS1170p5}
+          onChange={() => setShowUHSNZS1170p5(!showUHSNZS1170p5)}
         />
-        <span className="show-nzs">&nbsp;Show NZS1170.5</span>
+        <span className="show-nzs1170p5">&nbsp;Show NZS1170.5</span>
       </div>
     </Fragment>
   );

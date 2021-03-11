@@ -13,8 +13,8 @@ const HazardCurveSection = () => {
     selectedIM,
     setSelectedIM,
     setHazardCurveComputeClick,
-    showHazardNZCode,
-    setShowHazardNZCode,
+    showHazardNZS1170p5,
+    setShowHazardNZS1170p5,
   } = useContext(GlobalContext);
 
   const [
@@ -58,10 +58,10 @@ const HazardCurveSection = () => {
       <div className="form-group">
         <input
           type="checkbox"
-          checked={showHazardNZCode}
-          onChange={() => setShowHazardNZCode(!showHazardNZCode)}
+          checked={showHazardNZS1170p5}
+          onChange={() => setShowHazardNZS1170p5(!showHazardNZS1170p5)}
         />
-        <span className="show-nzs">&nbsp;Show NZS1170.5</span>
+        <span className="show-nzs1170p5">&nbsp;Show NZS1170.5</span>
       </div>
     </Fragment>
   );

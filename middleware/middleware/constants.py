@@ -8,12 +8,12 @@ CORE_API_STATION_ENDPOINT = "/coreAPI/station/get"
 
 # Seismic Hazard
 CORE_API_HAZARD_ENDPOINT = "/coreAPI/hazard/get"
-CORE_API_HAZARD_NZ11705_ENDPOINT = "/coreAPI/hazard/nz1170p5/get"
-CORE_API_HAZARD_NZ11705_SOIL_CLASS_ENDPOINT = "/coreAPI/hazard/nz1170p5/soil_class/get"
-CORE_API_HAZARD_NZ11705_DEFAULT_PARAMS_ENDPOINT = "/coreAPI/hazard/nz1170p5/default/get"
+CORE_API_HAZARD_NZS1170P5_ENDPOINT = "/coreAPI/hazard/nz1170p5/get"
+CORE_API_HAZARD_NZS1170P5_SOIL_CLASS_ENDPOINT = "/coreAPI/hazard/nz1170p5/soil_class/get"
+CORE_API_HAZARD_NZS1170P5_DEFAULT_PARAMS_ENDPOINT = "/coreAPI/hazard/nz1170p5/default/get"
 CORE_API_HAZARD_DISAGG_ENDPOINT = "/coreAPI/disagg/get"
 CORE_API_HAZARD_UHS_ENDPOINT = "/coreAPI/uhs/get"
-CORE_API_HAZARD_UHS_NZ11705_ENDPOINT = "/coreAPI/uhs/nz1170p5/get"
+CORE_API_HAZARD_UHS_NZS1170P5_ENDPOINT = "/coreAPI/uhs/nz1170p5/get"
 
 # Ground Motion Selection
 CORE_API_GMS_ENDPOINT = "/coreAPI/gms/ensemble_gms/get"
