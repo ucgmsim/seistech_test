@@ -66,9 +66,6 @@ export const INTERMEDIATE_API_AUTH0_USER_INFO_ENDPOINT =
 export const INTERMEDIATE_API_AUTH0_USERS_ENDPOINT =
   "intermediateAPI/auth0/users/get";
 
-export const INTERMEDIATE_API_ALL_USERS_PROJECTS_ENDPOINT =
-  "intermediateAPI/users_projects/all/get";
-
 export const INTERMEDIATE_API_USER_PROJECTS_ENDPOINT =
   "intermediateAPI/user/projects/get";
 export const INTERMEDIATE_API_USER_ALLOCATE_PROJECTS_ENDPOINT =
@@ -82,7 +79,9 @@ export const INTERMEDIATE_API_ALL_PERMISSIONS_ENDPOINT =
 export const INTERMEDIATE_API_ALL_USERS_PERMISSIONS_ENDPOINT =
   "intermediateAPI/users_permissions/all/get";
 
-// With updated Project table, new endpoints
+export const INTERMEDIATE_API_ALL_USERS_PROJECTS_ENDPOINT =
+  "intermediateAPI/users_projects/all/get";
+
 export const INTERMEDIATE_API_ALL_PRIVATE_PROJECTS_ENDPOINT =
   "intermediateAPI/project/private/all/get";
 export const INTERMEDIATE_API_ALL_PUBLIC_PROJECTS_ENDPOINT =
