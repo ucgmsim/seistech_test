@@ -174,7 +174,7 @@ const EditUserPermission = () => {
               );
 
               setAssignedProjectData(
-                filterToGetAllowedProjects(userProjectsData)
+                filterToGetAssignedProjects(userProjectsData)
               );
 
               setProjectDataFetching(false);
@@ -360,7 +360,7 @@ const EditUserPermission = () => {
     return filteredProjects;
   };
 
-  const filterToGetAllowedProjects = (userProjects) => {
+  const filterToGetAssignedProjects = (userProjects) => {
     let filteredProjects = {};
 
     for (const [key, value] of Object.entries(userProjects)) {

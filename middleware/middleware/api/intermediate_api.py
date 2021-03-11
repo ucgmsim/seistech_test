@@ -15,8 +15,8 @@ import middleware.constants as const
 def get_auth0_user_key_info():
     """Getting users permission on their first launch
 
-    At the same time, also update the allowed_permission table
-    as we want to keep the allowed_permission table up to date
+    At the same time, also update the users_permissions table
+    as we want to keep the users_permissions table up to date
     for the dashboards.
     """
     token = auth0.get_token_auth_header()
@@ -63,7 +63,7 @@ def get_public_projects():
 @decorators.requires_auth
 def get_user_assigned_projects_from_db():
     """Fetching all the projects that are already assigned to a user
-    Will be used for Allowed Projects dropdown
+    Will be used for Assigned Private Projects dropdown
     """
     user_id = request.args.to_dict()["user_id"]
 
@@ -101,7 +101,7 @@ def remove_projects_from_user():
 @app.route(const.INTERMEDIATE_API_ALL_USERS_PROJECTS_ENDPOINT, methods=["GET"])
 @decorators.requires_auth
 def get_all_users_projects():
-    """Pull every allowed project for all users from Users_Projects table"""
+    """Pull every assigned project for all users from Users_Projects table"""
     return db.get_all_users_projects()
 
 
@@ -115,5 +115,5 @@ def get_all_permissions():
 @app.route(const.INTERMEDIATE_API_ALL_USERS_PERMISSIONS_ENDPOINT, methods=["GET"])
 @decorators.requires_auth
 def get_all_users_permissions():
-    """Pull every allowed access permission for all uesrs from Users_Permissions table"""
+    """Pull every assigned access permission for all uesrs from Users_Permissions table"""
     return db.get_all_users_permissions()

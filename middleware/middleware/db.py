@@ -102,7 +102,7 @@ def _is_user_permission_in_db(user_id, permission):
 
 def _add_user_permission_to_db(user_id, permission):
     """Insert data(page access permission) to the bridging table,
-    allowed_permission
+    users_permissions
 
     Parameters
     ----------
@@ -129,8 +129,8 @@ def _add_user_permission_to_db(user_id, permission):
 
 
 def _add_user_project_to_db(user_id, project_code):
-    """Insert data(allowed projects) to the bridging table,
-    allowed_projects
+    """Insert data(assigned projects) to the bridging table,
+    users_projects
 
     Parameters
     ----------
@@ -157,7 +157,7 @@ def _add_user_project_to_db(user_id, project_code):
 
 def _remove_user_projects_from_db(user_id, project_code):
     """Remove data(project) from the bridging table,
-    allowed_projects
+    users_projects
 
     Parameters
     ----------
@@ -175,13 +175,13 @@ def _remove_user_projects_from_db(user_id, project_code):
             .project_code
         )
 
-        allowed_projects_row = (
+        users_projects_row = (
             models.UserProject.query.filter_by(user_id=user_id)
             .filter_by(project_code=certain_project_id)
             .first()
         )
 
-        db.session.delete(allowed_projects_row)
+        db.session.delete(users_projects_row)
         db.session.commit()
         db.session.flush()
     except:
@@ -189,7 +189,7 @@ def _remove_user_projects_from_db(user_id, project_code):
 
 
 def _remove_user_permission_from_db(user_id, permission):
-    """allowed_permission table is outdated, remove illegal permission to update the dashboard"""
+    """users_permissions table is outdated, remove illegal permission to update the dashboard"""
     illegal_permission_row = (
         models.UserPermission.query.filter_by(user_id=user_id)
         .filter_by(permission_name=permission)
@@ -213,39 +213,39 @@ def get_user_assigned_projects_from_db(user_id):
     -------
     list of Project IDs from DB (Assigned Projects from Users_Projects table)
     """
-    # Get all allowed projects that are assigned to this user.
-    allowed_project_objs = (
+    # Get all projects that are assigned to this user.
+    assigned_project_objs = (
         models.Project.query.join(models.UserProject)
         .filter((models.UserProject.user_id == user_id))
         .all()
     )
 
     return {
-        project.project_code: project.project_name for project in allowed_project_objs
+        project.project_code: project.project_name for project in assigned_project_objs
     }
 
 
 def get_all_users_projects():
-    """Retrieve all allowed projects from Allowed_Project table
+    """Retrieve all assigned projects from Users_Projects table
 
     Returns
     -------
-    allowed_projects_dict: dictionary
+    users_projects_dict: dictionary
         In the form of:
         {
            userA: [ProjectA, ProjectB, ProjectC],
            userB: [ProjectA, ProjectB]
         }
     """
-    # Get all allowed projects from the UserDB
-    allowed_projects = models.UserProject.query.all()
+    # Get all assigned projects from the UserDB
+    users_projects = models.UserProject.query.all()
 
-    allowed_projects_dict = defaultdict(list)
+    users_projects_dict = defaultdict(list)
 
-    for project in allowed_projects:
-        allowed_projects_dict[project.user_id].append(project.project_code)
+    for project in users_projects:
+        users_projects_dict[project.user_id].append(project.project_code)
 
-    return allowed_projects_dict
+    return users_projects_dict
 
 
 def allocate_projects_to_user(user_id, project_list):
@@ -290,13 +290,13 @@ def _get_user_permissions(requested_user_id):
     -------
     A list of permission names
     """
-    all_allowed_permission_for_a_user_list = models.UserPermission.query.filter_by(
+    all_users_permissions_for_a_user_list = models.UserPermission.query.filter_by(
         user_id=requested_user_id
     ).all()
 
     return [
         permission.permission_name
-        for permission in all_allowed_permission_for_a_user_list
+        for permission in all_users_permissions_for_a_user_list
     ]
 
 
@@ -313,15 +313,15 @@ def get_all_users_permissions():
               permission_name: [permission_name]
             }
     """
-    # Get all allowed permission from the DB.
-    all_allowed_permission_list = models.UserPermission.query.all()
+    # Get all assigned permission from the DB.
+    all_users_permissions_list = models.UserPermission.query.all()
 
-    allowed_permission_dict = defaultdict(list)
+    users_permissions_dict = defaultdict(list)
 
-    for permission in all_allowed_permission_list:
-        allowed_permission_dict[permission.user_id].append(permission.permission_name)
+    for permission in all_users_permissions_list:
+        users_permissions_dict[permission.user_id].append(permission.permission_name)
 
-    return allowed_permission_dict
+    return users_permissions_dict
 
 
 def get_all_permissions_for_dashboard():
@@ -331,14 +331,14 @@ def get_all_permissions_for_dashboard():
     -------
     A list of permission names
     """
-    # Get all allowed permission from the DB.
+    # Get all assigned permission from the DB.
     all_permission_list = models.Auth0Permission.query.all()
 
     return [permission.permission_name for permission in all_permission_list]
 
 
 def update_user_permissions(user_id, permission_list):
-    """Update/Insert user's allowed permission to a table,
+    """Update/Insert user's assigned permission to a table,
     Users_Permissions
     
     Parameters
@@ -348,7 +348,7 @@ def update_user_permissions(user_id, permission_list):
     permission_list: list
         List of permission that the user has. (From Auth0, trusted source)
     """
-    # Sync the allowed_permission table to token's permission (trusted source)
+    # Sync the users_permissions table to token's permission (trusted source)
     # first before we check/update
     _sync_permissions(user_id, permission_list)
 
@@ -365,19 +365,19 @@ def update_user_permissions(user_id, permission_list):
 def _sync_permissions(user_id, trusted_permission_list):
     """Syncs the user access permissions with the ones from
     the token (the one source of truth)
-    Filter the allowed_permission table to remove outdated permission
+    Filter the users_permissions table to remove outdated permission
 
-    If the access token has the permission of A, B, C but allowed_permission table
+    If the access token has the permission of A, B, C but users_permissions table
     has the permission of A, B, C, D. Then remove the permission D from the
-    allowed_permission table as the token is the trusted source of permission.
+    users_permissions table as the token is the trusted source of permission.
 
     Parameters
     ----------
     user_id: string
         It will be used to find a list of permission with the function,
-        _get_all_allowed_permission_for_a_user(user_id)
+        _get_all_users_permissions_for_a_user(user_id)
     trusted_permission_list: list
-        The list to be compared with the list of permission from allowed_permission
+        The list to be compared with the list of permission from users_permissions
         table
     """
     # Get a list of permission that are assigned to this user
