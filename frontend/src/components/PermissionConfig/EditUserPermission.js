@@ -349,25 +349,25 @@ const EditUserPermission = () => {
   };
 
   const filterToGetAddableProjects = (allPrivateProjects, userProjects) => {
-    let tempObj = {};
+    let filteredProjects = {};
 
     for (const [key, value] of Object.entries(allPrivateProjects)) {
       if (!Object.keys(userProjects).includes(key)) {
-        tempObj[key] = value;
+        filteredProjects[key] = value;
       }
     }
 
-    return tempObj;
+    return filteredProjects;
   };
 
   const filterToGetAllowedProjects = (userProjects) => {
-    let tempObj = {};
+    let filteredProjects = {};
 
     for (const [key, value] of Object.entries(userProjects)) {
-      tempObj[key] = value;
+      filteredProjects[key] = value;
     }
 
-    return tempObj;
+    return filteredProjects;
   };
 
   return (
