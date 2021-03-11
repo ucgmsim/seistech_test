@@ -7,6 +7,7 @@ import { PLOT_MARGIN, PLOT_CONFIG } from "constants/Constants";
 import "assets/style/GMSPlot.css";
 
 const GMSViewerMwRrupPlot = ({ gmsData, causalParamBounds }) => {
+  console.log("OW IM HERE~~~~ MWRRUP")
   const metadata = gmsData["metadata"];
 
   /* 
