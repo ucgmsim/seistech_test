@@ -220,7 +220,9 @@ def get_user_projects(user_id):
         .all()
     )
 
-    return {project.project_code: project.project_name for project in allowed_project_objs}
+    return {
+        project.project_code: project.project_name for project in allowed_project_objs
+    }
 
 
 def get_all_users_projects():
@@ -244,30 +246,6 @@ def get_all_users_projects():
         allowed_projects_dict[project.user_id].append(project.project_code)
 
     return allowed_projects_dict
-
-
-def get_all_projects_for_dashboard():
-    """Retrieve all the projects we have from Project table
-
-    Then customize the format to send to the frontend for two reasons.
-    1. For Table's header(will display the name of the project)
-    2. We can use this dictionary to filter the table to tell they have permission
-
-    Returns
-    -------
-    dictionary:
-        In the form of
-        {
-            project_code: project_name
-        }
-        project_code = (e.g., nzgl, soffitel,qtwn)
-        project_name = user friendly name for project,
-        e.g. Generic New Zealand Locations
-    """
-    # Get all projects from the UserDB.
-    all_projects = models.Project.query.all()
-
-    return {project.project_code: project.project_name for project in all_projects}
 
 
 def allocate_projects_to_user(user_id, project_list):
