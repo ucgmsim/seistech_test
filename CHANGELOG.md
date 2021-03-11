@@ -1,3 +1,11 @@
+## March 9, 2021
+
+### Restructure the Middleware - ([PR #50](https://github.com/ucgmsim/seistech_psha_frontend/pull/50)
+
+- Remove `server.py`
+- Make more use of `__init__.py`
+- Remove `__init__.py` from `/middleware/api/` directory
+
 ## March 3, 2021
 
 ### Restructure the Intermediate API - ([PR #49](https://github.com/ucgmsim/seistech_psha_frontend/pull/49)

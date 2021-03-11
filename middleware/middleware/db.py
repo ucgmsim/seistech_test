@@ -1,10 +1,7 @@
 from collections import defaultdict
 
-from flask import Response
-
-import middleware.server as server
+from middleware import db
 import middleware.models as models
-import middleware.auth0 as auth0
 
 
 def _is_user_in_db(user_id):
@@ -27,9 +24,9 @@ def _add_user_to_db(user_id):
         selected user's Auth0 id
     """
     if not _is_user_in_db(user_id):
-        server.db.session.add(models.User(user_id))
-        server.db.session.commit()
-        server.db.session.flush()
+        db.session.add(models.User(user_id))
+        db.session.commit()
+        db.session.flush()
     else:
         print(f"User {user_id} already exists")
 
@@ -56,9 +53,9 @@ def _add_project_to_db(project_name):
         E.g., gnzl, mac_raes, nzgs_pga, soffitel_qtwn...
     """
     if not _is_project_in_db(project_name):
-        server.db.session.add(models.Project(project_name))
-        server.db.session.commit()
-        server.db.session.flush()
+        db.session.add(models.Project(project_name))
+        db.session.commit()
+        db.session.flush()
     else:
         print(f"Project {project_name} already exists")
 
@@ -87,9 +84,9 @@ def _add_permission_to_db(permission_name):
         E.g., hazard, hazard:hazard, project...
     """
     if not _is_permission_in_db(permission_name):
-        server.db.session.add(models.Auth0Permission(permission_name))
-        server.db.session.commit()
-        server.db.session.flush()
+        db.session.add(models.Auth0Permission(permission_name))
+        db.session.commit()
+        db.session.flush()
     else:
         print(f"Project {permission_name} already exists")
 
@@ -121,12 +118,12 @@ def _add_user_permission_to_db(user_id, permission):
     if not _is_permission_in_db(permission):
         print(f"{permission} is not in the DB so updating it.")
         _add_permission_to_db(permission)
-        server.db.session.flush()
+        db.session.flush()
 
     if not _is_user_permission_in_db(user_id, permission):
-        server.db.session.add(models.UserPermission(user_id, permission))
-        server.db.session.commit()
-        server.db.session.flush()
+        db.session.add(models.UserPermission(user_id, permission))
+        db.session.commit()
+        db.session.flush()
     else:
         print(f"{user_id} already has a permission with ${permission}")
 
@@ -148,14 +145,14 @@ def _add_user_project_to_db(user_id, project_name):
     if not _is_project_in_db(project_name):
         print(f"{project_name} is not in the DB so updating it.")
         _add_project_to_db(project_name)
-        server.db.session.flush()
+        db.session.flush()
 
     # Find Find a project object with a given project_name to get its project id
     project_obj = models.Project.query.filter_by(project_name=project_name).first()
 
-    server.db.session.add(models.UserProject(user_id, project_obj.project_id))
-    server.db.session.commit()
-    server.db.session.flush()
+    db.session.add(models.UserProject(user_id, project_obj.project_id))
+    db.session.commit()
+    db.session.flush()
 
 
 def _remove_user_projects_from_db(user_id, project_name):
@@ -181,9 +178,9 @@ def _remove_user_projects_from_db(user_id, project_name):
             .first()
         )
 
-        server.db.session.delete(allowed_projects_row)
-        server.db.session.commit()
-        server.db.session.flush()
+        db.session.delete(allowed_projects_row)
+        db.session.commit()
+        db.session.flush()
     except:
         print("Something went wrong.")
 
@@ -196,9 +193,9 @@ def _remove_user_permission_from_db(user_id, permission):
         .first()
     )
 
-    server.db.session.delete(illegal_permission_row)
-    server.db.session.commit()
-    server.db.session.flush()
+    db.session.delete(illegal_permission_row)
+    db.session.commit()
+    db.session.flush()
 
 
 def get_user_projects(user_id):
@@ -294,12 +291,10 @@ def allocate_projects_to_user(user_id, project_list):
     if not _is_user_in_db(user_id):
         print(f"{user_id} is not in the DB so updating it.")
         _add_user_to_db(user_id)
-        server.db.session.flush()
+        db.session.flush()
 
     for project in project_list:
         _add_user_project_to_db(user_id, project["value"])
-
-    return Response(status=200)
 
 
 def remove_projects_from_user(user_id, project_list):
@@ -314,8 +309,6 @@ def remove_projects_from_user(user_id, project_list):
     """
     for project in project_list:
         _remove_user_projects_from_db(user_id, project["value"])
-
-    return Response(status=200)
 
 
 def _get_user_permissions(requested_user_id):
@@ -337,7 +330,7 @@ def _get_user_permissions(requested_user_id):
 
 def get_all_users_permissions():
     """Retrieve permissions for all users
-    Retrieve all permissions from Allowed_Permission table
+    Retrieve all permissions from Users_Permissions table
 
     Returns
     -------
@@ -374,7 +367,7 @@ def get_all_permissions_for_dashboard():
 
 def update_user_permissions(user_id, permission_list):
     """Update/Insert user's allowed permission to a table,
-    Allowed_Permission
+    Users_Permissions
     
     Parameters
     ----------
@@ -391,12 +384,10 @@ def update_user_permissions(user_id, permission_list):
     if not _is_user_in_db(user_id):
         print(f"{user_id} is not in the DB so updating it.")
         _add_user_to_db(user_id)
-        server.db.session.flush()
+        db.session.flush()
 
     for permission in permission_list:
         _add_user_permission_to_db(user_id, permission)
-
-    return Response(status=200)
 
 
 def _sync_permissions(user_id, trusted_permission_list):
@@ -425,12 +416,14 @@ def _sync_permissions(user_id, trusted_permission_list):
             _remove_user_permission_from_db(user_id, permission)
 
 
-def write_request_details(endpoint, query_dict):
+def write_request_details(user_id, action, query_dict):
     """Record users' interaction into the DB
 
     Parameters
     ----------
-    endpoint: string
+    user_id: string
+        Determining the user
+    action: string
         What users chose to do
         E.g., Hazard Curve Compute, UHS Compute, Disaggregation Compute...
     query_dict: dictionary
@@ -438,13 +431,10 @@ def write_request_details(endpoint, query_dict):
         E.g., Attribute -> Station
               value -> CCCC
     """
-    # Finding an user_id from the token
-    user_id = auth0.get_user_id()
-
     # Add to History table
-    new_history = models.History(user_id, endpoint)
-    server.db.session.add(new_history)
-    server.db.session.commit()
+    new_history = models.History(user_id, action)
+    db.session.add(new_history)
+    db.session.commit()
 
     # Get a current user's history id key which would be the last row in a table
     latest_history_id = (
@@ -463,9 +453,9 @@ def write_request_details(endpoint, query_dict):
                 new_history = models.HistoryRequest(
                     latest_history_id, attribute, exceedance
                 )
-                server.db.session.add(new_history)
+                db.session.add(new_history)
         else:
             new_history = models.HistoryRequest(latest_history_id, attribute, value)
-            server.db.session.add(new_history)
+            db.session.add(new_history)
 
-    server.db.session.commit()
+    db.session.commit()
