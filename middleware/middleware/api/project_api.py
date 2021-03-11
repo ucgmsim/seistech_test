@@ -36,8 +36,8 @@ def get_available_project_ids():
     user_id = auth0.get_user_id()
 
     return utils.get_user_projects(
-        db.get_user_projects(user_id),
-        intermediate_api.get_public_projects().get_json(),
+        db.get_user_assigned_projects_from_db(user_id),
+        intermediate_api.get_certain_access_level_projects("public").get_json(),
         _get_all_projects(),
     )
 
