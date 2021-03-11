@@ -82,21 +82,20 @@ def get_user_projects(db_user_projects, public_projects, api_projects):
 
     It finds allowed projects from the DB.
     (Users_Projects that contains user_id and project_name.)
-    We also retr
-    After we get all the existing projects from the Project API.
-    Then we compare [Allowed Projects] and [All the Existing Projects]
-    to find the matching one.
+    Then, with these allowed projects + public projects, check with projects
+    from Project API to check whether they are actually the valid projects
+    (For intsance, the projects with values that we can use)
 
     Parameters
     ----------
     db_user_projects: Dictionary
-        All allowed projects for the specified user
+        All allowed private projects for the specified user
 
     public_projects: Dictionary
         All Public projects from Project table
 
     api_projects: Dictionary
-        All projects from the project API (i.e. no constraints)
+        All projects from the project API
 
     Returns
     -------
