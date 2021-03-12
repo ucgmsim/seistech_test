@@ -166,12 +166,12 @@ const ProjectPermissionDashboard = () => {
       for (const [user_id, available_projects] of Object.entries(
         allAvailableProjects
       )) {
-        for (const project_code in allProjects) {
+        for (const project_id in allProjects) {
           tempObj["auth0-user-id"] = userOption.find(
             (user) => user.value === user_id
           ).label;
 
-          tempObj[project_code] = available_projects.includes(project_code)
+          tempObj[project_id] = available_projects.includes(project_id)
             ? "true"
             : "false";
         }

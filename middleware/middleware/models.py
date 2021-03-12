@@ -8,35 +8,35 @@ class UserProject(db.Model):
     user_id = db.Column(
         "user_id", db.String(100), db.ForeignKey("user.user_id"), primary_key=True,
     )
-    project_code = db.Column(
-        "project_code",
+    project_id = db.Column(
+        "project_id",
         db.String(100),
-        db.ForeignKey("project.project_code"),
+        db.ForeignKey("project.project_id"),
         primary_key=True,
     )
 
     user = db.relationship("User", back_populates="projects")
     project = db.relationship("Project", back_populates="users")
 
-    def __init__(self, user_id, project_code):
+    def __init__(self, user_id, project_id):
         self.user_id = user_id
-        self.project_code = project_code
+        self.project_id = project_id
 
 
 class Project(db.Model):
-    project_code = db.Column(db.String(100), primary_key=True)
+    project_id = db.Column(db.String(100), primary_key=True)
     project_name = db.Column(db.String(100), nullable=False)
     access_level = db.Column(db.String(100))
 
     users = db.relationship("UserProject", back_populates="project")
 
-    def __init__(self, project_code, project_name, access_level="private"):
-        self.project_code = project_code
+    def __init__(self, project_id, project_name, access_level="private"):
+        self.project_id = project_id
         self.project_name = project_name
         self.access_level = access_level
 
     def __repr__(self):
-        return "<Project %r>" % self.project_code
+        return "<Project %r>" % self.project_id
 
 
 class UserPermission(db.Model):
