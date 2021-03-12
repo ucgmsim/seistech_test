@@ -261,33 +261,42 @@ const GMSViewer = () => {
       2. gcim_cdf_y
       3. realisations
       4. selected_GMs
-      5. ks_bounds
+      5. ks_bounds - Checked by second checker above
       6. metadata
       7. im_j
       8. IMs
-      9. IM_j
-      1 ~ 4 are another objects and these should also have
+      9. IM_j - Checked by second checker above
+      1 ~ 3 are another objects and these should also have
       properties of selected IMVectors
       For instance, selected IMVectors are PGA, pSA_0.01 and pSA_0.03
-      Then 1~4 objects must have properties of PGA, pSA_0.01 and pSA_0.03
+      Then 1~3 objects must have properties of PGA, pSA_0.01 and pSA_0.03
     */
     // Compare IMVectors and selected Vectors to see if they are matching
-    if (!validateArrayWithIMVectors(computedGMS["IMs"])) {
+    if (
+      !arrayEquals(
+        computedGMS["IMs"].sort(),
+        GMSIMVector.map((im) => im.value).sort()
+      )
+    ) {
+      console.log("IMs FAILED");
       return false;
     }
 
     // Compare if gcim_cdf_x has the keys of IMs
-    if (!validateArrayWithIMVectors(computedGMS["gcim_cdf_x"])) {
+    if (!validateObjWithArray(computedGMS["gcim_cdf_x"], GMSIMVector)) {
+      console.log("gcim_cdf_x FAILED");
       return false;
     }
 
     // Compare if gcim_cdf_y has the keys of IMs
-    if (!validateArrayWithIMVectors(computedGMS["gcim_cdf_y"])) {
+    if (!validateObjWithArray(computedGMS["gcim_cdf_y"], GMSIMVector)) {
+      console.log("gcim_cdf_y FAILED");
       return false;
     }
 
     // Compare if realisations has the keys of IMs
-    if (!validateArrayWithIMVectors(computedGMS["realisations"])) {
+    if (!validateObjWithArray(computedGMS["realisations"], GMSIMVector)) {
+      console.log("realisations FAILED");
       return false;
     }
 
@@ -299,14 +308,27 @@ const GMSViewer = () => {
       return false;
     }
 
+    // Compare if metadata has the keys of mag, rrup, sf and vs30
+    console.log(`sorted computed gms metadata ${Object.keys(computedGMS["metadata"]).sort()}`)
+    console.log(`sorted label's metadata ${Object.keys(CONSTANTS.GMS_LABELS).sort()}`)
+    if (
+      !arrayEquals(
+        Object.keys(computedGMS["metadata"]).sort(),
+        Object.keys(CONSTANTS.GMS_LABELS).sort()
+      )
+    ) {
+      console.log("metadata failed");
+      return false;
+    }
+
     return true;
   };
 
-  const validateArrayWithIMVectors = (certainPropertyObj) => {
+  const validateObjWithArray = (certainPropertyObj, certainArray) => {
     if (
       !arrayEquals(
         Object.keys(certainPropertyObj).sort(),
-        GMSIMVector.map((im) => im.value).sort()
+        certainArray.map((im) => im.value).sort()
       )
     ) {
       return false;
