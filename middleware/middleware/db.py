@@ -170,9 +170,7 @@ def _remove_user_projects_from_db(user_id, project_id):
     try:
         # Get the project id with the given project name
         certain_project_id = (
-            models.Project.query.filter_by(project_id=project_id)
-            .first()
-            .project_id
+            models.Project.query.filter_by(project_id=project_id).first().project_id
         )
 
         users_projects_row = (

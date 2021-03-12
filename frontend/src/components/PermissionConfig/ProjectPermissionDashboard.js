@@ -201,9 +201,7 @@ const ProjectPermissionDashboard = () => {
             // acces_level is not public, then compare with Users_Projects to check the permission
           } else {
             for (const project_id in allProjects[access_level]) {
-              tempObj[project_id] = user_private_projects.includes(
-                project_id
-              )
+              tempObj[project_id] = user_private_projects.includes(project_id)
                 ? "true"
                 : "false";
             }
