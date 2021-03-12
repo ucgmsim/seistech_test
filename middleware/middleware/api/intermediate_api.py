@@ -49,25 +49,25 @@ def get_auth0_users():
 @decorators.requires_auth
 def get_private_projects():
     """Fetching all private projects from the Project table"""
-    return jsonify(db.get_certain_access_level_projects("private"))
+    return jsonify(db.get_projects("private"))
 
 
 @app.route(const.INTERMEDIATE_API_ALL_PUBLIC_PROJECTS_ENDPOINT, methods=["GET"])
 @decorators.requires_auth
 def get_public_projects():
     """Fetching all public projects from the Project table"""
-    return jsonify(db.get_certain_access_level_projects("public"))
+    return jsonify(db.get_projects("public"))
 
 
 @app.route(const.INTERMEDIATE_API_USER_PROJECTS_ENDPOINT, methods=["GET"])
 @decorators.requires_auth
-def get_user_assigned_projects_from_db():
-    """Fetching all the projects that are already assigned to a user
-    Will be used for Assigned Private Projects dropdown
+def get_user_allowed_projects():
+    """Fetching all the projects that are already allowed to a user
+    Will be used for allowed Private Projects dropdown
     """
     user_id = request.args.to_dict()["user_id"]
 
-    return jsonify(db.get_user_assigned_projects_from_db(user_id))
+    return jsonify(db.get_user_projects(user_id))
 
 
 @app.route(const.INTERMEDIATE_API_USER_ALLOCATE_PROJECTS_ENDPOINT, methods=["POST"])
@@ -102,7 +102,7 @@ def remove_projects_from_user():
 @decorators.requires_auth
 def get_all_users_projects():
     """Pull every assigned project for all users from Users_Projects table"""
-    return db.get_all_users_projects()
+    return db.get_all_users_project_permissions()
 
 
 @app.route(const.INTERMEDIATE_API_ALL_PERMISSIONS_ENDPOINT, methods=["GET"])
