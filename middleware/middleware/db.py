@@ -15,8 +15,8 @@ def _is_user_in_db(user_id):
     return bool(models.User.query.filter_by(user_id=user_id).first())
 
 
-def _add_user_to_db(user_id):
-    """Add an user to the MariaDB if not exist
+def _insert_user(user_id):
+    """Insert an user to the MariaDB if not exist
 
     Parameters
     ----------
@@ -43,8 +43,8 @@ def _is_project_in_db(project_id):
     return bool(models.Project.query.filter_by(project_id=project_id).first())
 
 
-def _add_project_to_db(project_id):
-    """Add a new project to the MariaDB if not exist
+def _insert_project(project_id):
+    """Insert a new project to the MariaDB if not exist
 
     Parameters
     ----------
@@ -74,8 +74,8 @@ def _is_permission_in_db(permission_name):
     )
 
 
-def _add_permission_to_db(permission_name):
-    """Add new permission to the MariaDB if not exist
+def _insert_permission(permission_name):
+    """Insert new permission to the MariaDB if not exist
 
     Parameters
     ----------
@@ -117,7 +117,7 @@ def _add_user_permission_to_db(user_id, permission):
     )
     if not _is_permission_in_db(permission):
         print(f"{permission} is not in the DB so updating it.")
-        _add_permission_to_db(permission)
+        _insert_permission(permission)
         db.session.flush()
 
     if not _is_user_permission_in_db(user_id, permission):
@@ -128,7 +128,7 @@ def _add_user_permission_to_db(user_id, permission):
         print(f"{user_id} already has a permission with ${permission}")
 
 
-def _add_user_project_to_db(user_id, project_id):
+def _insert_project_permission(user_id, project_id):
     """Insert data(assigned projects) to the bridging table,
     users_projects
 
@@ -144,7 +144,7 @@ def _add_user_project_to_db(user_id, project_id):
     print(f"Check whether the project is in the DB, if not, add the project to the DB")
     if not _is_project_in_db(project_id):
         print(f"{project_id} is not in the DB so updating it.")
-        _add_project_to_db(project_id)
+        _insert_project(project_id)
         db.session.flush()
 
     # Find a project object with a given project_id to get its project id
@@ -199,7 +199,7 @@ def _remove_user_permission_from_db(user_id, permission):
     db.session.flush()
 
 
-def get_user_assigned_projects_from_db(user_id):
+def get_user_projects(user_id):
     """Retrieves all projects ids for the specified user from Users_Permissions table
 
     Parameters
@@ -223,8 +223,8 @@ def get_user_assigned_projects_from_db(user_id):
     }
 
 
-def get_all_users_projects():
-    """Retrieve all assigned projects from Users_Projects table
+def get_all_users_project_permissions():
+    """Retrieve all assigned projects from Users_Projects table for each user
 
     Returns
     -------
@@ -260,11 +260,11 @@ def allocate_projects_to_user(user_id, project_list):
     print(f"Check whether the user is in the DB, if not, add the person to the DB")
     if not _is_user_in_db(user_id):
         print(f"{user_id} is not in the DB so updating it.")
-        _add_user_to_db(user_id)
+        _insert_user(user_id)
         db.session.flush()
 
     for project in project_list:
-        _add_user_project_to_db(user_id, project["value"])
+        _insert_project_permission(user_id, project["value"])
 
 
 def remove_projects_from_user(user_id, project_list):
@@ -353,7 +353,7 @@ def update_user_permissions(user_id, permission_list):
     print(f"Check whether the user is in the DB, if not, add the person to the DB")
     if not _is_user_in_db(user_id):
         print(f"{user_id} is not in the DB so updating it.")
-        _add_user_to_db(user_id)
+        _insert_user(user_id)
         db.session.flush()
 
     for permission in permission_list:
@@ -401,7 +401,7 @@ def write_request_details(user_id, action, query_dict):
         E.g., Attribute -> Station
               value -> CCCC
     """
-    # Add to History table
+    # Insert to History table
     new_history = models.History(user_id, action)
     db.session.add(new_history)
     db.session.commit()
@@ -431,7 +431,7 @@ def write_request_details(user_id, action, query_dict):
     db.session.commit()
 
 
-def get_certain_access_level_projects(access_level):
+def get_projects(access_level=None):
     """Get all projects that have a given access_level from the Project table
 
     Parameters
@@ -446,10 +446,10 @@ def get_certain_access_level_projects(access_level):
         project_id: project_name
     }
     """
-    access_level_projects = models.Project.query.filter_by(
-        access_level=access_level
-    ).all()
+    projects = (
+        models.Project.query.filter_by(access_level=access_level).all()
+        if access_level is not None
+        else models.Project.query.all()
+    )
 
-    return {
-        project.project_id: project.project_name for project in access_level_projects
-    }
+    return {project.project_id: project.project_name for project in projects}
