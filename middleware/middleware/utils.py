@@ -108,7 +108,10 @@ def get_user_projects(db_user_projects, public_projects, project_api_projects):
     """
 
     return {
-        api_project_code: api_project_name["name"]
-        for api_project_code, api_project_name in project_api_projects.items()
-        if (api_project_code in db_user_projects or api_project_code in public_projects)
+        project_api_project_id: project_api_project_name["name"]
+        for project_api_project_id, project_api_project_name in project_api_projects.items()
+        if (
+            project_api_project_id in db_user_projects
+            or project_api_project_id in public_projects
+        )
     }
