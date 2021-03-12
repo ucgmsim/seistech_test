@@ -97,11 +97,11 @@ const ProjectPermissionDashboard = () => {
       ];
 
       for (const access_level of Object.keys(allProjects)) {
-        for (const [project_code, project_name] of Object.entries(
+        for (const [project_id, project_name] of Object.entries(
           allProjects[access_level]
         )) {
           tempArray.push({
-            id: project_code,
+            id: project_id,
             label: `${project_name} - ${access_level}`,
           });
         }
@@ -195,14 +195,14 @@ const ProjectPermissionDashboard = () => {
           ).label;
           // If access_level is public, default to true, means have permission to use
           if (access_level === "public") {
-            for (const project_code in allProjects[access_level]) {
-              tempObj[project_code] = "true";
+            for (const project_id in allProjects[access_level]) {
+              tempObj[project_id] = "true";
             }
             // acces_level is not public, then compare with Users_Projects to check the permission
           } else {
-            for (const project_code in allProjects[access_level]) {
-              tempObj[project_code] = user_private_projects.includes(
-                project_code
+            for (const project_id in allProjects[access_level]) {
+              tempObj[project_id] = user_private_projects.includes(
+                project_id
               )
                 ? "true"
                 : "false";

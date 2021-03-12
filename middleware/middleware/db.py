@@ -128,7 +128,7 @@ def _add_user_permission_to_db(user_id, permission):
         print(f"{user_id} already has a permission with ${permission}")
 
 
-def _add_user_project_to_db(user_id, project_code):
+def _add_user_project_to_db(user_id, project_id):
     """Insert data(assigned projects) to the bridging table,
     users_projects
 
@@ -221,7 +221,7 @@ def get_user_assigned_projects_from_db(user_id):
     )
 
     return {
-        project.project_code: project.project_name for project in assigned_project_objs
+        project.project_id: project.project_name for project in assigned_project_objs
     }
 
 
@@ -243,7 +243,7 @@ def get_all_users_projects():
     users_projects_dict = defaultdict(list)
 
     for project in users_projects:
-        users_projects_dict[project.user_id].append(project.project_code)
+        users_projects_dict[project.user_id].append(project.project_id)
 
     return users_projects_dict
 
@@ -445,7 +445,7 @@ def get_certain_access_level_projects(access_level):
     -------
     Dictionary in the form of
     {
-        project_code: project_name
+        project_id: project_name
     }
     """
     access_level_projects = models.Project.query.filter_by(
@@ -453,5 +453,5 @@ def get_certain_access_level_projects(access_level):
     ).all()
 
     return {
-        project.project_code: project.project_name for project in access_level_projects
+        project.project_id: project.project_name for project in access_level_projects
     }
