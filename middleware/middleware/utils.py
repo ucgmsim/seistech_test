@@ -76,7 +76,7 @@ def proxy_to_api(
     return response
 
 
-def get_user_projects(db_user_projects, public_projects, project_api_projects):
+def run_project_crosscheck(db_user_projects, public_projects, project_api_projects):
     """Compute cross-check of assigned projects for the specified user
     with the verified projects(one with values that can be used) from the projectAPI
 
@@ -108,10 +108,7 @@ def get_user_projects(db_user_projects, public_projects, project_api_projects):
     """
 
     return {
-        project_api_project_id: project_api_project_name["name"]
-        for project_api_project_id, project_api_project_name in project_api_projects.items()
-        if (
-            project_api_project_id in db_user_projects
-            or project_api_project_id in public_projects
-        )
+        project_id: project_name["name"]
+        for project_id, project_name in project_api_projects.items()
+        if (project_id in db_user_projects or project_id in public_projects)
     }
