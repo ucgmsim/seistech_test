@@ -103,7 +103,7 @@ def get_user_projects(db_user_projects, public_projects, project_api_projects):
     -------
     dictionary in the form of
     {
-        project_code: project_name
+        project_id: project_name
     }
     """
 

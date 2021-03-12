@@ -31,33 +31,33 @@ def _add_user_to_db(user_id):
         print(f"User {user_id} already exists")
 
 
-def _is_project_in_db(project_code):
+def _is_project_in_db(project_id):
     """To check whether the given project is in the DB
 
     Parameters
     ----------
-    project_code: string
+    project_id: string
         A project code we use internally.
         E.g., gnzl, mac_raes, nzgs_pga, soffitel_qtwn...
     """
-    return bool(models.Project.query.filter_by(project_code=project_code).first())
+    return bool(models.Project.query.filter_by(project_id=project_id).first())
 
 
-def _add_project_to_db(project_code):
+def _add_project_to_db(project_id):
     """Add a new project to the MariaDB if not exist
 
     Parameters
     ----------
-    project_code: string
+    project_id: string
         A project code we use internally.
         E.g., gnzl, mac_raes, nzgs_pga, soffitel_qtwn...
     """
-    if not _is_project_in_db(project_code):
-        db.session.add(models.Project(project_code))
+    if not _is_project_in_db(project_id):
+        db.session.add(models.Project(project_id))
         db.session.commit()
         db.session.flush()
     else:
-        print(f"Project {project_code} already exists")
+        print(f"Project {project_id} already exists")
 
 
 def _is_permission_in_db(permission_name):
@@ -136,26 +136,26 @@ def _add_user_project_to_db(user_id, project_code):
     ----------
     user_id: string
         Selected user's Auth0 id
-    project_code: string
+    project_id: string
         Selected project's project code.
         E.g., gnzl, mac_raes, nzgs_pga, soffitel_qtwn...
     """
 
     print(f"Check whether the project is in the DB, if not, add the project to the DB")
-    if not _is_project_in_db(project_code):
-        print(f"{project_code} is not in the DB so updating it.")
-        _add_project_to_db(project_code)
+    if not _is_project_in_db(project_id):
+        print(f"{project_id} is not in the DB so updating it.")
+        _add_project_to_db(project_id)
         db.session.flush()
 
-    # Find a project object with a given project_code to get its project id
-    project_obj = models.Project.query.filter_by(project_code=project_code).first()
+    # Find a project object with a given project_id to get its project id
+    project_obj = models.Project.query.filter_by(project_id=project_id).first()
 
-    db.session.add(models.UserProject(user_id, project_obj.project_code))
+    db.session.add(models.UserProject(user_id, project_obj.project_id))
     db.session.commit()
     db.session.flush()
 
 
-def _remove_user_projects_from_db(user_id, project_code):
+def _remove_user_projects_from_db(user_id, project_id):
     """Remove data(project) from the bridging table,
     users_projects
 
@@ -163,21 +163,21 @@ def _remove_user_projects_from_db(user_id, project_code):
     ----------
     user_id: string
         Selected user's Auth0 id
-    project_code: string
+    project_id: string
         Selected project's project code.
         E.g., gnzl, mac_raes, nzgs_pga, soffitel_qtwn...
     """
     try:
         # Get the project id with the given project name
         certain_project_id = (
-            models.Project.query.filter_by(project_code=project_code)
+            models.Project.query.filter_by(project_id=project_id)
             .first()
-            .project_code
+            .project_id
         )
 
         users_projects_row = (
             models.UserProject.query.filter_by(user_id=user_id)
-            .filter_by(project_code=certain_project_id)
+            .filter_by(project_id=certain_project_id)
             .first()
         )
 
@@ -257,7 +257,7 @@ def allocate_projects_to_user(user_id, project_list):
         Selected user's Auth0 id
     project_list: array of dictionaries
         List of projects(dictionary) to allocate in the form of
-        [{label: project_name, value: project_code}]
+        [{label: project_name, value: project_id}]
     """
     print(f"Check whether the user is in the DB, if not, add the person to the DB")
     if not _is_user_in_db(user_id):
