@@ -100,7 +100,7 @@ def _is_user_permission_in_db(user_id, permission):
     )
 
 
-def _add_user_permission_to_db(user_id, permission):
+def _insert_access_permission(user_id, permission):
     """Insert data(page access permission) to the bridging table,
     users_permissions
 
@@ -155,7 +155,7 @@ def _insert_project_permission(user_id, project_id):
     db.session.flush()
 
 
-def _remove_user_projects_from_db(user_id, project_id):
+def _remove_user_projects(user_id, project_id):
     """Remove data(project) from the bridging table,
     users_projects
 
@@ -186,7 +186,7 @@ def _remove_user_projects_from_db(user_id, project_id):
         print("Something went wrong.")
 
 
-def _remove_user_permission_from_db(user_id, permission):
+def _remove_user_permission(user_id, permission):
     """users_permissions table is outdated, remove illegal permission to update the dashboard"""
     illegal_permission_row = (
         models.UserPermission.query.filter_by(user_id=user_id)
@@ -278,7 +278,7 @@ def remove_projects_from_user(user_id, project_list):
         List of projects to remove from the DB
     """
     for project in project_list:
-        _remove_user_projects_from_db(user_id, project["value"])
+        _remove_user_projects(user_id, project["value"])
 
 
 def _get_user_permissions(requested_user_id):
@@ -357,7 +357,7 @@ def update_user_permissions(user_id, permission_list):
         db.session.flush()
 
     for permission in permission_list:
-        _add_user_permission_to_db(user_id, permission)
+        _insert_access_permission(user_id, permission)
 
 
 def _sync_permissions(user_id, trusted_permission_list):
@@ -383,7 +383,7 @@ def _sync_permissions(user_id, trusted_permission_list):
 
     for permission in unfiltered_assigned_permission_list:
         if permission not in trusted_permission_list:
-            _remove_user_permission_from_db(user_id, permission)
+            _remove_user_permission(user_id, permission)
 
 
 def write_request_details(user_id, action, query_dict):
