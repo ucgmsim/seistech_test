@@ -36,7 +36,7 @@ def get_available_project_ids():
     user_id = auth0.get_user_id()
 
     return utils.run_project_crosscheck(
-        db.get_user_projects(user_id),
+        db.get_user_project_permission(user_id),
         intermediate_api.get_public_projects().get_json(),
         _get_available_projects(),
     )

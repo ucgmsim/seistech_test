@@ -91,7 +91,7 @@ def _insert_permission(permission_name):
         print(f"Project {permission_name} already exists")
 
 
-def _is_user_permission_in_db(user_id, permission):
+def _is_user_access_permission_in_db(user_id, permission):
     """Check whether there is a row with given user_id & permission"""
     return bool(
         models.UserPermission.query.filter_by(user_id=user_id)
@@ -100,7 +100,7 @@ def _is_user_permission_in_db(user_id, permission):
     )
 
 
-def _insert_access_permission(user_id, permission):
+def _insert_user_access_permission(user_id, permission):
     """Insert data(page access permission) to the bridging table,
     users_permissions
 
@@ -120,7 +120,7 @@ def _insert_access_permission(user_id, permission):
         _insert_permission(permission)
         db.session.flush()
 
-    if not _is_user_permission_in_db(user_id, permission):
+    if not _is_user_access_permission_in_db(user_id, permission):
         db.session.add(models.UserPermission(user_id, permission))
         db.session.commit()
         db.session.flush()
@@ -128,7 +128,45 @@ def _insert_access_permission(user_id, permission):
         print(f"{user_id} already has a permission with ${permission}")
 
 
-def _insert_project_permission(user_id, project_id):
+def update_user_access_permission(user_id, permission_list):
+    """Update/Insert user's assigned permission to a table,
+    Users_Permissions
+
+    Parameters
+    ----------
+    user_id: string
+        Auth0's unique user id
+    permission_list: list
+        List of permission that the user has. (From Auth0, trusted source)
+    """
+    # Sync the users_permissions table to token's permission (trusted source)
+    # first before we check/update
+    _sync_permissions(user_id, permission_list)
+
+    print(f"Check whether the user is in the DB, if not, add the person to the DB")
+    if not _is_user_in_db(user_id):
+        print(f"{user_id} is not in the DB so updating it.")
+        _insert_user(user_id)
+        db.session.flush()
+
+    for permission in permission_list:
+        _insert_user_access_permission(user_id, permission)
+
+
+def _remove_user_access_permission(user_id, permission):
+    """users_permissions table is outdated, remove illegal permission to update the dashboard"""
+    illegal_permission_row = (
+        models.UserPermission.query.filter_by(user_id=user_id)
+        .filter_by(permission_name=permission)
+        .first()
+    )
+
+    db.session.delete(illegal_permission_row)
+    db.session.commit()
+    db.session.flush()
+
+
+def _insert_user_project_permission(user_id, project_id):
     """Insert data(assigned projects) to the bridging table,
     users_projects
 
@@ -155,7 +193,7 @@ def _insert_project_permission(user_id, project_id):
     db.session.flush()
 
 
-def _remove_user_projects(user_id, project_id):
+def _remove_user_project_permission(user_id, project_id):
     """Remove data(project) from the bridging table,
     users_projects
 
@@ -186,20 +224,24 @@ def _remove_user_projects(user_id, project_id):
         print("Something went wrong.")
 
 
-def _remove_user_permission(user_id, permission):
-    """users_permissions table is outdated, remove illegal permission to update the dashboard"""
-    illegal_permission_row = (
-        models.UserPermission.query.filter_by(user_id=user_id)
-        .filter_by(permission_name=permission)
-        .first()
-    )
+def _get_user_access_permission(requested_user_id):
+    """Retrieve all permissions for the specified user
 
-    db.session.delete(illegal_permission_row)
-    db.session.commit()
-    db.session.flush()
+    Returns
+    -------
+    A list of permission names
+    """
+    all_users_permissions_for_a_user_list = models.UserPermission.query.filter_by(
+        user_id=requested_user_id
+    ).all()
+
+    return [
+        permission.permission_name
+        for permission in all_users_permissions_for_a_user_list
+    ]
 
 
-def get_user_projects(user_id):
+def get_user_project_permission(user_id):
     """Retrieves all projects ids for the specified user from Users_Permissions table
 
     Parameters
@@ -246,58 +288,6 @@ def get_all_users_project_permissions():
     return users_projects_dict
 
 
-def allocate_projects_to_user(user_id, project_list):
-    """Give user a permission of the chosen projects
-
-    Parameters
-    ----------
-    user_id: string
-        Selected user's Auth0 id
-    project_list: array of dictionaries
-        List of projects(dictionary) to allocate in the form of
-        [{label: project_name, value: project_id}]
-    """
-    print(f"Check whether the user is in the DB, if not, add the person to the DB")
-    if not _is_user_in_db(user_id):
-        print(f"{user_id} is not in the DB so updating it.")
-        _insert_user(user_id)
-        db.session.flush()
-
-    for project in project_list:
-        _insert_project_permission(user_id, project["value"])
-
-
-def remove_projects_from_user(user_id, project_list):
-    """Remove projects from the chosen user
-
-    Parameters
-    ----------
-    user_id: string
-        Selected user's Auth0 id
-    project_list: array
-        List of projects to remove from the DB
-    """
-    for project in project_list:
-        _remove_user_projects(user_id, project["value"])
-
-
-def _get_user_permissions(requested_user_id):
-    """Retrieve all permissions for the specified user
-
-    Returns
-    -------
-    A list of permission names
-    """
-    all_users_permissions_for_a_user_list = models.UserPermission.query.filter_by(
-        user_id=requested_user_id
-    ).all()
-
-    return [
-        permission.permission_name
-        for permission in all_users_permissions_for_a_user_list
-    ]
-
-
 def get_all_users_permissions():
     """Retrieve permissions for all users
     Retrieve all permissions from Users_Permissions table
@@ -322,6 +312,41 @@ def get_all_users_permissions():
     return users_permissions_dict
 
 
+def allocate_projects_to_user(user_id, project_list):
+    """Give user a permission of the chosen projects
+
+    Parameters
+    ----------
+    user_id: string
+        Selected user's Auth0 id
+    project_list: array of dictionaries
+        List of projects(dictionary) to allocate in the form of
+        [{label: project_name, value: project_id}]
+    """
+    print(f"Check whether the user is in the DB, if not, add the person to the DB")
+    if not _is_user_in_db(user_id):
+        print(f"{user_id} is not in the DB so updating it.")
+        _insert_user(user_id)
+        db.session.flush()
+
+    for project in project_list:
+        _insert_user_project_permission(user_id, project["value"])
+
+
+def remove_projects_from_user(user_id, project_list):
+    """Remove projects from the chosen user
+
+    Parameters
+    ----------
+    user_id: string
+        Selected user's Auth0 id
+    project_list: array
+        List of projects to remove from the DB
+    """
+    for project in project_list:
+        _remove_user_project_permission(user_id, project["value"])
+
+
 def get_all_permissions_for_dashboard():
     """Retrieve all permissions from Auth0_Permission table
 
@@ -333,31 +358,6 @@ def get_all_permissions_for_dashboard():
     all_permission_list = models.Auth0Permission.query.all()
 
     return [permission.permission_name for permission in all_permission_list]
-
-
-def update_user_permissions(user_id, permission_list):
-    """Update/Insert user's assigned permission to a table,
-    Users_Permissions
-    
-    Parameters
-    ----------
-    user_id: string
-        Auth0's unique user id
-    permission_list: list
-        List of permission that the user has. (From Auth0, trusted source)
-    """
-    # Sync the users_permissions table to token's permission (trusted source)
-    # first before we check/update
-    _sync_permissions(user_id, permission_list)
-
-    print(f"Check whether the user is in the DB, if not, add the person to the DB")
-    if not _is_user_in_db(user_id):
-        print(f"{user_id} is not in the DB so updating it.")
-        _insert_user(user_id)
-        db.session.flush()
-
-    for permission in permission_list:
-        _insert_access_permission(user_id, permission)
 
 
 def _sync_permissions(user_id, trusted_permission_list):
@@ -379,11 +379,11 @@ def _sync_permissions(user_id, trusted_permission_list):
         table
     """
     # Get a list of permission that are assigned to this user
-    unfiltered_assigned_permission_list = _get_user_permissions(user_id)
+    unfiltered_assigned_permission_list = _get_user_access_permission(user_id)
 
     for permission in unfiltered_assigned_permission_list:
         if permission not in trusted_permission_list:
-            _remove_user_permission(user_id, permission)
+            _remove_user_access_permission(user_id, permission)
 
 
 def write_request_details(user_id, action, query_dict):

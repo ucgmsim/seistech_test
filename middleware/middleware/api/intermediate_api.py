@@ -26,7 +26,7 @@ def get_auth0_user_key_info():
     permission_list = unverified_claims["permissions"]
 
     # Update the Users_Permissions table
-    db.update_user_permissions(user_id, permission_list)
+    db.update_user_access_permission(user_id, permission_list)
 
     return jsonify({"permissions": permission_list, "id": user_id})
 
@@ -67,7 +67,7 @@ def get_user_allowed_projects():
     """
     user_id = request.args.to_dict()["user_id"]
 
-    return jsonify(db.get_user_projects(user_id))
+    return jsonify(db.get_user_project_permission(user_id))
 
 
 @app.route(const.INTERMEDIATE_API_USER_ALLOCATE_PROJECTS_ENDPOINT, methods=["POST"])
