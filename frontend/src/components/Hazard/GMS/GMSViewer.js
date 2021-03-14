@@ -21,7 +21,7 @@ import {
   ErrorMessage,
 } from "components/common";
 import { handleErrors, GMSIMLabelConverter, arrayEquals } from "utils/Utils";
-import { calculateGMSSpectra } from "utils/calculations/GMSSpectra";
+import { calculateGMSSpectra } from "utils/calculations/CalculateGMSSpectra";
 
 import "assets/style/GMSViewer.css";
 
@@ -55,8 +55,11 @@ const GMSViewer = () => {
 
   const [computedGMS, setComputedGMS] = useState(null);
   const [isValidGMSData, setIsValidGMSData] = useState(false);
-
-  const [spectraData, setSpectraData] = useState([]);
+  // Cloned object for each plots
+  const [clonedGMSCausal, setClonedGMSCausal] = useState({});
+  const [clonedGMSIMDistribution, setClonedGMSIMDistribution] = useState({});
+  const [clonedGMSMwRrup, setClonedGMSMwRrup] = useState({});
+  const [clonedGMSSpectra, setClonedGMSSpectra] = useState([]);
 
   const [specifiedIM, setSpecifiedIM] = useState([]);
   const [localIMVectors, setLocalIMVectors] = useState([]);
@@ -172,6 +175,17 @@ const GMSViewer = () => {
 
               // Validate the computed data to see whether its valid
               setIsValidGMSData(validateComputedGMS(responseData));
+
+              // Deep clone the object for each plots component to avoid any potential change
+              setClonedGMSSpectra(
+                calculateGMSSpectra(JSON.parse(JSON.stringify(responseData)))
+              );
+              setClonedGMSCausal(JSON.parse(JSON.stringify(responseData)));
+              setClonedGMSIMDistribution(
+                JSON.parse(JSON.stringify(responseData))
+              );
+              setClonedGMSMwRrup(JSON.parse(JSON.stringify(responseData)));
+
               setIsLoading(false);
             })
             .catch((error) => {
@@ -234,15 +248,15 @@ const GMSViewer = () => {
   }, [computedGMS]);
 
   // This is the issue that changes IMs and responseData which doesn make sense
-  useEffect(() => {
-    if (computedGMS !== null) {
-      // Deep copy the Object as Javascript, Objects and Arrays are
-      // by reference not value, means if it gets changed inside
-      // calculatedGMSSpectra function, will affect the actual object
-      let clonedComputedGMS = JSON.parse(JSON.stringify(computedGMS));
-      setSpectraData(calculateGMSSpectra(clonedComputedGMS));
-    }
-  }, [computedGMS]);
+  // useEffect(() => {
+  //   if (computedGMS !== null) {
+  //     // Deep copy the Object as Javascript, Objects and Arrays are
+  //     // by reference not value, means if it gets changed inside
+  //     // calculatedGMSSpectra function, will affect the actual object
+  //     let clonedComputedGMS = JSON.parse(JSON.stringify(computedGMS));
+
+  //   }
+  // }, [computedGMS]);
 
   /*
       Lastly, check whether this object has the properties we are looking for
@@ -381,7 +395,7 @@ const GMSViewer = () => {
                       isSearchable={false}
                     />
                     {specifiedIM.value === "spectra" ? (
-                      <GMSViewerSpectra spectraData={spectraData} />
+                      <GMSViewerSpectra clonedGMSSpectra={clonedGMSSpectra} />
                     ) : (
                       <GMSViewerIMDistributions
                         gmsData={computedGMS}
