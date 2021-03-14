@@ -170,6 +170,7 @@ const GMSViewer = () => {
               setSelectedIMVectors(newIMVector);
               setDownloadToken(responseData["download_token"]);
 
+              // Validate the computed data to see whether its valid
               setIsValidGMSData(validateComputedGMS(responseData));
               setIsLoading(false);
             })
@@ -250,11 +251,11 @@ const GMSViewer = () => {
       2. gcim_cdf_y
       3. realisations
       4. selected_GMs
-      5. ks_bounds - Checked by second checker above
+      5. ks_bounds - Checked by second checker
       6. metadata
-      7. im_j
+      7. im_j - Checked by second checker
       8. IMs
-      9. IM_j - Checked by second checker above
+      9. IM_j - Checked by second checker
       1 ~ 3 are another objects and these should also have
       properties of selected IMVectors
       For instance, selected IMVectors are PGA, pSA_0.01 and pSA_0.03
@@ -436,13 +437,11 @@ const GMSViewer = () => {
                         metadata={specifiedMetadata.value}
                         causalParamBounds={causalParamBounds}
                       />
-                    ) : validateBounds() ? (
+                    ) : (
                       <GMSViewerMwRrupPlot
                         gmsData={computedGMS}
                         causalParamBounds={causalParamBounds}
                       />
-                    ) : (
-                      <ErrorMessage />
                     )}
                   </Fragment>
                 ) : (
