@@ -17,7 +17,6 @@ const GMSViewerCausalParameters = ({
   metadata,
   causalParamBounds,
 }) => {
-  console.log("OW IM HERE~~~~ CAUSALPARAM")
   // Sort metadata then duplicate each element
   const xRange = gmsData["metadata"][metadata]
     .sort((a, b) => {
