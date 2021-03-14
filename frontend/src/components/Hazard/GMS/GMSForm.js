@@ -388,7 +388,7 @@ const GMSForm = () => {
       localIMVector.length !== 0 &&
       localNumGMS !== ("" && null) &&
       localReplicates !== ("" && null) &&
-      localWeights !== ("" && null) &&
+      Object.keys(localWeights).length !== 0 &&
       localMwMin !== "" &&
       localMwMax !== "" &&
       localRrupMin !== "" &&
