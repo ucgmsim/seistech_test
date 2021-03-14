@@ -54,6 +54,8 @@ const GMSViewer = () => {
   const [selectedIMVectors, setSelectedIMVectors] = useState([]);
 
   const [computedGMS, setComputedGMS] = useState(null);
+  const [isValidGMSData, setIsValidGMSData] = useState(false);
+
   const [spectraData, setSpectraData] = useState([]);
 
   const [specifiedIM, setSpecifiedIM] = useState([]);
@@ -71,30 +73,7 @@ const GMSViewer = () => {
     errorCode: null,
   });
 
-  let causalParamBounds = {
-    mag: {
-      min: GMSMwMin,
-      max: GMSMwMax,
-    },
-    rrup: {
-      min: GMSRrupMin,
-      max: GMSRrupMax,
-    },
-    vs30: {
-      min: GMSVS30Min,
-      max: GMSVS30Max,
-      vs30: vs30,
-    },
-  };
-
-  let filterParamsObj = {
-    mag_low: Number(GMSMwMin),
-    mag_high: Number(GMSMwMax),
-    rrup_low: Number(GMSRrupMin),
-    rrup_high: Number(GMSRrupMax),
-    vs30_low: Number(GMSVS30Min),
-    vs30_high: Number(GMSVS30Max),
-  };
+  const [causalParamBounds, setCausalParamBounds] = useState({});
 
   /*
     Fetch data from Core API -> compute_ensemble_GMS
@@ -114,8 +93,36 @@ const GMSViewer = () => {
           setIsLoading(true);
           setShowErrorMessage({ isError: false, errorCode: null });
 
+          // Create an IMVectors array with only values
           const newIMVector = GMSIMVector.map((vector) => {
             return vector.value;
+          });
+
+          // Creating an object of Bounds to comput GMS
+          const filterParamsObj = {
+            mag_low: Number(GMSMwMin),
+            mag_high: Number(GMSMwMax),
+            rrup_low: Number(GMSRrupMin),
+            rrup_high: Number(GMSRrupMax),
+            vs30_low: Number(GMSVS30Min),
+            vs30_high: Number(GMSVS30Max),
+          };
+
+          // Min/Max values for one of the plots
+          setCausalParamBounds({
+            mag: {
+              min: GMSMwMin,
+              max: GMSMwMax,
+            },
+            rrup: {
+              min: GMSRrupMin,
+              max: GMSRrupMax,
+            },
+            vs30: {
+              min: GMSVS30Min,
+              max: GMSVS30Max,
+              vs30: vs30,
+            },
           });
 
           let requestOptions = {
@@ -159,11 +166,11 @@ const GMSViewer = () => {
             .then(handleErrors)
             .then(async (response) => {
               const responseData = await response.json();
-              console.log(responseData);
-              console.log(responseData["IMs"]);
               setComputedGMS(responseData);
               setSelectedIMVectors(newIMVector);
               setDownloadToken(responseData["download_token"]);
+
+              setIsValidGMSData(validateComputedGMS(responseData));
               setIsLoading(false);
             })
             .catch((error) => {
@@ -236,25 +243,7 @@ const GMSViewer = () => {
     }
   }, [computedGMS]);
 
-  const validateComputedGMS = () => {
-    // First, check whether we actually got computed GMS
-    if (computedGMS === undefined || computedGMS === null) {
-      return false;
-    }
-
-    // Second, check each values of the object, computedGMS
-    Object.values(computedGMS).forEach((x) => {
-      // Like ks_bound value is Number and is not working with Object.keys(x).length
-      if (!isNaN(x)) {
-        return;
-      }
-      // When an object doesn't have any values
-      if (Object.keys(x).length === 0) {
-        return false;
-      }
-    });
-
-    /*
+  /*
       Lastly, check whether this object has the properties we are looking for
       E.g., gmsData object must have properties of:
       1. gcim_cdf_x
@@ -271,49 +260,77 @@ const GMSViewer = () => {
       For instance, selected IMVectors are PGA, pSA_0.01 and pSA_0.03
       Then 1~3 objects must have properties of PGA, pSA_0.01 and pSA_0.03
     */
+  const validateComputedGMS = (providedGMSData) => {
+    // First, check whether we actually got computed GMS (providedGMSData)
+    if (providedGMSData === undefined || providedGMSData === null) {
+      return false;
+    }
+
+    // Second, check each values of the object, providedGMSData
+    Object.values(providedGMSData).forEach((x) => {
+      // Like ks_bound value is Number and is not working with Object.keys(x).length
+      if (!isNaN(x)) {
+        return;
+      }
+      // When an object doesn't have any values
+      if (Object.keys(x).length === 0) {
+        return false;
+      }
+    });
+
     // Compare IMVectors and selected Vectors to see if they are matching
-    if (
-      !arrayEquals(
-        computedGMS["IMs"].sort(),
-        GMSIMVector.map((im) => im.value).sort()
-      )
-    ) {
+    const sortedSelectedIMVector = GMSIMVector.map((im) => im.value).sort();
+
+    if (!arrayEquals(providedGMSData["IMs"].sort(), sortedSelectedIMVector)) {
       console.log("IMs FAILED");
       return false;
     }
 
     // Compare if gcim_cdf_x has the keys of IMs
-    if (!validateObjWithArray(computedGMS["gcim_cdf_x"], GMSIMVector)) {
+    if (
+      !arrayEquals(
+        Object.keys(providedGMSData["gcim_cdf_x"]).sort(),
+        sortedSelectedIMVector
+      )
+    ) {
       console.log("gcim_cdf_x FAILED");
       return false;
     }
 
     // Compare if gcim_cdf_y has the keys of IMs
-    if (!validateObjWithArray(computedGMS["gcim_cdf_y"], GMSIMVector)) {
+    if (
+      !arrayEquals(
+        Object.keys(providedGMSData["gcim_cdf_y"]).sort(),
+        sortedSelectedIMVector
+      )
+    ) {
       console.log("gcim_cdf_y FAILED");
       return false;
     }
 
     // Compare if realisations has the keys of IMs
-    if (!validateObjWithArray(computedGMS["realisations"], GMSIMVector)) {
+    if (
+      !arrayEquals(
+        Object.keys(providedGMSData["realisations"]).sort(),
+        sortedSelectedIMVector
+      )
+    ) {
       console.log("realisations FAILED");
       return false;
     }
 
     // Compare if selectedGMs has the keys of IMs
-    // computedGMS["selected_GMs"]
+    // providedGMSData["selected_GMs"]
 
     // Compare if IM_j equals to the selected IM Type
-    if (computedGMS["IM_j"] !== GMSIMType) {
+    if (providedGMSData["IM_j"] !== GMSIMType) {
       return false;
     }
 
     // Compare if metadata has the keys of mag, rrup, sf and vs30
-    console.log(`sorted computed gms metadata ${Object.keys(computedGMS["metadata"]).sort()}`)
-    console.log(`sorted label's metadata ${Object.keys(CONSTANTS.GMS_LABELS).sort()}`)
     if (
       !arrayEquals(
-        Object.keys(computedGMS["metadata"]).sort(),
+        Object.keys(providedGMSData["metadata"]).sort(),
         Object.keys(CONSTANTS.GMS_LABELS).sort()
       )
     ) {
@@ -321,18 +338,6 @@ const GMSViewer = () => {
       return false;
     }
 
-    return true;
-  };
-
-  const validateObjWithArray = (certainPropertyObj, certainArray) => {
-    if (
-      !arrayEquals(
-        Object.keys(certainPropertyObj).sort(),
-        certainArray.map((im) => im.value).sort()
-      )
-    ) {
-      return false;
-    }
     return true;
   };
 
@@ -365,7 +370,7 @@ const GMSViewer = () => {
             computedGMS !== null &&
             showErrorMessage.isError === false && (
               <Fragment>
-                {validateComputedGMS() ? (
+                {isValidGMSData ? (
                   <Fragment>
                     <Select
                       id="im-vectors"
@@ -407,7 +412,7 @@ const GMSViewer = () => {
             computedGMS !== null &&
             showErrorMessage.isError === false && (
               <Fragment>
-                {validateComputedGMS() ? (
+                {isValidGMSData ? (
                   <Fragment>
                     <Select
                       id="metadata"
