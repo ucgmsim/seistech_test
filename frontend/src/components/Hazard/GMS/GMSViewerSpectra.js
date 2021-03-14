@@ -6,13 +6,13 @@ import { PLOT_MARGIN, PLOT_CONFIG } from "constants/Constants";
 
 import "assets/style/GMSPlot.css";
 
-const GMSViewerSpectra = ({ spectraData }) => {
-  return spectraData.length === 0 ? (
+const GMSViewerSpectra = ({ clonedGMSSpectra }) => {
+  return clonedGMSSpectra.length === 0 ? (
     <p>something went wrong</p>
   ) : (
     <Plot
       className={"second-plot"}
-      data={spectraData}
+      data={clonedGMSSpectra}
       layout={{
         xaxis: {
           type: "log",
