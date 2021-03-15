@@ -445,15 +445,15 @@ const GMSViewer = () => {
                         );
                       }}
                     />
-                    {specifiedMetadata.value !== "mwrrupplot" ? (
-                      <GMSViewerCausalParameters
-                        gmsData={clonedGMSCausal}
-                        metadata={specifiedMetadata.value}
+                    {specifiedMetadata.value === "mwrrupplot" ? (
+                      <GMSViewerMwRrupPlot
+                        gmsData={clonedGMSMwRrup}
                         causalParamBounds={causalParamBounds}
                       />
                     ) : (
-                      <GMSViewerMwRrupPlot
-                        gmsData={clonedGMSMwRrup}
+                      <GMSViewerCausalParameters
+                        gmsData={clonedGMSCausal}
+                        metadata={specifiedMetadata.value}
                         causalParamBounds={causalParamBounds}
                       />
                     )}
