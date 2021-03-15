@@ -13,7 +13,8 @@ import middleware.api.intermediate_api as intermediate_api
 
 
 # For Project API with ENV
-PROJECT_API_BASE = os.environ["PROJECT_API_BASE"]
+# PROJECT_API_BASE = os.environ["PROJECT_API_BASE"]
+PROJECT_API_BASE = os.environ["PROJECT_API_BASE_MANTLE"]
 
 # Generate the coreAPI token
 PROJECT_API_TOKEN = "Bearer {}".format(

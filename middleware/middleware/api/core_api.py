@@ -11,7 +11,8 @@ import middleware.constants as const
 
 
 # For DEV/EA/PROD with ENV
-CORE_API_BASE = os.environ["CORE_API_BASE"]
+# CORE_API_BASE = os.environ["CORE_API_BASE"]
+CORE_API_BASE = os.environ["CORE_API_BASE_MANTLE"]
 
 # Generate the coreAPI token
 CORE_API_TOKEN = "Bearer {}".format(
