@@ -252,7 +252,9 @@ export const ERROR_SET_DIFF_CODE = {
     ERROR_MSG_TITLE: "Something went wrong.",
     ERROR_MSG_BODY: "Please try again or contact us.",
   },
-
+  /*
+    Fetching error
+  */
   400: {
     ERROR_MSG_HEADER: "400 Error",
     ERROR_MSG_TITLE: "One of the request inputs is not valid.",
@@ -262,6 +264,52 @@ export const ERROR_SET_DIFF_CODE = {
     ERROR_MSG_HEADER: "500 Error",
     ERROR_MSG_TITLE: "Our server is currently having issues.",
     ERROR_MSG_BODY: "Please try again later.",
+  },
+
+  /*
+    GMS Validation error
+  */
+  gms_im: {
+    ERROR_MSG_HEADER: "Ground Motion Selection - IMs",
+    ERROR_MSG_TITLE:
+      "Issue found in the retruend data that properties do not match with selected IM Vector",
+    ERROR_MSG_BODY:
+      "Please try to compute the Ground Motion Selection again or contact us.",
+  },
+  gms_gcim_cdf_x: {
+    ERROR_MSG_HEADER: "Ground Motion Selection - gcim_cdf_x",
+    ERROR_MSG_TITLE:
+      "Issue found in the retruend data that properties do not match with selected IM Vector",
+    ERROR_MSG_BODY:
+      "Please try to compute the Ground Motion Selection again or contact us.",
+  },
+  gms_gcim_cdf_y: {
+    ERROR_MSG_HEADER: "Ground Motion Selection - gcim_cdf_y",
+    ERROR_MSG_TITLE:
+      "Issue found in the retruend data that properties do not match with selected IM Vector",
+    ERROR_MSG_BODY:
+      "Please try to compute the Ground Motion Selection again or contact us.",
+  },
+  gms_realisations: {
+    ERROR_MSG_HEADER: "Ground Motion Selection - realisations",
+    ERROR_MSG_TITLE:
+      "Issue found in the retruend data that properties do not match with selected IM Vector",
+    ERROR_MSG_BODY:
+      "Please try to compute the Ground Motion Selection again or contact us.",
+  },
+  gms_IM_j: {
+    ERROR_MSG_HEADER: "Ground Motion Selection - IM_j",
+    ERROR_MSG_TITLE:
+      "Issue found in the retruend data that properties do not match with selected Conditioning IM Name",
+    ERROR_MSG_BODY:
+      "Please try to compute the Ground Motion Selection again or contact us.",
+  },
+  gms_metadata: {
+    ERROR_MSG_HEADER: "Ground Motion Selection - metadata",
+    ERROR_MSG_TITLE:
+      "Issue found in the retruend data that properties do not match with GMS_LABELS",
+    ERROR_MSG_BODY:
+      "Please try to compute the Ground Motion Selection again or contact us.",
   },
 };
 

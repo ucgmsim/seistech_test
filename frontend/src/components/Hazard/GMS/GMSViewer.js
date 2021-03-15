@@ -247,17 +247,6 @@ const GMSViewer = () => {
     }
   }, [computedGMS]);
 
-  // This is the issue that changes IMs and responseData which doesn make sense
-  // useEffect(() => {
-  //   if (computedGMS !== null) {
-  //     // Deep copy the Object as Javascript, Objects and Arrays are
-  //     // by reference not value, means if it gets changed inside
-  //     // calculatedGMSSpectra function, will affect the actual object
-  //     let clonedComputedGMS = JSON.parse(JSON.stringify(computedGMS));
-
-  //   }
-  // }, [computedGMS]);
-
   /*
       Lastly, check whether this object has the properties we are looking for
       E.g., gmsData object must have properties of:
@@ -297,7 +286,7 @@ const GMSViewer = () => {
     const sortedSelectedIMVector = GMSIMVector.map((im) => im.value).sort();
 
     if (!arrayEquals(providedGMSData["IMs"].sort(), sortedSelectedIMVector)) {
-      console.log("IMs FAILED");
+      setShowErrorMessage({ isError: true, errorCode: "gms_im" });
       return false;
     }
 
@@ -308,7 +297,7 @@ const GMSViewer = () => {
         sortedSelectedIMVector
       )
     ) {
-      console.log("gcim_cdf_x FAILED");
+      setShowErrorMessage({ isError: true, errorCode: "gms_gcim_cdf_x" });
       return false;
     }
 
@@ -319,7 +308,7 @@ const GMSViewer = () => {
         sortedSelectedIMVector
       )
     ) {
-      console.log("gcim_cdf_y FAILED");
+      setShowErrorMessage({ isError: true, errorCode: "gms_gcim_cdf_y" });
       return false;
     }
 
@@ -330,7 +319,7 @@ const GMSViewer = () => {
         sortedSelectedIMVector
       )
     ) {
-      console.log("realisations FAILED");
+      setShowErrorMessage({ isError: true, errorCode: "gms_realisations" });
       return false;
     }
 
@@ -339,6 +328,7 @@ const GMSViewer = () => {
 
     // Compare if IM_j equals to the selected IM Type
     if (providedGMSData["IM_j"] !== GMSIMType) {
+      setShowErrorMessage({ isError: true, errorCode: "gms_IM_j" });
       return false;
     }
 
@@ -349,7 +339,7 @@ const GMSViewer = () => {
         Object.keys(CONSTANTS.GMS_LABELS).sort()
       )
     ) {
-      console.log("metadata failed");
+      setShowErrorMessage({ isError: true, errorCode: "gms_metadata" });
       return false;
     }
 
@@ -404,7 +394,7 @@ const GMSViewer = () => {
                     )}
                   </Fragment>
                 ) : (
-                  <ErrorMessage />
+                  <ErrorMessage errorCode={showErrorMessage.errorCode} />
                 )}
               </Fragment>
             )}
@@ -459,7 +449,7 @@ const GMSViewer = () => {
                     )}
                   </Fragment>
                 ) : (
-                  <ErrorMessage />
+                  <ErrorMessage errorCode={showErrorMessage.errorCode} />
                 )}
               </Fragment>
             )}
