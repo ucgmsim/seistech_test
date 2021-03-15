@@ -9,8 +9,12 @@ CORE_API_STATION_ENDPOINT = "/coreAPI/station/get"
 # Seismic Hazard
 CORE_API_HAZARD_ENDPOINT = "/coreAPI/hazard/get"
 CORE_API_HAZARD_NZS1170P5_ENDPOINT = "/coreAPI/hazard/nz1170p5/get"
-CORE_API_HAZARD_NZS1170P5_SOIL_CLASS_ENDPOINT = "/coreAPI/hazard/nz1170p5/soil_class/get"
-CORE_API_HAZARD_NZS1170P5_DEFAULT_PARAMS_ENDPOINT = "/coreAPI/hazard/nz1170p5/default/get"
+CORE_API_HAZARD_NZS1170P5_SOIL_CLASS_ENDPOINT = (
+    "/coreAPI/hazard/nz1170p5/soil_class/get"
+)
+CORE_API_HAZARD_NZS1170P5_DEFAULT_PARAMS_ENDPOINT = (
+    "/coreAPI/hazard/nz1170p5/default/get"
+)
 CORE_API_HAZARD_DISAGG_ENDPOINT = "/coreAPI/disagg/get"
 CORE_API_HAZARD_UHS_ENDPOINT = "/coreAPI/uhs/get"
 CORE_API_HAZARD_UHS_NZS1170P5_ENDPOINT = "/coreAPI/uhs/nz1170p5/get"
@@ -54,20 +58,23 @@ INTERMEDIATE_API_AUTH0_USER_INFO_ENDPOINT = (
 )
 INTERMEDIATE_API_AUTH0_USERS_ENDPOINT = "/intermediateAPI/auth0/users/get"
 
-INTERMEDIATE_API_ALL_USERS_PROJECTS_ENDPOINT = "/intermediateAPI/users_projects/all/get"
-INTERMEDIATE_API_ALL_PROJECTS_ENDPOINT = "/intermediateAPI/project/all/get"
+INTERMEDIATE_API_ALL_USERS_PROJECTS_ENDPOINT = "/intermediateAPI/users_projects/get/all"
 
-INTERMEDIATE_API_USER_ADDABLE_PROJECTS_ENDPOINT = (
-    "/intermediateAPI/user/addable_projects/get"
-)
 INTERMEDIATE_API_USER_PROJECTS_ENDPOINT = "/intermediateAPI/user/projects/get"
 INTERMEDIATE_API_USER_ALLOCATE_PROJECTS_ENDPOINT = (
     "/intermediateAPI/user/allocate_projects"
 )
 INTERMEDIATE_API_USER_REMOVE_PROJECTS_ENDPOINT = "/intermediateAPI/user/remove_projects"
 
-INTERMEDIATE_API_ALL_PERMISSIONS_ENDPOINT = "/intermediateAPI/permission/all/get"
+INTERMEDIATE_API_ALL_PERMISSIONS_ENDPOINT = "/intermediateAPI/permission/get/all"
 
 INTERMEDIATE_API_ALL_USERS_PERMISSIONS_ENDPOINT = (
-    "/intermediateAPI/users_permissions/all/get"
+    "/intermediateAPI/users_permissions/get/all"
+)
+
+INTERMEDIATE_API_ALL_PRIVATE_PROJECTS_ENDPOINT = (
+    "/intermediateAPI/project/private/get/all"
+)
+INTERMEDIATE_API_ALL_PUBLIC_PROJECTS_ENDPOINT = (
+    "/intermediateAPI/project/public/get/all"
 )

@@ -21,8 +21,8 @@ const EditUserPermission = () => {
   const [allocatedProjectOption, setAllocatedProjectOption] = useState([]);
 
   const [selectedUser, setSelectedUser] = useState([]);
-  const [addableSelectedProject, setAddableSelectedProject] = useState([]);
-  const [allocatedSelectedProject, setAllocatedSelectedProject] = useState([]);
+  const [selectedAddableProject, setSelectedAddableProject] = useState([]);
+  const [selectedAllocatedProject, setSelectedAllocatedProject] = useState([]);
 
   const [userDataFetching, setUserDataFetching] = useState(false);
   const [projectDataFetching, setProjectDataFetching] = useState(false);
@@ -61,7 +61,7 @@ const EditUserPermission = () => {
   useEffect(() => {
     /*
       If fetched addable projects are more than 0, then display them as options.
-      If it is 0, then it is either API is not working or there are no more projects which can be added to this user.
+      If it is 0, then it is either API is not working or there are no more projects which can be removed from this user.
     */
     if (Object.entries(allocatedProjectData).length > 0) {
       setAllocatedProjectOption(createProjectIDArray(allocatedProjectData));
@@ -71,7 +71,7 @@ const EditUserPermission = () => {
   }, [allocatedProjectData]);
 
   /*
-    Fetching user information from the API(Auth0)
+    Fetching user information from the Auth0
   */
   useEffect(() => {
     const abortController = new AbortController();
@@ -117,6 +117,7 @@ const EditUserPermission = () => {
   /*
     Fetching projects that are not allocated to user.
     Addable projects
+    Compare Users_Projects table and Project table with Private Projects
   */
   useEffect(() => {
     const abortController = new AbortController();
@@ -125,8 +126,8 @@ const EditUserPermission = () => {
     const getAddableProjectData = async () => {
       if (selectedUser.length != 0) {
         // Reset the selected option
-        setAddableSelectedProject([]);
-        setAllocatedSelectedProject([]);
+        setSelectedAddableProject([]);
+        setSelectedAllocatedProject([]);
 
         setAddableProjectOption([]);
         setAllocatedProjectOption([]);
@@ -139,8 +140,7 @@ const EditUserPermission = () => {
           await Promise.all([
             fetch(
               CONSTANTS.CORE_API_BASE_URL +
-                CONSTANTS.INTERMEDIATE_API_USER_ADDABLE_PROJECTS_ENDPOINT +
-                `?user_id=${selectedUser.value}`,
+                CONSTANTS.INTERMEDIATE_API_ALL_PRIVATE_PROJECTS_ENDPOINT,
               {
                 headers: {
                   Authorization: `Bearer ${token}`,
@@ -162,12 +162,20 @@ const EditUserPermission = () => {
           ])
 
             .then(handleErrors)
-            .then(async ([addableProjects, allocatedProjects]) => {
-              const addableProjectData = await addableProjects.json();
-              const allocatedProjectData = await allocatedProjects.json();
+            .then(async ([allPrivateProjects, userProjects]) => {
+              const allPrivateProjectsData = await allPrivateProjects.json();
+              const userProjectsData = await userProjects.json();
 
-              setAddableProjectData(addableProjectData);
-              setAllocatedProjectData(allocatedProjectData);
+              setAddableProjectData(
+                filterToGetAddableProjects(
+                  allPrivateProjectsData,
+                  userProjectsData
+                )
+              );
+
+              setAllocatedProjectData(
+                filterToGetAllowedProjects(userProjectsData)
+              );
 
               setProjectDataFetching(false);
             })
@@ -187,6 +195,9 @@ const EditUserPermission = () => {
     };
   }, [selectedUser]);
 
+  /*
+    Allocating selected projectst to the chosen user
+  */
   useEffect(() => {
     const abortController = new AbortController();
     const signal = abortController.signal;
@@ -204,7 +215,7 @@ const EditUserPermission = () => {
             },
             body: JSON.stringify({
               user_info: selectedUser,
-              project_info: addableSelectedProject,
+              project_info: selectedAddableProject,
             }),
             signal: signal,
           };
@@ -236,6 +247,9 @@ const EditUserPermission = () => {
     };
   }, [alocateClick]);
 
+  /*
+    Removing projects from the chosen user
+  */
   useEffect(() => {
     const abortController = new AbortController();
     const signal = abortController.signal;
@@ -253,7 +267,7 @@ const EditUserPermission = () => {
             },
             body: JSON.stringify({
               user_info: selectedUser,
-              project_info: allocatedSelectedProject,
+              project_info: selectedAllocatedProject,
             }),
             signal: signal,
           };
@@ -285,11 +299,11 @@ const EditUserPermission = () => {
     };
   }, [removeClick]);
 
+  // Reset the select field after the modal is closed.
   useEffect(() => {
-    // Reset the select field after the modal is closed.
     if (addModal === false && setAllocateClick !== null) {
-      setAddableSelectedProject([]);
-      setAllocatedSelectedProject([]);
+      setSelectedAddableProject([]);
+      setSelectedAllocatedProject([]);
       setAddableProjectOption([]);
       setAllocatedProjectOption([]);
       setSelectedUser([]);
@@ -298,8 +312,8 @@ const EditUserPermission = () => {
 
   useEffect(() => {
     if (removeModal === false && setRemoveClick !== null) {
-      setAddableSelectedProject([]);
-      setAllocatedSelectedProject([]);
+      setSelectedAddableProject([]);
+      setSelectedAllocatedProject([]);
       setAddableProjectOption([]);
       setAllocatedProjectOption([]);
       setSelectedUser([]);
@@ -311,30 +325,22 @@ const EditUserPermission = () => {
     setAddModal(true);
   };
 
-  const validAllocateSubmitBtn = () => {
-    return (
-      Object.entries(selectedUser).length > 0 &&
-      addableSelectedProject.length > 0
-    );
-  };
-
   const removeProjects = () => {
     setRemoveClick(uuidv4());
     setRemoveModal(true);
   };
 
-  const validRemoveProjectsBtn = () => {
+  const validateBtn = (selectedProjects) => {
     return (
-      Object.entries(selectedUser).length > 0 &&
-      allocatedSelectedProject.length > 0
+      Object.entries(selectedUser).length > 0 && selectedProjects.length > 0
     );
   };
 
-  const addProjectsBodyText = () => {
-    let bodyString = `Successfully added the following projects:\n\n`;
+  const modalBodyText = (action, selectedProjects) => {
+    let bodyString = `Successfully ${action} the following projects:\n\n`;
 
-    for (let i = 0; i < addableSelectedProject.length; i++) {
-      bodyString += `${i + 1}: ${addableSelectedProject[i].label}\n`;
+    for (let i = 0; i < selectedProjects.length; i++) {
+      bodyString += `${i + 1}: ${selectedProjects[i].label}\n`;
     }
 
     bodyString += `\nto ${selectedUser.label}`;
@@ -342,16 +348,26 @@ const EditUserPermission = () => {
     return bodyString;
   };
 
-  const removeProjectsBodyText = () => {
-    let bodyString = `Successfully removed the following projects:\n\n`;
+  const filterToGetAddableProjects = (allPrivateProjects, userProjects) => {
+    let filteredProjects = {};
 
-    for (let i = 0; i < allocatedSelectedProject.length; i++) {
-      bodyString += `${i + 1}: ${allocatedSelectedProject[i].label}\n`;
+    for (const [key, value] of Object.entries(allPrivateProjects)) {
+      if (!Object.keys(userProjects).includes(key)) {
+        filteredProjects[key] = value;
+      }
     }
 
-    bodyString += `\nfrom ${selectedUser.label}`;
+    return filteredProjects;
+  };
 
-    return bodyString;
+  const filterToGetAllowedProjects = (userProjects) => {
+    let filteredProjects = {};
+
+    for (const [key, value] of Object.entries(userProjects)) {
+      filteredProjects[key] = value;
+    }
+
+    return filteredProjects;
   };
 
   return (
@@ -371,12 +387,12 @@ const EditUserPermission = () => {
       </div>
       <div className="row justify-content-lg-center">
         <div className="col-lg-6">
-          <h4>Allocated Projects</h4>
+          <h4>Allowed Private Projects</h4>
           <h5>(Use to remove projects from a user)</h5>
           <Select
-            id="allocated-projects"
-            onChange={(value) => setAllocatedSelectedProject(value || [])}
-            value={allocatedSelectedProject}
+            id="allowed-projects"
+            onChange={(value) => setSelectedAllocatedProject(value || [])}
+            value={selectedAllocatedProject}
             options={allocatedProjectOption}
             isMulti
             closeMenuOnSelect={false}
@@ -391,7 +407,7 @@ const EditUserPermission = () => {
                 : selectedUser.length !== 0 &&
                   projectDataFetching === false &&
                   allocatedProjectOption.length === 0
-                ? "No allocated projects"
+                ? "No allowed projects"
                 : selectedUser.length !== 0 &&
                   allocatedProjectOption.length !== 0
                 ? "Select projects to remove"
@@ -403,19 +419,19 @@ const EditUserPermission = () => {
             type="button"
             className="btn btn-primary mt-4"
             onClick={() => removeProjects()}
-            disabled={!validRemoveProjectsBtn()}
+            disabled={!validateBtn(selectedAllocatedProject)}
           >
             {allocatedStatusText}
           </button>
         </div>
 
         <div className="col-lg-6">
-          <h4>Addable Projects</h4>
+          <h4>Addable Private Projects</h4>
           <h5>(Use to add projects to a user)</h5>
           <Select
             id="available-projects"
-            onChange={(value) => setAddableSelectedProject(value || [])}
-            value={addableSelectedProject}
+            onChange={(value) => setSelectedAddableProject(value || [])}
+            value={selectedAddableProject}
             options={addableProjectOption}
             isMulti
             closeMenuOnSelect={false}
@@ -441,7 +457,7 @@ const EditUserPermission = () => {
             type="button"
             className="btn btn-primary mt-4"
             onClick={() => allocateProjects()}
-            disabled={!validAllocateSubmitBtn()}
+            disabled={!validateBtn(selectedAddableProject)}
           >
             {addableStatusText}
           </button>
@@ -452,14 +468,14 @@ const EditUserPermission = () => {
         modal={addModal}
         setModal={setAddModal}
         title="Successfully added"
-        body={addProjectsBodyText()}
+        body={modalBodyText("added", selectedAddableProject)}
       />
 
       <ModalComponent
         modal={removeModal}
         setModal={setRemoveModal}
         title="Successfully removed"
-        body={removeProjectsBodyText()}
+        body={modalBodyText("removed", selectedAllocatedProject)}
       />
     </div>
   );

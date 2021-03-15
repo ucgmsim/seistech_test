@@ -76,23 +76,28 @@ def proxy_to_api(
     return response
 
 
-def get_user_projects(db_user_projects, api_projects):
+def run_project_crosscheck(db_user_projects, public_projects, project_api_projects):
     """Compute cross-check of allowed projects for the specified user
-    with the available projects from the projectAPI
+    with the verified projects(one with values that can be used) from the projectAPI
 
-    It finds allowed projects from the DB.
-    (Allowed_Project that contains user_id and project_name.)
-    After we get all the existing projects from the Project API.
-    Then we compare [Allowed Projects] and [All the Existing Projects]
-    to find the matching one.
+    It finds allowed private projects from the Users_Permission table.
+    Then check these allowed projects + all public projects(From Project table), 
+    with verified projects from Project API to check 
+    whether they are valid projects to perform/use
+
+    For instance, nzgl is in the DB but some issues found and disabled from ProjectAPI,
+    then the user will not see nzgl until we fix any issues.
 
     Parameters
     ----------
-    db_user_projects: list of dictionaries
-        All allowed projects for the specified user
+    db_user_projects: Dictionary
+        All allowed private projects for the specified user
 
-    api_projects: list of strings
-        All projects from the project API (i.e. no constraints)
+    public_projects: Dictionary
+        All Public projects from the Project table
+
+    project_api_projects: Dictionary
+        All projects from the project API
 
     Returns
     -------
@@ -101,45 +106,9 @@ def get_user_projects(db_user_projects, api_projects):
         project_id: project_name
     }
     """
+
     return {
-        api_project_id: api_project_name["name"]
-        for api_project_id, api_project_name in api_projects.items()
-        if api_project_id in db_user_projects
-    }
-
-
-def get_user_addable_projects(db_user_projects, all_projects):
-    """Compute cross-check of allowed projects for the specified user
-    with the available projects from the projectAPI
-
-    get_allowed_projects is there to do the cross-check for the Project tab,
-    compare DB and Project API to see whether users have permission to access.
-
-    This function, get_addable_projects is for the Edit User feature in the frontend.
-    It compares the projects between the DB and Project API.
-    Then it returns the options that are not intersecting.
-    E.g. DB says A, B, C Projects
-    Project API says A, B, C, D, E
-
-    Then this function will return D, E for the Frontend.
-
-    Parameters
-    ----------
-    db_user_projects: list of dictionaries
-        All allowed projects for the specified user
-
-    all_projects: dictionary
-        All the projects that the Project API returns
-
-    Returns
-    -------
-    dictionary in the form of
-    {
-        project_id: project_name
-    }
-    """
-    return {
-        api_project_id: api_project_name["name"]
-        for api_project_id, api_project_name in all_projects.items()
-        if api_project_id not in db_user_projects
+        project_id: project_name["name"]
+        for project_id, project_name in project_api_projects.items()
+        if (project_id in db_user_projects or project_id in public_projects)
     }

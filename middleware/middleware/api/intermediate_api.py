@@ -4,21 +4,19 @@ from flask import jsonify, request, Response
 from jose import jwt
 
 from middleware import app
-
 import middleware.db as db
 import middleware.utils as utils
 import middleware.auth0 as auth0
 import middleware.decorators as decorators
 import middleware.constants as const
-import middleware.api.project_api as project_api
 
 
 @app.route(const.INTERMEDIATE_API_AUTH0_USER_INFO_ENDPOINT, methods=["GET"])
 def get_auth0_user_key_info():
     """Getting users permission on their first launch
 
-    At the same time, also update the allowed_permission table
-    as we want to keep the allowed_permission table up to date
+    At the same time, also update the users_permissions table
+    as we want to keep the users_permissions table up to date
     for the dashboards.
     """
     token = auth0.get_token_auth_header()
@@ -28,7 +26,7 @@ def get_auth0_user_key_info():
     permission_list = unverified_claims["permissions"]
 
     # Update the Users_Permissions table
-    db.update_user_permissions(user_id, permission_list)
+    db.update_user_access_permission(user_id, permission_list)
 
     return jsonify({"permissions": permission_list, "id": user_id})
 
@@ -38,7 +36,7 @@ def get_auth0_user_key_info():
 @decorators.requires_auth
 def get_auth0_users():
     """Fetching all the existing users from the Auth0
-    Will be used for User dropdown
+    These will be used for User dropdown in the Permission Config
 
     Have to use Auth0 as source for users, to allow
     setting user permission to users that don't
@@ -47,34 +45,29 @@ def get_auth0_users():
     return jsonify(auth0.get_users())
 
 
-@app.route(const.INTERMEDIATE_API_USER_ADDABLE_PROJECTS_ENDPOINT, methods=["GET"])
+@app.route(const.INTERMEDIATE_API_ALL_PRIVATE_PROJECTS_ENDPOINT, methods=["GET"])
 @decorators.requires_auth
-def get_user_addable_projects():
-    """Fetching all the projects that can be allocated to a user
-    Will be used for Addable Projects dropdown
-    """
-    user_id = request.args.to_dict()["user_id"]
+def get_private_projects():
+    """Fetching all private projects from the Project table"""
+    return jsonify(db.get_projects("private"))
 
-    return jsonify(
-        utils.get_user_addable_projects(
-            db.get_user_projects(user_id), project_api.get_all_projects()
-        )
-    )
+
+@app.route(const.INTERMEDIATE_API_ALL_PUBLIC_PROJECTS_ENDPOINT, methods=["GET"])
+@decorators.requires_auth
+def get_public_projects():
+    """Fetching all public projects from the Project table"""
+    return jsonify(db.get_projects("public"))
 
 
 @app.route(const.INTERMEDIATE_API_USER_PROJECTS_ENDPOINT, methods=["GET"])
 @decorators.requires_auth
-def get_user_projects():
-    """Fetching all the projects that are already allocated to a user
-    Will be used for Allowed Projects dropdown
+def get_user_allowed_projects():
+    """Fetching all the projects that are already allowed to a user
+    Will be used for allowed Private Projects dropdown
     """
     user_id = request.args.to_dict()["user_id"]
 
-    return jsonify(
-        utils.get_user_projects(
-            db.get_user_projects(user_id), project_api.get_all_projects(),
-        )
-    )
+    return jsonify(db.get_user_project_permission(user_id))
 
 
 @app.route(const.INTERMEDIATE_API_USER_ALLOCATE_PROJECTS_ENDPOINT, methods=["POST"])
@@ -105,18 +98,11 @@ def remove_projects_from_user():
     return Response(status=200)
 
 
-@app.route(const.INTERMEDIATE_API_ALL_PROJECTS_ENDPOINT, methods=["GET"])
-@decorators.requires_auth
-def get_all_projects():
-    """Get all projects to draw columns in the dashboard"""
-    return db.get_all_projects_for_dashboard(project_api.get_all_projects())
-
-
 @app.route(const.INTERMEDIATE_API_ALL_USERS_PROJECTS_ENDPOINT, methods=["GET"])
 @decorators.requires_auth
 def get_all_users_projects():
-    """Get allowed project permissions for all users"""
-    return db.get_all_users_projects()
+    """Pull every assigned project for all users from Users_Projects table"""
+    return db.get_all_users_project_permissions()
 
 
 @app.route(const.INTERMEDIATE_API_ALL_PERMISSIONS_ENDPOINT, methods=["GET"])
@@ -129,5 +115,5 @@ def get_all_permissions():
 @app.route(const.INTERMEDIATE_API_ALL_USERS_PERMISSIONS_ENDPOINT, methods=["GET"])
 @decorators.requires_auth
 def get_all_users_permissions():
-    """Pull every allowed permission from Allow_Permission table"""
+    """Pull every assigned access permission for all uesrs from Users_Permissions table"""
     return db.get_all_users_permissions()

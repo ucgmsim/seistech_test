@@ -9,6 +9,7 @@ import middleware.utils as utils
 import middleware.decorators as decorators
 import middleware.auth0 as auth0
 import middleware.constants as const
+import middleware.api.intermediate_api as intermediate_api
 
 
 # For Project API with ENV
@@ -23,7 +24,7 @@ PROJECT_API_TOKEN = "Bearer {}".format(
 
 
 # Site Selection
-def get_all_projects():
+def _get_available_projects():
     return utils.proxy_to_api(
         request, "api/project/ids/get", "GET", PROJECT_API_BASE, PROJECT_API_TOKEN
     ).get_json()
@@ -34,7 +35,11 @@ def get_all_projects():
 def get_available_project_ids():
     user_id = auth0.get_user_id()
 
-    return utils.get_user_projects(db.get_user_projects(user_id), get_all_projects())
+    return utils.run_project_crosscheck(
+        db.get_user_project_permission(user_id),
+        intermediate_api.get_public_projects().get_json(),
+        _get_available_projects(),
+    )
 
 
 @app.route(const.PROJECT_API_SITES_ENDPOINT, methods=["GET"])

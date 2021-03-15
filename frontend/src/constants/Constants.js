@@ -66,13 +66,6 @@ export const INTERMEDIATE_API_AUTH0_USER_INFO_ENDPOINT =
 export const INTERMEDIATE_API_AUTH0_USERS_ENDPOINT =
   "intermediateAPI/auth0/users/get";
 
-export const INTERMEDIATE_API_ALL_USERS_PROJECTS_ENDPOINT =
-  "intermediateAPI/users_projects/all/get";
-export const INTERMEDIATE_API_ALL_PROJECTS_ENDPOINT =
-  "intermediateAPI/project/all/get";
-
-export const INTERMEDIATE_API_USER_ADDABLE_PROJECTS_ENDPOINT =
-  "intermediateAPI/user/addable_projects/get";
 export const INTERMEDIATE_API_USER_PROJECTS_ENDPOINT =
   "intermediateAPI/user/projects/get";
 export const INTERMEDIATE_API_USER_ALLOCATE_PROJECTS_ENDPOINT =
@@ -81,15 +74,23 @@ export const INTERMEDIATE_API_USER_REMOVE_PROJECTS_ENDPOINT =
   "intermediateAPI/user/remove_projects";
 
 export const INTERMEDIATE_API_ALL_PERMISSIONS_ENDPOINT =
-  "intermediateAPI/permission/all/get";
+  "intermediateAPI/permission/get/all";
 
 export const INTERMEDIATE_API_ALL_USERS_PERMISSIONS_ENDPOINT =
-  "intermediateAPI/users_permissions/all/get";
+  "intermediateAPI/users_permissions/get/all";
+
+export const INTERMEDIATE_API_ALL_USERS_PROJECTS_ENDPOINT =
+  "intermediateAPI/users_projects/get/all";
+
+export const INTERMEDIATE_API_ALL_PRIVATE_PROJECTS_ENDPOINT =
+  "intermediateAPI/project/private/get/all";
+export const INTERMEDIATE_API_ALL_PUBLIC_PROJECTS_ENDPOINT =
+  "intermediateAPI/project/public/get/all";
 
 /* 
   Words 
-  TODO - See whether it's worth putting as constands due to structure.
-  E.g., We may go up two ~ three directoris to get an access to this Constants.js
+  TODO - See whether it's worth putting as constants due to structure.
+  E.g., We may go up two ~ three directories to get access to this Constants.js
   */
 
 export const HAZARD_ANALYSIS = "Hazard Analysis";
@@ -180,12 +181,12 @@ export const DISAGGREGATION_GUIDE_MSG_TABLE =
   "Please do the following steps to see the contribution table.";
 export const DISAGGREGATION_INSTRUCTION_PLOT = [
   "Choose the Intensity Measure first.",
-  "Update input fields in the 'Disaggregation' section to get probability.",
+  "Update input fields in the 'Disaggregation' section to get a probability.",
   "Click the compute button in the 'Disaggregation' section to see plots.",
 ];
 export const DISAGGREGATION_INSTRUCTION_TABLE = [
   "Choose the Intensity Measure first.",
-  "Update input fields in the 'Disaggregation' section to get probability.",
+  "Update input fields in the 'Disaggregation' section to get a probability.",
   "Click the compute button in the 'Disaggregation' section to see the contribution table.",
 ];
 
@@ -227,19 +228,19 @@ export const PROJECT_SITE_SELECTION_INSTRUCTION = [
 
 export const PROJECT_HAZARD_CURVE_INSTRUCTION = [
   "Choose the Intensity Measure.",
-  "Click the Get buton in the 'Hazard Curve' section to see plots.",
+  "Click the Get button in the 'Hazard Curve' section to see plots.",
 ];
 
 export const PROJECT_DISAGG_INSTRUCTION_PLOT = [
   "Choose the Intensity Measure.",
   "Choose the Return Period",
-  "Click the Get buton in the 'Disaggregation' section to see plots.",
+  "Click the Get button in the 'Disaggregation' section to see plots.",
 ];
 
 export const PROJECT_DISAGG_INSTRUCTION_TABLE = [
   "Choose the Intensity Measure.",
   "Choose the Return Period",
-  "Click the Get buton in the 'Disaggregation' section to see contribution table.",
+  "Click the Get button in the 'Disaggregation' section to see contribution table.",
 ];
 
 /*

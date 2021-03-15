@@ -14,11 +14,28 @@
 - With the validation above, if something goes wrong, we set the `setShowErrorMessage` to show an error message.
   - Currently, this is more developers-friendly
 
+## March 12, 2021
+
+### Update the logic on Middleware(Mainly the IntermediateAPI & DB) - ([PR #53](https://github.com/ucgmsim/seistech_psha_frontend/pull/53)
+
+- Make Intermediate API's endpoints as simple as possible.
+- Transfer some logic from the backend to the frontend.
+
 ## March 11, 2021
 
 ### Replace the frontend's NZCode to NZS1170p5 - ([PR #52](https://github.com/ucgmsim/seistech_psha_frontend/pull/52)
 
 - As we decided to use the term `NZS1170p5`, update old NZCode variables to NZS1170p5.
+
+## March 10, 2021
+
+### Refactor the IntermediateAPI & Frontend - ([PR #51](https://github.com/ucgmsim/seistech_psha_frontend/pull/51)
+
+- Update the Project table to have the following attributes:
+  1. project_id - E.g., gnzl, mac_raes, nzgs_pga...
+  2. project_name - Generic New Zealand Locations, MacRaes Oceania Gold...
+  3. access_level - At the moment, only public or private
+- Refactor the IntermediateAPI & Frontend due to restructuring the DB
 
 ## March 9, 2021
 
