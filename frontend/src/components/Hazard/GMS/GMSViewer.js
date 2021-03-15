@@ -249,17 +249,17 @@ const GMSViewer = () => {
 
   /*
       Lastly, check whether this object has the properties we are looking for
-      E.g., gmsData object must have properties of:
+      E.g., gmsData object must-have properties of:
       1. gcim_cdf_x
       2. gcim_cdf_y
       3. realisations
       4. selected_GMs
-      5. ks_bounds - Checked by second checker
+      5. ks_bounds - Checked by the second checker
       6. metadata
-      7. im_j - Checked by second checker
+      7. im_j - Checked by the second checker
       8. IMs
-      9. IM_j - Checked by second checker
-      1 ~ 3 are another objects and these should also have
+      9. IM_j - Checked by the second checker
+      1 ~ 3 are objects and these should also have
       properties of selected IMVectors
       For instance, selected IMVectors are PGA, pSA_0.01 and pSA_0.03
       Then 1~3 objects must have properties of PGA, pSA_0.01 and pSA_0.03
@@ -344,14 +344,6 @@ const GMSViewer = () => {
     }
 
     return true;
-  };
-
-  const validateBounds = () => {
-    let isValidated = false;
-    Object.values(causalParamBounds).forEach(
-      (x) => (isValidated = x === "" ? false : true)
-    );
-    return isValidated;
   };
 
   return (
