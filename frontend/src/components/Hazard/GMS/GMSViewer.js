@@ -398,7 +398,7 @@ const GMSViewer = () => {
                       <GMSViewerSpectra clonedGMSSpectra={clonedGMSSpectra} />
                     ) : (
                       <GMSViewerIMDistributions
-                        gmsData={computedGMS}
+                        gmsData={clonedGMSIMDistribution}
                         IM={specifiedIM.value}
                       />
                     )}
@@ -447,13 +447,13 @@ const GMSViewer = () => {
                     />
                     {specifiedMetadata.value !== "mwrrupplot" ? (
                       <GMSViewerCausalParameters
-                        gmsData={computedGMS}
+                        gmsData={clonedGMSCausal}
                         metadata={specifiedMetadata.value}
                         causalParamBounds={causalParamBounds}
                       />
                     ) : (
                       <GMSViewerMwRrupPlot
-                        gmsData={computedGMS}
+                        gmsData={clonedGMSMwRrup}
                         causalParamBounds={causalParamBounds}
                       />
                     )}
