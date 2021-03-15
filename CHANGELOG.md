@@ -1,6 +1,6 @@
 ## March 15, 2021
 
-### Fix the GMS plot issue - ([PR #50](https://github.com/ucgmsim/seistech_psha_frontend/pull/50)
+### Fix the GMS plot issue - ([PR #54](https://github.com/ucgmsim/seistech_psha_frontend/pull/54)
 
 - Fix the GMS plot - instead of using the user's IM/Exceedance rate level, use the IM_j value from the API.
 - Remove the `Highlight.js` package as no longer needed.
