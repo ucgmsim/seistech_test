@@ -109,7 +109,7 @@ const GMSForm = () => {
     const signal = abortController.signal;
 
     // To prevent recomputing by itself
-    // This occurs when you comes to GMS tab from Home or Projects tab
+    // This occurs when you come to the GMS tab from the Home or Projects tab
     setGMSComputeClick(null);
 
     const getGMSIMs = async () => {
