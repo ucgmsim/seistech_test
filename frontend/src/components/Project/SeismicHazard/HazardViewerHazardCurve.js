@@ -94,7 +94,9 @@ const HazardViewerHazardCurve = () => {
             .then(async (response) => {
               const responseData = await response.json();
               setHazardData(responseData);
-              setHazardNZS1170p5Data(responseData["nz_code_hazard"].im_values);
+              setHazardNZS1170p5Data(
+                responseData["nzs1170p5_hazard"]["im_values"]
+              );
               setDownloadToken(responseData["download_token"]);
               setShowSpinnerHazard(false);
               setShowPlotHazard(true);
