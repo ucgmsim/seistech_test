@@ -1,3 +1,19 @@
+## March 15, 2021
+
+### Fix the GMS plot issue - ([PR #50](https://github.com/ucgmsim/seistech_psha_frontend/pull/50)
+
+- Fix the GMS plot - instead of using the user's IM/Exceedance rate level, use the IM_j value from the API.
+- Remove the `Highlight.js` package as no longer needed.
+  - It used to be used on the `Profile` page. However, this was a default thing from Auth0 and we will have our version of the `Profile` page later.
+- Implement the computed GMS data validation
+  - Check the IM Type matches with selected Conditioning IM Name
+  - Checking its properties
+    - To see if any of the properties with 0 lengths (It means no values for this property)
+    - To see if some of the properties' properties are matching with the selected IM Vectors
+      (For instance, if selected IM Vectors are PGA, pSA_0.01 and pSA_0.02, then properties of `gcim_cdf_x`, `gcim_cdf_y` and `realisations` should match with the selected IM Vectors))
+- With the validation above, if something goes wrong, we set the `setShowErrorMessage` to show an error message.
+  - Currently, this is more developers-friendly
+
 ## March 11, 2021
 
 ### Replace the frontend's NZCode to NZS1170p5 - ([PR #52](https://github.com/ucgmsim/seistech_psha_frontend/pull/52)
@@ -25,12 +41,6 @@
     - `Users_Permissions` is the bridging table between `User` and `Auth0_Permission`.
     - `Users_Projects` is the bridging table between `User` and `Project`. (It used to be called, `Available_Projects` but saying `Available_Projects` was not 100% clear. So even it's not the best practice of naming the bridging table with connected tables but I thought this was the best we could find for now.)
   - Some of the endpoint's path is also changed.
-
-### Fix the GMS plot issue - ([PR #50](https://github.com/ucgmsim/seistech_psha_frontend/pull/50)
-
-- Fix the GMS plot - instead of using the user's IM/Exceedance rate level, use the IM_j value from the API.
-- Remove the `Highlight.js` package as no longer needed.
-  - It used to be used in the `Profile` page. However, this was a default thing from Auth0 and we will have our version of the `Profile` page later.
 
 ## February 26, 2021
 
