@@ -1,3 +1,12 @@
+## March 16, 2021
+
+### Update to use API servers on the Mantle - ([PR #55](https://github.com/ucgmsim/seistech_psha_frontend/pull/55)
+
+- Modify the frontend + Middleware server to accept updated parameters name from the Mantle.
+  - Planning to transfer servers from rcc to the Mantle to host API servers.
+    - Project API
+    - Core API
+
 ## March 15, 2021
 
 ### Fix the GMS plot issue - ([PR #54](https://github.com/ucgmsim/seistech_psha_frontend/pull/54)
