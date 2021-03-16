@@ -152,7 +152,9 @@ const HazardViewerUHS = () => {
             .then(handleErrors)
             .then(async (nzs1170p5CodeResponse) => {
               const nzs1170p5CodeDataResponse = await nzs1170p5CodeResponse.json();
-              setUHSNZS1170p5Data(nzs1170p5CodeDataResponse["nz_code_uhs_df"]);
+              setUHSNZS1170p5Data(
+                nzs1170p5CodeDataResponse["nzs1170p5_uhs_df"]
+              );
               setUHSNZS1170p5Token(nzs1170p5CodeDataResponse["download_token"]);
               setShowSpinnerUHS(false);
               setShowPlotUHS(true);

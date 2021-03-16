@@ -184,9 +184,9 @@ const NZS1170p5Section = () => {
         const hazardNZS1170p5Data = await hazard.json();
         const uhsNZS1170p5Data = await uhs.json();
         setHazardNZS1170p5Data(
-          hazardNZS1170p5Data["nz1170p5_hazard"]["im_values"]
+          hazardNZS1170p5Data["nzs1170p5_hazard"]["im_values"]
         );
-        setUHSNZS1170p5Data(uhsNZS1170p5Data["nz_code_uhs_df"]);
+        setUHSNZS1170p5Data(uhsNZS1170p5Data["nzs1170p5_uhs_df"]);
 
         setHazardNZS1170p5Token(hazardNZS1170p5Data["download_token"]);
         setUHSNZS1170p5Token(uhsNZS1170p5Data["download_token"]);
@@ -246,7 +246,7 @@ const NZS1170p5Section = () => {
       .then(async (response) => {
         const hazardNZS1170p5Data = await response.json();
         setHazardNZS1170p5Data(
-          hazardNZS1170p5Data["nz1170p5_hazard"]["im_values"]
+          hazardNZS1170p5Data["nzs1170p5_hazard"]["im_values"]
         );
 
         setHazardNZS1170p5Token(hazardNZS1170p5Data["download_token"]);
@@ -309,7 +309,7 @@ const NZS1170p5Section = () => {
       .then(handleErrors)
       .then(async (response) => {
         const uhsNZS1170p5Data = await response.json();
-        setUHSNZS1170p5Data(uhsNZS1170p5Data["nz_code_uhs_df"]);
+        setUHSNZS1170p5Data(uhsNZS1170p5Data["nzs1170p5_uhs_df"]);
 
         setUHSNZS1170p5Token(uhsNZS1170p5Data["download_token"]);
 
