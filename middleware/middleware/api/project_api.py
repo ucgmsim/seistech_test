@@ -27,7 +27,7 @@ PROJECT_API_TOKEN = "Bearer {}".format(
 # Site Selection
 def _get_available_projects():
     return utils.proxy_to_api(
-        request, "api/project/ids/get", "GET", PROJECT_API_BASE, PROJECT_API_TOKEN
+        request, const.PROJECT_IDS_ENDPOINT, "GET", PROJECT_API_BASE, PROJECT_API_TOKEN
     ).get_json()
 
 
@@ -47,7 +47,11 @@ def get_available_project_ids():
 @decorators.requires_auth
 def get_project_sites():
     return utils.proxy_to_api(
-        request, "api/project/sites/get", "GET", PROJECT_API_BASE, PROJECT_API_TOKEN
+        request,
+        const.PROJECT_SITES_ENDPOINT,
+        "GET",
+        PROJECT_API_BASE,
+        PROJECT_API_TOKEN,
     )
 
 
@@ -55,7 +59,7 @@ def get_project_sites():
 @decorators.requires_auth
 def get_project_ims():
     return utils.proxy_to_api(
-        request, "api/project/ims/get", "GET", PROJECT_API_BASE, PROJECT_API_TOKEN
+        request, const.PROJECT_IMS_ENDPOINT, "GET", PROJECT_API_BASE, PROJECT_API_TOKEN
     )
 
 
@@ -64,7 +68,7 @@ def get_project_ims():
 def get_project_maps():
     return utils.proxy_to_api(
         request,
-        "api/project/maps/get",
+        const.PROJECT_CONTEXT_MAPS_ENDPOINT,
         "GET",
         PROJECT_API_BASE,
         PROJECT_API_TOKEN,
@@ -79,7 +83,7 @@ def get_project_maps():
 def get_project_hazard():
     return utils.proxy_to_api(
         request,
-        "api/project/hazard/get",
+        const.PROJECT_HAZARD_ENDPOINT,
         "GET",
         PROJECT_API_BASE,
         PROJECT_API_TOKEN,
@@ -93,7 +97,7 @@ def get_project_hazard():
 def get_project_disagg():
     return utils.proxy_to_api(
         request,
-        "api/project/disagg/get",
+        const.PROJECT_DISAGG_ENDPOINT,
         "GET",
         PROJECT_API_BASE,
         PROJECT_API_TOKEN,
@@ -107,7 +111,7 @@ def get_project_disagg():
 def get_project_disagg_rps():
     return utils.proxy_to_api(
         request,
-        "api/project/disagg/rps/get",
+        const.PROJECT_DISAGG_RPS_ENDPOINT,
         "GET",
         PROJECT_API_BASE,
         PROJECT_API_TOKEN,
@@ -118,7 +122,11 @@ def get_project_disagg_rps():
 @decorators.requires_auth
 def get_project_uhs_rps():
     return utils.proxy_to_api(
-        request, "api/project/uhs/rps/get", "GET", PROJECT_API_BASE, PROJECT_API_TOKEN
+        request,
+        const.PROJECT_UHS_RPS_ENDPOINT,
+        "GET",
+        PROJECT_API_BASE,
+        PROJECT_API_TOKEN,
     )
 
 
@@ -127,7 +135,7 @@ def get_project_uhs_rps():
 def get_project_uhs():
     return utils.proxy_to_api(
         request,
-        "api/project/uhs/get",
+        const.PROJECT_UHS_ENDPOINT,
         "GET",
         PROJECT_API_BASE,
         PROJECT_API_TOKEN,
@@ -142,7 +150,7 @@ def get_project_uhs():
 def project_api_download_hazard():
     project_response = utils.proxy_to_api(
         request,
-        "api/project/hazard/download",
+        const.PROJECT_HAZARD_DOWNLOAD_ENDPOINT,
         "GET",
         PROJECT_API_BASE,
         PROJECT_API_TOKEN,
@@ -160,7 +168,7 @@ def project_api_download_hazard():
 def project_api_download_disagg():
     project_response = utils.proxy_to_api(
         request,
-        "api/project/disagg/download",
+        const.PROJECT_DISAGG_DOWNLOAD_ENDPOINT,
         "GET",
         PROJECT_API_BASE,
         PROJECT_API_TOKEN,
@@ -178,7 +186,7 @@ def project_api_download_disagg():
 def project_api_download_uhs():
     project_response = utils.proxy_to_api(
         request,
-        "api/project/uhs/download",
+        const.PROJECT_UHS_DOWNLOAD_ENDPOINT,
         "GET",
         PROJECT_API_BASE,
         PROJECT_API_TOKEN,
@@ -198,7 +206,7 @@ def project_api_download_uhs():
 def project_api_download_gms():
     project_response = utils.proxy_to_api(
         request,
-        "api/gms/ensemble_gms/download",
+        const.PROJECT_GMS_DOWNLOAD_ENDPOINT,
         "GET",
         PROJECT_API_BASE,
         PROJECT_API_TOKEN,
