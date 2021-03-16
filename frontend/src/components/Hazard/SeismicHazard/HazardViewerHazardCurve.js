@@ -129,7 +129,7 @@ const HazardViewerHazardCurve = () => {
             .then(async (response) => {
               const nzs1170p5CodeDataResponse = await response.json();
               setHazardNZS1170p5Data(
-                nzs1170p5CodeDataResponse["nz1170p5_hazard"]["im_values"]
+                nzs1170p5CodeDataResponse["nzs1170p5_hazard"]["im_values"]
               );
               setHazardNZS1170p5Token(
                 nzs1170p5CodeDataResponse["download_token"]
@@ -248,7 +248,7 @@ const HazardViewerHazardCurve = () => {
         downloadURL={CONSTANTS.CORE_API_HAZARD_CURVE_DOWNLOAD_ENDPOINT}
         downloadToken={{
           hazard_token: downloadHazardToken,
-          nz1170p5_hazard_token: hazardNZS1170p5Token,
+          nzs1170p5_hazard_token: hazardNZS1170p5Token,
         }}
         extraParams={{
           ensemble_id: selectedEnsemble,
