@@ -119,7 +119,7 @@ const HazardViewerUHS = () => {
                 filterUHSData(responseData["uhs_df"], getSelectedRP())
               );
               setUHSNZS1170p5Data(
-                filterUHSData(responseData["nz_code_uhs_df"], getSelectedRP())
+                filterUHSData(responseData["nzs1170p5_uhs_df"], getSelectedRP())
               );
               setDownloadToken(responseData["download_token"]);
               setShowSpinnerUHS(false);
