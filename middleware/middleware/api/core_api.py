@@ -27,7 +27,7 @@ CORE_API_TOKEN = "Bearer {}".format(
 @decorators.requires_auth
 def get_ensemble_ids():
     return utils.proxy_to_api(
-        request, "api/gm_data/ensemble/ids/get", "GET", CORE_API_BASE, CORE_API_TOKEN
+        request, const.ENSEMBLE_IDS_ENDPOINT, "GET", CORE_API_BASE, CORE_API_TOKEN
     )
 
 
@@ -35,7 +35,7 @@ def get_ensemble_ids():
 @decorators.requires_auth
 def get_im_ids():
     return utils.proxy_to_api(
-        request, "api/gm_data/ensemble/ims/get", "GET", CORE_API_BASE, CORE_API_TOKEN
+        request, const.ENSEMBLE_IMS_ENDPOINT, "GET", CORE_API_BASE, CORE_API_TOKEN
     )
 
 
@@ -43,7 +43,7 @@ def get_im_ids():
 @decorators.requires_auth
 def get_context_map():
     return utils.proxy_to_api(
-        request, "api/site/context/map/download", "GET", CORE_API_BASE, CORE_API_TOKEN
+        request, const.SITE_CONTEXT_MAP_ENDPOINT, "GET", CORE_API_BASE, CORE_API_TOKEN
     )
 
 
@@ -51,7 +51,7 @@ def get_context_map():
 @decorators.requires_auth
 def get_vs30_map():
     return utils.proxy_to_api(
-        request, "api/site/vs30/map/download", "GET", CORE_API_BASE, CORE_API_TOKEN
+        request, const.SITE_VS30_MAP_ENDPOINT, "GET", CORE_API_BASE, CORE_API_TOKEN
     )
 
 
@@ -60,7 +60,7 @@ def get_vs30_map():
 def get_station():
     return utils.proxy_to_api(
         request,
-        "api/site/station/location/get",
+        const.SITE_LOCATION_ENDPOINT,
         "GET",
         CORE_API_BASE,
         CORE_API_TOKEN,
@@ -76,7 +76,7 @@ def get_hazard():
     if auth0.requires_permission("hazard:hazard"):
         return utils.proxy_to_api(
             request,
-            "api/hazard/ensemble_hazard/get",
+            const.ENSEMBLE_HAZARD_ENDPOINT,
             "GET",
             CORE_API_BASE,
             CORE_API_TOKEN,
@@ -98,7 +98,7 @@ def get_hazard_nzs1170p5():
     if auth0.requires_permission("hazard:hazard"):
         return utils.proxy_to_api(
             request,
-            "api/hazard/nz1170p5/get",
+            const.NZS1170p5_HAZARD_ENDPOINT,
             "GET",
             CORE_API_BASE,
             CORE_API_TOKEN,
@@ -119,11 +119,7 @@ def get_hazard_nzs1170p5():
 def get_nzs1170p5_soil_class():
     if auth0.requires_permission("hazard:hazard"):
         return utils.proxy_to_api(
-            request,
-            "api/hazard/nz1170p5/soil_class",
-            "GET",
-            CORE_API_BASE,
-            CORE_API_TOKEN,
+            request, const.NZS1170p5_SOIL_CLASS, "GET", CORE_API_BASE, CORE_API_TOKEN,
         )
     raise auth0.AuthError(
         {
@@ -140,7 +136,7 @@ def get_nzs1170p5_default_params():
     if auth0.requires_permission("hazard:hazard"):
         return utils.proxy_to_api(
             request,
-            "api/hazard/nz1170p5/default_params",
+            const.NZS1170p5_DEFAULT_PARAMS_ENDPOINT,
             "GET",
             CORE_API_BASE,
             CORE_API_TOKEN,
@@ -160,7 +156,7 @@ def get_disagg():
     if auth0.requires_permission("hazard:disagg"):
         return utils.proxy_to_api(
             request,
-            "api/disagg/ensemble_disagg/get",
+            const.ENSEMBLE_DISAGG_ENDPOINT,
             "GET",
             CORE_API_BASE,
             CORE_API_TOKEN,
@@ -182,7 +178,7 @@ def get_uhs():
     if auth0.requires_permission("hazard:uhs"):
         return utils.proxy_to_api(
             request,
-            "api/uhs/ensemble_uhs/get",
+            const.ENSEMBLE_UHS_ENDPOINT,
             "GET",
             CORE_API_BASE,
             CORE_API_TOKEN,
@@ -204,7 +200,7 @@ def get_uhs_nzs1170p5():
     if auth0.requires_permission("hazard:hazard"):
         return utils.proxy_to_api(
             request,
-            "api/uhs/nz1170p5/get",
+            const.NZS1170p5_UHS_ENDPOINT,
             "GET",
             CORE_API_BASE,
             CORE_API_TOKEN,
@@ -226,7 +222,7 @@ def get_uhs_nzs1170p5():
 def compute_ensemble_gms():
     return utils.proxy_to_api(
         request,
-        "api/gms/ensemble_gms/compute",
+        const.ENSEMBLE_GMS_COMPUTE_ENDPOINT,
         "POST",
         CORE_API_BASE,
         CORE_API_TOKEN,
@@ -240,7 +236,7 @@ def compute_ensemble_gms():
 def get_default_im_weights():
     return utils.proxy_to_api(
         request,
-        "api/gms/ensemble_gms/get_default_IM_weights",
+        const.GMS_DEFAULT_IM_WEIGHTS_ENDPOINT,
         "GET",
         CORE_API_BASE,
         CORE_API_TOKEN,
@@ -252,7 +248,7 @@ def get_default_im_weights():
 def get_default_causal_params():
     return utils.proxy_to_api(
         request,
-        "api/gms/ensemble_gms/get_default_causal_params",
+        const.GMS_DEFAULT_CAUSAL_PARAMS_ENDPOINT,
         "GET",
         CORE_API_BASE,
         CORE_API_TOKEN,
@@ -263,14 +259,14 @@ def get_default_causal_params():
 @app.route(const.CORE_API_GMS_DATASETS_ENDPOINT, methods=["GET"])
 def get_gm_datasets():
     return utils.proxy_to_api(
-        request, "api/gms/ensemble_gms/datasets", "GET", CORE_API_BASE, CORE_API_TOKEN
+        request, const.GMS_GM_DATASETS_ENDPOINT, "GET", CORE_API_BASE, CORE_API_TOKEN
     )
 
 
 @app.route(const.CORE_API_GMS_IMS_ENDPOINT_ENDPOINT, methods=["GET"])
 def get_gms_available_ims():
     return utils.proxy_to_api(
-        request, "api/gms/ensemble_gms/ims", "GET", CORE_API_BASE, CORE_API_TOKEN
+        request, const.GMS_IMS_ENDPOINT, "GET", CORE_API_BASE, CORE_API_TOKEN
     )
 
 
@@ -281,7 +277,7 @@ def get_gms_available_ims():
 def core_api_download_hazard():
     core_response = utils.proxy_to_api(
         request,
-        "api/hazard/ensemble_hazard/download",
+        const.ENSEMBLE_HAZARD_DOWNLOAD_ENDPOINT,
         "GET",
         CORE_API_BASE,
         CORE_API_TOKEN,
@@ -299,7 +295,7 @@ def core_api_download_hazard():
 def core_api_download_disagg():
     core_response = utils.proxy_to_api(
         request,
-        "api/disagg/ensemble_disagg/download",
+        const.ENSEMBLE_DISAGG_DOWNLOAD_ENDPOINT,
         "GET",
         CORE_API_BASE,
         CORE_API_TOKEN,
@@ -317,7 +313,7 @@ def core_api_download_disagg():
 def core_api_download_uhs():
     core_response = utils.proxy_to_api(
         request,
-        "api/uhs/ensemble_uhs/download",
+        const.ENSEMBLE_UHS_DOWNLOAD_ENDPOINT,
         "GET",
         CORE_API_BASE,
         CORE_API_TOKEN,
@@ -337,7 +333,7 @@ def core_api_download_uhs():
 def core_api_download_gms():
     core_response = utils.proxy_to_api(
         request,
-        "api/gms/ensemble_gms/download",
+        const.ENSEMBLE_GMS_DOWNLOAD_ENDPOINT,
         "GET",
         CORE_API_BASE,
         CORE_API_TOKEN,
